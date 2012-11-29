@@ -1,0 +1,3 @@
+information_schema
+mysql
+discuz_x25_sc_utf8

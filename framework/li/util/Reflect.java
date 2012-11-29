@@ -137,6 +137,12 @@ public class Reflect {
      * 探测一个属性的类型,从Field或者Getter
      */
     public static Class<?> fieldType(Class<?> targetType, String fieldName) {
+        String setterName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+        for (Method method : targetType.getMethods()) {
+            if (1 == method.getParameterTypes().length && method.getName().equals(setterName)) {
+                return method.getParameterTypes()[0];
+            }
+        }
         Field field = getField(targetType, fieldName);
         if (null != field) { // 从field探测
             return field.getType();

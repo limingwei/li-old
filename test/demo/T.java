@@ -10,5 +10,7 @@ public class T {
         System.out.println(userDao.list(null, "select * from framework_forum.t_account"));
         System.out.println(userDao.list(null, "select * from mysql.db"));
         System.out.println(userDao.list(null, "select version()"));
+
+        System.out.println(userDao.list(null, "select * from discuz_x25_sc_utf8.dx25su_forum_post"));
     }
 }

@@ -14,11 +14,6 @@ public class DruidAdapter extends DruidDataSource {
     private static final long serialVersionUID = 8840084696561752691L;
 
     /**
-     * 所起的作用仅是被Ioc探测得到属性类型
-     */
-    private String filters;
-
-    /**
      * 重写setFilters方法
      */
     public void setFilters(String filters) throws SQLException {
