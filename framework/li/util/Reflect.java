@@ -134,22 +134,23 @@ public class Reflect {
     }
 
     /**
-     * 探测一个属性的类型,从Field或者Getter
+     * 探测一个属性的类型,从Setter或Field或Getter
      */
     public static Class<?> fieldType(Class<?> targetType, String fieldName) {
         String setterName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-        for (Method method : targetType.getMethods()) {
+        Method[] methods = targetType.getMethods();
+        for (Method method : methods) {
             if (1 == method.getParameterTypes().length && method.getName().equals(setterName)) {
-                return method.getParameterTypes()[0];
+                return method.getParameterTypes()[0];// 从setter探测
             }
         }
         Field field = getField(targetType, fieldName);
         if (null != field) { // 从field探测
             return field.getType();
         }
-        String method = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-        Method getter = getMethod(targetType, method);
-        if (null != getter) {// 从getter方法探测
+        String getterName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+        Method getter = getMethod(targetType, getterName);
+        if (null != getter) {// 从getter探测
             return getter.getReturnType();
         }
         return null;
