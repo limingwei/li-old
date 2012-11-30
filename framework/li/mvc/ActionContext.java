@@ -1,8 +1,8 @@
 package li.mvc;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import li.annotation.Arg;
 import li.annotation.At;
@@ -19,11 +19,10 @@ import li.util.Verify;
  * @author li (limw@w.cn)
  * @version 0.1.3 (2012-05-08)
  */
-
 public class ActionContext {
     private static final Log log = Log.init();
 
-    private final List<Action> ACTIONS = new ArrayList<Action>();// 保存所有Action的List
+    private final List<Action> ACTIONS = new CopyOnWriteArrayList<Action>();// 保存所有Action的List
 
     private static ActionContext ACTION_CONTEXT = null;// ActionContext的一个实例,用于单例地得到ActionContext的实例
 

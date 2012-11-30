@@ -1,8 +1,8 @@
 package li.ioc;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import li.aop.AopEnhancer;
 import li.aop.AopFilter;
@@ -25,14 +25,14 @@ public class IocContext {
 
     private static IocContext IOC_CONTEXT = null;// 存储IocContext的实例,它会是单例的
 
-    private IocContext() {// 私有的构造方法,保证IocContext是单例的
-        log.debug("new IocContext()");
-    }
-
     /**
      * List,用于保存所有的BEAN
      */
-    public final List<Bean> BEANS = new ArrayList<Bean>();
+    public final List<Bean> BEANS = new CopyOnWriteArrayList<Bean>();
+
+    private IocContext() {// 私有的构造方法,保证IocContext是单例的
+        log.debug("new IocContext()");
+    }
 
     /**
      * 得到一个单例的IocContext对象,包含通过不同方式配置的Bean集合,在List<Bean> BEANS里面
