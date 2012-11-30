@@ -22,7 +22,9 @@ public class MonitoringDataSource extends SimpleDataSource {
         for (Connection con : connections) {
             conns += con + "\t";
         }
-        log.trace(conns);
+        if (!conns.isEmpty()) {
+            log.trace(conns);
+        }
         return connection;
     }
 
@@ -33,6 +35,8 @@ public class MonitoringDataSource extends SimpleDataSource {
         for (Connection con : connections) {
             conns += con + "\t";
         }
-        log.trace(conns);
+        if (!conns.isEmpty()) {
+            log.trace(conns);
+        }
     }
 }
