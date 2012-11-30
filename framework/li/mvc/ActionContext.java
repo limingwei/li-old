@@ -22,9 +22,9 @@ import li.util.Verify;
 public class ActionContext {
     private static final Log log = Log.init();
 
-    private final List<Action> ACTIONS = new CopyOnWriteArrayList<Action>();// 保存所有Action的List
-
     private static ActionContext ACTION_CONTEXT = null;// ActionContext的一个实例,用于单例地得到ActionContext的实例
+
+    private final List<Action> ACTIONS = new CopyOnWriteArrayList<Action>();// 保存所有Action的List
 
     private ActionContext() {// 私有构造器,保障ActionContext是单例的
         log.debug("new ActionContext()");
