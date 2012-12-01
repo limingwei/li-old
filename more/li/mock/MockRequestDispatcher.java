@@ -25,10 +25,10 @@ class MockRequestDispatcher implements RequestDispatcher {
     }
 
     public void forward(ServletRequest request, ServletResponse response) throws ServletException, IOException {
-        log.debug("forward to : " + path + " calling by " + Tool.stackTrace());
+        log.info("forward to : " + path + " calling by " + Tool.stackTrace());
     }
 
     public void include(ServletRequest request, ServletResponse response) throws ServletException, IOException {
-        log.debug("include : " + path + " calling by " + Tool.stackTrace());
+        log.info("include : " + path + " calling by " + Tool.stackTrace());
     }
 }

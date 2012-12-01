@@ -97,7 +97,7 @@ public abstract class Trans {
         if (null == this.map.get(hashCode() + "~!@#in_trans") && null != connectionMap) { // Trans in Trans 时候不会重复执行
             for (Entry<Class, Connection> connection : connectionMap.entrySet()) {
                 connection.getValue().close();
-                log.debug("Closing Connection in Trans " + connection.getValue());
+                log.trace("Closing Connection in Trans " + connection.getValue());
             }
             CONNECTION_MAP.set(null);
             EXCEPTION.set(null);

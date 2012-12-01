@@ -25,10 +25,10 @@ public class IocExporter {
      * @param file 导出IOC的文件
      */
     public void extract(File file) {
-        log.debug("extract start");
+        log.info("extract start");
         List<Bean> beans = new AnnotationIocLoader().getBeans();
         Files.write(file, doc(beans));
-        log.debug("extract finished");
+        log.info("extract finished");
     }
 
     /**

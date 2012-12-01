@@ -19,7 +19,7 @@ class MockServletResponse implements ServletResponse {
     private static final Log log = Log.init();
 
     public PrintWriter getWriter() throws IOException {
-        log.debug("li.mock.MockServletResponse.getWriter() calling by " + Tool.stackTrace());
+        log.info("li.mock.MockServletResponse.getWriter() calling by " + Tool.stackTrace());
 
         return new PrintWriter(System.out) {
             public void write(char[] buf, int off, int len) {}
