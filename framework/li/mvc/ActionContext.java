@@ -26,10 +26,6 @@ public class ActionContext {
 
     private final List<Action> ACTIONS = new CopyOnWriteArrayList<Action>();// 保存所有Action的List
 
-    private ActionContext() {// 私有构造器,保障ActionContext是单例的
-        log.debug("new ActionContext()");
-    }
-
     /**
      * 单例的得到一个ActionContext对象,第一次时候会初始化ActionContext
      */

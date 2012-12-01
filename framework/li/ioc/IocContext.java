@@ -30,10 +30,6 @@ public class IocContext {
      */
     public final List<Bean> BEANS = new CopyOnWriteArrayList<Bean>();
 
-    private IocContext() {// 私有的构造方法,保证IocContext是单例的
-        log.debug("new IocContext()");
-    }
-
     /**
      * 得到一个单例的IocContext对象,包含通过不同方式配置的Bean集合,在List<Bean> BEANS里面
      */
