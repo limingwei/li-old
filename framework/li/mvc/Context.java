@@ -406,13 +406,6 @@ public class Context {
     }
 
     /**
-     * 把object转成json并写到页面
-     */
-    public static AbstractAction json(Object object) {
-        return write(Convert.toJson(object));
-    }
-
-    /**
      * 上传文件
      */
     public static AbstractAction upload(String uploadPath) {

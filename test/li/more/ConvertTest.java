@@ -1,4 +1,4 @@
-package li.util;
+package li.more;
 
 import static org.junit.Assert.assertEquals;
 

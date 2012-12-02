@@ -6,16 +6,8 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import li.dao.Record;
-import li.model.Field;
 
 /**
  * 类型转换的工具类
@@ -24,76 +16,6 @@ import li.model.Field;
  * @version 0.1.7 (2012-05-08)
  */
 public class Convert {
-    /**
-     * 将数据对象或对象的集合或数组转换为json
-     */
-    public static String toJson(Object target) {
-        if (target instanceof Collection) {// 如果是集合,转换成数组处理
-            return toJson(((Collection) target).toArray());
-        }
-        if (target.getClass().isArray()) {// 如果是数组
-            String json = "[";
-            for (Object one : (Object[]) target) {// 处理每个对象
-                json += toJson(one) + ",";
-            }
-            return json.substring(0, json.length() - 1) + "]";// 返回
-        }
-        String json = "{";// 处理单个对象
-        if (Record.class.isAssignableFrom(target.getClass())) {// 如果是Record
-            Set<Entry> entries = ((Record) target).entrySet();
-            for (Entry<String, Object> entry : entries) {// Record的每个属性
-                json += "\"" + entry.getKey() + "\":\"" + entry.getValue() + "\",";
-            }
-        } else {// 不是Record，按照POJO处理
-            List<Field> fields = Field.list(target.getClass(), true);
-            for (Field field : fields) {// POJO的每个属性
-                json += "\"" + field.name + "\":\"" + Reflect.get(target, field.name) + "\",";
-            }
-        }
-        return json.substring(0, json.length() - 1) + "}";
-    }
-
-    /**
-     * 将json转换为数据对象的List
-     */
-    public static <T> List<T> fromJson(Class<T> type, String json) {
-        final String JSON_REGEX = "^.*}[]]{0,1},[\\[]{0,1}\\{.*$", JSON_SPLIT = "}[]]{0,1},[\\[]{0,1}\\{";
-        List<T> list = new ArrayList<T>();
-        if (Verify.regex(json, JSON_REGEX)) {// 处理多个对象
-            String[] array = json.split(JSON_SPLIT);
-            for (String one : array) {
-                list.addAll(fromJson(type, one)); // 这里递归调用
-            }
-            return (List<T>) list;// 返回
-        }
-        T one = Reflect.born(type);// 处理单个对象
-        String[] array = json.split(",");
-        for (String field : array) {
-            String[] strs = field.split(":");
-            String key = strs[0].substring(strs[0].indexOf('"') + 1, strs[0].lastIndexOf('"'));
-            String value = strs[1].substring(strs[1].indexOf('"') + 1, strs[1].lastIndexOf('"'));
-            Reflect.set(one, key, value);// 存在这个属性并不为空字符串且不为null
-        }
-        list.add(one);
-        return list;
-    }
-
-    /**
-     * 将数组转换为Map,奇数位为key,偶数位为value; items必须为偶数个
-     */
-    public static Map<Object, Object> toMap(Object... items) {
-        Map map = new HashMap();
-        if (null != items && items.length > 0) {// 非空判断
-            if (items.length % 2 != 0) {
-                throw new RuntimeException("Count of items must be even !!!");// 个数为奇数,抛出异常
-            } else {
-                for (int i = 0; i < items.length; i = i + 2) {
-                    map.put(items[i], items[i + 1]);
-                }
-            }
-        }
-        return map;
-    }
 
     /**
      * 把字符串用一次MD5加密后返回
@@ -116,6 +38,23 @@ public class Convert {
         } catch (Exception e) {
             throw new RuntimeException("Exception at li.util.Convert.toMD5(Object)", e);
         }
+    }
+
+    /**
+     * 将数组转换为Map,奇数位为key,偶数位为value; items必须为偶数个
+     */
+    public static Map<Object, Object> toMap(Object... items) {
+        Map map = new HashMap();
+        if (null != items && items.length > 0) {// 非空判断
+            if (items.length % 2 != 0) {
+                throw new RuntimeException("Count of items must be even !!!");// 个数为奇数,抛出异常
+            } else {
+                for (int i = 0; i < items.length; i = i + 2) {
+                    map.put(items[i], items[i + 1]);
+                }
+            }
+        }
+        return map;
     }
 
     /**
