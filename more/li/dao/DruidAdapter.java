@@ -48,9 +48,9 @@ public class DruidAdapter extends DruidDataSource {
     }
 
     /*
-     * 从Properties里加载配置
+     * 从Properties里加载WallFilter配置
      */
     private List<String> getProps(Properties properties, String key) {
-        return Arrays.asList(properties.getProperty(key).split(","));
+        return Arrays.asList(properties.getProperty(key).split("\\,"));
     }
 }
