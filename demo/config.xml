@@ -12,8 +12,9 @@
 			<property name="username" value="${db.username}" />
 			<property name="password" value="${db.password}" />
 			
-			<property name="filters" value="${DRUID.FILTERS}"/>
-			
+			<property name="filters" value="wall,stat,mergeStat"/>
+		</bean>
+		<bean class="li.dao.WallFilter">
 			<property name="permitFunctions" value="${DRUID.PERMIT_FUNCTIONS}"/>
 			<property name="permitSchemas" value="${DRUID.PERMIT_SCHEMAS}"/>
 			<property name="permitTables" value="${DRUID.PERMIT_TABLES}"/>
