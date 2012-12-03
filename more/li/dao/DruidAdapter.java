@@ -108,6 +108,9 @@ public class DruidAdapter extends DruidDataSource {
         wallConfig.getReadOnlyTables().addAll(Verify.isEmpty(attrs) ? Collections.EMPTY_LIST : Arrays.asList(attrs.split("\\,")));
     }
 
+    /**
+     * PermitVariants，英文逗号分隔的列表
+     */
     public void setPermitVariants(String attrs) {
         wallConfig.getPermitVariants().addAll(Verify.isEmpty(attrs) ? Collections.EMPTY_LIST : Arrays.asList(attrs.split("\\,")));
     }
