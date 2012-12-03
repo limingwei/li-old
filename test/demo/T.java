@@ -18,5 +18,8 @@ public class T {
         System.out.println(JSON.toJSONString(userDao.list(null)));
 
         userDao.testDesc();
+
+        System.out.println(userDao.list(null, "where 1=1"));
+        System.out.println(userDao.list(null, "where true"));
     }
 }

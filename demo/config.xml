@@ -11,7 +11,12 @@
 			<property name="url" value="${db.url}" />
 			<property name="username" value="${db.username}" />
 			<property name="password" value="${db.password}" />
-			<property name="filters" value="wall,stat"/>
+			<property name="filters" value="${DRUID.FILTERS}"/>
+			<property name="true" value="${DRUID.TRUE}"/>
+			<property name="false" value="${DRUID.FALSE}"/>
+			<property name="permitFunctions" value="${DRUID.PERMIT_FUNCTIONS}"/>
+			<property name="permitSchemas" value="${DRUID.PERMIT_SCHEMAS}"/>
+			<property name="permitTables" value="${DRUID.PERMIT_TABLES}"/>
 		</bean>
 		<!-- <bean name="c3p0" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 			<property name="jdbcUrl" value="${db.url}" />
