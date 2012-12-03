@@ -16,6 +16,8 @@ public class DruidAdapter extends DruidDataSource {
 
     private WallConfig wallConfig = new WallConfig();
 
+    private WallFilter wallFilter = new WallFilter();
+
     /**
      * 重写setFilters方法
      */
@@ -23,7 +25,6 @@ public class DruidAdapter extends DruidDataSource {
         String[] filterArray = (filters != null && filters.length() > 0) ? filters.split("\\,") : new String[] {};
         for (String item : filterArray) {
             if ("wall".equals(item)) {
-                WallFilter wallFilter = new WallFilter();
                 wallFilter.setConfig(wallConfig);
                 super.getProxyFilters().add(wallFilter);
             } else {
@@ -33,9 +34,29 @@ public class DruidAdapter extends DruidDataSource {
     }
 
     /**
-     * 英文逗号分隔的设置为true的属性列表
+     * WallFilter中英文逗号分隔的设置为true的属性列表
      */
-    public void setTrue(String attrs) {
+    public void setWallFilterTrue(String attrs) {
+        String[] strs = Verify.isEmpty(attrs) ? new String[] {} : attrs.split("\\,");
+        for (String attr : strs) {
+            Reflect.set(wallFilter, attr, true);
+        }
+    }
+
+    /**
+     * WallFilter中英文逗号分隔的设置为true的属性列表
+     */
+    public void setWallFilterFalse(String attrs) {
+        String[] strs = Verify.isEmpty(attrs) ? new String[] {} : attrs.split("\\,");
+        for (String attr : strs) {
+            Reflect.set(wallFilter, attr, false);
+        }
+    }
+
+    /**
+     * WallConfig中英文逗号分隔的设置为true的属性列表
+     */
+    public void setWallConfigTrue(String attrs) {
         String[] strs = Verify.isEmpty(attrs) ? new String[] {} : attrs.split("\\,");
         for (String attr : strs) {
             Reflect.set(wallConfig, attr, true);
@@ -43,9 +64,9 @@ public class DruidAdapter extends DruidDataSource {
     }
 
     /**
-     * 英文逗号分隔的设置为false的属性列表
+     * WallConfig中英文逗号分隔的设置为false的属性列表
      */
-    public void setFalse(String attrs) {
+    public void setWallConfigFalse(String attrs) {
         String[] strs = Verify.isEmpty(attrs) ? new String[] {} : attrs.split("\\,");
         for (String attr : strs) {
             Reflect.set(wallConfig, attr, false);
