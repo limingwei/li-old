@@ -61,7 +61,7 @@ public class QueryBuilderTest extends BaseTest {
 
     @Test
     public void findById() {
-        assertEquals("SELECT * FROM t_account WHERE id=123 LIMIT 0,1", queryBuilder.findById(123));
+        assertEquals("SELECT * FROM t_account WHERE id=123", queryBuilder.findById(123));
     }
 
     @Test

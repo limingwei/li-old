@@ -44,7 +44,7 @@ public class QueryBuilder {
      * @see li.dao.QueryBuilder#setArgs(String, Object[])
      */
     public String deleteBySql(String sql, Object[] args) {
-        if (!Verify.startWith(sql, "DELETE")) {
+        if (Verify.startWith(sql, "WHERE")) {
             sql = "DELETE FROM " + beanMeta.table + " " + sql;
         }
         return setArgs(sql, args);// 处理args
@@ -65,7 +65,7 @@ public class QueryBuilder {
      * @see li.dao.QueryBuilder#setArgs(String, Object[])
      */
     public String countBySql(String sql, Object[] args) {
-        if (!Verify.startWith(sql, "SELECT")) {
+        if (Verify.startWith(sql, "WHERE")) {
             sql = "SELECT COUNT(*) FROM " + beanMeta.table + " " + sql;
         } else if (!Verify.regex(sql, "COUNT(.*)")) {
             sql = "SELECT COUNT(*) FROM " + sql.substring(sql.toUpperCase().indexOf("FROM") + 4, sql.length()).trim();
@@ -80,18 +80,17 @@ public class QueryBuilder {
      * 使用传入的ID,构造一个用于查询一条记录的SQL
      */
     public String findById(Number id) {
-        String sql = "SELECT * FROM " + beanMeta.table + " WHERE " + beanMeta.getId().column + "=" + id;
-        return setPage(sql, new Page(1, 1));
+        return "SELECT * FROM " + beanMeta.table + " WHERE " + beanMeta.getId().column + "=" + id;
     }
 
     /**
      * 使用传入的SQL和参数,构造一个用于查询一条记录的SQL
      */
     public String findBySql(String sql, Object[] args) {
-        if (!Verify.startWith(sql, "SELECT")) {// 添加SELECT * FROM table 部分
+        if (Verify.startWith(sql, "WHERE")) {// 添加SELECT * FROM table 部分
             sql = "SELECT * FROM " + beanMeta.table + " " + sql;
         }
-        return setPage(setArgs(sql, args), new Page(1, 1));// 先处理别名,再处理page
+        return setArgs(sql, args);// 先处理别名,再处理page
     }
 
     /**
@@ -113,10 +112,10 @@ public class QueryBuilder {
      * @see li.dao.QueryBuilder#setArgs(String, Object[])
      */
     public String listBySql(Page page, String sql, Object[] args) {
-        if (!Verify.startWith(sql, "SELECT")) {// 添加SELECT * FROM table 部分
+        if (Verify.startWith(sql, "WHERE")) {// 添加SELECT * FROM table 部分
             sql = "SELECT * FROM " + beanMeta.table + " " + sql;
         }
-        return setPage(setArgs(setAlias(sql), args), null == page ? new Page() : page);// 先处理别名,再处理args,最后处理page
+        return setPage(setArgs(setAlias(sql), args), page);// 先处理别名,再处理args,最后处理page
     }
 
     /**
@@ -223,7 +222,7 @@ public class QueryBuilder {
      * 为SQL添加分页语句
      */
     public String setPage(String sql, Page page) {
-        if (!Verify.contain(sql, "LIMIT")) {// 分页
+        if (!Verify.contain(sql, "LIMIT") && null != page) {// 分页
             return sql + " LIMIT " + page.getFrom() + "," + page.getPageSize();
         }
         return sql;

@@ -19,6 +19,8 @@ public class T {
 
         userDao.testDesc();
 
+        System.out.println(userDao.list(null, "DESC t_account"));
+
         System.out.println(userDao.list(null, "where 1=1"));
         System.out.println(userDao.list(null, "where true"));
     }

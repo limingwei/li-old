@@ -24,7 +24,7 @@ public class SqliteTest extends BaseTest {
 
         System.out.println("user id = " + user.get("id"));
 
-        for (Account u : userDao.list(page.setPageSize(3), "ORDER BY id DESC")) {
+        for (Account u : userDao.list(page.setPageSize(3), "WHERE 1=1 ORDER BY id DESC")) {
             System.out.println(u.get("id") + "\t" + u.get("username") + "\t" + u.get("password") + "\t" + u.get("email"));
         }
 
