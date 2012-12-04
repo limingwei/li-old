@@ -24,8 +24,8 @@
 			
 			<property name="wallConfigTrue" value="${DRUID.WALLCONFIG_TRUE}"/>
 			<property name="wallConfigFalse" value="${DRUID.WALLCONFIG_FALSE}"/>
-			<property name="wallFilterTrue" value="${DRUID.WALLFILTER_TRUE}"/>
-			<property name="wallFilterFalse" value="${DRUID.WALLFILTER_FALSE}"/>
+			<property name="logViolation" value="true"/>
+			<property name="throwException" value="true"/>
 		</bean>
 		<!-- <bean name="c3p0" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 			<property name="jdbcUrl" value="${db.url}" />

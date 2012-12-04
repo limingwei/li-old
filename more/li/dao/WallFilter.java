@@ -17,26 +17,6 @@ public class WallFilter extends com.alibaba.druid.wall.WallFilter {
     }
 
     /**
-     * WallFilter中英文逗号分隔的设置为true的属性列表
-     */
-    public void setWallFilterTrue(String attrs) {
-        String[] strs = Verify.isEmpty(attrs) ? new String[] {} : attrs.split("\\,");
-        for (String attr : strs) {
-            Reflect.set(this, attr, true);
-        }
-    }
-
-    /**
-     * WallFilter中英文逗号分隔的设置为true的属性列表
-     */
-    public void setWallFilterFalse(String attrs) {
-        String[] strs = Verify.isEmpty(attrs) ? new String[] {} : attrs.split("\\,");
-        for (String attr : strs) {
-            Reflect.set(this, attr, false);
-        }
-    }
-
-    /**
      * WallConfig中英文逗号分隔的设置为true的属性列表
      */
     public void setWallConfigTrue(String attrs) {
