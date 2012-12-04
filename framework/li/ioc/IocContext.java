@@ -74,12 +74,12 @@ public class IocContext {
             // STEP-5-给IocContext中的Bean设置属性
             for (Bean bean : IOC_CONTEXT.BEANS) {
                 for (Field field : bean.fields) {
-                    log.trace("Set Field: " + field.name + " " + field.value + " -> " + bean.type.getName());
                     if (Verify.basicType(field.type)) {// 基本类型,直接设值
                         Reflect.set(bean.instance, field.name, field.value);
                     } else {// 非基本类型,设为相应的bean
                         Reflect.set(bean.instance, field.name, Ioc.get(field.type, field.value));
                     }
+                    log.trace("Set Field: " + bean.type.getName() + "." + field.name + " = " + field.value);
                 }
             }
 
