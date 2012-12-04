@@ -3,6 +3,7 @@ package li.dao;
 import java.sql.SQLException;
 
 import li.ioc.Ioc;
+import li.util.Verify;
 
 import com.alibaba.druid.pool.DruidDataSource;
 
@@ -13,7 +14,7 @@ public class DruidAdapter extends DruidDataSource {
      * 重写setFilters方法
      */
     public void setFilters(String filters) throws SQLException {
-        String[] filterArray = (filters != null && filters.length() > 0) ? filters.split("\\,") : new String[] {};
+        String[] filterArray = (Verify.isEmpty(filters)) ? new String[] {} : filters.split("\\,");
         for (String item : filterArray) {
             if ("wall".equals(item)) {
                 super.getProxyFilters().add(Ioc.get(WallFilter.class));
