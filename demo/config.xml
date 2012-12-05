@@ -14,7 +14,7 @@
 			
 			<property name="filters" value="wall,stat,mergeStat"/>
 		</bean>
-		<bean class="li.dao.WallFilter">
+		<bean name="wall" class="li.dao.WallFilter">
 			<property name="permitFunctions" value="${DRUID.PERMIT_FUNCTIONS}"/>
 			<property name="permitSchemas" value="${DRUID.PERMIT_SCHEMAS}"/>
 			<property name="permitTables" value="${DRUID.PERMIT_TABLES}"/>
@@ -24,6 +24,7 @@
 			
 			<property name="wallConfigTrue" value="${DRUID.WALLCONFIG_TRUE}"/>
 			<property name="wallConfigFalse" value="${DRUID.WALLCONFIG_FALSE}"/>
+			
 			<property name="logViolation" value="true"/>
 			<property name="throwException" value="true"/>
 		</bean>
