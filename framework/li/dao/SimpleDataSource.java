@@ -23,12 +23,12 @@ public class SimpleDataSource implements DataSource {
     private String password;
 
     static {
-        String[] drivers = { "com.mysql.jdbc.Driver", "org.sqlite.JDBC", "org.h2.Driver", "org.apache.derby.jdbc.EmbeddedDriver", "org.hsqldb.jdbcDriver" };
-        for (String driver : drivers) {
-            try {
+        try {
+            String[] drivers = { "com.mysql.jdbc.Driver", "org.sqlite.JDBC", "org.h2.Driver", "org.apache.derby.jdbc.EmbeddedDriver", "org.hsqldb.jdbcDriver" };
+            for (String driver : drivers) {
                 Class.forName(driver);
-            } catch (Throwable e) {}
-        }
+            }
+        } catch (Throwable e) {}
     }
 
     public Connection getConnection() throws SQLException {
