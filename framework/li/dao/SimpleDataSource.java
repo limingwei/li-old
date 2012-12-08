@@ -39,27 +39,31 @@ public class SimpleDataSource implements DataSource {
         return DriverManager.getConnection(this.url, username, password);
     }
 
-    public int getLoginTimeout() throws SQLException {
-        return 0;
-    }
-
-    public void setLoginTimeout(int seconds) throws SQLException {}
-
     public PrintWriter getLogWriter() throws SQLException {
         return new PrintWriter(System.out);
     }
 
-    public void setLogWriter(PrintWriter out) throws SQLException {}
+    public void setLogWriter(PrintWriter out) throws SQLException {
+        throw new RuntimeException("no implement method");
+    }
 
     public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-        return null;
+        throw new RuntimeException("no implement method");
+    }
+
+    public int getLoginTimeout() throws SQLException {
+        throw new RuntimeException("no implement method");
+    }
+
+    public void setLoginTimeout(int seconds) throws SQLException {
+        throw new RuntimeException("no implement method");
     }
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return false;
+        throw new RuntimeException("no implement method");
     }
 
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        return null;
+        throw new RuntimeException("no implement method");
     }
 }
