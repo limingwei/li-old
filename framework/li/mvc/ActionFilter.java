@@ -38,8 +38,8 @@ public class ActionFilter implements Filter {
      * 初始化Filter,设置一些环境变量,只执行一次
      */
     public void init(FilterConfig config) throws ServletException {
+        config.getServletContext().setAttribute("root", config.getServletContext().getContextPath() + "/");// 默认的环境变量
         if ("true".equals(USE_I18N.trim().toLowerCase())) {
-            config.getServletContext().setAttribute("root", config.getServletContext().getContextPath() + "/");// 默认的环境变量
             config.getServletContext().setAttribute("lang", Files.load(Locale.getDefault().toString()));// 根据Locale.getDefault()初始化国际化,存到servletContext
             log.info("Setting default language as " + Locale.getDefault());
         }
