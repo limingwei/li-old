@@ -12,9 +12,9 @@ import li.annotation.At;
 import li.annotation.Bean;
 import li.annotation.Inject;
 import li.annotation.Trans;
+import li.dao.Page;
 import li.mvc.AbstractAction;
 import li.mvc.Context;
-import li.util.Page;
 import demo.record.Account;
 import demo.record.Member;
 

@@ -4,8 +4,8 @@ import java.util.List;
 
 import li.annotation.Bean;
 import li.annotation.Table;
+import li.dao.Page;
 import li.dao.Record;
-import li.util.Page;
 
 @Bean
 @Table("t_post")

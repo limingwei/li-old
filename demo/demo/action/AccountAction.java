@@ -4,9 +4,9 @@ import li.annotation.Arg;
 import li.annotation.At;
 import li.annotation.Bean;
 import li.annotation.Inject;
+import li.dao.Page;
 import li.mvc.AbstractAction;
 import li.util.Convert;
-import li.util.Page;
 import demo.record.Account;
 
 @Bean

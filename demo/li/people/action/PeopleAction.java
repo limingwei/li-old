@@ -3,9 +3,9 @@ package li.people.action;
 import li.annotation.At;
 import li.annotation.Bean;
 import li.annotation.Inject;
+import li.dao.Page;
 import li.mvc.AbstractAction;
 import li.people.record.People;
-import li.util.Page;
 
 @Bean
 public class PeopleAction extends AbstractAction {

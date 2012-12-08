@@ -5,8 +5,8 @@ import java.util.List;
 
 import li.dao.AbstractDao;
 import li.dao.IBaseDao;
+import li.dao.Page;
 import li.ioc.Ioc;
-import li.util.Page;
 import li.util.Reflect;
 
 /**

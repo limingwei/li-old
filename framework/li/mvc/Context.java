@@ -19,11 +19,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import li.dao.Page;
 import li.model.Action;
 import li.util.Convert;
 import li.util.Files;
 import li.util.Log;
-import li.util.Page;
 import li.util.Reflect;
 import li.util.Verify;
 

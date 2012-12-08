@@ -5,8 +5,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import li.dao.Page;
 import li.model.Action;
-import li.util.Page;
 
 /**
  * Action基类,你的Action类可以继承这个类

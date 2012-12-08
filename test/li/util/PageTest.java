@@ -1,6 +1,7 @@
 package li.util;
 
 import static org.junit.Assert.assertEquals;
+import li.dao.Page;
 
 import org.junit.Test;
 

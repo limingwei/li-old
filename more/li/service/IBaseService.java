@@ -2,7 +2,7 @@ package li.service;
 
 import java.util.List;
 
-import li.util.Page;
+import li.dao.Page;
 
 /**
  * 基础Service接口,你可以继承并扩展它形成自己的Service接口

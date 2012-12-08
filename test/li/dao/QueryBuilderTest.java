@@ -10,7 +10,6 @@ import li.ioc.Ioc;
 import li.model.Bean;
 import li.test.BaseTest;
 import li.util.Convert;
-import li.util.Page;
 
 import org.junit.Before;
 import org.junit.Test;

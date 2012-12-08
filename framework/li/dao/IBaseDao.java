@@ -2,8 +2,6 @@ package li.dao;
 
 import java.util.List;
 
-import li.util.Page;
-
 /**
  * 基础Dao接口,定义了几个基础的方法,可以继承并扩展它形成自己的Dao接口
  * 

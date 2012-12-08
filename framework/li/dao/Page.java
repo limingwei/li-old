@@ -1,4 +1,6 @@
-package li.util;
+package li.dao;
+
+import li.util.Files;
 
 /**
  * 分页对象

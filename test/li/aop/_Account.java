@@ -5,8 +5,8 @@ import java.util.List;
 import li.annotation.Aop;
 import li.annotation.Table;
 import li.annotation.Trans;
+import li.dao.Page;
 import li.dao.Record;
-import li.util.Page;
 
 @Table("t_account")
 public class _Account extends Record<_Account> {
