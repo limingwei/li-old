@@ -4,7 +4,6 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import li.dao.AbstractDao;
-import li.dao.IBaseDao;
 import li.dao.Page;
 import li.ioc.Ioc;
 import li.util.Reflect;
@@ -20,14 +19,14 @@ public abstract class AbstractService<T> implements IBaseService<T> {
     /**
      * Dao对象
      */
-    private IBaseDao<T> dao;
+    private AbstractDao<T> dao;
 
     /**
      * 你可以覆盖这个方法,如果不的话,框架会寻找 一个继承AbstractDao,泛型类型为 T的Bean
      * 
      * @see li.ioc.Ioc#get(Class, Type)
      */
-    protected IBaseDao<T> getDao() {
+    protected AbstractDao<T> getDao() {
         if (null == this.dao) {
             this.dao = Ioc.get(AbstractDao.class, Reflect.actualType(this.getClass(), 0));
         }

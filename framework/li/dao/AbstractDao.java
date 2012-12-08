@@ -18,7 +18,7 @@ import li.util.Reflect;
  * @author li (limw@w.cn)
  * @version 0.1.7 (2012-06-26)
  */
-public class AbstractDao<T> implements IBaseDao<T> {
+public class AbstractDao<T> {
     private static final Log log = Log.init();
 
     private Class<T> modelType;// 泛型参数的实际类型,即是数据对象类型
