@@ -72,7 +72,7 @@ public class ActionFilter implements Filter {
             for (int i = 0; i < action.argTypes.length; i++) {// Action方法参数适配
                 String key = (null == action.argAnnotations[i]) ? action.argNames[i] : action.argAnnotations[i].value();// ParameterKey
                 if (Verify.basicType(action.argTypes[i]) && !action.argTypes[i].isArray()) { // 单个基本类型
-                    args[i] = Convert.toType(action.argTypes[i], Context.getParameter(key));
+                    args[i] = Convert.toType(action.argTypes[i], Context.getRequest().getParameter(key));
                 } else if (Verify.basicType(action.argTypes[i]) && action.argTypes[i].isArray()) { // 基本类型的数组
                     args[i] = Context.getArray(action.argTypes[i].getComponentType(), key);
                 } else if (ServletRequest.class.isAssignableFrom(action.argTypes[i])) { // Request

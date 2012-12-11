@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import li.dao.Page;
 import li.model.Action;
+import li.more.Convert;
 
 /**
  * Action基类,你的Action类可以继承这个类
@@ -56,7 +57,7 @@ public abstract class AbstractAction implements RequestMethod {
      * 得到Session中键为key的值
      */
     public Object getSession(String key) {
-        return Context.getSession(key);
+        return Context.getSession().getAttribute(key);
     }
 
     /**
@@ -84,7 +85,7 @@ public abstract class AbstractAction implements RequestMethod {
      * 返回指定key的parameters参数
      */
     public String getParameter(String key) {
-        return Context.getParameter(key);
+        return Context.getRequest().getParameter(key);
     }
 
     /**
@@ -122,7 +123,7 @@ public abstract class AbstractAction implements RequestMethod {
      * 移除一个Session
      */
     public AbstractAction removeSession(String key) {
-        Context.removeSession(key);
+        Context.getSession().removeAttribute(key);
         return this;
     }
 
@@ -130,7 +131,7 @@ public abstract class AbstractAction implements RequestMethod {
      * 向request中设值
      */
     public AbstractAction setRequest(String key, Object value) {
-        Context.setRequest(key, value);
+        Context.getRequest().setAttribute(key, value);
         return this;
     }
 
@@ -138,7 +139,7 @@ public abstract class AbstractAction implements RequestMethod {
      * 向session中设值
      */
     public AbstractAction setSession(String key, Object value) {
-        Context.setSession(key, value);
+        Context.getSession().setAttribute(key, value);
         return this;
     }
 
@@ -191,6 +192,14 @@ public abstract class AbstractAction implements RequestMethod {
      */
     public AbstractAction write(String content) {
         Context.write(content);
+        return this;
+    }
+
+    /**
+     * 把对象转为json后写到页面
+     */
+    public AbstractAction json(Object object) {
+        Context.write(Convert.toJson(object));
         return this;
     }
 

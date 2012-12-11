@@ -128,45 +128,10 @@ public class Context {
     }
 
     /**
-     * 得到Session中得一个值
-     */
-    public static Object getSession(String key) {
-        return getSession().getAttribute(key);
-    }
-
-    /**
-     * 返回指定key的QueryString参数
-     */
-    public static String getParameter(String key) {
-        return getRequest().getParameter(key);
-    }
-
-    /**
      * 返回基本类型的数组参数
      */
     public static <T> T[] getArray(Class<T> type, String key) {
         return Convert.toType(type, getRequest().getParameterValues(key));
-    }
-
-    /**
-     * 移除一个Session
-     */
-    public static void removeSession(String key) {
-        getSession().removeAttribute(key);
-    }
-
-    /**
-     * 向request中设值
-     */
-    public static void setRequest(String key, Object value) {
-        getRequest().setAttribute(key, value);
-    }
-
-    /**
-     * 向session中设值
-     */
-    public static void setSession(String key, Object value) {
-        getRequest().getSession().setAttribute(key, value);
     }
 
     /**
@@ -193,7 +158,7 @@ public class Context {
         if (null == page) {
             page = new Page();
         }
-        String pnStr = getParameter(pageNumberKey);
+        String pnStr = getRequest().getParameter(pageNumberKey);
         page.setPageNumber(Verify.isEmpty(pnStr) ? 1 : Integer.valueOf(pnStr));
         return page;
     }
@@ -221,7 +186,7 @@ public class Context {
      */
     public static void passParams(String... keys) {
         for (String key : keys) {
-            getRequest().setAttribute(key, getParameter(key));
+            getRequest().setAttribute(key, getRequest().getParameter(key));
         }
     }
 
