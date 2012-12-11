@@ -344,4 +344,9 @@ public class DemoAction extends AbstractAction {
     public void test_action_path_default_value() {
         write(getRequest().getRequestURI());
     }
+
+    @At(value = { "1.do", "2.do" }, method = { GET, POST })
+    public void test_action_many_annotation() {
+        write(getRequest().getServletPath() + "\n" + getRequest().getMethod());
+    }
 }

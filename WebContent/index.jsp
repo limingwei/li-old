@@ -47,6 +47,19 @@
 		<a href="test_ctx">test_ctx</a>
 		<a href="test_all">test_all</a>
 		<br/>
+		<form action="1.do" method="GET">
+			<input type="submit" value="1?get"/>
+		</form>
+		<form action="1.do" method="POST">
+			<input type="submit" value="1?post"/>
+		</form>
+		<form action="2.do" method="GET">
+			<input type="submit" value="2?get"/>
+		</form>
+		<form action="2.do" method="POST">
+			<input type="submit" value="2?post"/>
+		</form>
+		<br/>
 		<form action="test_dev_filter" method="POST">
 			<input name="id" value="1"/>
 			<input name="id" value="3"/>
