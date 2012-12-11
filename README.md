@@ -1,10 +1,10 @@
 目录结构：
-* WebRoot -> WebContent
-* 示例项目 -> demo
-* 尚未完成 -> dev
-* 扩展工具 -> more
 * 框架源码 -> framework
+* 扩展工具 -> more
+* 尚未完成 -> dev
 * 单元测试 -> test
+* 示例项目 -> demo
+* WebRoot -> WebContent
 
 by li
 * QQ:416133823
