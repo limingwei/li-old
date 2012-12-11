@@ -40,17 +40,19 @@ public class ActionContext {
                     At at = method.getAnnotation(At.class);
                     if (null != at) {
                         for (String path : at.value()) {
-                            Action action = new Action();// Action请求路径,如果不以斜杠开始会被加上斜杠,如果注解value值为空则直接使用方法名
-                            action.path = Verify.isEmpty(path) ? "/" + method.getName() : Verify.startWith(path, "/") ? path : "/" + path;
-                            action.httpMethod = at.method().toUpperCase(); // HTTP请求类型,这里转换为大写
-                            action.actionInstance = bean.instance;
-                            action.actionMethod = method;
-                            action.argTypes = method.getParameterTypes();
-                            action.argNames = Reflect.argNames(method);
-                            action.argAnnotations = Reflect.argAnnotations(method, Arg.class);
-                            ACTION_CONTEXT.ACTIONS.add(action);
+                            for (String httpMethod : at.method()) {
+                                Action action = new Action();// Action请求路径,如果不以斜杠开始会被加上斜杠,如果注解value值为空则直接使用方法名
+                                action.path = Verify.isEmpty(path) ? "/" + method.getName() : Verify.startWith(path, "/") ? path : "/" + path;
+                                action.httpMethod = httpMethod.toUpperCase(); // HTTP请求类型,这里转换为大写
+                                action.actionInstance = bean.instance;
+                                action.actionMethod = method;
+                                action.argTypes = method.getParameterTypes();
+                                action.argNames = Reflect.argNames(method);
+                                action.argAnnotations = Reflect.argAnnotations(method, Arg.class);
+                                ACTION_CONTEXT.ACTIONS.add(action);
 
-                            log.info("ADD ACTION: @At(value=\"" + action.path + "\"" + (action.httpMethod.equals(".*") ? "" : ",method=\"" + action.httpMethod + "\"") + ") " + action.actionInstance.getClass().getName() + "." + action.actionMethod.getName() + "()");
+                                log.info("ADD ACTION: @At(value=\"" + action.path + "\"" + (action.httpMethod.equals(".*") ? "" : ",method=\"" + action.httpMethod + "\"") + ") " + action.actionInstance.getClass().getName() + "." + action.actionMethod.getName() + "()");
+                            }
                         }
                     }
                 }

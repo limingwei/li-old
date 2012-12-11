@@ -17,7 +17,7 @@ public @interface At {
     /**
      * HTTP请求类型GET/POST/..不指定则为任意类型
      */
-    public String method() default ".*";
+    public String[] method() default ".*";
 
     /**
      * Action请求路径,默认为方法名,可用正则表达式,如@At("thread-([0-9]*)-([a-z]*).htm"),需用括号包裹正则表达式的可变部分
