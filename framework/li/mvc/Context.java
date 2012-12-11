@@ -46,8 +46,6 @@ public class Context {
     private static final ThreadLocal<HttpServletResponse> RESPONSE = new ThreadLocal<HttpServletResponse>();
     private static final ThreadLocal<Action> ACTION = new ThreadLocal<Action>();
 
-    private static final AbstractAction ABSTRACT_ACTION = new AbstractAction() {};
-
     /**
      * 视图层异常处理,为了安全,页面上没有异常信息
      */
@@ -88,11 +86,10 @@ public class Context {
     /**
      * 初始化方法,会将request,response,action分别存入ThreadLocal
      */
-    public static AbstractAction init(ServletRequest request, ServletResponse response, Action action) {
+    public static void init(ServletRequest request, ServletResponse response, Action action) {
         REQUEST.set((HttpServletRequest) request);
         RESPONSE.set((HttpServletResponse) response);
         ACTION.set(action);
-        return ABSTRACT_ACTION;
     }
 
     /**
@@ -154,25 +151,22 @@ public class Context {
     /**
      * 移除一个Session
      */
-    public static AbstractAction removeSession(String key) {
+    public static void removeSession(String key) {
         getSession().removeAttribute(key);
-        return ABSTRACT_ACTION;
     }
 
     /**
      * 向request中设值
      */
-    public static AbstractAction setRequest(String key, Object value) {
+    public static void setRequest(String key, Object value) {
         getRequest().setAttribute(key, value);
-        return ABSTRACT_ACTION;
     }
 
     /**
      * 向session中设值
      */
-    public static AbstractAction setSession(String key, Object value) {
+    public static void setSession(String key, Object value) {
         getRequest().getSession().setAttribute(key, value);
-        return ABSTRACT_ACTION;
     }
 
     /**
@@ -225,11 +219,10 @@ public class Context {
     /**
      * 将QueryString中对应key的参数设置到request里面
      */
-    public static AbstractAction passParams(String... keys) {
+    public static void passParams(String... keys) {
         for (String key : keys) {
             getRequest().setAttribute(key, getParameter(key));
         }
-        return ABSTRACT_ACTION;
     }
 
     /**
@@ -388,7 +381,7 @@ public class Context {
     /**
      * 把 content写到页面上
      */
-    public static AbstractAction write(String content) {
+    public static void write(String content) {
         final String JSON_REGEX = "^[\\[]*[{]+.*[}]+[]]*$", XML_REGEX = "^<.*>$";
         if (!Verify.isEmpty(content) && Verify.regex(content, XML_REGEX)) {// 如果内容是XML
             getResponse().setContentType("text/xml;charset=UTF-8");
@@ -402,13 +395,12 @@ public class Context {
         } catch (Exception e) {
             error(e);
         }
-        return ABSTRACT_ACTION;
     }
 
     /**
      * 上传文件
      */
-    public static AbstractAction upload(String uploadPath) {
+    public static void upload(String uploadPath) {
         try {
             Object factory = Reflect.born("org.apache.commons.fileupload.disk.DiskFileItemFactory");
             Object upload = Reflect.born("org.apache.commons.fileupload.servlet.ServletFileUpload", new Class[] { Reflect.getType("org.apache.commons.fileupload.FileItemFactory") }, factory);
@@ -421,6 +413,5 @@ public class Context {
         } catch (Throwable e) {
             error(e);
         }
-        return ABSTRACT_ACTION;
     }
 }

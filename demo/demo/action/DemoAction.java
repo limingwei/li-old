@@ -320,7 +320,8 @@ public class DemoAction extends AbstractAction {
     public String testAll(HttpServletResponse response) throws Exception {
         response.getWriter().print("Response write 测试成功");
         super.write("AbstractAction write 测试成功");
-        Context.write("Ctx write 测试成功").write("Ctx write 第二次 测试成功");
+        Context.write("Ctx write 测试成功");
+        Context.write("Ctx write 第二次 测试成功");
 
         Context.view("write:" + "Ctx view 测试成功");
         super.view("write:" + "AbstractAction view 测试成功");

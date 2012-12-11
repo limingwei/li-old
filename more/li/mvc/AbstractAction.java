@@ -105,7 +105,8 @@ public abstract class AbstractAction implements RequestMethod {
      * 将QueryString中对应key的参数设置到request里面
      */
     public AbstractAction passParams(String... keys) {
-        return Context.passParams(keys);
+        Context.passParams(keys);
+        return this;
     }
 
     /**
@@ -121,21 +122,24 @@ public abstract class AbstractAction implements RequestMethod {
      * 移除一个Session
      */
     public AbstractAction removeSession(String key) {
-        return Context.removeSession(key);
+        Context.removeSession(key);
+        return this;
     }
 
     /**
      * 向request中设值
      */
     public AbstractAction setRequest(String key, Object value) {
-        return Context.setRequest(key, value);
+        Context.setRequest(key, value);
+        return this;
     }
 
     /**
      * 向session中设值
      */
     public AbstractAction setSession(String key, Object value) {
-        return Context.setSession(key, value);
+        Context.setSession(key, value);
+        return this;
     }
 
     /**
@@ -186,13 +190,15 @@ public abstract class AbstractAction implements RequestMethod {
      * 把 content写到页面上
      */
     public AbstractAction write(String content) {
-        return Context.write(content);
+        Context.write(content);
+        return this;
     }
 
     /**
      * 上传文件
      */
     public AbstractAction upload(String uploadPath) {
-        return Context.upload(uploadPath);
+        Context.upload(uploadPath);
+        return this;
     }
 }
