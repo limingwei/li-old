@@ -1,5 +1,11 @@
 package li.mvc;
 
+/**
+ * HTTP请求类型常量集合 GET POST ..
+ * 
+ * @author li (limw@w.cn)
+ * @version 0.1.1 (2012-12-11)
+ */
 public interface RequestMethod {
     public static final String GET = "GET";
 
