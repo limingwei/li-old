@@ -34,7 +34,8 @@ public class ActionContext {
             Log.put("MVCSTARTUP", System.currentTimeMillis());
 
             ACTION_CONTEXT = new ActionContext();
-            for (Bean bean : IocContext.getInstance().BEANS) {
+            List<Bean> beans = IocContext.getInstance().BEANS;
+            for (Bean bean : beans) {
                 Method[] methods = bean.type.getDeclaredMethods();
                 for (Method method : methods) {
                     At at = method.getAnnotation(At.class);
