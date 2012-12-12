@@ -22,6 +22,8 @@ import javax.servlet.SessionCookieConfig;
 import javax.servlet.SessionTrackingMode;
 import javax.servlet.descriptor.JspConfigDescriptor;
 
+import li.util.Files;
+
 /**
  * MockServletContext
  * 
@@ -29,11 +31,16 @@ import javax.servlet.descriptor.JspConfigDescriptor;
  * @version 0.1.1 (2012-09-27)
  */
 public class MockServletContext implements ServletContext {
+    private static final String WEB_ROOT_DIR_NAME = Files.load("config.properties").getProperty("WEB_ROOT_DIR_NAME", "WebContent");
 
     private Map<String, Object> servletContextMap;
 
     public MockServletContext() {
         this.servletContextMap = new HashMap<String, Object>();
+    }
+
+    public String getRealPath(String path) {
+        return System.getProperty("user.dir") + "/" + WEB_ROOT_DIR_NAME + "/" + path;
     }
 
     public Object getAttribute(String key) {
@@ -50,10 +57,6 @@ public class MockServletContext implements ServletContext {
 
     public void setAttribute(String key, Object value) {
         servletContextMap.put(key, value);
-    }
-
-    public String getRealPath(String path) {
-        return System.getProperty("user.dir") + "/WebContent/" + path;
     }
 
     public Dynamic addFilter(String arg0, String arg1) {
