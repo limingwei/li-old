@@ -1,82 +1,57 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Insert title here</title>
-		<!-- Le styles -->
-	    <link href="source/bootstrap/css/bootstrap.css" rel="stylesheet">
-	    <style type="text/css">
-	      body {
-	        padding-top: 40px;
-	        padding-bottom: 40px;
-	        background-color: #f5f5f5;
-	      }	
-	      .form-signin {
-	        max-width: 300px;
-	        padding: 19px 29px 29px;
-	        margin: 0 auto 20px;
-	        background-color: #fff;
-	        border: 1px solid #e5e5e5;
-	        -webkit-border-radius: 5px;
-	           -moz-border-radius: 5px;
-	                border-radius: 5px;
-	        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-	           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-	                box-shadow: 0 1px 2px rgba(0,0,0,.05);
-	      }
-	      .form-signin .form-signin-heading,
-	      .form-signin .checkbox {
-	        margin-bottom: 10px;
-	      }
-	      .form-signin input[type="text"],
-	      .form-signin input[type="password"] {
-	        font-size: 16px;
-	        height: auto;
-	        margin-bottom: 15px;
-	        padding: 7px 9px;
-	      }
-	
-	    </style>
-	    <link href="source/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-	
-	    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-	    <!--[if lt IE 9]>
-	      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	    <![endif]-->
-	
-	    <!-- Fav and touch icons -->
-	    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
-	    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
-	    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
-	    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
-	    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
-	</head>
-	<body>
-		<div class="container">
-      		<form class="form-signin" action="login.do" method="POST">
-		        <h2 class="form-signin-heading">Please sign in</h2>
-		        <input type="text" name="account.username" class="input-block-level" placeholder="Account">
-		        <input type="password" name="account.password"  class="input-block-level" placeholder="Password">
-		        <label class="checkbox">
-		          <input type="checkbox" value="remember-me"> Remember me
-		        </label>
-		        <button class="btn btn-large btn-primary" type="submit">Sign in</button>
-			</form>
-    	</div>
-		<!-- Le javascript  ================================================== -->
-	    <!-- Placed at the end of the document so the pages load faster -->
-	    <script src="source/jquery-1.8.2.js"></script>
-	    <script src="source/bootstrap/js/bootstrap-transition.js"></script>
-	    <script src="source/bootstrap/js/bootstrap-alert.js"></script>
-	    <script src="source/bootstrap/js/bootstrap-modal.js"></script>
-	    <script src="source/bootstrap/js/bootstrap-dropdown.js"></script>
-	    <script src="source/bootstrap/js/bootstrap-scrollspy.js"></script>
-	    <script src="source/bootstrap/js/bootstrap-tab.js"></script>
-	    <script src="source/bootstrap/js/bootstrap-tooltip.js"></script>
-	    <script src="source/bootstrap/js/bootstrap-popover.js"></script>
-	    <script src="source/bootstrap/js/bootstrap-button.js"></script>
-	    <script src="source/bootstrap/js/bootstrap-collapse.js"></script>
-	    <script src="source/bootstrap/js/bootstrap-carousel.js"></script>
-	    <script src="source/bootstrap/js/bootstrap-typeahead.js"></script>
-	</body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>登录</title> 
+<#include "../meta.htm"/> 
+<#include "../css.htm"/> 
+<#include "../js.htm"/>
+
+<style type="text/css">
+body {
+	padding-top: 40px;
+	padding-bottom: 40px;
+	background-color: #f5f5f5;
+}
+
+.form-signin {
+	max-width: 300px;
+	padding: 19px 29px 29px;
+	margin: 0 auto 20px;
+	background-color: #fff;
+	border: 1px solid #e5e5e5;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+}
+
+.form-signin .form-signin-heading,.form-signin .checkbox {
+	margin-bottom: 10px;
+}
+
+.form-signin input[type="text"],.form-signin input[type="password"] {
+	font-size: 16px;
+	height: auto;
+	margin-bottom: 15px;
+	padding: 7px 9px;
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<form class="form-signin" action="login.do" method="POST">
+			<h2 class="form-signin-heading">登录</h2>
+			<input type="text" name="account.username" class="input-block-level" placeholder="用户名/邮箱"> 
+			<input type="password" name="account.password" class="input-block-level" placeholder="密码"> 
+			<label class="checkbox"> 
+				<input type="checkbox" value="remember-me">记住密码
+			</label>
+			<button class="btn btn-large btn-primary" type="submit">登录</button>
+			<button class="btn btn-large btn-primary" type="submit">去注册</button>
+		</form>
+	</div>
+</body>
 </html>
