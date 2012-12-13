@@ -49,7 +49,7 @@ public class Context {
     /**
      * 视图层异常处理,为了安全,页面上没有异常信息
      */
-    private static void error(Throwable e) {
+    protected static void error(Throwable e) {
         getResponse().setStatus(500);
         log.error(e.getMessage());
         e.printStackTrace();
