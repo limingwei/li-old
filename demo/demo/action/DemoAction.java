@@ -142,7 +142,7 @@ public class DemoAction extends AbstractAction {
     public void testFreemarker() {
         setRequest("str1", "床前明月光 testFreemarker");
         Page page = new Page();
-        setSession("page", page);
+        setSession("pg", page);
         setRequest("accounts", memberDao.list(page, "select * from t_account"));
         freemarker("WEB-INF/view_fm/fm.htm");
     }

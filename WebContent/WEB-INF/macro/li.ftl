@@ -49,7 +49,7 @@
 </div>
 </#macro>
 
-<#-- <@li.page url="/edm_user/list_page?start="/> -->
+<#-- <@li.pager url="/edm_user/list_page?start="/> -->
 <#macro page url>
 <@li.basic_page url="${rc.getContextPath()}"+url totalPages="${pager.totalPageCount}" totalRecords="${pager.totalCount}" currPage="${pager.currentPageNo}" pageSize="${pager.pageSize}"/>
 </#macro>
