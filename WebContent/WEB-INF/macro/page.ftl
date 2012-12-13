@@ -70,7 +70,6 @@ ${currPage} / ${totalPages} 页
 </script>
 </#macro>
 
-
 <#macro test_page>
 	test page
 </#macro>
