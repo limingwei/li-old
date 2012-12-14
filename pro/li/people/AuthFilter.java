@@ -1,29 +1,21 @@
 package li.people;
 
-import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
+import li.annotation.Bean;
+import li.aop.AopChain;
+import li.aop.AopFilter;
+import li.mvc.Context;
 
-public class AuthFilter implements Filter {
-
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String path = ((HttpServletRequest) request).getServletPath();
-        List<String> permissions = (List<String>) ((HttpServletRequest) request).getSession().getAttribute("permissions");
+@Bean
+public class AuthFilter implements AopFilter {
+    public void doFilter(AopChain chain) {
+        String path = Context.getRequest().getServletPath();
+        List<String> permissions = (List<String>) Context.getSession().getAttribute("permissions");
         if (permissions.contains(path)) {
-            chain.doFilter(request, response);
+            chain.doFilter();
         } else {
-            ((HttpServletRequest) request).getRequestDispatcher("deny").forward(request, response);
+            Context.view("deny");
         }
     }
-
-    public void init(FilterConfig config) throws ServletException {}
-
-    public void destroy() {}
 }
