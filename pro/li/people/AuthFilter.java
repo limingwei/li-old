@@ -12,10 +12,14 @@ public class AuthFilter implements AopFilter {
     public void doFilter(AopChain chain) {
         String path = Context.getRequest().getServletPath();
         List<String> permissions = (List<String>) Context.getSession().getAttribute("permissions");
-        if (permissions.contains(path)) {
-            chain.doFilter();
+        if (null == Context.getSession().getAttribute("account") || null == permissions) {
+            Context.redirect("login.do");
         } else {
-            Context.view("deny");
+            if (permissions.contains(path)) {
+                chain.doFilter();
+            } else {
+                Context.view("deny");
+            }
         }
     }
 }

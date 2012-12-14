@@ -39,17 +39,35 @@ body {
 	padding: 7px 9px;
 }
 </style>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("form#register").submit(function() {
+			$.ajax({
+				url : $(this).attr("action"),
+				type : $(this).attr("method"),
+				data : $(this).serialize(),
+				dataType : "html"
+			}).done(function(data) {
+				if("注册成功"==data){
+					location.href="index.do";
+				}else{					
+					alert(data);
+				}
+			});
+			return false;
+        });
+	});
+</script>
 </head>
 <body>
 	<div class="container">
-		<form class="form-signin" action="login.do" method="POST">
+		<form id="register" class="form-signin" action="register.do" method="POST">
 			<h2 class="form-signin-heading">注册</h2>
 			<input type="text" name="account.username" class="input-block-level" placeholder="用户名"> 
-			<input type="password" name="account.password" class="input-block-level" placeholder="密码"> 
-			<input type="password" name="account.password" class="input-block-level" placeholder="重复密码"> 
-			<input type="text" name="account.username" class="input-block-level" placeholder="邮箱">
-			<button class="btn btn-large btn-primary" type="submit">注册</button>
-			<button class="btn btn-large btn-primary" type="submit">去登录</button>
+			<input type="text" name="account.password" class="input-block-level" placeholder="密码"> 
+			<input type="text" name="account.email" class="input-block-level" placeholder="邮箱">
+			<input type="submit" class="btn btn-large btn-primary" value="注册">
+			<a class="btn btn-large btn-primary" href="login.do">去登录</a>
 		</form>
 	</div>
 </body>

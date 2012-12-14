@@ -1,28 +1,12 @@
-<div class="modal hide fade in" id="myModal">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">×</button>
-        <h3 id="h3Title">添加资源</h3>
-    </div>
-    <div class="modal-body">
-        <form class="form-horizontal" id="editForm" action="">
-            <fieldset>
-                <div class="control-group">
-                    <label class="control-label" for="resName">资源名称</label>
-                    <div class="controls">
-                        <input type="text" class="input-xlarge" name="resName" maxlength="20" id="resName">
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="resDesc">资源描述</label>
-                    <div class="controls">
-                        <input type="text" class="input-xlarge" maxlength="20" name="resDesc" id="resDesc">
-                    </div>
-                </div>
-            </fieldset>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal">取消</a>
-        <a href="#" class="btn btn-primary" onclick="$('#editForm').submit();">保存</a>
-    </div>
-</div>
+<@li.window title="修改">
+	<@li.form>
+		<@li.input name="id" label="ID" value=""/>
+		<@li.input name="username" label="用户名"/>
+		<@li.input name="password" label="密码"/>
+		<@li.input name="email" label="邮箱"/>
+	</@li.form>
+	<@li.button>
+		<a href="#" class="btn" data-dismiss="modal">取消</a>
+        <a href="#" class="btn btn-primary">保存</a>
+	</@li.button>
+</@li.window>

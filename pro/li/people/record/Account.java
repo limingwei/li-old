@@ -12,7 +12,17 @@ public class Account extends Record<Account> {
 
     public Account login(Account account) {
         account.set("password", Convert.toMD5(account.get("password")));
-        String sql = "WHERE username=#username AND password=#password";
+        String sql = "WHERE (username=#username OR email=#username) AND password=#password";
         return find(sql, account);
+    }
+
+    public Account findByUsername(String username) {
+        String sql = "WHERE username=?";
+        return find(sql, username);
+    }
+
+    public Object findByEmail(String email) {
+        String sql = "WHERE email=?";
+        return find(sql, email);
     }
 }
