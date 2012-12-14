@@ -1,22 +1,28 @@
-<div class="window123 modal hide fade in" style="display: none;">
-	<div class="modal-header">
-		<a class="close" data-dismiss="modal">×</a>
-		<h3>修改</h3>
-	</div>
-	<div class="modal-body">
-		<form class="form-horizontal">
-			<label class="control-label" for="i1">标签</label>
-			<input id="i1" type="text" class="input-xlarge" placeholder="请输入文字...">
-			<label class="control-label"  for="i2">标签名</label>
-			<input id="i2" type="text" class="input-xlarge" placeholder="请输入文字...">
-			<label class="control-label"  for="i3">标签名称</label>
-			<input id="i3" type="text" class="input-xlarge" placeholder="请输入文字...">
-			<input type="text" class="input-xlarge" placeholder="请输入文字...">
-			<input type="text" class="input-xlarge" placeholder="请输入文字...">
-		</form>
-	</div>
-	<div class="modal-footer">
-		<a href="#" class="btn" data-dismiss="modal">关闭</a> <a href="#"
-			class="btn btn-primary">保存</a>
-	</div>
+<div class="modal hide fade in" id="myModal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3 id="h3Title">添加资源</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" id="editForm" action="">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="resName">资源名称</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" name="resName" maxlength="20" id="resName">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="resDesc">资源描述</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" maxlength="20" name="resDesc" id="resDesc">
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">取消</a>
+        <a href="#" class="btn btn-primary" onclick="$('#editForm').submit();">保存</a>
+    </div>
 </div>

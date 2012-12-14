@@ -11,17 +11,19 @@
 		</tr>
 	</thead>
 	<tbody>
-		<#list list as each>
-		<tr>
-			<td>${each.id}</td>
-			<td>${each.studentId }</td>
-			<td>${each.birthday}</td>
-			<td>${each.sex}</td>
-			<td>${each.name}</td>
-			<td>${each.status}</td>
-			<td><a class="button_url" href="people_edit.do?id=${each.id}">修改</a></td>
-		</tr>
-		</#list>
+		<#if list??>
+			<#list list as each>
+			<tr>
+				<td>${each.id}</td>
+				<td>${each.studentId }</td>
+				<td>${each.birthday}</td>
+				<td>${each.sex}</td>
+				<td>${each.name}</td>
+				<td>${each.status}</td>
+				<td><a class="button_url" href="people_edit.do?id=${each.id}">修改</a></td>
+			</tr>
+			</#list>
+		</#if>
 	</tbody>
 </table>
 
