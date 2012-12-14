@@ -32,6 +32,14 @@ public class Record<T extends Record> extends AbstractDao<T> implements Map, Ser
         return fields.get(key);
     }
 
+    public String getString(String key) {
+        return fields.get(key).toString();
+    }
+
+    public Integer getInt(String key) {
+        return Integer.valueOf(fields.get(key).toString());
+    }
+
     /**
      * 设置名为key的属性的值为value
      */
