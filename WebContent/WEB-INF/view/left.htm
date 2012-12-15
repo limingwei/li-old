@@ -2,13 +2,12 @@
 <div class="span3">
 	<div class="well sidebar-nav">
 		<ul class="nav nav-list">
-			<li class="nav-header">会员管理</li>
-			<li class="active"><a href="#">汪书记最英明</a></li>
-			<li><a href="people_list.do">会员管理</a></li>
-			<li><a href="#">汪书记最英明</a></li>
-			<li><a href="#">汪书记最英明</a></li>
+			<li class="nav-header">用户管理</li>
+			<li><a href="account_list.do" class="list">账户管理</a></li>
+			<li><a href="resource_list.do" class="list">资源管理</a></li>
+			<li><a href="role_list.do" class="list">角色管理</a></li>
 			<li class="nav-header">薄熙来在任时</li>
-			<li><a href="#">薄书记最英明</a></li>
+			<li><a href="1234567890">404</a></li>
 			<li><a href="#">薄书记最英明</a></li>
 			<li><a href="#">薄书记最英明</a></li>
 			<li><a href="#">薄书记最英明</a></li>
@@ -18,12 +17,18 @@
 			<li><a href="#">中央最英明</a></li>
 			<li><a href="#">中央最英明</a></li>
 			<li><a href="#">中央最英明</a></li>
+			<li><a href="#">中央最英明</a></li>
+			<li><a href="#">中央最英明</a></li>
+			<li><a href="#">中央最英明</a></li>
+			<li><a href="#">中央最英明</a></li>
+			<li><a href="#">中央最英明</a></li>
+			<li><a href="#">中央最英明</a></li>
 		</ul>
 	</div>
 </div>
 <script>
-	$(".nav-list a").each(function(index,item){
-		$(this).click(function(){
+	$(".nav-list a").each(function(index, item) {
+		$(this).click(function() {
 			$(".span9").load($(this).attr("href"));
 			$(".active").removeClass("active");
 			$(this).parent().addClass("active");

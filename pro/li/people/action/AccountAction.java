@@ -3,18 +3,45 @@ package li.people.action;
 import li.annotation.At;
 import li.annotation.Bean;
 import li.annotation.Inject;
+import li.dao.Page;
 import li.more.Convert;
 import li.mvc.AbstractAction;
+import li.people.Const;
 import li.people.record.Account;
-import li.people.record.Permission;
+import li.people.record.Role;
 
 @Bean
-public class AccountAction extends AbstractAction {
+public class AccountAction extends AbstractAction implements Const {
     @Inject
     Account accountDao;
 
     @Inject
-    Permission permissionDao;
+    Role roleDao;
+
+    @At("account_list.do")
+    public void list(Page page) {
+        setRequest(LIST, accountDao.list(page));
+        setRequest(PAGE, page);
+        view("account/list");
+    }
+
+    @At("account_edit_role.do")
+    public void editRole(Integer id) {
+        setRequest("account", accountDao.find(id));
+        setRequest("roles", roleDao.list(new Page()));
+        view("account/edit_role");
+    }
+
+    @At("account_update_role.do")
+    public void updateRole(Account account) {
+        write(accountDao.updateIgnoreNull(account) ? "更新角色成功" : "更新角色失败");
+    }
+
+    @At("account_edit_password.do")
+    public void editPassword(Integer id) {
+        setRequest("account", accountDao.find(id));
+        view("account/edit_password");
+    }
 
     @At(value = "login.do", method = GET)
     public void login() {
@@ -25,7 +52,6 @@ public class AccountAction extends AbstractAction {
     public void login(Account account) {
         if (null != accountDao.login(account)) {
             setSession("account", account);
-            setSession("permissions", permissionDao.listByRoleId(Convert.toType(Integer.class, account.get("roleId"))));
             view("index");
         } else {
             redirect("index.do");

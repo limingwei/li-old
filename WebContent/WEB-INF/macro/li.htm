@@ -1,97 +1,145 @@
-<#-- 自定义标签 li 20121213 -->
+<#-- 自定义标签 li 20121213 --> 
 
 <#macro input name="" id="" value="" label="" type="text" class="input-xlarge">
-<div class="control-group">
-    <label class="control-label" for="${name!}">${label!}</label>
+	<div class="control-group">
+		<label class="control-label" for="${name!}">${label!}</label>
+		<div class="controls">
+			<input type="${type!}" class="${class!}" name="${name!}" maxlength="20"
+				<#if ''!=id>id="${id}"</#if> 
+				<#if ''!=value>value="${value}"</#if> 
+			/>
+		</div>
+	</div>
+</#macro>
+
+<#macro select list key val name="" label="" value="" def="" disabled="" class="input-xlarge">
+<div id="${name}" class="control-group">
+    <label class="control-label" for="${name}">${label}</label>
     <div class="controls">
-        <input type="${type!}" class="${class!}" name="${name!}" maxlength="20" 
-        	<#if ''!=id>id="${id}"</#if> 
-        	<#if ''!=value>value="${value}"</#if>
-        />
+        <select id="${name}" name="${name}" class="${class!}" <#if disabled!="">disabled</#if>>
+            <#if def!="">
+                <option>${def}</option>
+            </#if>
+            <#list list as each>
+                <option value="${each[key]}" <#if each[key]?string==value?string>selected</#if>>${each[val]}</option>
+            </#list>
+        </select>
     </div>
 </div>
 </#macro>
 
 <#macro window title="window">
-<div class="modal hide fade in" id="myModal">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">×</button>
-        <h3 id="h3Title">${title!}</h3>
-    </div>
-    <#nested/><#-- 一个form 加 一个btton-->
-</div>
+	<div class="modal hide fade in">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">×</button>
+			<h3 id="h3Title">${title!}</h3>
+		</div>
+		<#nested/><#-- 一个form 加 一个btton-->
+	</div>
 </#macro>
 
-<#macro form id="" action="" method="GET">
-<div class="modal-body">
-    <form class="form-horizontal" id="${id}" action="${action}" method="${method}">
-        <fieldset>
-        	<#nested/><#-- 多个input-->
-        </fieldset>
-    </form>
-</div>
-</#macro>
+<#macro form id="" action="" method="POST">
+	<div class="modal-body">
+		<form class="form-horizontal" id="${id}" action="${action}" method="${method}">
+			<fieldset>
+				<#nested/><#-- 多个input-->
+			</fieldset>
+		</form>
+	</div>
+</#macro> 
 
 <#macro button>
-    <div class="modal-footer">
+	<div class="modal-footer">
 		<#nested/>
-    </div>
-</#macro>
+	</div>
+</#macro> 
 
 <#macro table list>
 	<table class="table">
-		<#list list as row>
-			<#if row_index==0>
+		<#if list?size=0> 
+			<#assign i=-1/>
+			<thead>
+				<tr>
+					<#nested row,i,true/>
+				</tr>
+			</thead>
+		</#if> 
+		
+		<#list list as row> 
+			<#if row_index==0> 
 				<#assign i=-1/>
 				<thead>
 					<tr>
 						<#nested row,i,true/>
 					</tr>
 				</thead>
-			</#if>
-			<#assign i=row_index has_next=row_has_next/>			
+			</#if> 
+			<#assign i=row_index has_next=row_has_next/> 
 			<#if row_index==0>
 				<tbody>
 					<tr>
 			<#else>
 				<tr>
-			</#if>
-			<#nested row,row_index,row_has_next/>
+			</#if> 
+			<#nested row,row_index,row_has_next/> 
 			<#if !row_has_next>
 					</tr>
 				</tbody>
 			<#else>
 				</tr>
-			</#if>
+			</#if> 
 		</#list>
 	</table>
-</#macro>
+	
+	<script type="text/javascript">
+		$(".window").click(function() {
+			$(".model").each(function(index,each){
+				$(this).remove();
+			});
+			$.ajax({
+				url : $(this).attr("href"),
+				dataType : "html"
+			}).done(function(data) {
+				$(data).modal();
+			});
+			return false;
+		});
+	</script>
+</#macro> 
 
-<#macro tr title="">
+<#macro tr title=""> 
 	<#if i==-1>
-		<th>
-			${title}
-		</th>
+		<th>${title}</th>
 	<#else>
-		<td>
-			<#nested/>
-		</td>
-	</#if>
-</#macro>
+		<td><#nested/></td>
+	</#if> 
+</#macro> 
 
 <#macro page pg url pn="page">
-	<div class="pagination">
-		<ul>
-			<li class="disabled"><a href="#">«</a></li>
-			<#list pg.pageNumber..pg.pageCount as i>
-				<li>
-					<a href="${url}?${pn}=${pg.next}">${i}</a>
-				</li>
-			</#list>
-			<li class="active"><a href="#">001</a></li>
-			<li><a href="#">002</a></li>
-			<li><a href="#">003</a></li>			
-			<li><a href="#">»</a></li>
-		</ul>
-	</div>
+<div class="pagination">
+	<ul>
+		<li <#if 1=pg.pageNumber>class="disabled"</#if>>
+			<a <#if 1!=pg.pageNumber>href="${url}?${pn}=1"</#if>>首页</a>
+		</li>
+		<li <#if 1=pg.pageNumber>class="disabled"</#if>>
+			<a <#if 1!=pg.pageNumber>href="${url}?${pn}=${pg.previous}"</#if>>上一页</a>
+		</li>
+		<li class="active"><a>第${pg.pageNumber}页,共${pg.pageCount}页,共${pg.recordCount}条</a></li>
+		<li <#if (0 = pg.pageCount || pg.pageCount <= pg.pageNumber)>class="disabled"</#if>>
+			<a <#if (0 = pg.pageCount || pg.pageCount >= pg.pageNumber)>href="${url}?${pn}=${pg.next}"</#if>>下一页</a>
+		</li>
+		<li <#if (0 = pg.pageCount || pg.pageCount <= pg.pageNumber)>class="disabled"</#if>>
+			<a <#if (0 = pg.pageCount || pg.pageCount >= pg.pageNumber)>href="${url}?${pn}=${pg.pageCount}"</#if>>末页</a>
+		</li>
+	</ul>
+</div>
+
+<script>
+	$("div.pagination a").each(function(index, item) {
+		$(this).click(function() {
+			$(".span9").load($(this).attr("href"));
+			return false;
+		});
+	});
+</script>
 </#macro>

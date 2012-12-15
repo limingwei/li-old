@@ -1,7 +1,10 @@
 package li.people.record;
 
+import java.util.List;
+
 import li.annotation.Bean;
 import li.annotation.Table;
+import li.dao.Page;
 import li.dao.Record;
 import li.more.Convert;
 
@@ -24,5 +27,10 @@ public class Account extends Record<Account> {
     public Object findByEmail(String email) {
         String sql = "WHERE email=?";
         return find(sql, email);
+    }
+
+    public List<Account> list(Page page) {
+        String sql = "SELECT a.*,r.name role_name FROM t_account a,t_role r WHERE r.id=a.role_id";
+        return list(page, sql);
     }
 }
