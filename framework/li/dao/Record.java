@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import li.util.Convert;
+
 /**
  * 你的数据对象类可以继承这个类,以使用ActiveRecord的方式操作数据库
  * 
@@ -32,12 +34,11 @@ public class Record<T extends Record> extends AbstractDao<T> implements Map, Ser
         return fields.get(key);
     }
 
-    public String getString(String key) {
-        return fields.get(key).toString();
-    }
-
-    public Integer getInt(String key) {
-        return Integer.valueOf(fields.get(key).toString());
+    /**
+     * 返回属性,并转换为指定类型
+     */
+    public <C> C get(Class<C> type, Object key) {
+        return Convert.toType(type, fields.get(key));
     }
 
     /**

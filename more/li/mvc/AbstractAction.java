@@ -89,6 +89,13 @@ public abstract class AbstractAction implements RequestMethod {
     }
 
     /**
+     * 返回转换为特定类型的parameters参数
+     */
+    public <C> C getParameter(Class<C> type, String key) {
+        return li.util.Convert.toType(type, getParameter(key));
+    }
+
+    /**
      * 返回项目文件系统跟路径
      */
     public String getRootPath() {

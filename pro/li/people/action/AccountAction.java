@@ -72,9 +72,9 @@ public class AccountAction extends AbstractAction implements Const {
 
     @At(value = "register.do", method = POST)
     public void register(Account account) {
-        if (null != accountDao.findByUsername(account.getString("username"))) {
+        if (null != accountDao.findByUsername(account.get(String.class, "username"))) {
             write("此用户名已注册");
-        } else if (null != account.findByEmail(account.getString("email"))) {
+        } else if (null != account.findByEmail(account.get(String.class, "email"))) {
             write("此邮箱已注册");
         } else if (accountDao.save(account.set("password", Convert.toMD5(account.get("password"))).set("status", "1"))) {
             login(account);
