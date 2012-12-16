@@ -31,6 +31,14 @@ public class SimpleDataSource implements DataSource {
         } catch (Throwable e) {}
     }
 
+    public SimpleDataSource() {}
+
+    public SimpleDataSource(String url, String username, String password) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+    }
+
     public Connection getConnection() throws SQLException {
         return getConnection(this.username, this.password);
     }

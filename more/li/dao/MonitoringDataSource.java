@@ -8,10 +8,17 @@ import java.util.List;
 import li.util.Log;
 
 public class MonitoringDataSource extends SimpleDataSource {
+
     private static final Log log = Log.init();
 
     private int times = 0;
     private List<Connection> connections = new ArrayList<Connection>();
+
+    public MonitoringDataSource() {}
+
+    public MonitoringDataSource(String url, String username, String password) {
+        super(url, username, password);
+    }
 
     public Connection getConnection(String username, String password) throws SQLException {
         Connection connection = new MonitoringConnection(this, super.getConnection(username, password));

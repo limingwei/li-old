@@ -1,6 +1,5 @@
 package li.dao;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -8,6 +7,7 @@ import javax.sql.DataSource;
 
 import li.model.Bean;
 import li.model.Field;
+import li.util.Files;
 import li.util.Reflect;
 import li.util.Verify;
 
@@ -18,6 +18,8 @@ import li.util.Verify;
  * @version 0.1.8 (2012-05-08)
  */
 public class QueryBuilder {
+    private static final String MAP_ARG_SIGN = Files.load("config.properties").getProperty("dao.mapArgSign", "#");
+
     /**
      * 表示对象结构的beanMeta
      */
@@ -114,7 +116,7 @@ public class QueryBuilder {
         if (Verify.startWith(sql, "WHERE")) {// 添加SELECT * FROM table 部分
             sql = "SELECT * FROM " + beanMeta.table + " " + sql;
         }
-        return setPage(setArgs(setAlias(sql), args), page);// 先处理别名,再处理args,最后处理page
+        return setPage(setArgs(sql, args), page);// 先处理别名,再处理args,最后处理page
     }
 
     /**
@@ -164,14 +166,31 @@ public class QueryBuilder {
     }
 
     /**
-     * 根据传入的对象构建一个插入一条记录的SQL,会略过为null的属性
+     * 根据传入的对象构建一个插入一条记录的SQL
      */
     public String save(Object object) {
         String columns = " (", values = " VALUES (";
         for (Field field : beanMeta.fields) {
             if (!beanMeta.getId().name.equals(field.name)) {
                 Object fieldValue = Reflect.get(object, field.name);
-                if (null != fieldValue) {// 略过为null的属性
+                columns += field.column + ",";
+                values += (null == fieldValue ? "NULL" : "'" + fieldValue + "'") + ",";
+            }
+        }
+        columns = columns.substring(0, columns.length() - 1) + ")";
+        values = values.substring(0, values.length() - 1) + ")";
+        return "INSERT INTO " + beanMeta.table + columns + values;
+    }
+
+    /**
+     * 根据传入的对象构建一个插入一条记录的SQL,忽略为空的属性
+     */
+    public String saveIgnoreNull(Object object) {
+        String columns = " (", values = " VALUES (";
+        for (Field field : beanMeta.fields) {
+            if (!beanMeta.getId().name.equals(field.name)) {
+                Object fieldValue = Reflect.get(object, field.name);
+                if (!Verify.isEmpty(fieldValue)) {// 略过为null的属性
                     columns += field.column + ",";
                     values += (null == fieldValue ? "NULL" : "'" + fieldValue + "'") + ",";
                 }
@@ -211,7 +230,7 @@ public class QueryBuilder {
     public String setArgMap(String sql, Map<?, ?> argMap) {
         if (null != sql && sql.length() > 0 && null != argMap && argMap.size() > 0) {// 非空判断
             for (Entry<?, ?> arg : argMap.entrySet()) {
-                sql = sql.replaceFirst("#" + arg.getKey(), "'" + arg.getValue() + "'");// 为参数加上引号后替换问号
+                sql = sql.replaceFirst(MAP_ARG_SIGN + arg.getKey(), "'" + arg.getValue() + "'");// 为参数加上引号后替换问号
             }
         }
         return sql;
@@ -225,40 +244,5 @@ public class QueryBuilder {
             return sql + " LIMIT " + page.getFrom() + "," + page.getPageSize();
         }
         return sql;
-    }
-
-    /**
-     * 处理批量别名,将类似 SELECT t_account.#,t_member.# AS member_# FROM t_account,t_member的SQL转换为标准SQL
-     */
-    public String setAlias(final String sql) {
-        int index = sql.indexOf(".#");
-        if (index < 6) {
-            return sql;// 如果SQL中不包含#,则直接返回
-        } else {// 如果有替换字符,则开始处理
-            final int sign_end = index + 2;// end为第一个#的位置
-
-            int old_part_start_1 = sql.substring(0, sign_end).lastIndexOf(" ") + 1;// #之前最后一个空格的位置
-            int old_part_start_2 = sql.substring(0, sign_end).lastIndexOf(",") + 1;// #之前最后一个,的位置
-            final int old_part_start = old_part_start_1 > old_part_start_2 ? old_part_start_1 : old_part_start_2;// table.#部分开始位置
-
-            int as_index = sql.toUpperCase().indexOf(" AS ", sign_end);// sign_end之后第一个AS的位置
-            int old_part_end = (as_index > 0 && as_index - sign_end < 3) ? sql.indexOf("#", as_index) + 1 : sign_end;// 如果有AS,截取到AS后的第一个#,如果没有AS,截取到end
-            String old_part = sql.substring(old_part_start, old_part_end);// 求出被替换部分字符串
-            String new_part = "";// 申明替换部分字符串
-
-            final String table_name = sql.substring(old_part_start, sign_end - 2);// 求得表名
-            List<Field> fields = Field.list(dataSource, table_name);
-            for (Field field : fields) {// 构造替换字符串
-                if (as_index > 0 && as_index - sign_end < 3) {// 如果有AS
-                    String fix = old_part.substring(as_index - old_part_start, old_part.length() - 1);// 取得AS+别名前缀,如AS member_
-                    new_part = new_part + (table_name + "." + field.column) + (fix + field.column) + ",";// 构造一列加AS
-                } else {
-                    new_part = new_part + table_name + "." + field.column + ",";// 构造一列不加AS
-                }
-            }
-
-            String result = sql.replaceFirst(old_part, new_part.substring(0, new_part.length() - 1));// 替换,去掉最后一个逗号
-            return setAlias(result);// 处理下一个
-        }
     }
 }

@@ -25,8 +25,8 @@ public class Verify {
     /**
      * 判断一个字符串是否为空,不为null且长度大于0时返回true
      */
-    public static Boolean isEmpty(String string) {
-        return (string == null) || (string.trim().length() < 1);
+    public static Boolean isEmpty(Object object) {
+        return null == object || (object instanceof String && ((String) object).trim().length() < 1);
     }
 
     /**

@@ -229,6 +229,18 @@ public class AbstractDao<T> {
     }
 
     /**
+     * 向数据库中插入一条记录,忽略为空的属性
+     */
+    public Boolean saveIgnoreNull(T t) {
+        QueryRunner queryRunner = new QueryRunner(getConnection());
+        Integer updateCount = queryRunner.executeUpdate(getQueryBuilder().saveIgnoreNull(t));
+
+        Reflect.set(t, getBeanMeta().getId().name, queryRunner.LAST_INSERT_ID);// 设置对象ID为最后主键值
+
+        return 0 < updateCount;
+    }
+
+    /**
      * 执行更新类的自定义SQL
      * 
      * @param sql 传入的sql语句,可以包含'?'占位符和具名占位符
