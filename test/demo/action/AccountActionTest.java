@@ -57,7 +57,7 @@ public class AccountActionTest extends ActionTest {
 
     @Test
     public void save() {
-        accountAction.save(account.set("username", System.currentTimeMillis()));
+        accountAction.save(account.set("role_id", 1).set("username", System.currentTimeMillis()));
     }
 
     @Test

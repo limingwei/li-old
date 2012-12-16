@@ -24,7 +24,7 @@ public class H2Test extends BaseTest {
     @Test
     public void insert() {
         for (int i = 0; i < 3; i++) {
-            Account account = new Account().set("USERNAME", "li" + System.currentTimeMillis()).set("PASSWORD", "wode").set("EMAIL", "limingwei@mail.com");
+            Account account = new Account().set("STATUS", 1).set("USERNAME", "li" + System.currentTimeMillis()).set("PASSWORD", "wode").set("EMAIL", "limingwei@mail.com");
             System.out.println(dao.save(account) + "\t" + account.get("ID"));
         }
     }

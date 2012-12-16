@@ -10,6 +10,6 @@ public class PageTest {
     public void test() {
         Page page = new Page();
         page.setRecordCount(100);
-        assertEquals(20 + "", page.getPageSize() + "");
+        assertEquals(10 + "", page.getPageSize() + "");
     }
 }

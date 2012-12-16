@@ -19,7 +19,7 @@ public class SqliteTest extends BaseTest {
 
     @Test
     public void test() {
-        Account user = new Account().set("username", "li" + System.currentTimeMillis()).set("password", "wode").set("email", "limw@w.cn");
+        Account user = new Account().set("status", 1).set("username", "li" + System.currentTimeMillis()).set("password", "wode").set("email", "limw@w.cn");
         userDao.save(user);
 
         System.out.println("user id = " + user.get("id"));
@@ -34,7 +34,7 @@ public class SqliteTest extends BaseTest {
     @Test
     public void insert() {
         for (int i = 0; i < 3; i++) {
-            Account user = new Account().set("username", "li" + System.currentTimeMillis()).set("password", "wode").set("email", "limw@w.cn");
+            Account user = new Account().set("status", 1).set("username", "li" + System.currentTimeMillis()).set("password", "wode").set("email", "limw@w.cn");
             System.out.println(userDao.save(user) + "\t" + user.get("id"));
         }
     }
