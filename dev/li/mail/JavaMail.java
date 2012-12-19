@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * https://mailgun.net http://sendgrid.com
+ */
 public class JavaMail {
     public static void main(String[] args) {
         Sender sender = new Sender("smtp.qq.com", "1055515958@qq.com", "buxiaode");

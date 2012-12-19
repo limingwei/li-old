@@ -15,6 +15,18 @@ body {
 }
 </style>
 
+
+<script>
+	function endWith(string, str) {
+		if (string.length < str.length)
+			return false;
+		if (string == str)
+			return true;
+		if (string.substring(string.length - str.length) == str)
+			return true;
+		return false;
+	}
+</script>
 </head>
 <body>
 	<#include "top.htm"/>

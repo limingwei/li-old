@@ -25,22 +25,17 @@ public class AccountAction extends AbstractAction implements Const {
         view("account/list");
     }
 
-    @At("account_edit_role.do")
-    public void editRole(Integer id) {
+    @At("account_edit.do")
+    public void edit(Integer id) {
         setRequest("account", accountDao.find(id));
         setRequest("roles", roleDao.list(new Page()));
-        view("account/edit_role");
+        view("account/edit");
     }
 
-    @At("account_update_role.do")
-    public void updateRole(Account account) {
+    @At("account_update.do")
+    public void update(Account account) {
+        System.out.println(account);
         write(accountDao.updateIgnoreNull(account) ? "更新角色成功" : "更新角色失败");
-    }
-
-    @At("account_edit_password.do")
-    public void editPassword(Integer id) {
-        setRequest("account", accountDao.find(id));
-        view("account/edit_password");
     }
 
     @At(value = "login.do", method = GET)
