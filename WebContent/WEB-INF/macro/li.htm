@@ -1,12 +1,14 @@
 <#-- 自定义标签 li 20121213 --> 
 
-<#macro input name="" id="" value="" label="" type="text" class="input-xlarge">
+<#macro input name="" id="" value="" label="" type="text" class="input-xlarge" readonly="" placeholder="">
 	<div class="control-group">
 		<label class="control-label" for="${name!}">${label!}</label>
 		<div class="controls">
 			<input type="${type!}" class="${class!}" name="${name!}" maxlength="20"
 				<#if ''!=id>id="${id}"</#if> 
 				<#if ''!=value>value="${value}"</#if> 
+				<#if ''!=readonly>readonly="readonly"</#if> 
+				<#if ''!=placeholder>placeholder="${placeholder}"</#if> 
 			/>
 		</div>
 	</div>
@@ -90,20 +92,36 @@
 			</#if> 
 		</#list>
 	</table>
-	
-	<script type="text/javascript">
-		$(".window").click(function() {
-			$(".modal").remove();
+
+<script type="text/javascript">
+	$(".window").click(function() {
+		$(".modal").remove();
+		$.ajax({
+			url : $(this).attr("href"),
+			dataType : "html"
+		}).done(function(data) {
+			$("body").append(data);
+			$(".modal").modal();
+		});
+		return false;
+	});
+	$(".delete").click(function() {
+		if (confirm("确认删除这条数据?")) {
 			$.ajax({
-				url : $(this).attr("href"),
+				type:'POST',
+				url : $(this).attr("href"),				
 				dataType : "html"
 			}).done(function(data) {
-				$("body").append(data);
-				$(".modal").modal();
+				if (endWith(data, "成功")) {
+					reload();
+				} else {
+					alert(data);
+				}
 			});
-			return false;
-		});
-	</script>
+		}
+		return false;
+	});
+</script>
 </#macro> 
 
 <#macro tr title=""> 

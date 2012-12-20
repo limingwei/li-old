@@ -34,8 +34,12 @@ public class AccountAction extends AbstractAction implements Const {
 
     @At("account_update.do")
     public void update(Account account) {
-        System.out.println(account);
-        write(accountDao.updateIgnoreNull(account) ? "更新角色成功" : "更新角色失败");
+        write(accountDao.updateIgnoreNull(account) ? "更新用户成功" : "更新用户失败");
+    }
+
+    @At(value = "account_delete.do", method = POST)
+    public void delete(Integer id) {
+        write(accountDao.delete(id) ? "删除用户成功" : "删除用户失败");
     }
 
     @At(value = "login.do", method = GET)
