@@ -17,7 +17,11 @@ public class Sender {
     private Session session;
     private String username;
 
-    public Sender(String host, final String username, final String password) {
+    public Sender(String host, String username, String password) {
+        this(host, username, password, true);
+    }
+
+    public Sender(String host, final String username, final String password, Boolean debug) {
         Properties properties = new Properties();
         properties.put("mail.smtp.host", host);
         properties.put("mail.smtp.auth", true);
@@ -26,7 +30,7 @@ public class Sender {
                 return new PasswordAuthentication(username, password);
             }
         });
-        session.setDebug(true);
+        session.setDebug(debug);
         this.username = username;
     }
 
