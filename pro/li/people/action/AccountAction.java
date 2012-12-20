@@ -32,7 +32,7 @@ public class AccountAction extends AbstractAction implements Const {
         view("account/edit");
     }
 
-    @At("account_update.do")
+    @At(value = "account_update.do", method = POST)
     public void update(Account account) {
         write(accountDao.updateIgnoreNull(account) ? "更新用户成功" : "更新用户失败");
     }

@@ -26,6 +26,21 @@ body {
 			return true;
 		return false;
 	}
+	
+	function ajaxPost(form){
+		$.ajax({
+			type:'POST',
+			url : $(form).parent().prev().children("form").attr("action"),
+			data : $(form).parent().prev().children("form").serialize()
+		}).done(function(data) {
+			if (endWith(data, "成功")) {
+				$(".modal").modal("hide");
+				reload();
+			} else {
+				alert(data);
+			}
+		});
+	}
 </script>
 </head>
 <body>
