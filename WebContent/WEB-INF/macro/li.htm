@@ -1,12 +1,14 @@
 <#-- 自定义标签 li 20121213 --> 
 
-<#macro input name="" id="" value="" label="" type="text" class="input-xlarge">
+<#macro input name="" value="" label="" type="text" class="input-xlarge" readonly="" placeholder="" disabled="">
 	<div class="control-group">
 		<label class="control-label" for="${name!}">${label!}</label>
 		<div class="controls">
-			<input type="${type!}" class="${class!}" name="${name!}" maxlength="20"
-				<#if ''!=id>id="${id}"</#if> 
+			<input type="${type!}" class="${class!}" name="${name!}" id="${name}" maxlength="20"
 				<#if ''!=value>value="${value}"</#if> 
+				<#if ''!=placeholder>placeholder="${placeholder}"</#if> 
+				<#if ''!=readonly>readonly="readonly"</#if> 
+				<#if ''!=disabled>disabled="disabled"</#if> 
 			/>
 		</div>
 	</div>
@@ -17,9 +19,7 @@
     <label class="control-label" for="${name}">${label}</label>
     <div class="controls">
         <select id="${name}" name="${name}" class="${class!}" <#if disabled!="">disabled</#if>>
-            <#if def!="">
-                <option>${def}</option>
-            </#if>
+            <#if ''!=def> <option>${def}</option> </#if>
             <#list list as each>
                 <option value="${each[key]}" <#if each[key]?string==value?string>selected</#if>>${each[val]}</option>
             </#list>
