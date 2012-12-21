@@ -1,4 +1,4 @@
-package li.more;
+package li.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,8 +8,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import li.model.Field;
-import li.util.Reflect;
-import li.util.Verify;
 
 /**
  * 类型转换的工具类
@@ -17,7 +15,7 @@ import li.util.Verify;
  * @author li (limw@w.cn)
  * @version 0.1.7 (2012-05-08)
  */
-public class Convert extends li.util.Convert {
+public class Convert2 extends li.util.Convert {
     /**
      * 将数据对象或对象的集合或数组转换为json
      */

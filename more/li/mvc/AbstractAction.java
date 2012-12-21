@@ -7,7 +7,6 @@ import javax.servlet.http.HttpSession;
 
 import li.dao.Page;
 import li.model.Action;
-import li.more.Convert;
 
 /**
  * Action基类,你的Action类可以继承这个类
@@ -199,14 +198,6 @@ public abstract class AbstractAction implements RequestMethod {
      */
     public AbstractAction write(String content) {
         Context.write(content);
-        return this;
-    }
-
-    /**
-     * 把对象转为json后写到页面
-     */
-    public AbstractAction json(Object object) {
-        Context.write(Convert.toJson(object));
         return this;
     }
 

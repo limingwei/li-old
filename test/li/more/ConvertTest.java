@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import li.dao.Record;
+import li.util.Convert;
+import li.util.Convert2;
 
 import org.junit.Test;
 
@@ -16,10 +18,10 @@ public class ConvertTest {
     public void timeConvert() {
         String[] times = { "19:48", "9:8", "09:8", "9:08", "1:1:1", "12:12:12", "2012-2-1", "2012/02/12", "2012-02-12 19:48", "2012/02/12 19:48", "2012-02-12 19:48:12", "2012/02/12 19:48:12" };
         for (String time : times) {
-            Convert.toType(java.util.Date.class, time);
-            Convert.toType(java.sql.Date.class, time);
-            Convert.toType(Time.class, time);
-            Convert.toType(Timestamp.class, time);
+            Convert2.toType(java.util.Date.class, time);
+            Convert2.toType(java.sql.Date.class, time);
+            Convert2.toType(Time.class, time);
+            Convert2.toType(Timestamp.class, time);
         }
     }
 
@@ -34,7 +36,7 @@ public class ConvertTest {
             record.set("email", "limw@w.cn");
             list.add(record);
 
-            System.out.println(Convert.fromJson(Record.class, Convert.toJson(record)));
+            System.out.println(Convert2.fromJson(Record.class, Convert2.toJson(record)));
         }
 
         List<List<Record>> list2 = new ArrayList<List<Record>>();
@@ -42,13 +44,13 @@ public class ConvertTest {
         list2.add(list);
         list2.add(list);
 
-        String json = Convert.toJson(list);
+        String json = Convert2.toJson(list);
 
-        List<Record> records = Convert.fromJson(Record.class, json);
+        List<Record> records = Convert2.fromJson(Record.class, json);
 
         System.out.println(records);
 
-        String json2 = Convert.toJson(Convert.fromJson(Record.class, Convert.toJson(Convert.fromJson(Record.class, Convert.toJson(list)))));
+        String json2 = Convert2.toJson(Convert2.fromJson(Record.class, Convert2.toJson(Convert2.fromJson(Record.class, Convert2.toJson(list)))));
 
         System.out.println(json2);
 
@@ -66,7 +68,7 @@ public class ConvertTest {
             record.set("email", "limw@w.cn");
             list.add(record);
         }
-        String json = Convert.toJson(list);
+        String json = Convert2.toJson(list);
         System.out.println(json);
     }
 
