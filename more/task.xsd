@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<!-- Root Element -->
+	<xs:element name="config" type="config_type" />
+
+	<xs:complexType name="config_type">
+		<xs:sequence>
+			<xs:element name="tasks" type="tasks_type" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="tasks_type">
+		<xs:sequence>
+			<xs:element name="task" maxOccurs="unbounded" type="task_type" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="task_type">
+		<xs:attributeGroup ref="task_attribute" />
+	</xs:complexType>
+
+	<xs:attributeGroup name="task_attribute">
+		<xs:attribute name="class" type="xs:string" use="required" />
+		<xs:attribute name="trigger" type="xs:string" use="required" />
+	</xs:attributeGroup>
+</xs:schema>
