@@ -15,17 +15,17 @@
 </#macro>
 
 <#macro select list key val name="" label="" value="" def="" disabled="" class="input-xlarge">
-<div id="${name}" class="control-group">
-    <label class="control-label" for="${name}">${label}</label>
-    <div class="controls">
-        <select id="${name}" name="${name}" class="${class!}" <#if disabled!="">disabled</#if>>
-            <#if ''!=def> <option>${def}</option> </#if>
-            <#list list as each>
-                <option value="${each[key]}" <#if each[key]?string==value?string>selected</#if>>${each[val]}</option>
-            </#list>
-        </select>
-    </div>
-</div>
+	<div id="${name}" class="control-group">
+	    <label class="control-label" for="${name}">${label}</label>
+	    <div class="controls">
+	        <select id="${name}" name="${name}" class="${class!}" <#if disabled!="">disabled</#if>>
+	            <#if ''!=def> <option>${def}</option> </#if>
+	            <#list list as each>
+	                <option value="${each[key]}" <#if each[key]?string==value?string>selected</#if>>${each[val]}</option>
+	            </#list>
+	        </select>
+	    </div>
+	</div>
 </#macro>
 
 <#macro window id="" title="window">
@@ -52,7 +52,7 @@
 	<div class="modal-footer">
 		<#nested/>
 	</div>
-</#macro> 
+</#macro>
 
 <#macro table list>
 	<table class="table">
@@ -111,34 +111,34 @@
 		<th>${title}</th>
 	<#else>
 		<td><#nested/></td>
-	</#if> 
+	</#if>
 </#macro> 
 
 <#macro page pg url pn="page">
-<div class="pagination">
-	<ul>
-		<li <#if 1=pg.pageNumber>class="disabled"</#if>>
-			<a <#if 1!=pg.pageNumber>href="${url}?${pn}=1"</#if>>首页</a>
-		</li>
-		<li <#if 1=pg.pageNumber>class="disabled"</#if>>
-			<a <#if 1!=pg.pageNumber>href="${url}?${pn}=${pg.previous}"</#if>>上一页</a>
-		</li>
-		<li class="active"><a>第${pg.pageNumber}页,共${pg.pageCount}页,共${pg.recordCount}条</a></li>
-		<li <#if (0 = pg.pageCount || pg.pageCount <= pg.pageNumber)>class="disabled"</#if>>
-			<a <#if (0 = pg.pageCount || pg.pageCount >= pg.pageNumber)>href="${url}?${pn}=${pg.next}"</#if>>下一页</a>
-		</li>
-		<li <#if (0 = pg.pageCount || pg.pageCount <= pg.pageNumber)>class="disabled"</#if>>
-			<a <#if (0 = pg.pageCount || pg.pageCount >= pg.pageNumber)>href="${url}?${pn}=${pg.pageCount}"</#if>>末页</a>
-		</li>
-	</ul>
-</div>
+	<div class="pagination">
+		<ul>
+			<li <#if 1=pg.pageNumber>class="disabled"</#if>>
+				<a <#if 1!=pg.pageNumber>href="${url}?${pn}=1"</#if>>首页</a>
+			</li>
+			<li <#if 1=pg.pageNumber>class="disabled"</#if>>
+				<a <#if 1!=pg.pageNumber>href="${url}?${pn}=${pg.previous}"</#if>>上一页</a>
+			</li>
+			<li class="active"><a>第${pg.pageNumber}页,共${pg.pageCount}页,共${pg.recordCount}条</a></li>
+			<li <#if (0 = pg.pageCount || pg.pageCount <= pg.pageNumber)>class="disabled"</#if>>
+				<a <#if (0 = pg.pageCount || pg.pageCount >= pg.pageNumber)>href="${url}?${pn}=${pg.next}"</#if>>下一页</a>
+			</li>
+			<li <#if (0 = pg.pageCount || pg.pageCount <= pg.pageNumber)>class="disabled"</#if>>
+				<a <#if (0 = pg.pageCount || pg.pageCount >= pg.pageNumber)>href="${url}?${pn}=${pg.pageCount}"</#if>>末页</a>
+			</li>
+		</ul>
+	</div>
 
-<script>
-	$("div.pagination a").each(function(index, item) {
-		$(this).click(function() {
-			$(".span9").load($(this).attr("href"));
-			return false;
+	<script>
+		$("div.pagination a").each(function(index, item) {
+			$(this).click(function() {
+				$(".span9").load($(this).attr("href"));
+				return false;
+			});
 		});
-	});
-</script>
+	</script>
 </#macro>
