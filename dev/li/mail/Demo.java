@@ -16,7 +16,7 @@ public class Demo {
         Mail mail = new Mail();
         mail.setSubject("这是一封测试邮件" + System.currentTimeMillis());
         mail.setContent(buildContent());
-        mail.setFrom("li@w.cn");//发件人
+        mail.setFrom("li@w.cn");// 发件人
         mail.setTo("416133823@qq.com");
         sender.send(mail);
     }
