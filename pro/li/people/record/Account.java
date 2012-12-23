@@ -30,7 +30,7 @@ public class Account extends Record<Account> {
     }
 
     public List<Account> list(Page page) {
-        String sql = "SELECT a.*,r.name role_name FROM t_account a,t_role r WHERE r.id=a.role_id";
+        String sql = "SELECT a.*,r.name role_name FROM t_account a LEFT JOIN t_role r ON a.role_id=r.id";
         return list(page, sql);
     }
 }
