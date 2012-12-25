@@ -89,7 +89,7 @@ public class ActionFilter implements Filter {
 
             Object result = Reflect.invoke(action.actionInstance, action.actionMethod, args);// 执行Action方法
             if (result instanceof String && !result.equals("~!@#DONE")) {// 返回值为String且未调用视图方法
-                Context.view(result.toString());// 则Context.view返回视图
+                Context.view((String) result);// 则Context.view返回视图
             }
         } else {
             log.info("ACTION NOT FOUND: path=\"" + ((HttpServletRequest) request).getServletPath() + "\",method=\"" + ((HttpServletRequest) request).getMethod() + "\"");
