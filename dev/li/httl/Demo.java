@@ -13,10 +13,12 @@ public class Demo {
         parameters.put("name", "limingwei");
 
         Properties properties = new Properties();
-        properties.put("template.directory", "tempdir");
+        properties.put("loaders", "httl.spi.loaders.FileLoader");
+        properties.put("template.directory", "D:/workspace/li/dev/li/httl/");
 
         Engine engine = Engine.getEngine(properties);
-        Template template = engine.getTemplate("/httl.htm");
+
+        Template template = engine.getTemplate("httl.htm");
         template.render(parameters, System.out);
     }
 }
