@@ -19,7 +19,42 @@ import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 
 public class Demo {
+
     public static void main(String[] args) throws Exception {
+        send("哼哼哈嘿,成功了");
+    }
+
+    public static void send(String msg) throws Exception {
+        String referer = "http://q32.3g.qq.com/g/s?sid=Ab6Ou9oAGFKrhH3NQIJCuk3X&aid=nqqChat&u=416133823&on=1";
+        String action = "http://q32.3g.qq.com/g/s?sid=Ab6Ou9oAGFKrhH3NQIJCuk3X";
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(action);
+        post.addHeader("Referer", referer);
+
+        List<NameValuePair> formParams = new ArrayList<NameValuePair>();
+
+        formParams.add(new BasicNameValuePair("msg", msg));
+        formParams.add(new BasicNameValuePair("u", "416133823"));
+        formParams.add(new BasicNameValuePair("saveURL", "0"));
+        formParams.add(new BasicNameValuePair("do", "send"));
+        formParams.add(new BasicNameValuePair("on", "1"));
+        formParams.add(new BasicNameValuePair("saveURL", "0"));
+
+        formParams.add(new BasicNameValuePair("aid", "发送"));
+        formParams.add(new BasicNameValuePair("aid", "表情"));
+        formParams.add(new BasicNameValuePair("num", "416133823"));
+
+        formParams.add(new BasicNameValuePair("do", "sendsms"));
+        formParams.add(new BasicNameValuePair("aid", "发送短信给Ta"));
+
+        HttpEntity entity = new UrlEncodedFormEntity(formParams, "UTF-8");
+        post.setEntity(entity);
+        HttpResponse response = new DefaultHttpClient().execute(post);
+
+        System.out.println(EntityUtils.toString(response.getEntity()));
+    }
+
+    public static void login() throws Exception {
         String url = "http://pt.3g.qq.com/s?aid=nLogin3gqq&auto=1&s_it=1&g_f=286&sid=AbO79wm99_gRqY0wBafirEzk";
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet(url);
@@ -32,7 +67,7 @@ public class Demo {
 
         List<NameValuePair> formParams = new ArrayList<NameValuePair>();
 
-        formParams.add(new BasicNameValuePair("qq", "416133823"));
+        formParams.add(new BasicNameValuePair("qq", "1055515958"));
         formParams.add(new BasicNameValuePair("pwd", "buxiaode"));
         formParams.add(new BasicNameValuePair("bid_code", "3GQQ"));
         formParams.add(new BasicNameValuePair("toQQchat", "true"));
@@ -55,5 +90,9 @@ public class Demo {
         String main = Jsoup.parse(content).select("a").attr("href");
 
         Files.write(new File("C:\\Users\\li\\Desktop\\qq.htm"), Jsoup.connect(main).get().toString());
+
+        String send_page_url = "http://q32.3g.qq.com/g/s?sid=Ab6Ou9oAGFKrhH3NQIJCuk3X&aid=nqqChat&u=416133823&g_f=1660";
+
+        String send_page_action = "";
     }
 }
