@@ -6,18 +6,19 @@
 * 示例项目 -> demo
 * WebRoot -> WebContent
 
-by li (@limingwei) limingwei@mail.com
+by li limingwei@mail.com
 * QQ: 416133823
 * Q群: 254860190
 
+javadoc
+* li-framework http://limingwei.github.com/liz 
+* li-more http://limingwei.github.com/liz/more 
+
+下载
+* li-framework.jar http://limingwei.github.com/liz/downloads/lis-framework.jar
+* li-more.jar http://limingwei.github.com/liz/downloads/lis-more.jar
+* cglib-nodep.jar http://limingwei.github.com/liz/downloads/cglib-nodep-2.2.3.jar
+
 * 介绍 http://limingwei.github.com/li
 * 提问&讨论   https://github.com/limingwei/li/issues
-
 * 更新记录   https://github.com/limingwei/li/wiki/changelog
-
-* javadoc li-framework http://limingwei.github.com/liz 
-* javadoc li-more http://limingwei.github.com/liz/more 
-
-* 下载li-framework.jar http://limingwei.github.com/liz/downloads/lis-framework.jar
-* 下载li-more.jar http://limingwei.github.com/liz/downloads/lis-more.jar
-* 下载cglib-nodep.jar http://limingwei.github.com/liz/downloads/cglib-nodep-2.2.3.jar
