@@ -39,13 +39,9 @@ public class AopEnhancer {
      */
     private static final NamingPolicy NAMING_POLICY = new NamingPolicy() {
         public String getClassName(String prefix, String source, Object key, Predicate names) {
-            if (null == prefix) {
-                prefix = "net.sf.cglib.empty.Object";
-            } else if (prefix.startsWith("java")) {
-                prefix = "$" + prefix;
-            }
+            prefix = null == prefix ? "net.sf.cglib.empty.Object" : prefix.startsWith("java") ? "$" + prefix : prefix;
             return source.endsWith("Enhancer") ? prefix + "$Aop" : prefix + "$FastClass";
-        }
+        } // http://www.oschina.net/code/explore/cglib-2.2/src/proxy/net/sf/cglib/core/DefaultNamingPolicy.java
     };
 
     /**
