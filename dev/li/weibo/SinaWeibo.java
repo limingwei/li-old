@@ -14,6 +14,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -105,6 +106,32 @@ public class SinaWeibo {
         Timeline timeline = new Timeline();
         timeline.setToken(token);
         return timeline.UpdateStatus(status).toString();
+    }
+
+    /**
+     * @param access_token
+     * @param weibo_id
+     * @param status
+     * @param is_comment 0：不评论、1：评论给当前微博、2：评论给原微博、3：都评论，默认为0 。
+     * @return
+     */
+    public String repost(String access_token, String weibo_id, String status, Integer is_comment) throws Exception {
+        String url = "https://api.weibo.com/2/statuses/repost.json";
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(url);
+
+        List<NameValuePair> formParams = new ArrayList<NameValuePair>();
+
+        formParams.add(new BasicNameValuePair("access_token", access_token));
+        formParams.add(new BasicNameValuePair("id", weibo_id));
+        formParams.add(new BasicNameValuePair("status", status));
+        formParams.add(new BasicNameValuePair("is_comment", is_comment.toString()));
+
+        HttpEntity entity = new UrlEncodedFormEntity(formParams, "UTF-8");
+
+        post.setEntity(entity);
+        HttpResponse response = client.execute(post);
+        return EntityUtils.toString(response.getEntity());
     }
 
     private String getByName(Document document, String query) {
