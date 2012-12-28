@@ -81,11 +81,46 @@ public class QQ3G {
     }
 
     /**
-     * 在线好友列表
+     * 在线好友列表,翻页
      */
     public String online(String sid) {
         String url = "http://q32.3g.qq.com/g/s?sid=" + sid + "&aid=nqqchatMain";
         return content(execute(HTTP_CLIENT, new HttpGet(url)).getEntity());
+    }
+
+    /**
+     * 最近联系好友
+     */
+    public String recent(String sid) {
+        String url = "http://q32.3g.qq.com/g/s?sid=" + sid + "&aid=nqqRecent";
+        return content(execute(HTTP_CLIENT, new HttpGet(url)).getEntity());
+    }
+
+    /**
+     * 好友分组
+     */
+    public String groups(String sid) {
+        String url = "http://q32.3g.qq.com/g/s?sid=" + sid + "&aid=nqqGroup";
+        return content(execute(HTTP_CLIENT, new HttpGet(url)).getEntity());
+    }
+
+    /**
+     * 一个组的好友列表,翻页
+     */
+    public String group(String sid, String groupName, String groupId, String groupIndex, String pid) {
+        String action = "http://q16.3g.qq.com/g/s?sid=" + sid;
+
+        List<NameValuePair> formParams = new ArrayList<NameValuePair>();
+        formParams.add(new BasicNameValuePair("aid", "nqqGrpF"));
+        formParams.add(new BasicNameValuePair("name", groupName));
+        formParams.add(new BasicNameValuePair("id", groupId));
+        formParams.add(new BasicNameValuePair("pid", pid));
+        formParams.add(new BasicNameValuePair("gindex", groupIndex));
+
+        HttpPost post = new HttpPost(action);
+        post.setEntity(urlEncodedFormEntity(formParams, UTF8));
+
+        return content(execute(HTTP_CLIENT, post).getEntity());
     }
 
     /**

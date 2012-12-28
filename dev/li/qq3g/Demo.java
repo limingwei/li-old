@@ -3,7 +3,8 @@ package li.qq3g;
 public class Demo {
     static QQ3G qq3g = new QQ3G();
 
-    static String sid = "AY6ZZi03_f_OSUNccbwubWiC";
+    // static String sid = "AY6ZZi03_f_OSUNccbwubWiC";//1055515958
+    static String sid = "AV9xTG04qXTVQcM6s57zfuOL";// 416133823
 
     public static void main(String[] args) throws Exception {
         // System.out.println(qq3g.login("1055515958", "buxiaode"));
@@ -14,7 +15,10 @@ public class Demo {
 
         // sendMsgsToQQ("416133823", new String[] { "床前明月光", "疑是地上霜", "举头望明月", "低头思故乡" });
 
-        System.out.println(qq3g.online(sid));
+        // System.out.println(qq3g.online(sid));
+        // System.out.println(qq3g.groups(sid));
+
+        System.out.println(qq3g.group(sid, "我会的", "4", "4", "99"));
     }
 
     public static void sendMsgToQQs(String msg, String[] qqs) throws Exception {
