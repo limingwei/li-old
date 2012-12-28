@@ -15,6 +15,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -38,7 +39,7 @@ public class SinaWeibo {
                 Config.redirect_uri + //
                 "&display=wap2.0";
 
-        Document document = Jsoup.connect(url).get();
+        Document document = jsoupGet(Jsoup.connect(url));
 
         Map<String, String> map = new HashMap<String, String>();
         map.put("display", getByName(document, "display"));
@@ -136,5 +137,13 @@ public class SinaWeibo {
 
     private String getByName(Document document, String query) {
         return document.select("input[name=" + query + "]").attr("value");
+    }
+
+    private Document jsoupGet(Connection connection) {
+        try {
+            return connection.get();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
