@@ -1,6 +1,5 @@
 package li.qq3g;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class QQ3G {
     private static final HttpClient HTTP_CLIENT = new DefaultHttpClient();
 
     /**
-     * @return 登陆成功后的主页地址
+     * 登陆
      */
     public String login(String username, String password) {
         String referer = "http://pt.3g.qq.com/s?aid=nLogin3gqq&auto=1&s_it=1&g_f=286&sid=AfSsoTvRoUqcOGuBitGc2anf";
@@ -51,11 +50,14 @@ public class QQ3G {
     /**
      * 刷新消息列表页
      */
-    public String refresh(String sid, String qq) {
+    public String refreshChat(String sid, String qq) {
         String url = "http://q32.3g.qq.com/g/s?sid=" + sid + "&aid=nqqChat&u=" + qq + "&on=1";
         return content(execute(HTTP_CLIENT, new HttpGet(url)).getEntity());
     }
 
+    /**
+     * 发送QQ消息
+     */
     public String send(String sid, String msg, String to) {
         String referer = "http://q32.3g.qq.com/g/s?sid=" + sid + "&aid=nqqChat&u=" + to + "&on=1";
         String action = "http://q32.3g.qq.com/g/s?sid=" + sid;
@@ -75,9 +77,15 @@ public class QQ3G {
         post.setHeader("Referer", referer);
         post.setEntity(urlEncodedFormEntity(formParams, UTF8));
 
-        String response = content(execute(HTTP_CLIENT, post).getEntity());
+        return content(execute(HTTP_CLIENT, post).getEntity());
+    }
 
-        return response;
+    /**
+     * 在线好友列表
+     */
+    public String online(String sid) {
+        String url = "http://q32.3g.qq.com/g/s?sid=" + sid + "&aid=nqqchatMain";
+        return content(execute(HTTP_CLIENT, new HttpGet(url)).getEntity());
     }
 
     /**
@@ -86,7 +94,7 @@ public class QQ3G {
     private static HttpEntity urlEncodedFormEntity(List<NameValuePair> formParams, String charset) {
         try {
             return new UrlEncodedFormEntity(formParams, charset);
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

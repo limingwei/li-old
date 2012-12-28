@@ -12,7 +12,9 @@ public class Demo {
 
         // send("416133823", "616319864", "154520174", "767702147");
 
-        sendMsgsToQQ("416133823", new String[] { "床前明月光", "疑是地上霜", "举头望明月", "低头思故乡" });
+        // sendMsgsToQQ("416133823", new String[] { "床前明月光", "疑是地上霜", "举头望明月", "低头思故乡" });
+
+        System.out.println(qq3g.online(sid));
     }
 
     public static void sendMsgToQQs(String msg, String[] qqs) throws Exception {
