@@ -1,7 +1,11 @@
 package li.tencentweibo;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -10,114 +14,141 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-public class TencentWeibo {
+public class TencentWeibo implements Config {
+
     /**
-     * @throws Exception
+     * 登陆,获取code和openid
+     * 
+     * @param username
+     * @param password
      */
-    public void authorize() throws Exception {
+    public Map<String, String> authorize(String username, String password) {
         String url = "https://open.t.qq.com/cgi-bin/oauth2/authorize?client_id=" + //
-                "801062955" + //
+                APP_KEY + //
                 "&response_type=" + //
                 "code" + //
                 "&redirect_uri=" + //
-                "http://123.cn" + //
+                REDIRECT_URI + //
                 "&wap=" + //
                 "2";
 
-        HttpClient client = new DefaultHttpClient();
-        HttpGet get = new HttpGet(url);
+        Document document = Jsoup.parse(content(execute(CLIENT, new HttpGet(url)).getEntity()));
 
-        HttpResponse response = client.execute(get);
+        Map<String, String> map = new HashMap<String, String>();
 
-        Document document = Jsoup.parse(EntityUtils.toString(response.getEntity()));
+        map.put("client_id", document.select("#client_id").attr("value"));
+        map.put("response_type", document.select("#response_type").attr("value"));
+        map.put("redirect_uri", document.select("#redirect_uri").attr("value"));
+        map.put("checkType", document.select("#checkType").attr("value"));
+        map.put("checkStatus", document.select("#checkStatus").attr("value"));
+        map.put("sessionKey", document.select("#sessionKey").attr("value"));
+        map.put("state", document.select("#state").attr("value"));
+        map.put("sid", document.select("#sid").attr("value"));
+        map.put("flag", document.select("#flag").attr("value"));
+        map.put("mobile", document.select("#mobile").attr("value"));
+        map.put("wap", document.select("#wap").attr("value"));
 
-        HttpClient client2 = new DefaultHttpClient();
+        map.put("u", username);
+        map.put("p", password);
+
         HttpPost post = new HttpPost(document.select("#loginform").attr("action"));
-
         post.addHeader("Referer", url);
+        post.setEntity(urlEncodedFormEntity(map, UTF8));
 
-        List<NameValuePair> formParams = new ArrayList<NameValuePair>();
-        formParams.add(new BasicNameValuePair("client_id", document.select("#client_id").attr("value")));
-        formParams.add(new BasicNameValuePair("response_type", document.select("#response_type").attr("value")));
-        formParams.add(new BasicNameValuePair("redirect_uri", document.select("#redirect_uri").attr("value")));
-        formParams.add(new BasicNameValuePair("checkType", document.select("#checkType").attr("value")));
-        formParams.add(new BasicNameValuePair("checkStatus", document.select("#checkStatus").attr("value")));
-        formParams.add(new BasicNameValuePair("sessionKey", document.select("#sessionKey").attr("value")));
-        formParams.add(new BasicNameValuePair("state", document.select("#state").attr("value")));
-        formParams.add(new BasicNameValuePair("sid", document.select("#sid").attr("value")));
-        formParams.add(new BasicNameValuePair("flag", document.select("#flag").attr("value")));
-        formParams.add(new BasicNameValuePair("mobile", document.select("#mobile").attr("value")));
-        formParams.add(new BasicNameValuePair("wap", document.select("#wap").attr("value")));
-
-        formParams.add(new BasicNameValuePair("u", "1055515958"));
-        formParams.add(new BasicNameValuePair("p", "buxiaode"));
-
-        HttpEntity entity = new UrlEncodedFormEntity(formParams, "UTF-8");
-
-        post.setEntity(entity);
-
-        HttpResponse response2 = client2.execute(post);
-
-        System.out.println(EntityUtils.toString(response2.getEntity()));// 出code和openid
+        String response = content(execute(CLIENT, post).getEntity());
+        Map<String, String> result = new HashMap<String, String>();
+        if (response.length() > 250) {
+            result.put("error", "密码错误");
+        } else {
+            result.put("code", response.substring(response.indexOf("code=") + 5, response.indexOf("code=") + 37));
+            result.put("openid", response.substring(response.indexOf("openid=") + 7, response.indexOf("openid=") + 39));
+        }
+        return result;
     }
 
     /**
-     * @param code
-     * @throws Exception
+     * 用code换取access_token
      */
-    public void access_token(String code) throws Exception {
-        String url3 = "https://open.t.qq.com/cgi-bin/oauth2/access_token?client_id=" + //
-                "801062955" + //
+    public String access_token(String code) {
+        String url = "https://open.t.qq.com/cgi-bin/oauth2/access_token?client_id=" + //
+                APP_KEY + //
                 "&client_secret=" + //
-                "8111a0bb97bf37e5f00ea291ceb89131" + //
+                APP_SECRET + //
                 "&redirect_uri=" + //
-                "http://123.cn" + //
+                REDIRECT_URI + //
                 "&grant_type=" + //
                 "authorization_code" + //
                 "&code=" + //
                 code;
 
-        HttpClient client3 = new DefaultHttpClient();
-        HttpPost post3 = new HttpPost(url3);
-
-        HttpResponse response3 = client3.execute(post3);
-
-        System.out.println(EntityUtils.toString(response3.getEntity()));// 出access_token
+        String response = content(execute(CLIENT, new HttpPost(url)).getEntity());
+        return response.substring(response.indexOf("access_token=") + 13, response.indexOf("access_token=") + 45);// 返回access_token
     }
 
     /**
-     * @param token
-     * @param open_id
-     * @param ip
-     * @param content
-     * @throws Exception
+     * 发布一条微博
      */
-    public void addWeibo(String token, String open_id, String ip, String content) throws Exception {
-        String url4 = "https://open.t.qq.com/api/t/add";
-        HttpClient client4 = new DefaultHttpClient();
-        HttpPost post4 = new HttpPost(url4);
-        List<NameValuePair> formParams2 = new ArrayList<NameValuePair>();
+    public String addWeibo(String access_token, String open_id, String content) {
+        String url = "https://open.t.qq.com/api/t/add";
+        String ip = "220.181.111.85";
 
-        formParams2.add(new BasicNameValuePair("oauth_consumer_key", "801062955"));
-        formParams2.add(new BasicNameValuePair("access_token", token));
-        formParams2.add(new BasicNameValuePair("openid", open_id));
-        formParams2.add(new BasicNameValuePair("clientip", ip));
-        formParams2.add(new BasicNameValuePair("oauth_version", "2.a"));
-        formParams2.add(new BasicNameValuePair("scope", "all"));
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("oauth_consumer_key", APP_KEY);
+        map.put("access_token", access_token);
+        map.put("openid", open_id);
+        map.put("clientip", ip);
+        map.put("oauth_version", "2.a");
+        map.put("scope", "all");
+        map.put("format", "json");
+        map.put("content", content);
 
-        formParams2.add(new BasicNameValuePair("format", "json"));
-        formParams2.add(new BasicNameValuePair("content", content));
-        HttpEntity entity2 = new UrlEncodedFormEntity(formParams2, "UTF-8");
-        post4.setEntity(entity2);
+        HttpPost post = new HttpPost(url);
+        post.setEntity(urlEncodedFormEntity(map, UTF8));
 
-        HttpResponse response4 = client4.execute(post4);
+        String response = content(execute(CLIENT, post).getEntity());
+        return response;// {"data":{"id":"209949107254015","time":1356685040},"errcode":0,"msg":"ok","ret":0,"seqid":5826917877778055590}
+    }
 
-        System.out.println(EntityUtils.toString(response4.getEntity()));
+    /**
+     * 组装http请求的form表单
+     */
+    private static HttpEntity urlEncodedFormEntity(Map<String, String> map, String charset) {
+        List<NameValuePair> formParams = new ArrayList<NameValuePair>();
+        for (Entry<String, String> each : map.entrySet()) {
+            formParams.add(new BasicNameValuePair(each.getKey(), each.getValue()));
+        }
+        try {
+            return new UrlEncodedFormEntity(formParams, charset);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 执行http请求
+     */
+    private static HttpResponse execute(HttpClient client, HttpUriRequest request) {
+        try {
+            return client.execute(request);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 提取页面内容文本
+     */
+    private static String content(HttpEntity entity) {
+        try {
+            return EntityUtils.toString(entity);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

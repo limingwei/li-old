@@ -1,20 +1,14 @@
 package li.tencentweibo;
 
-import java.io.IOException;
+import java.util.Date;
 
-public class Demo {
+public class Demo implements Config {
     static TencentWeibo tencentWeibo = new TencentWeibo();
+    static String open_id = "C149FADBF72D266F998E974F8C1F3B6D";
+    static String code = "fa558e94af565908863772d6565741eb";
+    static String access_token = "e507a9371eff530ff9e8d1db16947df8";
 
-    public static void main(String[] args) throws Exception, IOException {
-        String ip = "220.181.111.85";
-
-        // tencentWeibo.authorize();
-        String code = "0c4b76e016382c28f944fc455740a1d2";
-        String openid = "C149FADBF72D266F998E974F8C1F3B6D";
-
-        // tencentWeibo.access_token(code);
-        String access_token = "89f4c51916faf1af37e3a689d2d81e6d";
-
-        tencentWeibo.addWeibo(access_token, openid, ip, "床前明月光,测试微博内容");
+    public static void main(String[] args) throws Exception {
+        System.out.println(tencentWeibo.addWeibo(access_token, open_id, "我爱你,塞北的雪 @fengkuangfeifei 来自微博机器人" + new Date()));
     }
 }
