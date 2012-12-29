@@ -15,13 +15,16 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.jsoup.Jsoup;
 
 public class Feixin {
+    public static void main(String[] args) throws Exception {
+        new Feixin().login();
+    }
+
     public void login() throws Exception {
         String url = "http://f.10086.cn/im/";
 
-        Files.write(new File("C:/Users/li/Desktop/feixin.htm"), Jsoup.connect(url).get().toString());
+        // Files.write(new File("C:/Users/li/Desktop/feixin.htm"), Jsoup.connect(url).get().toString());
 
         HttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost("http://f.10086.cn/im/login/inputpass.action");
@@ -36,6 +39,6 @@ public class Feixin {
         post.setEntity(entity);
         HttpResponse response = client.execute(post);
 
-        Files.write(new File("C:/Users/li/Desktop/feixin.htm"), EntityUtils.toString(response.getEntity()));
+        Files.write(new File("D:/Users/li/Desktop/feixin.htm"), EntityUtils.toString(response.getEntity()));
     }
 }
