@@ -10,9 +10,14 @@ public class Demo {
     static List<Cookie> cookies = null;
 
     // dinghuan 1406678816
-    public static void main(String[] args) {
-        cookies = discuz.login("dinghuan", "1406678816");
+    // 测试101 wode
+    public static void main(String[] args) throws Exception {
+        discuz.login("dinghuan", "1406678816");
 
-        discuz.index(cookies);
+        Thread.sleep(1000);
+        Integer fid = 143;
+        String subject = "JAVA发布主题测试";
+        String message = "测试主题内容";
+        discuz.post(fid, subject, message);
     }
 }

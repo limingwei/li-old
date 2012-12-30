@@ -20,12 +20,14 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 public class Discuz {
-    private static final String UTF8 = "UTF-8";
-    private static final HttpClient HTTP_CLIENT = new DefaultHttpClient();
-    private static final HttpContext context = new BasicHttpContext();
-    private static final CookieStore cookieStore = new BasicCookieStore();
+    public static final String UTF8 = "UTF-8";
+    public static final HttpClient HTTP_CLIENT = new DefaultHttpClient();
+    public static final HttpContext context = new BasicHttpContext();
+    public static final CookieStore cookieStore = new BasicCookieStore();
 
     public List<Cookie> login(String username, String password) {
         String referer = "http://bbs.cduer.com/member.php?mod=register";
@@ -37,7 +39,7 @@ public class Discuz {
         formParams.add(new BasicNameValuePair("loginsubmit", "true"));
         formParams.add(new BasicNameValuePair("answer", ""));
         formParams.add(new BasicNameValuePair("questionid", "0"));
-        formParams.add(new BasicNameValuePair("referer", "http%3A%2F%2Fbbs.cduer.com%2Fmember.php%3Fmod%3Dregister"));
+        formParams.add(new BasicNameValuePair("referer", referer));
         formParams.add(new BasicNameValuePair("formhash", "2b903052"));
 
         HttpPost post = new HttpPost(action);
@@ -52,6 +54,38 @@ public class Discuz {
         return cookieStore.getCookies();
     }
 
+    public void post(Integer fid, String subject, String message) {
+        String referer = "http://bbs.cduer.com/forum.php?mod=post&action=newthread&fid=" + fid + "&mobile=yes";
+        String action = "http://bbs.cduer.com/forum.php?mod=post&action=newthread&fid=" + fid + "&extra=&topicsubmit=yes&mobile=yes";
+
+        HttpGet get = new HttpGet(referer);
+        Document document = Jsoup.parse(content(execute(HTTP_CLIENT, get, context).getEntity()));
+
+        List<NameValuePair> formParams = new ArrayList<NameValuePair>();
+        formParams.add(new BasicNameValuePair("formhash", document.select("input#formhash").attr("value")));
+        formParams.add(new BasicNameValuePair("posttime", document.select("input#posttime").attr("value")));
+        formParams.add(new BasicNameValuePair("subject", subject));
+        formParams.add(new BasicNameValuePair("message", message));
+        formParams.add(new BasicNameValuePair("topicsubmit", "发表帖子"));
+
+        thread_sleep(1000);
+
+        HttpPost post = new HttpPost(action);
+        post.setHeader("Referer", referer);
+        HttpResponse response = execute(HTTP_CLIENT, post, context);
+
+        System.out.println(content(response.getEntity()));
+
+    }
+
+    public static void thread_sleep(Integer millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void index(List<Cookie> cookies) {
         String url = "http://bbs.cduer.com/forum.php?mobile=yes";
         HttpGet get = new HttpGet(url);
@@ -63,7 +97,7 @@ public class Discuz {
     /**
      * 执行http请求
      */
-    private static HttpResponse execute(HttpClient client, HttpUriRequest request, HttpContext context) {
+    public static HttpResponse execute(HttpClient client, HttpUriRequest request, HttpContext context) {
         try {
             return client.execute(request, context);
         } catch (Exception e) {
@@ -74,7 +108,7 @@ public class Discuz {
     /**
      * 组装http请求的form表单
      */
-    private static HttpEntity urlEncodedFormEntity(List<NameValuePair> formParams, String charset) {
+    public static HttpEntity urlEncodedFormEntity(List<NameValuePair> formParams, String charset) {
         try {
             return new UrlEncodedFormEntity(formParams, charset);
         } catch (Exception e) {
@@ -85,7 +119,7 @@ public class Discuz {
     /**
      * 提取页面内容文本
      */
-    private static String content(HttpEntity entity) {
+    public static String content(HttpEntity entity) {
         try {
             return EntityUtils.toString(entity);
         } catch (Exception e) {
