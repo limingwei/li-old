@@ -72,6 +72,7 @@ public class Discuz {
 
         HttpPost post = new HttpPost(action);
         post.setHeader("Referer", referer);
+        post.setEntity(urlEncodedFormEntity(formParams, UTF8));
         HttpResponse response = execute(HTTP_CLIENT, post, context);
 
         System.out.println(content(response.getEntity()));
@@ -84,14 +85,6 @@ public class Discuz {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public void index(List<Cookie> cookies) {
-        String url = "http://bbs.cduer.com/forum.php?mobile=yes";
-        HttpGet get = new HttpGet(url);
-        HttpResponse response = execute(HTTP_CLIENT, get, context);
-
-        System.out.println(content(response.getEntity()));
     }
 
     /**

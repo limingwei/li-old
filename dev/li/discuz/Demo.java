@@ -12,7 +12,7 @@ public class Demo {
     // dinghuan 1406678816
     // 测试101 wode
     public static void main(String[] args) throws Exception {
-        discuz.login("dinghuan", "1406678816");
+        discuz.login("we", "buxiaode");
 
         Thread.sleep(1000);
         Integer fid = 143;
