@@ -15,10 +15,10 @@ javadoc
 * li-more http://limingwei.github.com/liz/more 
 
 下载
-* li-framework.jar http://limingwei.github.com/liz/downloads/lis-framework.jar
-* li-more.jar http://limingwei.github.com/liz/downloads/lis-more.jar
+* li-framework.jar http://limingwei.github.com/liz/downloads/li-framework.jar
+* li-more.jar http://limingwei.github.com/liz/downloads/li-more.jar
 * cglib-nodep.jar http://limingwei.github.com/liz/downloads/cglib-nodep-2.2.3.jar
-* 文档 http://limingwei.github.com/liz/downloads/lis-pdf.pdf
+* 文档 http://limingwei.github.com/liz/downloads/li.pdf
 
 ~!@#$%^&*()_+{}|:"<>?`-=[]\;',.//*-+.
 * 介绍 http://limingwei.github.com/li
