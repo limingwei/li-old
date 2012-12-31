@@ -1,4 +1,4 @@
-package li.more;
+package li.util;
 
 import static org.junit.Assert.assertEquals;
 
@@ -8,20 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import li.dao.Record;
-import li.util.Convert;
-import li.util.Convert2;
 
 import org.junit.Test;
 
 public class ConvertTest {
     @Test
     public void timeConvert() {
-        String[] times = { "19:48", "9:8", "09:8", "9:08", "1:1:1", "12:12:12", "2012-2-1", "2012/02/12", "2012-02-12 19:48", "2012/02/12 19:48", "2012-02-12 19:48:12", "2012/02/12 19:48:12" };
+        String[] times = { "2012/12/31 12:12:12", "2012-12-31 12:12:12", "2012/12/31 12:12", "2012-12-31 12:12", "2012/12/31", "2012-12-31", "12:12:12", "12:12" };
+        Class<?>[] types = { java.util.Date.class, java.sql.Date.class, Time.class, Timestamp.class };
         for (String time : times) {
-            Convert2.toType(java.util.Date.class, time);
-            Convert2.toType(java.sql.Date.class, time);
-            Convert2.toType(Time.class, time);
-            Convert2.toType(Timestamp.class, time);
+            for (Class<?> type : types) {
+                System.out.println(Convert.toType(type, time));
+            }
         }
     }
 
