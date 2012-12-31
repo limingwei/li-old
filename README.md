@@ -18,6 +18,7 @@ javadoc
 * li-framework.jar http://limingwei.github.com/liz/downloads/lis-framework.jar
 * li-more.jar http://limingwei.github.com/liz/downloads/lis-more.jar
 * cglib-nodep.jar http://limingwei.github.com/liz/downloads/cglib-nodep-2.2.3.jar
+* 文档 http://limingwei.github.com/liz/downloads/lis-pdf.pdf
 
 ~!@#$%^&*()_+{}|:"<>?`-=[]\;',.//*-+.
 * 介绍 http://limingwei.github.com/li
