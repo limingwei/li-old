@@ -29,19 +29,31 @@ public class Discuz {
     public static final HttpContext context = new BasicHttpContext();
     public static final CookieStore cookieStore = new BasicCookieStore();
 
+    private String domain;
+
+    public Discuz(String domain) {
+        this.domain = domain;
+    }
+
     public List<Cookie> login(String username, String password) {
-        String referer = "http://bbs.cduer.com/member.php?mod=register";
-        String action = "http://bbs.cduer.com/member.php?mod=logging&action=login&loginsubmit=yes&handlekey=login&loginhash=LpEMK&inajax=1";
+        String referer = domain + "member.php?mod=logging&action=login&mobile=yes";
+
+        HttpGet get = new HttpGet(referer);
+        Document document = Jsoup.parse(content(execute(HTTP_CLIENT, get, context).getEntity()));
+
+        System.err.println(document);
 
         List<NameValuePair> formParams = new ArrayList<NameValuePair>();
+        formParams.add(new BasicNameValuePair("formhash", document.select("input#formhash").attr("value")));
+        formParams.add(new BasicNameValuePair("referer", document.select("input#referer").attr("value")));
         formParams.add(new BasicNameValuePair("username", username));
         formParams.add(new BasicNameValuePair("password", password));
+        formParams.add(new BasicNameValuePair("submit", document.select("input#submit").attr("value")));
         formParams.add(new BasicNameValuePair("loginsubmit", "true"));
         formParams.add(new BasicNameValuePair("answer", ""));
         formParams.add(new BasicNameValuePair("questionid", "0"));
-        formParams.add(new BasicNameValuePair("referer", referer));
-        formParams.add(new BasicNameValuePair("formhash", "2b903052"));
 
+        String action = domain + document.select("form").attr("action");
         HttpPost post = new HttpPost(action);
         post.setHeader("Referer", referer);
         post.setEntity(urlEncodedFormEntity(formParams, UTF8));
@@ -49,14 +61,14 @@ public class Discuz {
         context.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
         HttpResponse response = execute(HTTP_CLIENT, post, context);
 
-        System.out.println(content(response.getEntity()));
+        System.err.println(content(response.getEntity()));
 
         return cookieStore.getCookies();
     }
 
     public void post(Integer fid, String subject, String message) {
-        String referer = "http://bbs.cduer.com/forum.php?mod=post&action=newthread&fid=" + fid + "&mobile=yes";
-        String action = "http://bbs.cduer.com/forum.php?mod=post&action=newthread&fid=" + fid + "&extra=&topicsubmit=yes&mobile=yes";
+        String referer = domain + "forum.php?mod=post&action=newthread&fid=" + fid + "&mobile=yes";
+        String action = domain + "forum.php?mod=post&action=newthread&fid=" + fid + "&extra=&topicsubmit=yes&mobile=yes";
 
         HttpGet get = new HttpGet(referer);
         Document document = Jsoup.parse(content(execute(HTTP_CLIENT, get, context).getEntity()));
@@ -68,23 +80,12 @@ public class Discuz {
         formParams.add(new BasicNameValuePair("message", message));
         formParams.add(new BasicNameValuePair("topicsubmit", "发表帖子"));
 
-        thread_sleep(1000);
-
         HttpPost post = new HttpPost(action);
         post.setHeader("Referer", referer);
         post.setEntity(urlEncodedFormEntity(formParams, UTF8));
         HttpResponse response = execute(HTTP_CLIENT, post, context);
 
         System.out.println(content(response.getEntity()));
-
-    }
-
-    public static void thread_sleep(Integer millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     /**
