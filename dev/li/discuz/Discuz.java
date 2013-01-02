@@ -24,10 +24,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 public class Discuz {
+    public static final String REFERER = "Referer";
     public static final String UTF8 = "UTF-8";
     public static final HttpClient HTTP_CLIENT = new DefaultHttpClient();
-    public static final HttpContext context = new BasicHttpContext();
-    public static final CookieStore cookieStore = new BasicCookieStore();
+    public static final HttpContext CONTEXT = new BasicHttpContext();
+    public static final CookieStore COOKIE_STORE = new BasicCookieStore();
 
     private String domain;
 
@@ -39,39 +40,36 @@ public class Discuz {
         String referer = domain + "member.php?mod=logging&action=login&mobile=yes";
 
         HttpGet get = new HttpGet(referer);
-        Document document = Jsoup.parse(content(execute(HTTP_CLIENT, get, context).getEntity()));
-
-        System.err.println(document);
+        Document document = Jsoup.parse(content(execute(HTTP_CLIENT, get, CONTEXT).getEntity()));
 
         List<NameValuePair> formParams = new ArrayList<NameValuePair>();
         formParams.add(new BasicNameValuePair("formhash", document.select("input#formhash").attr("value")));
         formParams.add(new BasicNameValuePair("referer", document.select("input#referer").attr("value")));
-        formParams.add(new BasicNameValuePair("username", username));
-        formParams.add(new BasicNameValuePair("password", password));
         formParams.add(new BasicNameValuePair("submit", document.select("input#submit").attr("value")));
         formParams.add(new BasicNameValuePair("loginsubmit", "true"));
-        formParams.add(new BasicNameValuePair("answer", ""));
         formParams.add(new BasicNameValuePair("questionid", "0"));
+        formParams.add(new BasicNameValuePair("answer", ""));
+        formParams.add(new BasicNameValuePair("username", username));
+        formParams.add(new BasicNameValuePair("password", password));
 
         String action = domain + document.select("form").attr("action");
         HttpPost post = new HttpPost(action);
-        post.setHeader("Referer", referer);
+        post.setHeader(REFERER, referer);
         post.setEntity(urlEncodedFormEntity(formParams, UTF8));
 
-        context.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
-        HttpResponse response = execute(HTTP_CLIENT, post, context);
+        CONTEXT.setAttribute(ClientContext.COOKIE_STORE, COOKIE_STORE);
+        HttpResponse response = execute(HTTP_CLIENT, post, CONTEXT);
 
-        System.err.println(content(response.getEntity()));
+        System.out.println(content(response.getEntity()));
 
-        return cookieStore.getCookies();
+        return COOKIE_STORE.getCookies();
     }
 
     public void post(Integer fid, String subject, String message) {
         String referer = domain + "forum.php?mod=post&action=newthread&fid=" + fid + "&mobile=yes";
-        String action = domain + "forum.php?mod=post&action=newthread&fid=" + fid + "&extra=&topicsubmit=yes&mobile=yes";
 
         HttpGet get = new HttpGet(referer);
-        Document document = Jsoup.parse(content(execute(HTTP_CLIENT, get, context).getEntity()));
+        Document document = Jsoup.parse(content(execute(HTTP_CLIENT, get, CONTEXT).getEntity()));
 
         List<NameValuePair> formParams = new ArrayList<NameValuePair>();
         formParams.add(new BasicNameValuePair("formhash", document.select("input#formhash").attr("value")));
@@ -80,10 +78,31 @@ public class Discuz {
         formParams.add(new BasicNameValuePair("message", message));
         formParams.add(new BasicNameValuePair("topicsubmit", "发表帖子"));
 
+        String action = domain + document.select("form#postform").attr("action");
         HttpPost post = new HttpPost(action);
-        post.setHeader("Referer", referer);
+        post.setHeader(REFERER, referer);
         post.setEntity(urlEncodedFormEntity(formParams, UTF8));
-        HttpResponse response = execute(HTTP_CLIENT, post, context);
+        HttpResponse response = execute(HTTP_CLIENT, post, CONTEXT);
+
+        System.out.println(content(response.getEntity()));
+    }
+
+    public void reply(Integer tid, String message) {
+        String referer = domain + "forum.php?mod=viewthread&tid=" + tid + "&mobile=yes";
+
+        HttpGet get = new HttpGet(referer);
+        Document document = Jsoup.parse(content(execute(HTTP_CLIENT, get, CONTEXT).getEntity()));
+
+        List<NameValuePair> formParams = new ArrayList<NameValuePair>();
+        formParams.add(new BasicNameValuePair("formhash", document.select("input[name=formhash]").attr("value")));
+        formParams.add(new BasicNameValuePair("replysubmit", document.select("input#fastpostsubmit").attr("value")));
+        formParams.add(new BasicNameValuePair("message", message));
+
+        String action = domain + document.select("form#fastpostform").attr("action");
+        HttpPost post = new HttpPost(action);
+        post.setHeader(REFERER, referer);
+        post.setEntity(urlEncodedFormEntity(formParams, UTF8));
+        HttpResponse response = execute(HTTP_CLIENT, post, CONTEXT);
 
         System.out.println(content(response.getEntity()));
     }
