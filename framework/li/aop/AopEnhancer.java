@@ -45,22 +45,31 @@ public class AopEnhancer {
     };
 
     /**
-     * 生成一个Aop增强的对象
+     * 构造一个类型所有方法的AopFilter的集合
      */
-    public static Object create(Class<?> type) {
-        final Map<Method, List<AopFilter>> filtersMap = new HashMap<Method, List<AopFilter>>();// 构造这个类型所有方法的AopFilter的集合
+    private static Map<Method, List<AopFilter>> getAopFiltersMap(Class<?> type) {
+        Map<Method, List<AopFilter>> filtersMap = new HashMap<Method, List<AopFilter>>();// 构造这个类型所有方法的AopFilter的集合
         Method[] methods = type.getDeclaredMethods();
         for (Method method : methods) {// 对每一个方法
             List<AopFilter> filters = new ArrayList<AopFilter>();
             Aop aop = method.getAnnotation(Aop.class);
             for (int length = (null == aop ? -1 : aop.value().length), i = 0; i < length; i++) {// 如果有@Aop注解,对每一个@Aop.value()的值
-                filters.add(Ioc.get(aop.value()[i]));
+                filters.add(Ioc.get(aop.value()[i]));// 通过Ioc得到AopFilter
             }
             if (null != method.getAnnotation(li.annotation.Trans.class)) {// 如果有@Trans注解
                 filters.add(TRANS_FILTER);
             }
             filtersMap.put(method, filters);
         }
+        return filtersMap;
+    }
+
+    /**
+     * 生成一个Aop增强的对象
+     */
+    public static Object create(Class<?> type) {
+        final Map<Method, List<AopFilter>> filtersMap = getAopFiltersMap(type);
+
         Enhancer enhancer = new Enhancer(); // 创建代理
         enhancer.setNamingPolicy(NAMING_POLICY);
         enhancer.setSuperclass(type);
