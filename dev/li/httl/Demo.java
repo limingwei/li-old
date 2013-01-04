@@ -14,7 +14,7 @@ public class Demo {
 
         Properties properties = new Properties();
         properties.put("loaders", "httl.spi.loaders.FileLoader");
-        properties.put("template.directory", "E:/workspace/li/dev/li/httl/");
+        properties.put("template.directory", System.getProperty("user.dir") + "/dev/li/httl/");
         properties.put("template.suffix", ".htm");
 
         Engine engine = Engine.getEngine(properties);
