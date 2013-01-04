@@ -2,6 +2,7 @@ package li.mvc;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -12,7 +13,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import li.dao.Page;
-import li.dao.Record;
 import li.model.Action;
 import li.model.Field;
 import li.util.Convert;
@@ -81,7 +81,7 @@ public class ActionFilter implements Filter {
                     args[i] = Context.getResponse();
                 } else if (Page.class.isAssignableFrom(action.argTypes[i])) { // Page
                     args[i] = Context.getPage(key);
-                } else if (Field.list(action.argTypes[i], false).size() > 0 || Record.class.isAssignableFrom(action.argTypes[i])) {
+                } else if (Field.list(action.argTypes[i], false).size() > 0 || Map.class.isAssignableFrom(action.argTypes[i])) {
                     key = (null == action.argAnnotations[i]) ? action.argNames[i] + "." : action.argAnnotations[i].value();
                     args[i] = Context.get(action.argTypes[i], key);// 数据对象,POJO,如果没加@Arg注解,则key为参数名+"."
                 }
