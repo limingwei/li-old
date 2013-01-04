@@ -44,17 +44,15 @@ public class Convert {
      * 将数组转换为Map,奇数位为key,偶数位为value; items必须为偶数个
      */
     public static Map<Object, Object> toMap(Object... items) {
-        Map map = new HashMap();
-        if (null != items && items.length > 0) {// 非空判断
-            if (items.length % 2 != 0) {
-                throw new RuntimeException("Count of items must be even !!!");// 个数为奇数,抛出异常
-            } else {
-                for (int i = 0; i < items.length; i = i + 2) {
-                    map.put(items[i], items[i + 1]);
-                }
+        if (null == items || items.length % 2 != 0) {
+            throw new RuntimeException("Count of items must be even !!!");// 个数必须为偶数,抛出异常
+        } else {
+            Map map = new HashMap();
+            for (int i = 0; i < items.length; i = i + 2) {
+                map.put(items[i], items[i + 1]);
             }
+            return map;
         }
-        return map;
     }
 
     /**
