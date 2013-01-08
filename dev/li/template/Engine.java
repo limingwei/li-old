@@ -3,22 +3,15 @@ package li.template;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import li.template.compiler.Compiler;
+
 public class Engine {
     private static final Map<String, Template> TEMPLATES = new ConcurrentHashMap<String, Template>();
 
-    private static final Map<String, String> CONFIG = new ConcurrentHashMap<String, String>();
+    private static final Compiler compiler = new Compiler();
 
     public static Engine getIntense() {
         return new Engine();
-    }
-
-    public static Engine getIntense(Map config) {
-        CONFIG.putAll(config);
-        return getIntense();
-    }
-
-    private Engine() {
-
     }
 
     public Template getTemplate(String name) {
@@ -31,7 +24,26 @@ public class Engine {
     }
 
     private Template parse(String name) {
-        String content = name + "";
-        return new Template();
+        try {
+            String packageName = "li.template.impl";
+            String className = name.replace(".", "_") + "_utf8_writer";
+
+            String source = "" + //
+                    "package " + packageName + ";" + //
+                    "import java.io.*;" + //
+                    "import java.util.*;" + //
+                    "import li.template.*;" + //
+                    "public class " + className + " extends Template {" + //
+                    "    protected void doRender(Map params, Writer writer) throws Exception {" + //
+                    "        writer.write(\"index_htm_utf8_writer\");" + //
+                    "        writer.write(\"params : \" + params);" + //
+                    "        writer.flush();" + //
+                    "    }" + //
+                    "}";
+            Class clazz = compiler.doCompile(packageName + "." + className, source);
+            return (Template) clazz.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

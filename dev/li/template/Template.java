@@ -3,15 +3,14 @@ package li.template;
 import java.io.Writer;
 import java.util.Map;
 
-public class Template {
+public abstract class Template {
     public void render(Map params, Writer writer) {
         try {
-            for (int i = 0; i < 10; i++) {
-                writer.write(i + "\t");
-            }
-            writer.flush();
+            doRender(params, writer);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
+
+    protected abstract void doRender(Map params, Writer writer) throws Exception;
 }
