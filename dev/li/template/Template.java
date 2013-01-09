@@ -1,6 +1,5 @@
 package li.template;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
@@ -13,12 +12,6 @@ public abstract class Template {
             doRender(params, writer);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 

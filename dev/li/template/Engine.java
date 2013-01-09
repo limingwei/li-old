@@ -41,21 +41,57 @@ public class Engine {
             String packageName = "li.template.impl";
             String className = name.replace(".", "_") + "_utf8_writer";
 
-            content = content.replaceAll("\\\"", "\\\\\"");
+            String source = head(packageName, className);
 
-            String source = "" + //
-                    "package " + packageName + ";\n\n" + //
-                    "import java.io.*;\n" + //
-                    "import java.util.*;\n" + //
-                    "import li.template.*;\n\n" + //
-                    "public class " + className + " extends Template {\n" + //
-                    "    protected void doRender(Map params, Writer writer) throws Exception {\n" + //
-                    "        writer.write(\"index_htm_utf8_writer \\n\");\n" + //
-                    "        writer.write(\"params : \" + params + \"\\n\");\n" + //
-                    "        writer.write(\"content : \" +\"" + content + "\");\n" + //
-                    "        writer.flush();\n" + //
-                    "    }\n" + //
-                    "}";
+            String text = "";
+            for (int i = 0; i < content.length(); i++) {
+                char each = content.charAt(i);
+
+                if ('<' == each) {
+                    if ('!' == content.charAt(++i) && '-' == content.charAt(++i) && '-' == content.charAt(++i)) {// 语句开始
+                        source += write("\"" + text + "\"");// 输出缓冲的静态文本
+                        text = "";// 清空静态文本缓冲区
+
+                        String value = "";
+                        char[] temp = new char[3];
+                        while (true) {
+                            temp[0] = content.charAt(++i);
+                            if ('-' == temp[0]) {
+                                temp[1] = content.charAt(++i);
+                                temp[2] = content.charAt(++i);
+                                if ('-' == temp[1] && '>' == temp[2]) {// 语句结束
+                                    source += value;
+                                    break;
+                                } else {
+                                    value += new String(temp);
+                                }
+                            } else {
+                                value += temp[0];
+                            }
+                        }
+                    }
+                } else if ('$' == each) {
+                    if ('{' == content.charAt(++i)) {// 表达式
+                        source += write("\"" + text + "\"");// 输出缓冲的静态文本
+                        text = "";// 清空静态文本缓冲区
+
+                        String value = "";
+                        while (true) {
+                            each = content.charAt(++i);
+                            if ('}' == each) {
+                                source += write(value(value));
+                                break;
+                            } else {
+                                value += each;
+                            }
+                        }
+                    }
+                } else {// 文本
+                    text += each;
+                }
+            }
+
+            source += foot();
 
             System.out.println(source);
 
@@ -64,5 +100,29 @@ public class Engine {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String head(String packageName, String className) {
+        return "package " + packageName + ";\n\n" + //
+                "import java.io.*;\n" + //
+                "import java.util.*;\n" + //
+                "import li.template.*;\n\n" + //
+                "public class " + className + " extends Template {\n" + //
+                "    protected void doRender(Map map, Writer writer) throws Exception {\n";
+    }
+
+    private String foot() {
+        return "        writer.flush();\n" + //
+                "        writer.close();\n" + //
+                "    }\n" + //
+                "}";
+    }
+
+    private String write(String value) {
+        return "        writer.write(" + value + ".toString());\n";
+    }
+
+    private String value(String value) {
+        return "map.get(\"" + value + "\")";
     }
 }
