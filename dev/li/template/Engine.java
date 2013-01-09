@@ -108,18 +108,18 @@ public class Engine {
                 "import java.util.*;\n" + //
                 "import li.template.*;\n\n" + //
                 "public class " + className + " extends Template {\n" + //
-                "    protected void doRender(Map map, Writer writer) throws Exception {\n";
+                "    protected void doRender(Map map, Writer out) throws Exception {\n";
     }
 
     private String foot() {
-        return "        writer.flush();\n" + //
-                "        writer.close();\n" + //
+        return "        out.flush();\n" + //
+                "        out.close();\n" + //
                 "    }\n" + //
                 "}";
     }
 
     private String write(String value) {
-        return "        writer.write(" + value + ".toString());\n";
+        return "        out.write(" + value + ".toString());\n";
     }
 
     private String value(String value) {
