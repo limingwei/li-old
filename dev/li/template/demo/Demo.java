@@ -13,7 +13,7 @@ import li.util.Convert;
 public class Demo {
     public static void main(String[] args) {
         Engine engine = Engine.getIntense(Convert.toMap("TEMPLATE_DIRECTORY", "D:/workspace/li/dev/li/template/demo/"));
-        Template template = engine.getTemplate("for.htm");
+        Template template = engine.getTemplate("index.htm");
 
         Map params = new HashMap();
         params.put("name", "limingwei");

@@ -43,16 +43,20 @@ public class Engine {
 
             String source = head(packageName, className);
 
-            String text = "";
+            String local_variables = "";
+            String page_code = "";
+            String temp1 = "";
             for (int i = 0; i < content.length(); i++) {
                 char each = content.charAt(i);
 
                 if ('<' == each) {
                     if ('!' == content.charAt(++i) && '-' == content.charAt(++i) && '-' == content.charAt(++i)) {// 语句开始
-                        source += write("\"" + text + "\"");// 输出缓冲的静态文本
-                        text = "";// 清空静态文本缓冲区
+                        if (!temp1.isEmpty()) {
+                            page_code += "        " + write("\"" + temp1 + "\"");// 输出缓冲的静态文本
+                            temp1 = "";// 清空静态文本缓冲区
+                        }
 
-                        String value = "";
+                        String value = "";// 静态文本
                         char[] temp = new char[3];
                         while (true) {
                             temp[0] = content.charAt(++i);
@@ -60,7 +64,7 @@ public class Engine {
                                 temp[1] = content.charAt(++i);
                                 temp[2] = content.charAt(++i);
                                 if ('-' == temp[1] && '>' == temp[2]) {// 语句结束
-                                    source += value;
+                                    page_code += "        " + value + "\n";// 语句输出
                                     break;
                                 } else {
                                     value += new String(temp);
@@ -72,14 +76,16 @@ public class Engine {
                     }
                 } else if ('$' == each) {
                     if ('{' == content.charAt(++i)) {// 表达式
-                        source += write("\"" + text + "\"");// 输出缓冲的静态文本
-                        text = "";// 清空静态文本缓冲区
+                        if (!temp1.isEmpty()) {
+                            page_code += "        " + write("\"" + temp1 + "\"");// 输出缓冲的静态文本
+                            temp1 = "";// 清空静态文本缓冲区
+                        }
 
                         String value = "";
                         while (true) {
                             each = content.charAt(++i);
                             if ('}' == each) {
-                                source += write(value(value));
+                                page_code += "        " + write(value);// 取值输出
                                 break;
                             } else {
                                 value += each;
@@ -87,10 +93,12 @@ public class Engine {
                         }
                     }
                 } else {// 文本
-                    text += each;
+                    temp1 += each;
                 }
             }
 
+            source += local_variables;
+            source += page_code;
             source += foot();
 
             System.out.println(source);
@@ -119,10 +127,6 @@ public class Engine {
     }
 
     private String write(String value) {
-        return "        out.write(" + value + ".toString());\n";
-    }
-
-    private String value(String value) {
-        return "map.get(\"" + value + "\")";
+        return "out.write(" + value + "+\"\");\n";
     }
 }
