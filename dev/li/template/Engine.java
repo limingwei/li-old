@@ -52,7 +52,7 @@ public class Engine {
                 if ('<' == each) {
                     if ('!' == content.charAt(++i) && '-' == content.charAt(++i) && '-' == content.charAt(++i)) {// 语句开始
                         if (!temp1.isEmpty()) {
-                            page_code += "        " + write("\"" + temp1 + "\"");// 输出缓冲的静态文本
+                            page_code += write("\"" + temp1 + "\"");// 输出缓冲的静态文本
                             temp1 = "";// 清空静态文本缓冲区
                         }
 
@@ -64,7 +64,7 @@ public class Engine {
                                 temp[1] = content.charAt(++i);
                                 temp[2] = content.charAt(++i);
                                 if ('-' == temp[1] && '>' == temp[2]) {// 语句结束
-                                    page_code += "        " + value + "\n";// 语句输出
+                                    page_code += value;// 语句输出
                                     break;
                                 } else {
                                     value += new String(temp);
@@ -77,7 +77,7 @@ public class Engine {
                 } else if ('$' == each) {
                     if ('{' == content.charAt(++i)) {// 表达式
                         if (!temp1.isEmpty()) {
-                            page_code += "        " + write("\"" + temp1 + "\"");// 输出缓冲的静态文本
+                            page_code += write("\"" + temp1 + "\"");// 输出缓冲的静态文本
                             temp1 = "";// 清空静态文本缓冲区
                         }
 
@@ -85,7 +85,7 @@ public class Engine {
                         while (true) {
                             each = content.charAt(++i);
                             if ('}' == each) {
-                                page_code += "        " + write(value);// 取值输出
+                                page_code += write(value);// 取值输出
                                 break;
                             } else {
                                 value += each;
@@ -111,22 +111,22 @@ public class Engine {
     }
 
     private String head(String packageName, String className) {
-        return "package " + packageName + ";\n\n" + //
-                "import java.io.*;\n" + //
-                "import java.util.*;\n" + //
-                "import li.template.*;\n\n" + //
-                "public class " + className + " extends Template {\n" + //
-                "    protected void doRender(Map map, Writer out) throws Exception {\n";
+        return "package " + packageName + ";" + //
+                "import java.io.*;" + //
+                "import java.util.*;" + //
+                "import li.template.*;" + //
+                "public class " + className + " extends Template {" + //
+                "protected void doRender(Map map, Writer out) throws Exception {";
     }
 
     private String foot() {
-        return "        out.flush();\n" + //
-                "        out.close();\n" + //
-                "    }\n" + //
+        return "out.flush();" + //
+                "out.close();" + //
+                "}" + //
                 "}";
     }
 
     private String write(String value) {
-        return "out.write(" + value + "+\"\");\n";
+        return "out.write(" + value + "+\"\");";
     }
 }
