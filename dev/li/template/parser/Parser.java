@@ -1,5 +1,8 @@
 package li.template.parser;
 
-public class Parser {
+/**
+ * @author li
+ */
+public abstract class Parser {
 
 }

@@ -7,6 +7,9 @@ import java.util.Map;
 
 import javax.tools.JavaFileObject;
 
+/**
+ * @author li
+ */
 public final class ClassLoaderImpl extends ClassLoader {
 
     private final Map<String, JavaFileObject> classes = new HashMap<String, JavaFileObject>();

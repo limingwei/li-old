@@ -18,6 +18,9 @@ import javax.tools.JavaFileObject;
 import javax.tools.JavaFileObject.Kind;
 import javax.tools.StandardLocation;
 
+/**
+ * @author li
+ */
 public final class JavaFileManagerImpl extends ForwardingJavaFileManager<JavaFileManager> {
 
     private final ClassLoaderImpl classLoader;

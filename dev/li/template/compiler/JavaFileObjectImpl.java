@@ -8,6 +8,9 @@ import javax.tools.SimpleJavaFileObject;
 
 import li.template.utils.ClassUtils;
 
+/**
+ * @author li
+ */
 public final class JavaFileObjectImpl extends SimpleJavaFileObject {
 
     private ByteArrayOutputStream bytecode;
