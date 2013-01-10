@@ -31,7 +31,7 @@ public class Demo {
 
         map.put("goodsList", list);
 
-        // Files.write(new File("E:\\workspace\\li\\dev\\li\\mail\\out.htm"), fm.merge(map));
+        // Files.write(new File(System.getProperty("user.dir")+"\\dev\\li\\mail\\out.htm"), fm.merge(map));
 
         Sender sender = new Sender("smtp.mailgun.org", "postmaster@limingwei.mailgun.org", "6mitwv670n61");
 
