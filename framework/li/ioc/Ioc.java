@@ -2,7 +2,11 @@ package li.ioc;
 
 import java.lang.reflect.Type;
 
+import li.aop.AopEnhancer;
+import li.aop.AopFilter;
 import li.model.Bean;
+import li.model.Field;
+import li.util.Log;
 import li.util.Reflect;
 import li.util.Verify;
 
@@ -13,13 +17,49 @@ import li.util.Verify;
  * @version 0.1.3 (2012-05-08)
  */
 public class Ioc {
+    private static Boolean AOP_CAN = false;
+
+    private static final Log log = Log.init();
+
+    static {
+        try {
+            Class.forName("net.sf.cglib.proxy.Enhancer");
+            AOP_CAN = true;
+        } catch (Exception e) {}
+    }
+
+    /**
+     * 检查Bean是否已经实例化,若无,则实例化之
+     */
+    private static Bean init(Bean bean) {
+        if (null == bean.instance) {// 如果尚未实例化
+            if (!AOP_CAN || AopFilter.class.isAssignableFrom(bean.type)) {
+                log.trace("Ioc initializing " + bean.type);
+                bean.instance = Reflect.born(bean.type);
+            } else {
+                log.trace("Aop initializing " + bean.type);
+                bean.instance = AopEnhancer.create(bean.type);// 如果有cglib-nodep-2.2.3.jar,这里每次都进入异常程序,影响性能
+            }
+
+            for (Field field : bean.fields) {
+                if (Verify.basicType(field.type)) {// 基本类型,直接设值
+                    Reflect.set(bean.instance, field.name, field.value);
+                } else {// 非基本类型,设为相应的bean
+                    Reflect.set(bean.instance, field.name, Ioc.get(field.type, field.value));
+                }
+                log.trace("Set Field: " + bean.type.getName() + "." + field.name + " = " + field.value);
+            }
+        }
+        return bean;
+    }
+
     /**
      * 若一个Bean为type类型或其子类型,则返回他的实例
      */
     public static <T> T get(Class<T> type) {
         for (Bean bean : IocContext.getInstance().BEANS) {
             if (type.isAssignableFrom(bean.type)) {
-                return (T) bean.instance;
+                return (T) init(bean).instance;
             }
         }
         return null;
@@ -31,7 +71,7 @@ public class Ioc {
     public static <T> T get(String name) {
         for (Bean bean : IocContext.getInstance().BEANS) {
             if (!Verify.isEmpty(name) && bean.name.equals(name)) {
-                return (T) bean.instance;
+                return (T) init(bean).instance;
             }
         }
         return null;
@@ -44,7 +84,7 @@ public class Ioc {
         if (!Verify.isEmpty(name) && null != type) {
             for (Bean bean : IocContext.getInstance().BEANS) {
                 if (type.isAssignableFrom(bean.type) && bean.name.equals(name)) {
-                    return (T) bean.instance;
+                    return (T) init(bean).instance;
                 }
             }
         }
@@ -59,7 +99,7 @@ public class Ioc {
     public static <T> T get(Class<T> type, Type genericType) {
         for (Bean bean : IocContext.getInstance().BEANS) {
             if (type.isAssignableFrom(bean.type) && null != genericType && genericType.equals(Reflect.actualType(bean.type, 0))) {
-                return (T) bean.instance;
+                return (T) init(bean).instance;
             }
         }
         return null;
