@@ -31,9 +31,9 @@ import org.junit.runners.Suite.SuiteClasses;
         AbstractServiceTest.class, //
         IocTest.class, AopTest.class, //
         BeanTest.class, FieldTest.class, //
-        AbstractDaoTest.class, QueryRunnerTest.class, RecordTest.class, //
+        AbstractDaoTest.class, QueryRunnerTest.class, RecordTest.class, PageTest.class,//
         QueryBuilderTest.class, ModelBuilderTest.class, TransTest.class,//
-        ConvertTest.class, ReflectTest.class, FilesTest.class, LogTest.class, VerifyTest.class, PageTest.class //
+        ConvertTest.class, ReflectTest.class, FilesTest.class, LogTest.class, VerifyTest.class //
 })
 public class FrameworkTest {
 

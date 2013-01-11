@@ -1,5 +1,6 @@
 package li.util;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import li.test.BaseTest;
@@ -31,12 +32,92 @@ public class VerifyTest extends BaseTest {
     }
 
     @Test
-    public void regex() {
-        assertTrue(Verify.regex("abcdefg", ".*"));
-    }
-
-    @Test
     public void startWith() {
         assertTrue(Verify.startWith("abcdefg", "abc"));
+    }
+
+    /**
+     * {@link li.dao.QueryBuilder#countBySql(String, Object[])}
+     */
+    @Test
+    public void regex1() {
+        String regex = "COUNT(.*)";
+        System.out.println(Verify.regex("", regex));
+    }
+
+    /**
+     * {@link li.mvc.ActionContext#getAction(String, String)}
+     */
+    @Test
+    public void regex2() {
+        System.out.println("test regex ActionContext#getAction");
+    }
+
+    /**
+     * {@link li.util.Convert#toType(Class, Object)}
+     */
+    @Test
+    public void regex3() {
+        System.out.println("test regex Convert#toType");
+    }
+
+    /**
+     * {@link li.mvc.Context#write(String)}
+     */
+    @Test
+    public void regex4() {
+        System.out.println("test regex Context#write");
+    }
+
+    /**
+     * {@li.quartz.Quartz#getJobs()}
+     */
+    @Test
+    public void regex5() {
+        String QUARTZ_CONFIG_REGEX = ".*[(config)|(task)]\\.xml$";
+        String[] tests = { "config.xml" };
+        Boolean[] results = { true };
+        for (int i = 0; i < tests.length; i++) {
+            assertEquals(results[i], Verify.regex(tests[i], QUARTZ_CONFIG_REGEX));
+        }
+    }
+
+    /**
+     * {@link li.ioc.XmlIocLoader#getBeans()}
+     */
+    @Test
+    public void regex6() {
+        String IOC_CONFIG_REGEX = ".*[(config)|(ioc)]\\.xml$";
+        String[] tests = { "config.xml" };
+        Boolean[] results = { true };
+        for (int i = 0; i < tests.length; i++) {
+            assertEquals(results[i], Verify.regex(tests[i], IOC_CONFIG_REGEX));
+        }
+    }
+
+    /**
+     * {@link li.ioc.AnnotationIocLoader#getBeans()}
+     */
+    @Test
+    public void regex7() {
+        String CLASS_REGEX = "^.*\\.class$";
+        String[] tests = { "User.class" };
+        Boolean[] results = { true };
+        for (int i = 0; i < tests.length; i++) {
+            assertEquals(results[i], Verify.regex(tests[i], CLASS_REGEX));
+        }
+    }
+
+    /**
+     * {@link li.util.Files#load(String)}
+     */
+    @Test
+    public void regex8() {
+        String PROPERTIES_REGEX = "^.*\\.properties$";
+        String[] tests = { "config.properties" };
+        Boolean[] results = { true };
+        for (int i = 0; i < tests.length; i++) {
+            assertEquals(results[i], Verify.regex(tests[i], PROPERTIES_REGEX));
+        }
     }
 }
