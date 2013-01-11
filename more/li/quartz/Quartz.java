@@ -25,41 +25,23 @@ import org.quartz.spi.TriggerFiredBundle;
 import org.w3c.dom.NodeList;
 
 public class Quartz {
-    private static final String QUARTZ_CONFIG_REGEX = "^.*(config)|(task)\\.xml$";
+    private static final String QUARTZ_CONFIG_REGEX = ".*[(config)|(task)]\\.xml$";
 
     /**
      * 初始化此类的时候启动Quartz,唯一的public方法
      */
     public Quartz() {
-        start();
+        try {
+            start();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * 防止重复启动的标记
      */
     private static boolean started = false;
-
-    /**
-     * 启动Quartz,启动所有任务,synchronized方法
-     */
-    private synchronized static void start() {
-        if (!started) {
-            try {
-                Scheduler scheduler = getScheduler();
-                Set<Entry<Class<? extends Job>, String>> jobs = getJobs().entrySet();
-                for (Entry<Class<? extends Job>, String> entry : jobs) {
-                    String name = entry.getKey().getName();// 类名作为name,使用默认的GROUP
-                    JobDetail jobDetail = new JobDetailImpl(name, Scheduler.DEFAULT_GROUP, entry.getKey());
-                    CronTrigger cronTrigger = new CronTriggerImpl(name, Scheduler.DEFAULT_GROUP, entry.getValue());
-                    scheduler.scheduleJob(jobDetail, cronTrigger);
-                }
-                scheduler.start();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        started = true;
-    }
 
     /**
      * 扫描以config.xml结尾的Quartz配置文件返回所有任务
@@ -91,5 +73,23 @@ public class Quartz {
                     }
                 });
         return scheduler;
+    }
+
+    /**
+     * 启动Quartz,启动所有任务,synchronized方法
+     */
+    private static void start() throws Exception {
+        if (!started) {
+            Scheduler scheduler = getScheduler();
+            Set<Entry<Class<? extends Job>, String>> jobs = getJobs().entrySet();
+            for (Entry<Class<? extends Job>, String> entry : jobs) {
+                String name = entry.getKey().getName();// 类名作为name,使用默认的GROUP
+                JobDetail jobDetail = new JobDetailImpl(name, Scheduler.DEFAULT_GROUP, entry.getKey());
+                CronTrigger cronTrigger = new CronTriggerImpl(name, Scheduler.DEFAULT_GROUP, entry.getValue());
+                scheduler.scheduleJob(jobDetail, cronTrigger);
+            }
+            scheduler.start();
+        }
+        started = true;
     }
 }

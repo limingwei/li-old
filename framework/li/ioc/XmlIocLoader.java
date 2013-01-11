@@ -20,7 +20,7 @@ import org.w3c.dom.NodeList;
  * @version 0.1.4 (2012-05-08)
  */
 public class XmlIocLoader {
-    private static final String IOC_CONFIG_REGEX = "^.*(config)|(ioc)\\.xml$";
+    private static final String IOC_CONFIG_REGEX = ".*[(config)|(ioc)]\\.xml$";
 
     private static final Log log = Log.init();
 

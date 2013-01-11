@@ -26,6 +26,8 @@ import org.w3c.dom.Document;
  * @version 0.1.5 (2012-05-08)
  */
 public class Files {
+    private static final String PROPERTIES_REGEX = "^.*\\.properties$";
+
     private static final Log log = Log.init();
 
     /**
@@ -95,7 +97,6 @@ public class Files {
         if (null == properties) {
             List propertyFiles = (List) Log.get("PROPERTIE_FILES");// 从缓存中查找propertyFiles
             if (null == propertyFiles) {
-                String PROPERTIES_REGEX = "^.*.properties$";// 搜索以.properties结尾的文件
                 propertyFiles = list(root(), PROPERTIES_REGEX, true);
                 Log.put("PROPERTIE_FILES", propertyFiles); // 将 PROPERTIES文件列表缓存
                 log.info("Found " + propertyFiles.size() + " properties files , at " + root());
