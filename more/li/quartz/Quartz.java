@@ -25,6 +25,8 @@ import org.quartz.spi.TriggerFiredBundle;
 import org.w3c.dom.NodeList;
 
 public class Quartz {
+    private static final String QUARTZ_CONFIG_REGEX = "^.*(config)|(task)\\.xml$";
+
     /**
      * 初始化此类的时候启动Quartz,唯一的public方法
      */
@@ -65,7 +67,7 @@ public class Quartz {
     private static Map<Class<? extends Job>, String> getJobs() {
         Map<Class<? extends Job>, String> jobs = new HashMap<Class<? extends Job>, String>();
 
-        List<String> fileList = Files.list(Files.root(), "^.*config.xml$", true);// 搜索以config.xml结尾的文件
+        List<String> fileList = Files.list(Files.root(), QUARTZ_CONFIG_REGEX, true);// 搜索以config.xml结尾的文件
         for (String filePath : fileList) {
             NodeList beanNodes = (NodeList) Files.xpath(Files.build(filePath), "//task", XPathConstants.NODESET);
             for (int length = (null == beanNodes ? -1 : beanNodes.getLength()), i = 0; i < length; i++) {

@@ -21,6 +21,9 @@ public class Ioc {
 
     private static final Log log = Log.init();
 
+    /**
+     * 检测Aop功能是否可用,只执行一次
+     */
     static {
         try {
             Class.forName("net.sf.cglib.proxy.Enhancer");

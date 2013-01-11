@@ -20,13 +20,15 @@ import org.w3c.dom.NodeList;
  * @version 0.1.4 (2012-05-08)
  */
 public class XmlIocLoader {
+    private static final String IOC_CONFIG_REGEX = "^.*(config)|(ioc)\\.xml$";
+
     private static final Log log = Log.init();
 
     /**
      * 解析SourceFloder下搜索到的文件名以config.xml结尾的文件,将其中配置的Bean返回
      */
     public List<Bean> getBeans() {
-        List<String> fileList = Files.list(Files.root(), "^.*config.xml$", true);// 搜索以config.xml结尾的文件
+        List<String> fileList = Files.list(Files.root(), IOC_CONFIG_REGEX, true);// 搜索以config.xml结尾的文件
         log.info("Found " + fileList.size() + " Xml config files at " + Files.root());
 
         List<Bean> beans = new ArrayList<Bean>();

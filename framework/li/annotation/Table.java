@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 标记与数据库中一张表相对应的一个类,POJO
+ * 标记与数据库中一张表相对应的一个类,POJO或者Record
  * 
  * @author li (limw@w.cn)
  * @version 0.1.1 (2012-05-08)

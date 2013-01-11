@@ -130,6 +130,6 @@ public class Record<T extends Record> extends AbstractDao<T> implements Map, Ser
      * 转调用HashMap的toString方法
      */
     public String toString() {
-        return fields.toString();
+        return super.toString() + " : " + fields.toString();
     }
 }

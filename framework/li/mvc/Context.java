@@ -174,8 +174,8 @@ public class Context {
         Set<Entry<String, String[]>> parameterSet = getRequest().getParameterMap().entrySet();
         for (Entry<String, String[]> entry : parameterSet) {// 迭代ParameterMap
             if (Verify.isEmpty(prefix) || Verify.startWith(entry.getKey(), prefix)) {// 前缀为空或者参数Key以前缀开头
-                String field = entry.getKey().substring(prefix.length());// 属性名
-                Reflect.set(t, field, entry.getValue()[0]);
+                String fieldName = entry.getKey().substring(prefix.length());// 属性名
+                Reflect.set(t, fieldName, entry.getValue()[0]);
             }
         }
         return t;
