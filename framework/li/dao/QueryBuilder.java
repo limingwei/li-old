@@ -68,7 +68,7 @@ public class QueryBuilder {
     public String countBySql(String sql, Object[] args) {
         if (Verify.startWith(sql, "WHERE")) {
             sql = "SELECT COUNT(*) FROM " + beanMeta.table + " " + sql;
-        } else if (!Verify.regex(sql, "COUNT(.*)")) {
+        } else if (!Verify.regex(sql.toUpperCase(), "COUNT\\(.*\\)")) {
             sql = "SELECT COUNT(*) FROM " + sql.substring(sql.toUpperCase().indexOf("FROM") + 4, sql.length()).trim();
         }
         if (Verify.contain(sql, "LIMIT")) {

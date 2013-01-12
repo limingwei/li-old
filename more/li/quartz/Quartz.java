@@ -25,7 +25,12 @@ import org.quartz.spi.TriggerFiredBundle;
 import org.w3c.dom.NodeList;
 
 public class Quartz {
-    private static final String QUARTZ_CONFIG_REGEX = ".*[(config)|(task)]\\.xml$";
+    private static final String QUARTZ_CONFIG_REGEX = "^.*[(config)|(task)]\\.xml$";
+
+    /**
+     * 防止重复启动的标记
+     */
+    private static boolean started = false;
 
     /**
      * 初始化此类的时候启动Quartz,唯一的public方法
@@ -37,11 +42,6 @@ public class Quartz {
             throw new RuntimeException(e);
         }
     }
-
-    /**
-     * 防止重复启动的标记
-     */
-    private static boolean started = false;
 
     /**
      * 扫描以config.xml结尾的Quartz配置文件返回所有任务
@@ -69,7 +69,7 @@ public class Quartz {
         Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
         scheduler.setJobFactory(new SimpleJobFactory() {// 设置自定义的job生成工厂
                     public Job newJob(TriggerFiredBundle bundle, Scheduler scheduler) throws SchedulerException {
-                        return Ioc.get(bundle.getJobDetail().getJobClass());// 通过Io生成job
+                        return Ioc.get(bundle.getJobDetail().getJobClass());// 通过Ioc生成job实例
                     }
                 });
         return scheduler;
@@ -78,8 +78,8 @@ public class Quartz {
     /**
      * 启动Quartz,启动所有任务,synchronized方法
      */
-    private static void start() throws Exception {
-        if (!started) {
+    private synchronized static void start() throws Exception {
+        if (!started) {// 只开始一次
             Scheduler scheduler = getScheduler();
             Set<Entry<Class<? extends Job>, String>> jobs = getJobs().entrySet();
             for (Entry<Class<? extends Job>, String> entry : jobs) {
@@ -89,7 +89,7 @@ public class Quartz {
                 scheduler.scheduleJob(jobDetail, cronTrigger);
             }
             scheduler.start();
+            started = true;
         }
-        started = true;
     }
 }
