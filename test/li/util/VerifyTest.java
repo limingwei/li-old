@@ -79,9 +79,9 @@ public class VerifyTest extends BaseTest {
      */
     @Test
     public void regex5() {
-        String QUARTZ_CONFIG_REGEX = "^.*[(config)|(task)]\\.xml$";
-        String[] tests = { "config.xml", "task.xml", "test-config.xml", /* "test.xml", */"task.yml" };
-        Boolean[] results = { true, true, true, /* false, */false };
+        String QUARTZ_CONFIG_REGEX = "^.*(config|task)\\.xml$";
+        String[] tests = { "config.xml", "task.xml", "test-config.xml", "test.xml", "task.yml" };
+        Boolean[] results = { true, true, true, false, false };
         for (int i = 0; i < tests.length; i++) {
             assertEquals(results[i], Verify.regex(tests[i], QUARTZ_CONFIG_REGEX));
         }
@@ -92,7 +92,7 @@ public class VerifyTest extends BaseTest {
      */
     @Test
     public void regex6() {
-        String IOC_CONFIG_REGEX = "^.*[(config)|(ioc)]\\.xml$";
+        String IOC_CONFIG_REGEX = "^.*(config|ioc)\\.xml$";
         String[] tests = { "config.xml", "ioc.xml", "test-config.xml", "test.xml", "iloveyou.xml", "ioc.yml" };
         Boolean[] results = { true, true, true, false, false, false };
         for (int i = 0; i < tests.length; i++) {

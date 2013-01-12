@@ -25,7 +25,7 @@ import org.quartz.spi.TriggerFiredBundle;
 import org.w3c.dom.NodeList;
 
 public class Quartz {
-    private static final String QUARTZ_CONFIG_REGEX = "^.*[(config)|(task)]\\.xml$";
+    private static final String QUARTZ_CONFIG_REGEX = "^.*(config|task)\\.xml$";
 
     /**
      * 防止重复启动的标记
