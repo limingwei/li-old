@@ -21,12 +21,12 @@ public abstract class Trans {
     /**
      * 存储当前事务中使用到的Connection,为null意味不在事务中
      */
-    public static final ThreadLocal<Map<Class, Connection>> CONNECTION_MAP = new ThreadLocal<Map<Class, Connection>>();
+    protected static final ThreadLocal<Map<Class, Connection>> CONNECTION_MAP = new ThreadLocal<Map<Class, Connection>>();
 
     /**
      * 存储数据操作异常,不为null则代表出错,需要回滚
      */
-    public static final ThreadLocal<Exception> EXCEPTION = new ThreadLocal<Exception>();
+    protected static final ThreadLocal<Exception> EXCEPTION = new ThreadLocal<Exception>();
 
     /**
      * 定义一个事务,并执行run()中包裹的数据操作方法
