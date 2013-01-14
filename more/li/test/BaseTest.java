@@ -5,7 +5,7 @@ import li.dao.Page;
 import org.junit.runner.RunWith;
 
 /**
- * 测试类的基类，会为每一个@Inject注解的字段设值
+ * 可以作为你的测试类的基类
  * 
  * @author li (limw@w.cn)
  * @version 0.1.1 (2012-07-21)
@@ -24,6 +24,5 @@ public class BaseTest {
      */
     public BaseTest() {
         this.page = new Page();
-        // li.test.JUnit4Li.createTest()
     }
 }

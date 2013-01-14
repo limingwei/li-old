@@ -12,7 +12,7 @@ import li.mvc.ActionFilter;
 import li.mvc.Context;
 
 /**
- * Action测试类的基类，准备内request response等的Mock对象
+ * Action测试类的基类，准备了request response等的Mock对象
  * 
  * @author li (limw@w.cn)
  * @version 0.1.1 (2012-07-21)
