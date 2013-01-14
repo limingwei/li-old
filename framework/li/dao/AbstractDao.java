@@ -179,7 +179,7 @@ public class AbstractDao<T> {
     }
 
     /**
-     * 根据SQL条件和分页对象进行分页查询,SQL语句可以从WHERE开始写,当然也可以是完整的SQL
+     * 根据SQL条件和分页对象进行分页查询
      * 
      * @param sql 传入的sql语句,可以包含'?'占位符和具名占位符
      * @param args 替换sql中占位符的值,或者对应具名占位符的Map
@@ -211,8 +211,8 @@ public class AbstractDao<T> {
         if (null != resultSet && null != page && page.count()) {
             page.setRecordCount(count(sql));
         }
-        Class<?> type = Record.class.isAssignableFrom(getType()) ? getType() : Record.class;// Record类型或其子类
         Integer count = null == page ? Page.DEFAULT_SIZE : page.getPageSize();
+        Class<?> type = Record.class.isAssignableFrom(getType()) ? getType() : Record.class;// Record类型或其子类
         return (List<Record>) modelBuilder.list(type, Field.list(resultSet), count, true);
     }
 
