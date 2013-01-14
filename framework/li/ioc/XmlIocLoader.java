@@ -20,9 +20,9 @@ import org.w3c.dom.NodeList;
  * @version 0.1.4 (2012-05-08)
  */
 public class XmlIocLoader {
-    private static final String IOC_CONFIG_REGEX = "^.*(config|ioc)\\.xml$";
-
     private static final Log log = Log.init();
+
+    private static final String IOC_CONFIG_REGEX = "^.*(config|ioc)\\.xml$";
 
     /**
      * 解析SourceFloder下搜索到的文件名以config.xml结尾的文件,将其中配置的Bean返回

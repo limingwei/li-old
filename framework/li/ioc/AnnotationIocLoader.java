@@ -17,9 +17,9 @@ import li.util.Reflect;
  * @version 0.1.2 (2012-05-08)
  */
 public class AnnotationIocLoader {
-    private static final String CLASS_REGEX = "^.*\\.class$";
-
     private static final Log log = Log.init();
+
+    private static final String CLASS_REGEX = "^.*\\.class$";
 
     /**
      * 扫描 Source Floder 下的所有类文件, 将其中加了@Bean注解的类返回,然后被加入到IocContext

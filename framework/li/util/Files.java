@@ -26,9 +26,9 @@ import org.w3c.dom.Document;
  * @version 0.1.5 (2012-05-08)
  */
 public class Files {
-    private static final String PROPERTIES_REGEX = "^.*\\.properties$";
-
     private static final Log log = Log.init();
+
+    private static final String PROPERTIES_REGEX = "^.*\\.properties$";
 
     /**
      * 返回项目的classes目录

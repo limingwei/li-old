@@ -16,23 +16,21 @@ import java.util.Map;
  * @version 0.1.7 (2012-05-08)
  */
 public class Convert {
-
     /**
      * 把字符串用一次MD5加密后返回
      */
     public static String toMD5(Object input) {
         try {
+            StringBuffer stringBuffer = new StringBuffer();
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
             messageDigest.update(input.toString().getBytes());
             byte[] byteDigest = messageDigest.digest();
-            StringBuffer stringBuffer = new StringBuffer("");
-            int i;
-            for (int offset = 0; offset < byteDigest.length; offset++) {
-                i = byteDigest[offset] < 0 ? byteDigest[offset] + 256 : byteDigest[offset];
-                if (i < 16) {
-                    stringBuffer.append("0");
+            for (int tmp, offset = 0; offset < byteDigest.length; offset++) {
+                tmp = byteDigest[offset] < 0 ? byteDigest[offset] + 256 : byteDigest[offset];
+                if (tmp < 16) {
+                    stringBuffer.append(0);
                 }
-                stringBuffer.append(Integer.toHexString(i));
+                stringBuffer.append(Integer.toHexString(tmp));
             }
             return stringBuffer.toString(); // 32位加密
         } catch (Exception e) {

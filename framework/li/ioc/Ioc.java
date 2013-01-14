@@ -17,9 +17,9 @@ import li.util.Verify;
  * @version 0.1.3 (2012-05-08)
  */
 public class Ioc {
-    private static Boolean AOP_CAN = false;
-
     private static final Log log = Log.init();
+
+    private static Boolean AOP_CAN = false;
 
     /**
      * 检测Aop功能是否可用,只执行一次
