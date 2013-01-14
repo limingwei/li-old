@@ -68,9 +68,9 @@ public class JUnit4Li extends BlockJUnit4ClassRunner {
                             }
                             Trans.EXCEPTION.set(new RuntimeException("rollback when test"));
                         }// public void run()
-                    };// new Trans()
+                    };
                 }// public void evaluate()
-            };// new Statement()
+            };
         }// else
     }
 
