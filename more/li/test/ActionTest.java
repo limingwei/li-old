@@ -41,14 +41,16 @@ public class ActionTest extends BaseTest {
     /**
      * 模拟的servletContext
      */
-    protected static MockServletContext servletContext = new MockServletContext();
+    protected static MockServletContext servletContext;
 
     /**
      * 模拟的FilterConfig
      */
-    private static MockFilterConfig filterConfig = new MockFilterConfig(servletContext);
+    private static MockFilterConfig filterConfig;
 
     static {
+        servletContext = new MockServletContext();
+        filterConfig = new MockFilterConfig(servletContext);
         try {
             new ActionFilter().init(filterConfig);// 初始化Filter,设置一些环境变量,只执行一次
         } catch (ServletException e) {
