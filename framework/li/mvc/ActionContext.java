@@ -6,6 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import li.annotation.Arg;
 import li.annotation.At;
+import li.ioc.Ioc;
 import li.ioc.IocContext;
 import li.model.Action;
 import li.model.Bean;
@@ -42,14 +43,14 @@ public class ActionContext {
                     if (null != at) {
                         for (String path : at.value()) {
                             for (String httpMethod : at.method()) {
-                                Action action = new Action();// Action请求路径,如果不以斜杠开始会被加上斜杠,如果注解value值为空则直接使用方法名
-                                action.path = Verify.isEmpty(path) ? "/" + method.getName() : Verify.startWith(path, "/") ? path : "/" + path;
-                                action.httpMethod = httpMethod.toUpperCase(); // HTTP请求类型,这里转换为大写
-                                action.actionInstance = bean.instance;
+                                Action action = new Action();
+                                action.actionInstance = Ioc.init(bean).instance;
                                 action.actionMethod = method;
                                 action.argTypes = method.getParameterTypes();
                                 action.argNames = Reflect.argNames(method);
                                 action.argAnnotations = Reflect.argAnnotations(method, Arg.class);
+                                action.path = Verify.isEmpty(path) ? "/" + method.getName() : Verify.startWith(path, "/") ? path : "/" + path;// Action请求路径,如果不以斜杠开始会被加上斜杠,如果注解value值为空则直接使用方法名
+                                action.httpMethod = httpMethod.toUpperCase(); // HTTP请求类型,这里转换为大写
                                 ACTION_CONTEXT.ACTIONS.add(action);
 
                                 log.info("ADD ACTION: @At(value=\"" + action.path + "\"" + (action.httpMethod.equals(".*") ? "" : ",method=\"" + action.httpMethod + "\"") + ") " + action.actionInstance.getClass().getName() + "." + action.actionMethod.getName() + "()");

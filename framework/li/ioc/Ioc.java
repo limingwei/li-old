@@ -34,7 +34,7 @@ public class Ioc {
     /**
      * 检查Bean是否已经实例化,若无,则实例化之
      */
-    private static Bean init(Bean bean) {
+    public static Bean init(Bean bean) {
         if (null == bean.instance) {// 如果尚未实例化
             if (!AOP_CAN || AopFilter.class.isAssignableFrom(bean.type)) {
                 log.trace("Ioc initializing " + bean.type);
