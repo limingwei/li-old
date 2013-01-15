@@ -15,10 +15,9 @@
 		<a class="delete" href="account_delete.do?id=${each.id}">删除</a>
 	</@li.tr>
 </@li.table>
-<div class="inline">
-<@li.page pg=page url="account_list.do" pn="page"/>
 
-<a class="btn btn-primary inline">添加</a></div>
+<@li.page pg=page url="account_list.do" pn="page"/>
+<a class="btn btn-primary">添加</a>
 
 <script>
 	function reload() {
