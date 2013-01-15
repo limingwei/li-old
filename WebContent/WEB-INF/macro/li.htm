@@ -159,10 +159,10 @@
 -->
 <#macro window id="" title="window">
     <div class="modal hide fade in" id="${id}">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">×</button>
-        <h3 id="h3Title">${title!}</h3>
-    </div>
+	    <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">×</button>
+	        <h3 id="h3Title">${title!}</h3>
+	    </div>
         <#nested/><#-- 一个form 加 一个button-->
     </div>
 </#macro>
@@ -230,72 +230,65 @@
     从page.ftl复制的,尽量不要直接引用,用 <@li.page url="/edm_user/list_page?start="/>
 -->
 <#macro basic_page url totalPages totalRecords currPage=1 pageSize=20 showPageNum=10  class="">
-<span>
-    <#local currPage = currPage?number/>
-    <#local showPageNum = showPageNum?number/>
-    <#local pageSize = pageSize?number/>
-    <#local totalPages = totalPages?number/>
-    <#local halfPage = (showPageNum/2)?number/>
-${currPage} / ${totalPages} 页
-    <#if ( currPage > 1) >
-    <a href="javascript:getPage('${url}','${(currPage-2)*pageSize}')"><b>上一页</b></a>&nbsp;&nbsp;
-        <#else >
-        上一页
-    </#if>
+	<span>
+	    <#local currPage = currPage?number/>
+	    <#local showPageNum = showPageNum?number/>
+	    <#local pageSize = pageSize?number/>
+	    <#local totalPages = totalPages?number/>
+	    <#local halfPage = (showPageNum/2)?number/>
+	    
+		${currPage} / ${totalPages} 页
+		<#if ( currPage > 1) >
+			<a href="javascript:getPage('${url}','${(currPage-2)*pageSize}')"><b>上一页</b></a>&nbsp;&nbsp;
+		<#else >
+		        上一页
+		</#if>
 
-    <#if ( currPage < totalPages) >
-    <a href="javascript:getPage('${url}','${(currPage)*pageSize}')"><b>下一页</b></a>&nbsp;&nbsp;
-        <#else >
-        下一页
-    </#if>
-
-共有记录${totalRecords} 条,到第
-<input id="pageNum" name="pageNum" type="text" class="input-small" value="${currPage}"/>
-页
-<input id="gobutton" type="button" class="btn btn-primary" value="GO.." onclick="javascript:checkGo(this,'${url}')"/>
-
-<script type="text/javascript">
-    function checkGo(obj, url) {
-        var pageNo = $(obj).prev().attr('value');
-        var preObj = $(obj).prev();
-        if (isNaN(pageNo)) {
-            alert('请输入数字!');
-            preObj.focus();
-            return false;
-        } else if (pageNo == null || pageNo == '') {
-            alert('请先输入页码!');
-            preObj.focus();
-            return false;
-        } else if (pageNo < 1 || pageNo > ${totalPages}) {
-            alert('输入的值超出页码范围!');
-            preObj.focus();
-            return false;
-        } else {
-            getPage(url, (pageNo - 1) *${pageSize} );
-        }
-    }
-
-    var setVal = function(obj) {
-        var pageNum = $(obj).val();
-        $("#pageNum").val(pageNum);
-    }
-
-    var ua = window.navigator.userAgent;
-    if (ua.indexOf('Firefox') >= 1) {
-        document.onkeydown = function(event) {
-            e = event ? event : (window.event ? window.event : null);
-            if (e.keyCode == 13) {
-                checkGo($("#gobutton"), '${url}')
-            }
-        }
-    }
-    
-	$("div.pagination a").each(function(index, item) {
-		$(this).click(function() {
-			$(".span9").load($(this).attr("href"));
-			return false;
-		});
-	});
-</script>
-</span>
+		<#if ( currPage < totalPages) >
+			<a href="javascript:getPage('${url}','${(currPage)*pageSize}')"><b>下一页</b></a>&nbsp;&nbsp;
+		<#else >
+			下一页
+		</#if>
+		
+		共有记录${totalRecords} 条,到第
+			<input id="pageNum" name="pageNum" type="text" class="input-small" value="${currPage}"/>
+		页
+			<input id="gobutton" type="button" class="btn btn-primary" value="GO.." onclick="javascript:checkGo(this,'${url}')"/>
+	</span>
+	<script type="text/javascript">
+		function checkGo(obj, url) {
+		    var pageNo = $(obj).prev().attr('value');
+		    var preObj = $(obj).prev();
+		    if (isNaN(pageNo)) {
+		        alert('请输入数字!');
+		        preObj.focus();
+		        return false;
+		    } else if (pageNo == null || pageNo == '') {
+		        alert('请先输入页码!');
+		        preObj.focus();
+		        return false;
+		    } else if (pageNo < 1 || pageNo > ${totalPages}) {
+		        alert('输入的值超出页码范围!');
+		        preObj.focus();
+		        return false;
+		    } else {
+		        getPage(url, (pageNo - 1) *${pageSize} );
+		    }
+		}
+		
+	    var setVal = function(obj) {
+	        var pageNum = $(obj).val();
+	        $("#pageNum").val(pageNum);
+	    }
+		
+	    var ua = window.navigator.userAgent;
+	    if (ua.indexOf('Firefox') >= 1) {
+	        document.onkeydown = function(event) {
+	            e = event ? event : (window.event ? window.event : null);
+	            if (e.keyCode == 13) {
+	                checkGo($("#gobutton"), '${url}')
+	            }
+	        }
+	    }
+	</script>
 </#macro>
