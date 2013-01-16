@@ -100,7 +100,7 @@
 <#--
     定义一个table列表
 -->
-<#macro table list page action=""  cols=1>
+<#macro table list page cols=1>
     <table class="table table-striped">
         <#if list?size=0>
             <#assign i=-1/>
@@ -154,7 +154,7 @@
 		});
 
 		function reload() {
-			$(".span9").load("${action}?page=${page.pageNumber}");
+			$(".span9").load("${request.getRequestURI()}?${request.getQueryString()!}");
 		}
 	</script>
 </#macro>

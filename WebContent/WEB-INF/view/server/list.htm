@@ -1,4 +1,4 @@
-<@li.table list=list;each>
+<@li.table page=page list=list;each>
 	<@li.tr title="ID">${each.id}</@li.tr>
 	<@li.tr title="主机">${each.host }</@li.tr>
 	<@li.tr title="账号">${each.username}</@li.tr>
@@ -11,17 +11,3 @@
 
 <@li.page pg=page url="role_list.do" pn="page"/>
 <a class="btn btn-primary window" href="server_add.do"><i class="icon-plus"></i>添加</a>
-
-<script type="text/javascript">
-	$(".delete").click(function() {
-		return doDelete($(this));
-	});
-
-	$(".window").click(function() {
-		return doWindow($(this));
-	});
-	
-	function reload() {
-		$(".span9").load("server_list.do?page=${page.pageNumber}");
-	}
-</script>
