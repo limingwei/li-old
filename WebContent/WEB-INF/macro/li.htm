@@ -12,11 +12,13 @@
 <#--
     主界面左侧的功能菜单项
 -->
-<#macro menu id text url pm="">
+<#macro menu text url icon="" pm="">
     <@li.op pm="${pm}">
-        <li id="${id}">
-            <a href="javascript:postRequest('${rc.getContextPath()}/${url}','${id}')">${text}</a>
-        </li>
+		<li>
+				<a href="${url}" class="list">					
+					<#if ''!=icon><i class="${icon}"></i></#if>${text}
+				</a>
+			</li>
     </@li.op>
 </#macro>
 

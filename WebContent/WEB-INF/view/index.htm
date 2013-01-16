@@ -1,77 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>System</title> 
-<#include "meta.htm"/> 
+<title>System</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="这里是页面的描述">
+<meta name="author" content="limingwei@mail.com">
 <#include "css.htm"/>
 <#include "js.htm"/>
-
-<style type="text/css">
-body {
-	padding-top: 60px;
-	padding-bottom: 40px;
-}
-
-.sidebar-nav {
-	padding: 9px 0;
-}
-</style>
-
-<script type="text/javascript">
-	function ajaxPost(form) {
-		$.ajax({
-			type : 'POST',
-			url : $(form).attr("action"),
-			data : $(form).serialize()
-		}).done(function(data) {
-			if (data.indexOf("成功") > -1) {
-				$(".modal").modal("hide");
-				reload();
-			} else {
-				alert(data);
-			}
-		});
-	}
-
-	function doWindow(target) {
-		$(".modal").remove();
-		$.ajax({
-			url : $(target).attr("href"),
-			dataType : "html"
-		}).done(function(data) {
-			$("body").append(data);
-			$(".modal").modal();
-		});
-		return false;
-	}
-
-	function doDelete(target) {
-		if (confirm("确认删除这条数据?")) {
-			$.ajax({
-				type : 'POST',
-				url : $(target).attr("href"),
-				dataType : "html"
-			}).done(function(data) {
-				if (data.indexOf("成功") > -1) {
-					reload();
-				} else {
-					alert(data);
-				}
-			});
-		}
-		return false;
-	}
-</script>
-
 </head>
 <body>
 	<#include "top.htm"/>
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<#include "left.htm"/>
-			<div class="span9"><#include "right.htm"/></div>
+			<div class="span9">
+				<div class="hero-unit">
+					<h1>welcome</h1>
+				</div>
+			</div>
 		</div>
-		<#include "foot.htm"/>
+		<hr>
+		<footer>
+			<p>&copy; System 2012</p>
+		</footer>
 	</div>
 </body>
 </html>

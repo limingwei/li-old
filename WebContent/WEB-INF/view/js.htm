@@ -16,3 +16,49 @@
 <script src="source/bootstrap/js/bootstrap-collapse.js"></script>
 <script src="source/bootstrap/js/bootstrap-carousel.js"></script>
 <script src="source/bootstrap/js/bootstrap-typeahead.js"></script>
+
+<script type="text/javascript">
+	function ajaxPost(form) {
+		$.ajax({
+			type : 'POST',
+			url : $(form).attr("action"),
+			data : $(form).serialize()
+		}).done(function(data) {
+			if (data.indexOf("成功") > -1) {
+				$(".modal").modal("hide");
+				reload();
+			} else {
+				alert(data);
+			}
+		});
+	}
+
+	function doWindow(target) {
+		$(".modal").remove();
+		$.ajax({
+			url : $(target).attr("href"),
+			dataType : "html"
+		}).done(function(data) {
+			$("body").append(data);
+			$(".modal").modal();
+		});
+		return false;
+	}
+
+	function doDelete(target) {
+		if (confirm("确认删除这条数据?")) {
+			$.ajax({
+				type : 'POST',
+				url : $(target).attr("href"),
+				dataType : "html"
+			}).done(function(data) {
+				if (data.indexOf("成功") > -1) {
+					reload();
+				} else {
+					alert(data);
+				}
+			});
+		}
+		return false;
+	}
+</script>

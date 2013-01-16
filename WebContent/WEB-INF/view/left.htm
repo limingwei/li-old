@@ -2,32 +2,12 @@
 <div class="span3">
 	<div class="well sidebar-nav">
 		<ul class="nav nav-list">
-			<li class="nav-header">
-				<i class="icon-refresh"></i>用户管理
-			</li>
-			<li>
-				<a href="account_list.do" class="list">
-					<i class="icon-headphones"></i>账户管理
-				</a>
-			</li>
-			<li>
-				<a href="resource_list.do" class="list">
-					<i class="icon-volume-up"></i>资源管理
-				</a>
-			</li>
-			<li>
-				<a href="role_list.do" class="list">
-					<i class="icon-camera"></i>角色管理
-				</a>
-			</li>
-			<li class="nav-header">
-				<i class="icon-off"></i>邮件
-			</li>
-			<li>
-				<a href="server_list.do">
-					<i class="icon-ban-circle"></i>邮件服务器
-				</a>
-			</li>
+			<li class="nav-header">用户管理</li>
+			<@li.menu text="账户管理" url="account_list.do"/>
+			<@li.menu text="资源管理" url="resource_list.do"/>
+			<@li.menu text="角色管理" url="role_list.do"/>
+			<li class="nav-header">邮件</li>
+			<@li.menu text="邮件服务器" url="server_list.do"/>
 		</ul>
 	</div>
 </div>
