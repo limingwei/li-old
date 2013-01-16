@@ -17,9 +17,17 @@
 </@li.table>
 
 <@li.page pg=page url="account_list.do" pn="page"/>
-<a class="btn btn-primary">添加</a>
+<a class="btn btn-primary window" href="account_add.do"><i class="icon-plus"></i>添加</a>
 
-<script>
+<script type="text/javascript">
+	$(".delete").click(function() {
+		return doDelete($(this));
+	});
+
+	$(".window").click(function() {
+		return doWindow($(this));
+	});
+
 	function reload() {
 		$(".span9").load("account_list.do?page=${page.pageNumber}");
 	}

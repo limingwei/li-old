@@ -16,24 +16,15 @@ body {
 	padding: 9px 0;
 }
 </style>
-<script>
-	function endWith(string, str) {
-		if (string.length < str.length)
-			return false;
-		if (string == str)
-			return true;
-		if (string.substring(string.length - str.length) == str)
-			return true;
-		return false;
-	}
-	
-	function ajaxPost(form){
+
+<script type="text/javascript">
+	function ajaxPost(form) {
 		$.ajax({
-			type:'POST',
-			url : $(form).parent().prev().children("form").attr("action"),
-			data : $(form).parent().prev().children("form").serialize()
+			type : 'POST',
+			url : $(form).attr("action"),
+			data : $(form).serialize()
 		}).done(function(data) {
-			if (endWith(data, "成功")) {
+			if (data.indexOf("成功") > -1) {
 				$(".modal").modal("hide");
 				reload();
 			} else {
@@ -41,7 +32,37 @@ body {
 			}
 		});
 	}
+
+	function doWindow(target) {
+		$(".modal").remove();
+		$.ajax({
+			url : $(target).attr("href"),
+			dataType : "html"
+		}).done(function(data) {
+			$("body").append(data);
+			$(".modal").modal();
+		});
+		return false;
+	}
+
+	function doDelete(target) {
+		if (confirm("确认删除这条数据?")) {
+			$.ajax({
+				type : 'POST',
+				url : $(target).attr("href"),
+				dataType : "html"
+			}).done(function(data) {
+				if (data.indexOf("成功") > -1) {
+					reload();
+				} else {
+					alert(data);
+				}
+			});
+		}
+		return false;
+	}
 </script>
+
 </head>
 <body>
 	<#include "top.htm"/>
