@@ -46,7 +46,7 @@ public class ThreadAction extends AbstractAction {
 
     @At(value = "thread_update", method = POST)
     public void update(Thread thread) {
-        threadDao.update(thread);
+        threadDao.updateIgnoreNull(thread);
         redirect("thread?id=" + thread.get("id"));
     }
 

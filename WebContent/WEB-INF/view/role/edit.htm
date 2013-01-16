@@ -1,6 +1,6 @@
 <@li.window id="edit_win" title="修改角色">
 	<@li.form id="role_edit" action="role_update.do">
-		<@li.input name="role.id" type="hidden" value="${role.id!}"/>
+		<input name="role.id" type="hidden" value="${role.id!}"/>
 		<@li.input label="名称" value="${role.name!}" readonly="1"/>
 		<@li.input name="role.description" label="描述" value="${role.description!}"/>
 	</@li.form>
@@ -11,6 +11,6 @@
 </@li.window>
 <script>
 	$("a#save").click(function() {
-		ajaxPost($(this));
+		ajaxPost($("#role_edit"));
 	});
 </script>

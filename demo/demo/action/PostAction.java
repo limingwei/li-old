@@ -39,7 +39,7 @@ public class PostAction extends AbstractAction {
 
     @At(value = "post_update", method = POST)
     public void update(Post post) {
-        postDao.update(post);
+        postDao.updateIgnoreNull(post);
         redirect("thread?id=" + post.get("thread_id"));
     }
 

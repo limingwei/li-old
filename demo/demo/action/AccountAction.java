@@ -46,7 +46,7 @@ public class AccountAction extends AbstractAction {
 
     @At(value = "account_update", method = POST)
     public void update(Account account) {
-        accountDao.update(account.set("password", Convert.toMD5(account.get("password"))));
+        accountDao.updateIgnoreNull(account.set("password", Convert.toMD5(account.get("password"))));
         redirect("account_list?pn=" + getParameter("pn"));
     }
 

@@ -1,6 +1,6 @@
 <@li.window id="edit_win" title="修改资源">
 	<@li.form id="resource_edit" action="resource_update.do">
-		<@li.input name="resource.id" type="hidden" value="${resource.id!}"/>
+		<input name="resource.id" type="hidden" value="${resource.id!}"/>
 		<@li.input label="名称" value="${resource.name!}" readonly="1"/>
 		<@li.input name="resource.description" label="描述" value="${resource.description!}"/>
 	</@li.form>
@@ -11,6 +11,6 @@
 </@li.window>
 <script>
 	$("a#save").click(function() {
-		ajaxPost($(this));
+		ajaxPost("#resource_edit");
 	});
 </script>

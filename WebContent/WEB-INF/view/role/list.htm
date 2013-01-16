@@ -7,8 +7,19 @@
 		<a class="delete" href="role_delete.do?id=${each.id}">删除</a>
 	</@li.tr>
 </@li.table>
+
 <@li.page pg=page url="role_list.do" pn="page"/>
-<script>
+<a class="btn btn-primary window" href="role_add.do"><i class="icon-plus"></i>添加</a>
+
+<script type="text/javascript">
+	$(".delete").click(function() {
+		return doDelete($(this));
+	});
+
+	$(".window").click(function() {
+		return doWindow($(this));
+	});
+
 	function reload() {
 		$(".span9").load("role_list.do?page=${page.pageNumber}");
 	}

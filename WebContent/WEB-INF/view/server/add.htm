@@ -1,0 +1,17 @@
+<@li.window id="edit_win" title="添加服务器">
+	<@li.form id="server_add" action="server_save.do">
+		<@li.input name="server.host" label="主机"/>
+		<@li.input name="server.username" label="账户"/>
+		<@li.input name="server.password" label="密码"/>
+	</@li.form>
+	<@li.button>
+		<a href="#" class="btn" data-dismiss="modal">取消</a>
+        <a href="#" class="btn btn-primary" id="save">保存</a>
+	</@li.button>
+</@li.window>
+
+<script type="text/javascript">
+	$("a#save").click(function() {
+		ajaxPost($("#server_add"));
+	});
+</script>

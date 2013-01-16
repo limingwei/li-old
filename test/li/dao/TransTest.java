@@ -19,8 +19,8 @@ public class TransTest extends BaseTest {
     public void test1() {
         System.err.println(new Trans(Convert.toMap("inpar", "inpar---", "1", "2", "3", "4")) {
             public void run() {
-                userDao.update(new _User().set("id", 2).set("username", "u-1" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1").set("status", 1));
-                userDao.update(new _User().set("id", 2).set("username", "u-2" + System.currentTimeMillis()).set("password", "p-2").set("email", "e-2").set("status", 1));
+                userDao.updateIgnoreNull(new _User().set("id", 2).set("username", "u-1" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1").set("status", 1));
+                userDao.updateIgnoreNull(new _User().set("id", 2).set("username", "u-2" + System.currentTimeMillis()).set("password", "p-2").set("email", "e-2").set("status", 1));
                 map().put("outpar", "outpar---");
                 System.err.println(map().get("inpar"));
             }

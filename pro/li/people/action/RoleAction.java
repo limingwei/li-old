@@ -31,6 +31,16 @@ public class RoleAction extends AbstractAction implements Const {
         write(roleDao.updateIgnoreNull(role) ? "更新角色成功" : "更新角色失败");
     }
 
+    @At("role_add.do")
+    public void add() {
+        view("role/add");
+    }
+
+    @At(value = "role_save.do", method = POST)
+    public void save(Role role) {
+        write(roleDao.saveIgnoreNull(role) ? "添加角色成功" : "添加角色失败");
+    }
+
     @At(value = "role_delete.do", method = POST)
     public void delete(Integer id) {
         write(roleDao.delete(id) ? "删除角色成功" : "删除角色失败");

@@ -26,7 +26,7 @@ public class _User extends Record<_User> {
             public void run() {
                 new Trans() {
                     public void run() {
-                        update(new _User().set("id", 2).set("username", "u-5" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1").set("status", 1));
+                        updateIgnoreNull(new _User().set("id", 2).set("username", "u-5" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1").set("status", 1));
                     }
                 };
             }

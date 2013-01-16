@@ -31,6 +31,16 @@ public class ResourceAction extends AbstractAction implements Const {
         write(resourceDao.updateIgnoreNull(resource) ? "更新资源成功" : "更新资源失败");
     }
 
+    @At("resource_add.do")
+    public void add() {
+        view("resource/add");
+    }
+
+    @At(value = "resource_save.do", method = POST)
+    public void save(Resource resource) {
+        write(resourceDao.saveIgnoreNull(resource) ? "添加资源成功" : "添加资源失败");
+    }
+
     @At(value = "resource_delete.do", method = POST)
     public void delete(Integer id) {
         write(resourceDao.delete(id) ? "删除资源成功" : "删除资源失败");
