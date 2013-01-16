@@ -4,7 +4,7 @@
 	<a class="btn btn-primary"><i class="icon-search icon-white"></i>搜索</a>
 </form>
 
-<@li.table list=list;each>
+<@li.table action="account_list.do" page=page list=list;each>
 	<@li.tr title="ID">${each.id}</@li.tr>
 	<@li.tr title="账户">${each.username }</@li.tr>
 	<@li.tr title="邮箱">${each.email}</@li.tr>
@@ -18,17 +18,3 @@
 
 <@li.page pg=page url="account_list.do" pn="page"/>
 <a class="btn btn-primary window" href="account_add.do"><i class="icon-plus"></i>添加</a>
-
-<script type="text/javascript">
-	$(".delete").click(function() {
-		return doDelete($(this));
-	});
-
-	$(".window").click(function() {
-		return doWindow($(this));
-	});
-
-	function reload() {
-		$(".span9").load("account_list.do?page=${page.pageNumber}");
-	}
-</script>

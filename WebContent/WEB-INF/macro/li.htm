@@ -100,7 +100,7 @@
 <#--
     定义一个table列表
 -->
-<#macro table list cols=1>
+<#macro table list page action=""  cols=1>
     <table class="table table-striped">
         <#if list?size=0>
             <#assign i=-1/>
@@ -143,6 +143,20 @@
             </#if>
         </#list>
     </table>
+    
+	<script type="text/javascript">
+		$(".delete").click(function() {
+			return doDelete($(this));
+		});
+	
+		$(".window").click(function() {
+			return doWindow($(this));
+		});
+
+		function reload() {
+			$(".span9").load("${action}?page=${page.pageNumber}");
+		}
+	</script>
 </#macro>
 
 <#--
@@ -180,6 +194,12 @@
             </fieldset>
         </form>
     </div>
+
+	<script type="text/javascript">
+		$(".submit").click(function() {
+			ajaxPost($("#${id}"));
+		});
+	</script>
 </#macro>
 
 <#--
