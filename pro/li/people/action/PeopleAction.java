@@ -24,4 +24,24 @@ public class PeopleAction extends AbstractAction implements Const {
     public void edit(Integer id) {
         view("people/edit");
     }
+
+    @At(value = "people_update.do", method = POST)
+    public void update(People people) {
+        write(peopleDao.updateIgnoreNull(people) ? "修改会员成功" : "修改会员失败");
+    }
+
+    @At("people_add.do")
+    public void add() {
+        view("people/add");
+    }
+
+    @At(value = "people_save.do", method = POST)
+    public void save(People people) {
+        write(peopleDao.saveIgnoreNull(people) ? "新增会员成功" : "新增会员失败");
+    }
+
+    @At(value = "people_delete.do", method = POST)
+    public void delete(Integer id) {
+        write(peopleDao.delete(id) ? "删除会员成功" : "删除会员失败");
+    }
 }

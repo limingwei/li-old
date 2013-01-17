@@ -8,10 +8,17 @@
 			<@li.menu text="角色管理" url="role_list.do"/>
 			<li class="nav-header">邮件</li>
 			<@li.menu text="邮件服务器" url="server_list.do"/>
+			<li class="nav-header">会员管理</li>
+			<@li.menu text="会员管理" url="people_list.do"/>
+			<@li.menu text="部门管理" url="department_list.do"/>
+			<@li.menu text="干事管理" url="secretary_list.do"/>
+			<li class="nav-header">财务管理</li>
+			<@li.menu text="财务记录" url="secretary_list.do"/>
 		</ul>
 	</div>
 </div>
-<script>
+
+<script type="text/javascript">
 	$(".nav-list a").each(function(index, item) {
 		$(this).click(function() {
 			$(".span9").load($(this).attr("href"));
