@@ -40,7 +40,7 @@
 			dataType : "html"
 		}).done(function(data) {
 			$("body").append(data);
-			$(".modal").modal();
+			$(".modal").modal({backdrop:"static",keyboard:false,show:true});
 		});
 		return false;
 	}
