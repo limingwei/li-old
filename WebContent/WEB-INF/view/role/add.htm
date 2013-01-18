@@ -2,6 +2,13 @@
 	<@li.form id="role_add" action="role_save.do">
 		<@li.input name="role.name" label="名称"/>
 		<@li.input name="role.description" label="描述"/>
+		<@li.control label="权限">
+			<#list resources as each>
+				<label class="checkbox inline">
+		        	<input type="checkbox" name="resource_id" value="${each.id}">${each.description}
+		    	</label>
+			</#list>
+		</@li.control>
 	</@li.form>
 	<@li.button>
 		<a href="#" class="btn" data-dismiss="modal">取消</a>
