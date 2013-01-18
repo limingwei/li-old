@@ -7,25 +7,24 @@ import li.annotation.Bean;
 import li.annotation.Inject;
 import li.annotation.Table;
 import li.dao.Record;
+import li.people.Const;
 
 @Bean
 @Table("t_role")
-public class Role extends Record<Role> {
+public class Role extends Record<Role> implements Const {
     private static final long serialVersionUID = -3309607180685180059L;
 
     @Inject
     RoleResource roleResourceDao;
 
-    @Inject
-    Resource resourceDao;
-
     public Role find(Integer id) {
+        String sql = "SELECT resource_id FROM r_role_resource WHERE role_id = ?";
         Role role = super.find(id);
         if (null != role) {
-            List<Resource> resources = resourceDao.listByRoleId(id);
+            List<Role> roleResources = list(MAX_PAGE, sql, id);
             List<Integer> resourceIds = new ArrayList<>();
-            for (Resource resource : resources) {
-                resourceIds.add(resource.get(Integer.class, "id"));
+            for (Role resource : roleResources) {
+                resourceIds.add(resource.get(Integer.class, "resource_id"));
             }
             role.set("resourceIds", resourceIds);
         }

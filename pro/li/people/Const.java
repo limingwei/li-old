@@ -7,5 +7,5 @@ public interface Const {
 
     public static final String PAGE = "page";
 
-    public static final Page MAX_PAGE = new Page(1, Integer.MAX_VALUE);
+    public static final Page MAX_PAGE = new Page(1, Integer.MAX_VALUE).count(false);
 }

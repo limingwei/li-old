@@ -7,6 +7,7 @@
 				<label class="checkbox inline">
 		        	<input type="checkbox" name="resource_id" value="${each.id}">${each.description}
 		    	</label>
+		    	<#if (each_index+1)%4=0><br/></#if>
 			</#list>
 		</@li.control>
 	</@li.form>
