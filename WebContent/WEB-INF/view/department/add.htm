@@ -1,9 +1,8 @@
+<#-- -->
+
 <@li.window id="edit_win" title="部门添加">
-	<@li.form id="people_edit" action="people_update.do">
-		<@li.input name="id" label="ID" value=""/>
-		<@li.input name="username" label="用户名"/>
-		<@li.input name="password" label="密码"/>
-		<@li.input name="email" label="邮箱"/>
+	<@li.form id="people_edit" action="department_save.do">
+		<@li.input name="department.name" label="名称"/>
 	</@li.form>
 	<@li.button>
 		<a href="#" class="btn" data-dismiss="modal">取消</a>

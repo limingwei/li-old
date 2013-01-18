@@ -1,7 +1,13 @@
+<#-- -->
+
 <form class="well form-search">
 	<input class="input" placeholder="搜索会员"/>
+	<input id="datepicker" class="datepicker" type="text" />
 	<a class="btn btn-primary"><i class="icon-search icon-white"></i>搜索</a>
 </form>
+<script type="text/javascript">
+	$(".datepicker").datepicker();
+</script>
 
 <@li.table list=list;each>
 	<@li.tr title="ID">${each.id}</@li.tr>

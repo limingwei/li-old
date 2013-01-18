@@ -32,7 +32,7 @@ public class DepartmentAction extends AbstractAction implements Const {
 
     @At("department_edit.do")
     public void edit(Integer id) {
-        setRequest("secretary", departmentDao.find(id));
+        setRequest("department", departmentDao.find(id));
         view("department/edit");
     }
 
