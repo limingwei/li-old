@@ -232,3 +232,17 @@
 		});
 	</script>
 </#macro>
+
+<#--
+	搜索栏
+-->
+<#macro search action="">
+	<form class="well form-search">
+	    <#nested/>
+		<a class="btn btn-primary"><i class="icon-search icon-white"></i>搜索</a>
+	</form>
+	
+	<script type="text/javascript">
+		$(".datepicker").datepicker();
+	</script>
+</#macro>

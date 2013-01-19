@@ -6,6 +6,7 @@ import java.util.List;
 import li.annotation.Bean;
 import li.annotation.Inject;
 import li.annotation.Table;
+import li.annotation.Trans;
 import li.dao.Record;
 import li.people.Const;
 
@@ -18,23 +19,24 @@ public class Role extends Record<Role> implements Const {
     RoleResource roleResourceDao;
 
     public Role find(Integer id) {
-        String sql = "SELECT resource_id FROM r_role_resource WHERE role_id = ?";
         Role role = super.find(id);
         if (null != role) {
-            List<Role> roleResources = list(MAX_PAGE, sql, id);
+            List<RoleResource> roleResources = roleResourceDao.listByRoleId(id);
             List<Integer> resourceIds = new ArrayList<>();
-            for (Role resource : roleResources) {
-                resourceIds.add(resource.get(Integer.class, "resource_id"));
+            for (RoleResource roleResource : roleResources) {
+                resourceIds.add(roleResource.get(Integer.class, "resource_id"));
             }
             role.set("resourceIds", resourceIds);
         }
         return role;
     }
 
+    @Trans
     public Boolean update(Role role, Integer[] resourceIds) {
         return updateIgnoreNull(role) && roleResourceDao.reSave(role.get(Integer.class, "id"), resourceIds);
     }
 
+    @Trans
     public Boolean save(Role role, Integer[] resourceIds) {
         return saveIgnoreNull(role) && roleResourceDao.reSave(role.get(Integer.class, "id"), resourceIds);
     }

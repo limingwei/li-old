@@ -23,7 +23,7 @@ public class Account extends Record<Account> {
         return find(sql, username);
     }
 
-    public Object findByEmail(String email) {
+    public Account findByEmail(String email) {
         String sql = "WHERE email=?";
         return find(sql, email);
     }

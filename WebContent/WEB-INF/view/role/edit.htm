@@ -7,7 +7,7 @@
 		<@li.input name="role.description" label="描述" value="${role.description!}"/>
 		<@li.control label="权限">
 			<#list resources as each>
-				<label class="checkbox inline">
+				<label class="checkbox inline"  style="width:56px;">
 		        	<input type="checkbox" name="resource_id" value="${each.id}" <#if role.resourceIds?seq_contains(each.id?number)>checked</#if>>${each.description} 
 		    	</label>
 		    	<#if (each_index+1)%4=0><br/></#if>
