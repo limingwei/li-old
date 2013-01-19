@@ -22,7 +22,7 @@ public class Role extends Record<Role> implements Const {
         Role role = super.find(id);
         if (null != role) {
             List<RoleResource> roleResources = roleResourceDao.listByRoleId(id);
-            List<Integer> resourceIds = new ArrayList<>();
+            List<Integer> resourceIds = new ArrayList<Integer>();
             for (RoleResource roleResource : roleResources) {
                 resourceIds.add(roleResource.get(Integer.class, "resource_id"));
             }

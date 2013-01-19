@@ -19,17 +19,15 @@ public class Account extends Record<Account> {
     }
 
     public Account findByUsername(String username) {
-        String sql = "WHERE username=?";
-        return find(sql, username);
+        return find("WHERE username=?", username);
     }
 
     public Account findByEmail(String email) {
-        String sql = "WHERE email=?";
-        return find(sql, email);
+        return find("WHERE email=?", email);
     }
 
     public List<Account> list(Page page) {
-        String sql = "SELECT a.*,r.name role_name FROM t_account a LEFT JOIN t_role r ON a.role_id=r.id";
+        String sql = "SELECT a.*,r.name role_name " + "FROM t_account a " + "LEFT JOIN t_role r ON a.role_id=r.id";
         return list(page, sql);
     }
 }

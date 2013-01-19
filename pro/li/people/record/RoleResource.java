@@ -23,7 +23,6 @@ public class RoleResource extends Record<RoleResource> implements Const {
     }
 
     public List<RoleResource> listByRoleId(Integer roleId) {
-        String sql = "SELECT resource_id FROM r_role_resource WHERE role_id = ?";
-        return list(MAX_PAGE, sql, roleId);
+        return list(MAX_PAGE, "WHERE role_id = ?", roleId);
     }
 }
