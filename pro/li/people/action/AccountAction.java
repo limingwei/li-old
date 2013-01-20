@@ -1,12 +1,10 @@
 package li.people.action;
 
-import li.annotation.Aop;
 import li.annotation.At;
 import li.annotation.Bean;
 import li.annotation.Inject;
 import li.dao.Page;
 import li.mvc.AbstractAction;
-import li.people.AuthFilter;
 import li.people.Const;
 import li.people.record.Account;
 import li.people.record.Role;
@@ -21,7 +19,6 @@ public class AccountAction extends AbstractAction implements Const {
     Role roleDao;
 
     @At("account_list.do")
-    @Aop(AuthFilter.class)
     public void list(Page page) {
         setRequest(LIST, accountDao.list(page));
         setRequest(PAGE, page);
