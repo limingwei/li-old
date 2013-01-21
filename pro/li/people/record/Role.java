@@ -7,6 +7,7 @@ import li.annotation.Bean;
 import li.annotation.Inject;
 import li.annotation.Table;
 import li.annotation.Trans;
+import li.dao.Page;
 import li.dao.Record;
 import li.people.Const;
 
@@ -18,6 +19,19 @@ public class Role extends Record<Role> implements Const {
     @Inject
     RoleResource roleResourceDao;
 
+    @Inject
+    Resource resourceDao;
+
+    @Trans
+    public List<Role> list(Page page) {
+        List<Role> roles = super.list(page);
+        for (Role role : roles) {
+            role.set("resources", resourceDao.listByRoleId(role.get(Integer.class, "id")));
+        }
+        return roles;
+    }
+
+    @Trans
     public Role find(Integer id) {
         Role role = super.find(id);
         if (null != role) {

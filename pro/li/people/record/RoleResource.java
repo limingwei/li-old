@@ -16,8 +16,8 @@ public class RoleResource extends Record<RoleResource> implements Const {
     @Trans
     public Boolean reSave(Integer roleId, Integer[] resourceIds) {
         Boolean flag = 0 < delete("WHERE role_id=?", roleId);
-        for (Integer resourceId : resourceIds) {
-            flag = save(new RoleResource().set("role_id", roleId).set("resource_id", resourceId));
+        for (int i = 0; null != resourceIds && i < resourceIds.length; i++) {
+            flag = save(new RoleResource().set("role_id", roleId).set("resource_id", resourceIds[i]));
         }
         return flag;
     }
