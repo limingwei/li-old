@@ -91,7 +91,7 @@ public class AbstractDao<T> {
             if (null == Trans.CONNECTION_MAP.get()) {// 如果未进入事务
                 return this.getDataSource().getConnection();// 则简单获取一个connection
             } else { // 如果已经进入事务
-                Connection connection = Trans.CONNECTION_MAP.get().get(getClass()); // 从connectionMap中得到缓存的connection
+                Connection connection = Trans.CONNECTION_MAP.get().get(getClass()); // 从connectionMap中得到为这个Dao类缓存的connection
                 if (null == connection || connection.isClosed()) { // 没有缓存这个Dao的connection或已被关闭
                     connection = this.getDataSource().getConnection(); // 获取一个新的connection
                     connection.setAutoCommit(false); // 设置为不自动提交

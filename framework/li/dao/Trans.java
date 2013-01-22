@@ -19,7 +19,7 @@ public abstract class Trans {
     private Map map;// 实例变量,用于存放一些值,可用于Trans内外通信
 
     /**
-     * 存储当前事务中使用到的Connection,为null意味不在事务中
+     * 存储当前事务中每一个Dao使用的Connection,为null意味不在事务中
      */
     protected static final ThreadLocal<Map<Class, Connection>> CONNECTION_MAP = new ThreadLocal<Map<Class, Connection>>();
 
@@ -97,7 +97,7 @@ public abstract class Trans {
         if (null == this.map.get(hashCode() + "~!@#in_trans") && null != connectionMap) { // Trans in Trans 时候不会重复执行
             for (Entry<Class, Connection> connection : connectionMap.entrySet()) {
                 connection.getValue().close();
-                log.trace("Closing Connection in Trans " + connection.getValue());
+                log.trace("Closing Connection in Trans " + connection.getValue().getClass().getName() + "@" + connection.getValue().hashCode());
             }
             CONNECTION_MAP.set(null);
             EXCEPTION.set(null);
