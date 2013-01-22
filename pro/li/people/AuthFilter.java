@@ -11,7 +11,7 @@ import li.people.record.Account;
 @Bean
 public class AuthFilter implements AopFilter {
     public void doFilter(AopChain chain) {
-        String path = Context.getRequest().getServletPath();
+        String path = Context.getRequest().getServletPath().replace('/', ' ').trim();
         Account account = (Account) Context.getSession().getAttribute("account");
         List<String> resources = (List<String>) Context.getSession().getAttribute("resources");
         if (null == account || null == resources) {

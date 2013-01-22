@@ -4,7 +4,7 @@
     包裹一个操作按钮,有相应权限才会显示
 -->
 <#macro op pm="">
-    <#if ""==pm || sa || user_permissions?seq_contains(pm)>
+    <#if ""==pm || (sa??&&sa) || (resources??&&resources?seq_contains(pm))>
         <#nested>
     </#if>
 </#macro>

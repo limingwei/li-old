@@ -52,9 +52,9 @@ body {
 				data : $(this).serialize(),
 				dataType : "html"
 			}).done(function(data) {
-				if("注册成功"==data){
+				if(data.indexOf("成功")>-1){
 					location.href="index.do";
-				}else{					
+				}else{
 					alert(data);
 				}
 			});

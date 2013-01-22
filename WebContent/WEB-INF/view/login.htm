@@ -42,12 +42,31 @@ body {
 	padding: 7px 9px;
 }
 </style>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("form#login").submit(function() {
+			$.ajax({
+				url : $(this).attr("action"),
+				type : $(this).attr("method"),
+				data : $(this).serialize(),
+				dataType : "html"
+			}).done(function(data) {
+				if(data.indexOf("成功")>-1){
+					location.href="index.do";
+				}else{
+					alert(data);
+				}
+			});
+			return false;
+        });
+	});
+</script>
 </head>
 <body>
 	<#include "top.htm"/>
 	<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 	<div class="container">
-		<form class="form-signin" action="login.do" method="POST">
+		<form id="login" class="form-signin" action="login.do" method="POST">
 			<h2 class="form-signin-heading">登录</h2>
 			<input type="text" name="account.username" class="input-block-level" placeholder="用户名/邮箱"> 
 			<input type="password" name="account.password" class="input-block-level" placeholder="密码"> 
