@@ -47,11 +47,11 @@ public class Role extends Record<Role> implements Const {
 
     @Trans
     public Boolean update(Role role, Integer[] resourceIds) {
-        return updateIgnoreNull(role) && roleResourceDao.reSave(role.get(Integer.class, "id"), resourceIds);
+        return updateIgnoreNull(role) | roleResourceDao.reSave(role.get(Integer.class, "id"), resourceIds);
     }
 
     @Trans
     public Boolean save(Role role, Integer[] resourceIds) {
-        return saveIgnoreNull(role) && roleResourceDao.reSave(role.get(Integer.class, "id"), resourceIds);
+        return saveIgnoreNull(role) | roleResourceDao.reSave(role.get(Integer.class, "id"), resourceIds);
     }
 }
