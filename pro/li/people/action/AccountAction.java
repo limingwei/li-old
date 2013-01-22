@@ -7,6 +7,7 @@ import li.dao.Page;
 import li.mvc.AbstractAction;
 import li.people.Const;
 import li.people.record.Account;
+import li.people.record.Resource;
 import li.people.record.Role;
 import li.util.Convert;
 
@@ -17,6 +18,9 @@ public class AccountAction extends AbstractAction implements Const {
 
     @Inject
     Role roleDao;
+
+    @Inject
+    Resource resourceDao;
 
     @At("account_list.do")
     public void list(Page page) {
@@ -34,7 +38,7 @@ public class AccountAction extends AbstractAction implements Const {
 
     @At(value = "account_update.do", method = POST)
     public void update(Account account) {
-        write(accountDao.updateIgnoreNull(account) ? "更新用户成功" : "更新用户失败");
+        write(accountDao.updateIgnoreNull(account.md5PasswordIfNotNull()) ? "更新用户成功" : "更新用户失败");
     }
 
     @At("account_add.do")
@@ -45,7 +49,7 @@ public class AccountAction extends AbstractAction implements Const {
 
     @At(value = "account_save.do", method = POST)
     public void save(Account account) {
-        write(accountDao.saveIgnoreNull(account) ? "添加用户成功" : "添加用户失败");
+        write(accountDao.saveIgnoreNull(account.md5PasswordIfNotNull()) ? "添加用户成功" : "添加用户失败");
     }
 
     @At(value = "account_delete.do", method = POST)
@@ -62,16 +66,17 @@ public class AccountAction extends AbstractAction implements Const {
     public void login(Account account) {
         if (null != accountDao.login(account)) {
             setSession("account", account);
+            setSession("resources", resourceDao.listByRoleId(MAX_PAGE, account.get(Integer.class, "role_id")));
             view("index");
         } else {
-            redirect("index.do");
+            redirect("login.do?login-failed");
         }
     }
 
     @At("logout.do")
     public void logout() {
         removeSession("account");
-        removeSession("permissions");
+        removeSession("resources");
         redirect("index.do");
     }
 

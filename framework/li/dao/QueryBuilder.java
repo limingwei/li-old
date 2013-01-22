@@ -142,7 +142,7 @@ public class QueryBuilder {
         String sets = " SET ";
         for (Field field : beanMeta.fields) {
             Object fieldValue = Reflect.get(object, field.name);
-            if (!beanMeta.getId().name.equals(field.name) && null != fieldValue) {// 不更新fieldValue为null的属性
+            if (!beanMeta.getId().name.equals(field.name) && null != fieldValue && !"".equals(fieldValue)) {// 不更新fieldValue为null的属性
                 sets += field.column + "='" + fieldValue + "',";
             }
         }
@@ -230,7 +230,7 @@ public class QueryBuilder {
     public String setArgMap(String sql, Map<?, ?> argMap) {
         if (null != sql && sql.length() > 0 && null != argMap && argMap.size() > 0) {// 非空判断
             for (Entry<?, ?> arg : argMap.entrySet()) {
-                sql = sql.replaceFirst(MAP_ARG_SIGN + arg.getKey(), "'" + arg.getValue() + "'");// 为参数加上引号后替换问号
+                sql = sql.replaceAll(MAP_ARG_SIGN + arg.getKey(), "'" + arg.getValue() + "'");// 为参数加上引号后替换问号
             }
         }
         return sql;

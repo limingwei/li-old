@@ -26,7 +26,7 @@ public class Role extends Record<Role> implements Const {
     public List<Role> list(Page page) {
         List<Role> roles = super.list(page);
         for (Role role : roles) {
-            role.set("resources", resourceDao.listByRoleId(role.get(Integer.class, "id")));
+            role.set("resources", resourceDao.listByRoleId(MAX_PAGE, role.get(Integer.class, "id")));
         }
         return roles;
     }

@@ -29,9 +29,19 @@
 <script type="text/javascript">
 	$(".nav-list a").each(function(index, item) {
 		$(this).click(function() {
-			$(".span9").load($(this).attr("href"));
 			$(".active").removeClass("active");
 			$(this).parent().addClass("active");
+			$(".span9").html("正在加载,请稍候...");
+			$.ajax({
+				url : $(this).attr("href"),
+				statusCode : {
+					302 : function() {						
+						location.href = "login.do?302";
+					}
+				}
+			}).done(function(data) {
+				$(".span9").html(data);
+			});
 			return false;
 		});
 	});

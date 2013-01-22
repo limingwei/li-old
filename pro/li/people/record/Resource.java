@@ -13,8 +13,8 @@ import li.people.Const;
 public class Resource extends Record<Resource> implements Const {
     private static final long serialVersionUID = 7989017780707672816L;
 
-    public List<Resource> listByRoleId(Integer roleId) {
-        return list(MAX_PAGE, "WHERE id IN (SELECT resource_id from r_role_resource WHERE role_id=?) ORDER BY description ASC", roleId);
+    public List<Resource> listByRoleId(Page page, Integer roleId) {
+        return list(page, "WHERE id IN (SELECT resource_id from r_role_resource WHERE role_id=?) ORDER BY description ASC", roleId);
     }
 
     public List<Resource> list(Page page) {

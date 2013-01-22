@@ -6,16 +6,18 @@ import li.annotation.Bean;
 import li.aop.AopChain;
 import li.aop.AopFilter;
 import li.mvc.Context;
+import li.people.record.Account;
 
 @Bean
 public class AuthFilter implements AopFilter {
     public void doFilter(AopChain chain) {
         String path = Context.getRequest().getServletPath();
-        List<String> permissions = (List<String>) Context.getSession().getAttribute("permissions");
-        if (null == Context.getSession().getAttribute("account") || null == permissions) {
-            Context.redirect("login.do");
+        Account account = (Account) Context.getSession().getAttribute("account");
+        List<String> resources = (List<String>) Context.getSession().getAttribute("resources");
+        if (null == account || null == resources) {
+            Context.getResponse().setStatus(302);
         } else {
-            if (permissions.contains(path)) {
+            if (resources.contains(path)) {
                 chain.doFilter();
             } else {
                 Context.view("deny");
