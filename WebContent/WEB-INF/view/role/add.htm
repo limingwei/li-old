@@ -1,20 +1,71 @@
 <#-- -->
 
-<@li.window id="edit_win" title="添加角色">
-	<@li.form id="role_add" action="role_save.do">
+<@li.window id="add_win" title="添加角色">
+	<@li.form id="role_add" action="role_save.do" submit="0">
 		<@li.input name="role.name" label="名称"/>
 		<@li.input name="role.description" label="描述"/>
 		<@li.control label="权限">
-			<#list resources as each>
-				<label class="checkbox inline">
-		        	<input type="checkbox" name="resource_id" value="${each.id}">${each.description}
-		    	</label>
-		    	<#if (each_index+1)%4=0><br/></#if>
-			</#list>
+			<table>
+			  <tr>
+			    <td>已有权限</td>
+			    <td></td>
+			    <td>未有权限</td>
+			  </tr>
+			  <tr>
+			    <td>
+				    <select multiple="multiple" id="resource_have" class="input-medium">
+	              	</select>
+			    </td>
+			    <td style="width:10px;">
+			    	<a id="go_right" class="btn">>></a>
+			    	<a id="go_left" class="btn"><<</a>
+			    </td>
+			    <td>
+				    <select multiple="multiple" id="resource_not_have" class="input-medium">
+		                <#list resource_not_have as each>
+		                	<option value="${each.id}">${each.description}</option>		                	
+		                </#list>
+	              	</select>
+			    </td>
+			  </tr>
+			</table>
 		</@li.control>
 	</@li.form>
 	<@li.button>
-		<a href="#" class="btn" data-dismiss="modal">取消</a>
-        <a href="#" class="btn btn-primary submit" id="save">保存</a>
+		<input type="button" class="btn" data-dismiss="modal" value="取消">
+        <input type="button" class="btn btn-primary submit" id="save" value="保存">
 	</@li.button>
 </@li.window>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("input.submit").click(function() {
+			$("select#resource_have option").each(function(){
+				$("form#role_add").append("<input type='hidden' name='resource_id' value='"+$(this).attr("value")+"'/>");
+			});
+			ajaxPost($("form#role_add"));
+		});
+
+		$("a#go_right").click(function(){
+			$("select#resource_have").find("option:selected").each(function(){
+				$("select#resource_not_have").prepend("<option value='"+$(this).attr("value")+"'>"+$(this).text()+"</option>");
+				$(this).remove();
+			});
+		});
+
+		$("a#go_left").click(function(){
+			$("select#resource_not_have").find("option:selected").each(function(){
+				$("select#resource_have").prepend("<option value='"+$(this).attr("value")+"'>"+$(this).text()+"</option>");
+				$(this).remove();
+			});
+		});
+
+		$("select#resource_have").dblclick(function(){
+			$("a#go_right").click();
+		});
+		
+		$("select#resource_not_have").dblclick(function(){
+			$("a#go_left").click();
+		});
+	});
+</script>

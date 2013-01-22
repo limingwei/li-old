@@ -31,11 +31,10 @@
 		$(this).click(function() {
 			$(".active").removeClass("active");
 			$(this).parent().addClass("active");
-			$(".span9").html("正在加载,请稍候...");
 			$.ajax({
 				url : $(this).attr("href"),
 				statusCode : {
-					302 : function() {						
+					302 : function() {
 						location.href = "login.do?302";
 					}
 				}

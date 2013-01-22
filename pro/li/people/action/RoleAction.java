@@ -27,8 +27,10 @@ public class RoleAction extends AbstractAction implements Const {
 
     @At("role_edit.do")
     public void edit(Integer id) {
-        setRequest("resources", resourceDao.list(MAX_PAGE));
-        setRequest("role", roleDao.find(id));
+        Role role = roleDao.find(id);
+        setRequest("resource_have", resourceDao.listByRoleId(MAX_PAGE, role.get(Integer.class, "id")));
+        setRequest("resource_not_have", resourceDao.listNotHaveByRoleId(MAX_PAGE, role.get(Integer.class, "id")));
+        setRequest("role", role);
         view("role/edit");
     }
 
@@ -39,7 +41,7 @@ public class RoleAction extends AbstractAction implements Const {
 
     @At("role_add.do")
     public void add() {
-        setRequest("resources", resourceDao.list(MAX_PAGE));
+        setRequest("resource_not_have", resourceDao.list(MAX_PAGE));
         view("role/add");
     }
 

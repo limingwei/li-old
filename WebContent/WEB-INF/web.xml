@@ -3,6 +3,16 @@
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="WebApp_ID" version="3.0">
+	
+	<filter>
+		<filter-name>authFilter</filter-name>
+		<filter-class>li.people.AuthFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>authFilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+
 	<filter>
 		<filter-name>actionFilter</filter-name>
 		<filter-class>li.mvc.ActionFilter</filter-class>

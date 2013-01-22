@@ -1,6 +1,5 @@
 package li.people.record;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import li.annotation.Bean;
@@ -31,19 +30,19 @@ public class Role extends Record<Role> implements Const {
         return roles;
     }
 
-    @Trans
-    public Role find(Integer id) {
-        Role role = super.find(id);
-        if (null != role) {
-            List<RoleResource> roleResources = roleResourceDao.listByRoleId(id);
-            List<Integer> resourceIds = new ArrayList<Integer>();
-            for (RoleResource roleResource : roleResources) {
-                resourceIds.add(roleResource.get(Integer.class, "resource_id"));
-            }
-            role.set("resourceIds", resourceIds);
-        }
-        return role;
-    }
+    // @Trans
+    // public Role find(Integer id) {
+    // Role role = super.find(id);
+    // if (null != role) {
+    // List<RoleResource> roleResources = roleResourceDao.listByRoleId(id);
+    // List<Integer> resourceIds = new ArrayList<Integer>();
+    // for (RoleResource roleResource : roleResources) {
+    // resourceIds.add(roleResource.get(Integer.class, "resource_id"));
+    // }
+    // role.set("resourceIds", resourceIds);
+    // }
+    // return role;
+    // }
 
     @Trans
     public Boolean update(Role role, Integer[] resourceIds) {

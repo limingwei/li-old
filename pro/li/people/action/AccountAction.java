@@ -64,9 +64,8 @@ public class AccountAction extends AbstractAction implements Const {
 
     @At(value = "login.do", method = POST)
     public void login(Account account) {
-        if (null != accountDao.login(account)) {
+        if (null != (account = accountDao.login(account))) {
             setSession("account", account);
-            setSession("resources", resourceDao.listNameByRoleId(MAX_PAGE, account.get(Integer.class, "role_id")));
             write("登陆成功");
         } else {
             write("登录失败,用户名或密码错误");
@@ -76,7 +75,6 @@ public class AccountAction extends AbstractAction implements Const {
     @At("logout.do")
     public void logout() {
         removeSession("account");
-        removeSession("resources");
         redirect("login.do");
     }
 

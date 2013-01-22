@@ -16,7 +16,7 @@ public class Account extends Record<Account> {
 
     public Account login(Account account) {
         String sql = "WHERE (username=#username OR email=#username) AND password=#password";
-        return account = find(sql, account.set("password", Convert.toMD5(account.get("password"))));
+        return find(sql, account.set("password", Convert.toMD5(account.get("password"))));
     }
 
     public Account findByUsername(String username) {

@@ -196,8 +196,8 @@
     </div>
 
 	<script type="text/javascript">
-		$(".submit").click(function() {
-			ajaxPost($("#${id}"));
+		$("input.submit").click(function() {
+			ajaxPost($("form#${id}"));
 		});
 	</script>
 </#macro>
