@@ -18,6 +18,6 @@ public class Resource extends Record<Resource> implements Const {
     }
 
     public List<Resource> list(Page page) {
-        return super.list(page, "SELECT * FROM t_resource ORDER BY description ASC");
+        return super.list(page, "ORDER BY description ASC");
     }
 }

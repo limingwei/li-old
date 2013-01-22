@@ -45,7 +45,7 @@ public class QueryBuilder {
      * @see li.dao.QueryBuilder#setArgs(String, Object[])
      */
     public String deleteBySql(String sql, Object[] args) {
-        if (Verify.startWith(sql, "WHERE")) {
+        if (!Verify.startWith(sql, "DELETE")) {
             sql = "DELETE FROM " + beanMeta.table + " " + sql;
         }
         return setArgs(sql, args);// 处理args
@@ -66,7 +66,7 @@ public class QueryBuilder {
      * @see li.dao.QueryBuilder#setArgs(String, Object[])
      */
     public String countBySql(String sql, Object[] args) {
-        if (Verify.startWith(sql, "WHERE")) {
+        if (!Verify.startWith(sql, "SELECT")) {
             sql = "SELECT COUNT(*) FROM " + beanMeta.table + " " + sql;
         } else if (!Verify.regex(sql.toUpperCase(), "COUNT\\(.*\\)")) {
             sql = "SELECT COUNT(*) FROM " + sql.substring(sql.toUpperCase().indexOf("FROM") + 4, sql.length()).trim();
@@ -88,7 +88,7 @@ public class QueryBuilder {
      * 使用传入的SQL和参数,构造一个用于查询一条记录的SQL
      */
     public String findBySql(String sql, Object[] args) {
-        if (Verify.startWith(sql, "WHERE")) {// 添加SELECT * FROM table 部分
+        if (!Verify.startWith(sql, "SELECT")) {// 添加SELECT * FROM table 部分
             sql = "SELECT * FROM " + beanMeta.table + " " + sql;
         }
         return setArgs(sql, args);// 先处理别名,再处理page
@@ -113,7 +113,7 @@ public class QueryBuilder {
      * @see li.dao.QueryBuilder#setArgs(String, Object[])
      */
     public String listBySql(Page page, String sql, Object[] args) {
-        if (Verify.startWith(sql, "WHERE")) {// 添加SELECT * FROM table 部分
+        if (!Verify.startWith(sql, "SELECT")) {// 添加SELECT * FROM table 部分
             sql = "SELECT * FROM " + beanMeta.table + " " + sql;
         }
         return setPage(setArgs(sql, args), page);// 先处理别名,再处理args,最后处理page
@@ -159,7 +159,7 @@ public class QueryBuilder {
      * @see li.dao.QueryBuilder#setArgs(String, Object[])
      */
     public String updateBySql(String sql, Object[] args) {
-        if (Verify.startWith(sql, "SET")) {
+        if (!Verify.startWith(sql, "UPDATE")) {
             sql = "UPDATE " + beanMeta.table + " " + sql;
         }
         return setArgs(sql, args);// 处理args

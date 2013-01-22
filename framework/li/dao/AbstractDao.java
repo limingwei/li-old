@@ -144,7 +144,7 @@ public class AbstractDao<T> {
      * @see li.dao.AbstractDao#update(String, Object...)
      */
     public Integer delete(String sql, Object... args) {
-        return update(getQueryBuilder().deleteBySql(sql, args));
+        return new QueryRunner(getConnection()).executeUpdate(getQueryBuilder().deleteBySql(sql, args));
     }
 
     /**
