@@ -36,8 +36,8 @@ public class Role extends Record<Role> implements Const {
     }
 
     @Trans
-    public Boolean delete(Number id) {
-        return super.delete(id) | -1 < roleResourceDao.deleteByRoleId((Integer) id);
+    public Boolean save(Role role, Integer[] resourceIds) {
+        return saveIgnoreNull(role) | roleResourceDao.reSave(role.get(Integer.class, "id"), resourceIds);
     }
 
     @Trans
@@ -46,7 +46,7 @@ public class Role extends Record<Role> implements Const {
     }
 
     @Trans
-    public Boolean save(Role role, Integer[] resourceIds) {
-        return saveIgnoreNull(role) | roleResourceDao.reSave(role.get(Integer.class, "id"), resourceIds);
+    public Boolean delete(Number id) {
+        return super.delete(id) | -1 < roleResourceDao.deleteByRoleId((Integer) id);
     }
 }

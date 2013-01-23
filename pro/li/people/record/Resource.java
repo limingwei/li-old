@@ -15,6 +15,14 @@ import li.util.Verify;
 public class Resource extends Record<Resource> implements Const {
     private static final long serialVersionUID = 7989017780707672816L;
 
+    public List<Resource> list(Page page, String key) {
+        String sql = "SELECT * FROM t_resource WHERE 1=1";
+        if (!Verify.isEmpty(key)) {
+            sql += " AND(name LIKE '%" + key + "%' OR description LIKE '%" + key + "%')";
+        }
+        return super.list(page, sql + " ORDER BY description ASC");
+    }
+
     public List<Resource> listByRoleId(Page page, Integer roleId) {
         String sql = "WHERE id IN (SELECT resource_id from r_role_resource WHERE role_id=?) ORDER BY description ASC";
         return list(page, sql, roleId);
@@ -32,13 +40,5 @@ public class Resource extends Record<Resource> implements Const {
             list.add(resource.get(String.class, "name"));
         }
         return list;
-    }
-
-    public List<Resource> list(Page page, String key) {
-        String sql = "SELECT * FROM t_resource WHERE 1=1";
-        if (!Verify.isEmpty(key)) {
-            sql += " AND(name LIKE '%" + key + "%' OR description LIKE '%" + key + "%')";
-        }
-        return super.list(page, sql + " ORDER BY description ASC");
     }
 }

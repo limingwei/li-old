@@ -22,17 +22,17 @@ public class Account extends Record<Account> {
         return super.list(page, sql);
     }
 
-    public Account login(Account account) {
-        String sql = "WHERE (username=#username OR email=#username) AND password=#password";
-        return find(sql, account.set("password", Convert.toMD5(account.get("password"))));
-    }
-
     public Account findByUsername(String username) {
         return find("WHERE username=?", username);
     }
 
     public Account findByEmail(String email) {
         return find("WHERE email=?", email);
+    }
+
+    public Account login(Account account) {
+        String sql = "WHERE (username=#username OR email=#username) AND password=#password";
+        return find(sql, account.set("password", Convert.toMD5(account.get("password"))));
     }
 
     public Account md5PasswordIfNotNull() {
