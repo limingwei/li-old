@@ -1,8 +1,7 @@
 <#-- -->
 
 <@li.search action="account_list.do">
-	<input name="username" class="input" placeholder="用户名" value="${username!}"/>
-	<input name="email" class="input" placeholder="邮箱" value="${email!}"/>
+	<input name="key" class="input" placeholder="搜索关键字" value="${key!}"/>
 </@li.search>
 
 <@li.table cols=6 list=list;each>
@@ -17,5 +16,5 @@
 	</@li.tr>
 </@li.table>
 
-<@li.page pg=page url="account_list.do" pn="page"/>
+<@li.page pg=page/>
 <a class="btn btn-primary window" href="account_add.do"><i class="icon-plus"></i>添加</a>

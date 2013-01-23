@@ -222,17 +222,26 @@
 <#--
 	分页对象,移除url参数
 -->
-<#macro page pg url pn="page">	
+<#macro page pg pn="page">
+	<#assign url2="${request.requestURI+\"?\"+(request.queryString)!}"/>
+	
+	<#if url2?index_of(pn) gt -1>
+		<#assign url3="${url2?substring(0,url2?index_of(pn))}"/>
+	<#else>
+		<#assign url3="${url2}"/>
+	</#if>
+	
+	<#if url3?ends_with("?") || url3?ends_with("&")>
+		<#assign url4="${url3}"/>
+	<#else>
+		<#assign url4="${url3+\"&\"}"/>
+	</#if>
 	<span class="btn-group page">
-		<a class="btn">
-          	${request.requestURI} ${request.queryString!} 
-		</a>
-          
-          <a class="btn <#if 2 gt pg.pageNumber>disabled</#if>" <#if 1 lt pg.pageNumber>href="${url}?${pn}=1"</#if>>首页</a>
-          <a class="btn <#if 2 gt pg.pageNumber>disabled</#if>" <#if 1 lt pg.pageNumber>href="${url}?${pn}=${pg.previous}"</#if>>上一页</a>
+          <a class="btn <#if 2 gt pg.pageNumber>disabled</#if>" <#if 1 lt pg.pageNumber>href="${url4}${pn}=1"</#if>>首页</a>
+          <a class="btn <#if 2 gt pg.pageNumber>disabled</#if>" <#if 1 lt pg.pageNumber>href="${url4}${pn}=${pg.previous}"</#if>>上一页</a>
           <a class="btn disabled">第${pg.pageNumber}页,共${pg.pageCount}页,每页${pg.pageSize}行,共${pg.recordCount}行</a>
-          <a class="btn <#if pg.pageCount-1 lt pg.pageNumber>disabled</#if>" <#if pg.pageCount gt pg.pageNumber>href="${url}?${pn}=${pg.next}"</#if>>下一页</a>
-          <a class="btn <#if pg.pageCount-1 lt pg.pageNumber>disabled</#if>" <#if pg.pageCount gt pg.pageNumber>href="${url}?${pn}=${pg.pageCount}"</#if>>末页</a>
+          <a class="btn <#if pg.pageCount-1 lt pg.pageNumber>disabled</#if>" <#if pg.pageCount gt pg.pageNumber>href="${url4}${pn}=${pg.next}"</#if>>下一页</a>
+          <a class="btn <#if pg.pageCount-1 lt pg.pageNumber>disabled</#if>" <#if pg.pageCount gt pg.pageNumber>href="${url4}${pn}=${pg.pageCount}"</#if>>末页</a>
 	</span>
 
 	<script type="text/javascript">

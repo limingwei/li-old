@@ -1,9 +1,8 @@
 <#-- -->
 
-<form class="well form-search">
-	<input class="input" placeholder="搜索服务器"/>
-	<a class="btn btn-primary"><i class="icon-search icon-white"></i>搜索</a>
-</form>
+<@li.search action="account_list.do">
+	<input name="key" class="input" placeholder="搜索关键字" value="${key!}"/>
+</@li.search>
 
 <@li.table cols=5 list=list;each>
 	<@li.tr title="ID">${each.id}</@li.tr>
@@ -16,5 +15,5 @@
 	</@li.tr>
 </@li.table>
 
-<@li.page pg=page url="role_list.do" pn="page"/>
+<@li.page pg=page/>
 <a class="btn btn-primary window" href="server_add.do"><i class="icon-plus"></i>添加</a>

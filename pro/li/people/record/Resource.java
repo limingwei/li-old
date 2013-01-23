@@ -8,6 +8,7 @@ import li.annotation.Table;
 import li.dao.Page;
 import li.dao.Record;
 import li.people.Const;
+import li.util.Verify;
 
 @Bean
 @Table("t_resource")
@@ -33,7 +34,11 @@ public class Resource extends Record<Resource> implements Const {
         return list;
     }
 
-    public List<Resource> list(Page page) {
-        return super.list(page, "ORDER BY description ASC");
+    public List<Resource> list(Page page, String key) {
+        String sql = "SELECT * FROM t_resource WHERE 1=1";
+        if (!Verify.isEmpty(key)) {
+            sql += " AND(name LIKE '%" + key + "%' OR description LIKE '%" + key + "%')";
+        }
+        return super.list(page, sql + " ORDER BY description ASC");
     }
 }

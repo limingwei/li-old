@@ -14,10 +14,10 @@ import li.util.Verify;
 public class Account extends Record<Account> {
     private static final long serialVersionUID = 3084398087892682872L;
 
-    public List<Account> list(Page page, String username) {
-        String sql = "SELECT a.*,r.name role_name " + "FROM t_account a " + "LEFT JOIN t_role r ON a.role_id=r.id";
-        if (!Verify.isEmpty(username)) {
-            sql += " WHERE a.username LIKE '%" + username + "%'";
+    public List<Account> list(Page page, String key) {
+        String sql = "SELECT a.*,r.name role_name " + "FROM t_account a " + "LEFT JOIN t_role r ON a.role_id=r.id WHERE 1=1";
+        if (!Verify.isEmpty(key)) {
+            sql += " AND(a.username LIKE '%" + key + "%' OR a.email LIKE '%" + key + "%')";
         }
         return super.list(page, sql);
     }

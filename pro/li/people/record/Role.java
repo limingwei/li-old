@@ -9,6 +9,7 @@ import li.annotation.Trans;
 import li.dao.Page;
 import li.dao.Record;
 import li.people.Const;
+import li.util.Verify;
 
 @Bean
 @Table("t_role")
@@ -22,8 +23,12 @@ public class Role extends Record<Role> implements Const {
     Resource resourceDao;
 
     @Trans
-    public List<Role> list(Page page) {
-        List<Role> roles = super.list(page);
+    public List<Role> list(Page page, String key) {
+        String sql = "SELECT * FROM t_role WHERE 1=1";
+        if (!Verify.isEmpty(key)) {
+            sql += " AND(name LIKE '%" + key + "%' OR description LIKE '%" + key + "%')";
+        }
+        List<Role> roles = super.list(page, sql);
         for (Role role : roles) {
             role.set("resources", resourceDao.listByRoleId(MAX_PAGE, role.get(Integer.class, "id")));
         }

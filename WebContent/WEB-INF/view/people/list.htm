@@ -1,8 +1,7 @@
 <#-- -->
 
-<@li.search>
-	<input class="input" placeholder="搜索会员"/>
-	<input id="datepicker" class="datepicker" type="text" />
+<@li.search action="account_list.do">
+	<input name="key" class="input" placeholder="搜索关键字" value="${key!}"/>
 </@li.search>
 
 <@li.table list=list;each>
@@ -17,5 +16,5 @@
 	</@li.tr>
 </@li.table>
 
-<@li.page pg=page url="people.do" pn="page"/>
+<@li.page pg=page/>
 <a class="btn btn-primary window" href="people_add.do"><i class="icon-plus"></i>添加</a>

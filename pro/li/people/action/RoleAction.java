@@ -19,9 +19,10 @@ public class RoleAction extends AbstractAction implements Const {
     Resource resourceDao;
 
     @At("role_list.do")
-    public void list(Page page) {
-        setRequest(LIST, roleDao.list(page));
+    public void list(Page page,String key) {
+        setRequest(LIST, roleDao.list(page,key));
         setRequest(PAGE, page);
+        passParams("key");
         view("role/list");
     }
 

@@ -5,11 +5,13 @@ import li.annotation.Bean;
 import li.annotation.Inject;
 import li.dao.Page;
 import li.mvc.AbstractAction;
+import li.mvc.Context;
 import li.people.Const;
 import li.people.record.Account;
 import li.people.record.Resource;
 import li.people.record.Role;
 import li.util.Convert;
+import li.util.Verify;
 
 @Bean
 public class AccountAction extends AbstractAction implements Const {
@@ -23,10 +25,10 @@ public class AccountAction extends AbstractAction implements Const {
     Resource resourceDao;
 
     @At("account_list.do")
-    public void list(Page page, String username) {
-        setRequest(LIST, accountDao.list(page, username));
+    public void list(Page page, String key) {
+        setRequest(LIST, accountDao.list(page, key));
         setRequest(PAGE, page);
-        passParams("username");
+        passParams("key");
         view("account/list");
     }
 
