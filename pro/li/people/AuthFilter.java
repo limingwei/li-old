@@ -8,9 +8,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import li.ioc.Ioc;
 import li.mvc.Context;
@@ -30,22 +27,17 @@ public class AuthFilter implements Filter {
         roleDao = Ioc.get(Role.class);
     }
 
-    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) req;
-        HttpServletResponse response = (HttpServletResponse) resp;
-        String path = request.getServletPath().replace('/', ' ').trim();
-        if (controled(path)) {
-            HttpSession session = request.getSession();
-            Account account = (Account) session.getAttribute("account");
-            if (null == account) {
-                response.setStatus(302);// goto login
-            } else if (allowed(path, account)) {
-                chain.doFilter(request, response);
-            } else {
-                Context.init(request, response, null);
-                Context.view("deny");
-            }
-        } else {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        Context.init(request, response, null);
+        String path = Context.getRequest().getServletPath().replace('/', ' ').trim();
+        Account account = (Account) Context.getSession().getAttribute("account");
+        Boolean controled = controled(path);
+
+        if (controled && null == account) {// 页面需要授权且未登录
+            Context.getResponse().setStatus(302);// goto login
+        } else if (controled && !allowed(path, account)) {// 页面需要授权且未授权
+            Context.view("deny");
+        } else {// 页面不需要授权或者通过授权
             chain.doFilter(request, response);
         }
     }

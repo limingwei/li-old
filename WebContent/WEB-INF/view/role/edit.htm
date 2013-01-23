@@ -37,13 +37,13 @@
 	</@li.form>
 	<@li.button>
 		<input type="button" class="btn" data-dismiss="modal" value="取消">
-        <a type="button" class="btn btn-primary submit" id="save">保存</a>
+        <input type="button" class="btn btn-primary submit" value="保存">
 	</@li.button>
 </@li.window>
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		$("a#save").click(function() {
+		$("input.submit").click(function() {
 			$("select#resource_have option").each(function(){
 				$("form#role_edit").append("<input type='hidden' name='resource_id' value='"+$(this).attr("value")+"'/>");
 			});
