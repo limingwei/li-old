@@ -30,19 +30,10 @@ public class Role extends Record<Role> implements Const {
         return roles;
     }
 
-    // @Trans
-    // public Role find(Integer id) {
-    // Role role = super.find(id);
-    // if (null != role) {
-    // List<RoleResource> roleResources = roleResourceDao.listByRoleId(id);
-    // List<Integer> resourceIds = new ArrayList<Integer>();
-    // for (RoleResource roleResource : roleResources) {
-    // resourceIds.add(roleResource.get(Integer.class, "resource_id"));
-    // }
-    // role.set("resourceIds", resourceIds);
-    // }
-    // return role;
-    // }
+    @Trans
+    public Boolean delete(Number id) {
+        return super.delete(id) | -1 < roleResourceDao.deleteByRoleId((Integer) id);
+    }
 
     @Trans
     public Boolean update(Role role, Integer[] resourceIds) {

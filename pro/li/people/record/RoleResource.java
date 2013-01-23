@@ -25,4 +25,8 @@ public class RoleResource extends Record<RoleResource> implements Const {
     public List<RoleResource> listByRoleId(Integer roleId) {
         return list(MAX_PAGE, "WHERE role_id = ?", roleId);
     }
+
+    public Integer deleteByRoleId(Integer roleId) {
+        return delete("WHERE role_id=?", roleId);
+    }
 }

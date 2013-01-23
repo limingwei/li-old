@@ -7,29 +7,16 @@
 		<@li.input name="role.description" label="描述" value="${role.description!}"/>
 		<@li.control label="权限">
 			<table>
-			  <!-- <tr>
-			    <td>已有权限</td>
-			    <td></td>
-			    <td>未有权限</td>
-			  </tr> -->
 			  <tr>
 			    <td>
-				    <select multiple="multiple" id="resource_have" class="input-medium">
-		                <#list resource_have as each>
-		                	<option value="${each.id}">${each.description}</option>		                	
-		                </#list>
-	              	</select>
+			    	<@li.select multiple="multiple" name="resource_have" class="input-medium" title="已有权限" list=resource_have key="id" val="description" wrap="0"/>
 			    </td>
 			    <td style="width:10px;">
 			    	<a id="go_right" class="btn">>></a>
 			    	<a id="go_left" class="btn"><<</a>
 			    </td>
 			    <td>
-				    <select multiple="multiple" id="resource_not_have" class="input-medium">
-		                <#list resource_not_have as each>
-		                	<option value="${each.id}">${each.description}</option>		                	
-		                </#list>
-	              	</select>
+			    	<@li.select multiple="multiple" name="resource_not_have" class="input-medium" title="未有权限" list=resource_not_have key="id" val="description" wrap="0"/>
 			    </td>
 			  </tr>
 			</table>
@@ -37,13 +24,13 @@
 	</@li.form>
 	<@li.button>
 		<input type="button" class="btn" data-dismiss="modal" value="取消">
-        <input type="button" class="btn btn-primary submit" value="保存">
+        <a href="#" class="btn btn-primary submit">保存</a>
 	</@li.button>
 </@li.window>
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		$("input.submit").click(function() {
+		$("a.submit").click(function() {
 			$("select#resource_have option").each(function(){
 				$("form#role_edit").append("<input type='hidden' name='resource_id' value='"+$(this).attr("value")+"'/>");
 			});

@@ -25,13 +25,17 @@
 <#--
     control div
 -->
-<#macro control name="" label="">
-    <div id="${name}" class="control-group">
-        <label class="control-label" for="${name}">${label}</label>
-        <div class="controls">
+<#macro control name="" label="" wrap="1">
+	<#if wrap="1" || wrap="true">
+	    <div id="${name}" class="control-group">
+	        <label class="control-label" for="${name}">${label}</label>
+	        <div class="controls">
+	            <#nested><#---->
+	        </div>
+	    </div>
+	<#else>
             <#nested><#---->
-        </div>
-    </div>
+	</#if>
 </#macro>
 
 <#--
@@ -52,9 +56,13 @@
 <#--
     select
 -->
-<#macro select list key val name="" label="" value="" def="" disabled="" class="input-xlarge">
-    <@li.control name="${name}" label="${label}">
-        <select id="${name}" name="${name}" class="${class}" <#if disabled!="">disabled</#if>>
+<#macro select list key val name="" label="" value="" def="" disabled="" title="" multiple="" class="input-xlarge" wrap="1">
+    <@li.control name="${name}" label="${label}" wrap="${wrap}">
+        <select id="${name}" name="${name}" class="${class}" 
+        	<#if disabled!="">disabled</#if>
+        	<#if title!="">title="${title}"</#if>
+        	<#if multiple!="">multiple="multiple"</#if>
+        >
             <#if def!="">
                 <option value="">${def}</option>
             </#if>
