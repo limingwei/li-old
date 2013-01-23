@@ -220,10 +220,14 @@
 </#macro>
 
 <#--
-	分页对象
+	分页对象,移除url参数
 -->
-<#macro page pg url pn="page">
+<#macro page pg url pn="page">	
 	<span class="btn-group page">
+		<a class="btn">
+          	${request.requestURI} ${request.queryString!} 
+		</a>
+          
           <a class="btn <#if 2 gt pg.pageNumber>disabled</#if>" <#if 1 lt pg.pageNumber>href="${url}?${pn}=1"</#if>>首页</a>
           <a class="btn <#if 2 gt pg.pageNumber>disabled</#if>" <#if 1 lt pg.pageNumber>href="${url}?${pn}=${pg.previous}"</#if>>上一页</a>
           <a class="btn disabled">第${pg.pageNumber}页,共${pg.pageCount}页,每页${pg.pageSize}行,共${pg.recordCount}行</a>
@@ -231,7 +235,7 @@
           <a class="btn <#if pg.pageCount-1 lt pg.pageNumber>disabled</#if>" <#if pg.pageCount gt pg.pageNumber>href="${url}?${pn}=${pg.pageCount}"</#if>>末页</a>
 	</span>
 
-	<script>
+	<script type="text/javascript">
 		$("span.page a").each(function(index, item) {
 			$(this).click(function() {
 				$(".span9").load($(this).attr("href"));
@@ -245,12 +249,21 @@
 	搜索栏
 -->
 <#macro search action="">
-	<form class="well form-search">
+	<form class="well form-search" id="search_form">
 	    <#nested/>
-		<a class="btn btn-primary"><i class="icon-search icon-white"></i>搜索</a>
+		<a class="btn btn-primary" id="search"><i class="icon-search icon-white"></i>搜索</a>
 	</form>
-	
+
 	<script type="text/javascript">
 		$(".datepicker").datepicker();
+		
+		$("a#search").click(function(){
+			$.ajax({
+				url : "${action}",
+				data : $("form#search_form").serialize()
+			}).done(function(data) {
+				$(".span9").html(data);
+			});
+		});
 	</script>
 </#macro>

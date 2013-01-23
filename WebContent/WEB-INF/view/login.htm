@@ -64,19 +64,16 @@ body {
 </head>
 <body>
 	<#include "top.htm"/>
-	<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+	<br/><br/><br/><br/><br/>
 	<div class="container">
 		<form id="login" class="form-signin" action="login.do" method="POST">
 			<h2 class="form-signin-heading">登录</h2>
-			<input type="text" name="account.username" class="input-block-level" placeholder="用户名/邮箱"> 
-			<input type="password" name="account.password" class="input-block-level" placeholder="密码"> 
-			<label class="checkbox"> 
-				<input type="checkbox" value="remember-me">记住密码
-			</label>
+			<input type="text" name="account.username" class="input-block-level" placeholder="用户名/邮箱" autocomplete="off"> 
+			<input type="password" name="account.password" class="input-block-level" placeholder="密码" autocomplete="off"> 
 			<button class="btn btn-large btn-primary" type="submit">登录</button>
 			<a class="btn btn-large btn-primary" href="register.do">去注册</a>
 		</form>
-		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		<br/><br/><br/>
 		<hr>
 		<footer style="text-align:center;">
 			<p>&copy; limingwei 2012-2013

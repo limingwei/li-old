@@ -1,9 +1,9 @@
 <#-- -->
 
-<form class="well form-search" action="account_list.do">
-	<input name="username" class="input" placeholder="搜索账号"/>
-	<a class="btn btn-primary"><i class="icon-search icon-white"></i>搜索</a>
-</form>
+<@li.search action="account_list.do">
+	<input name="username" class="input" placeholder="用户名" value="${username!}"/>
+	<input name="email" class="input" placeholder="邮箱" value="${email!}"/>
+</@li.search>
 
 <@li.table cols=6 list=list;each>
 	<@li.tr title="ID">${each.id}</@li.tr>

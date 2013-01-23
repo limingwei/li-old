@@ -54,7 +54,5 @@ public class AuthFilter implements Filter {
         return 0 < roleDao.count(sql1, id) || 0 < roleResourceDao.count(sql2, path, id);
     }
 
-    public void destroy() {
-        System.out.println("enclosing_type.enclosing_method()");
-    }
+    public void destroy() {}
 }

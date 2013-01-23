@@ -23,9 +23,10 @@ public class AccountAction extends AbstractAction implements Const {
     Resource resourceDao;
 
     @At("account_list.do")
-    public void list(Page page) {
-        setRequest(LIST, accountDao.list(page));
+    public void list(Page page, String username) {
+        setRequest(LIST, accountDao.list(page, username));
         setRequest(PAGE, page);
+        passParams("username");
         view("account/list");
     }
 
@@ -85,6 +86,7 @@ public class AccountAction extends AbstractAction implements Const {
 
     @At(value = "register.do", method = POST)
     public void register(Account account) {
+        account.set("role_id", 0);
         if (null != accountDao.findByUsername(account.get(String.class, "username"))) {
             write("此用户名已注册");
         } else if (null != account.findByEmail(account.get(String.class, "email"))) {
