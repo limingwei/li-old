@@ -39,10 +39,10 @@ public class QueryRunner {
         ResultSet resultSet = null;
         if (null == Trans.CONNECTION_MAP.get() || null == Trans.EXCEPTION.get()) {
             try { // 如果未进入事务或事务中未出现异常,则执行后面的语句
-                log.info(sql + "-> " + connection.getClass().getName() + "@" + Integer.toHexString(connection.hashCode()));
-
                 preparedStatement = connection.prepareStatement(sql);
                 resultSet = preparedStatement.executeQuery();
+
+                log.info(sql + "-> " + connection.getClass().getName() + "@" + Integer.toHexString(connection.hashCode()));
             } catch (Exception e) {
                 Trans.EXCEPTION.set(e);// 出现异常,记录起来
                 log.error(e);
@@ -59,13 +59,14 @@ public class QueryRunner {
         Integer count = -1;
         if (null == Trans.CONNECTION_MAP.get() || null == Trans.EXCEPTION.get()) {
             try { // 如果未进入事务或事务中未出现异常,则执行后面的语句
-                log.info(sql + " -> " + connection.getClass().getName() + "@" + Integer.toHexString(connection.hashCode()));
                 preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);// 构建要返回GeneratedKeys的Statement
                 count = preparedStatement.executeUpdate();
 
                 ResultSet generatedKeys = preparedStatement.getGeneratedKeys();// 获得主键结果集
                 this.LAST_INSERT_ID = null != generatedKeys && generatedKeys.next() ? generatedKeys.getInt(1) : -1;// 设置最后更新的主键的值
                 generatedKeys.close();// 关闭主键结果集
+
+                log.info(sql + " -> " + "[" + count + " row] " + connection.getClass().getName() + "@" + Integer.toHexString(connection.hashCode()));
             } catch (Exception e) {
                 Trans.EXCEPTION.set(e); // 出现异常,记录起来
                 log.error(e);
