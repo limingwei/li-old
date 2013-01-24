@@ -152,6 +152,14 @@
         </#list>
     </table>
     
+	<#assign url_0="${request.requestURI}?"/>
+	<#assign parameterMap=request.parameterMap/>
+	<#list parameterMap?keys as key>
+		<#list parameterMap[key] as param>
+			<#assign url_0="${url_0}${key}=${param}&"/>
+		</#list>
+	</#list>
+	
 	<script type="text/javascript">
 		$(".delete").click(function() {
 			return doDelete($(this));
@@ -162,7 +170,7 @@
 		});
 
 		function reload() {
-			$(".span9").load("${request.requestURI}?${request.queryString!}");	<#-- 没有POST表单提交的参数 -->
+			$(".span9").load("${url_0}");
 		}
 	</script>
 </#macro>
@@ -220,34 +228,46 @@
 </#macro>
 
 <#--
-	分页对象 [URIEncoding="UTF-8"]
+	分页对象
 -->
-<#macro page pg pn="page">
-	<#assign url2="${request.requestURI+\"?\"+(request.queryString)!}"/>	<#-- 没有POST表单提交的参数 -->
-	
-	<#if url2?index_of(pn) gt -1>
-		<#assign url3="${url2?substring(0,url2?index_of(pn))}"/>
-	<#else>
-		<#assign url3="${url2}"/>
+<#macro page pg pn="page" method="GET">
+	<#assign url_0="${request.requestURI}?"/>
+
+	<#if url_0?index_of(pn) gt -1><#-- 截取掉末尾的page=1 -->
+		<#assign url_0="${url_0?substring(0,url_0?index_of(pn))}"/>
 	</#if>
-	
-	<#if url3?ends_with("?") || url3?ends_with("&")>
-		<#assign url4="${url3}"/>
-	<#else>
-		<#assign url4="${url3+\"&\"}"/>
-	</#if>
-	<span class="btn-group page">
-          <a class="btn <#if 2 gt pg.pageNumber>disabled</#if>" <#if 1 lt pg.pageNumber>href="${url4}${pn}=1"</#if>>首页</a>
-          <a class="btn <#if 2 gt pg.pageNumber>disabled</#if>" <#if 1 lt pg.pageNumber>href="${url4}${pn}=${pg.previous}"</#if>>上一页</a>
+
+	<#assign parameterMap=request.parameterMap/>
+	<#list parameterMap?keys as key>
+		<#list parameterMap[key] as param>
+			<#if key != pn>
+				<#assign url_0="${url_0}${key}=${param}&"/>
+			</#if>
+		</#list>
+	</#list>
+
+	<span class="btn-group page">	
+          <a class="btn <#if 2 gt pg.pageNumber>disabled</#if>" <#if 1 lt pg.pageNumber>href="${url_0}${pn}=1"</#if>>首页</a>
+          <a class="btn <#if 2 gt pg.pageNumber>disabled</#if>" <#if 1 lt pg.pageNumber>href="${url_0}${pn}=${pg.previous}"</#if>>上一页</a>
           <a class="btn disabled">第${pg.pageNumber}页,共${pg.pageCount}页,每页${pg.pageSize}行,共${pg.recordCount}行</a>
-          <a class="btn <#if pg.pageCount-1 lt pg.pageNumber>disabled</#if>" <#if pg.pageCount gt pg.pageNumber>href="${url4}${pn}=${pg.next}"</#if>>下一页</a>
-          <a class="btn <#if pg.pageCount-1 lt pg.pageNumber>disabled</#if>" <#if pg.pageCount gt pg.pageNumber>href="${url4}${pn}=${pg.pageCount}"</#if>>末页</a>
+          <a class="btn <#if pg.pageCount-1 lt pg.pageNumber>disabled</#if>" <#if pg.pageCount gt pg.pageNumber>href="${url_0}${pn}=${pg.next}"</#if>>下一页</a>
+          <a class="btn <#if pg.pageCount-1 lt pg.pageNumber>disabled</#if>" <#if pg.pageCount gt pg.pageNumber>href="${url_0}${pn}=${pg.pageCount}"</#if>>末页</a>
 	</span>
 
 	<script type="text/javascript">
 		$("span.page a").each(function(index, item) {
 			$(this).click(function() {
-				$(".span9").load($(this).attr("href"));
+				$.ajax({
+					type : "${method}",
+					url : $(this).attr("href"),
+					statusCode : {
+						302 : function() {
+							location.href = "login.do?302";
+						}
+					}
+				}).done(function(data) {
+					$(".span9").html(data);
+				});
 				return false;
 			});
 		});
@@ -255,9 +275,9 @@
 </#macro>
 
 <#--
-	搜索栏
+	搜索条
 -->
-<#macro search action="">
+<#macro search action="" method="GET">
 	<form class="well form-search" id="search_form">
 	    <#nested/>
 		<a class="btn btn-primary" id="search"><i class="icon-search icon-white"></i>搜索</a>
@@ -266,6 +286,7 @@
 	<script type="text/javascript">		
 		$("a#search").click(function(){
 			$.ajax({
+				type : "${method}",
 				url : "${action}",
 				data : $("form#search_form").serialize()
 			}).done(function(data) {
