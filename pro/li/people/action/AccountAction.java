@@ -33,7 +33,7 @@ public class AccountAction extends AbstractAction implements Const {
     @At("account_edit.do")
     public void edit(Integer id) {
         setRequest("account", accountDao.find(id));
-        setRequest("roles", roleDao.list(new Page()));
+        setRequest("roles", roleDao.list(MAX_PAGE));
         view("account/edit");
     }
 
@@ -44,7 +44,7 @@ public class AccountAction extends AbstractAction implements Const {
 
     @At("account_add.do")
     public void add() {
-        setRequest("roles", roleDao.list(new Page()));
+        setRequest("roles", roleDao.list(MAX_PAGE));
         view("account/add");
     }
 

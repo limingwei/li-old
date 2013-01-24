@@ -60,7 +60,8 @@
 		$(".modal").remove();
 		$.ajax({
 			url : $(target).attr("href"),
-			dataType : "html"
+			dataType : "html",
+			cache : false
 		}).done(function(data) {
 			$("body").append(data);
 			$(".modal").modal({backdrop:"static",keyboard:false,show:true});

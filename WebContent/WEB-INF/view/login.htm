@@ -20,7 +20,7 @@ body {
 .form-signin {
 	max-width: 300px;
 	padding: 19px 29px 29px;
-	margin: 0 auto 20px;
+	margin: 80px auto;
 	background-color: #fff;
 	border: 1px solid #e5e5e5;
 	-webkit-border-radius: 5px;
@@ -55,6 +55,7 @@ body {
 					location.href="index.do";
 				}else{
 					alert(data);
+					$("input[type='password']").focus();
 				}
 			});
 			return false;
@@ -63,17 +64,21 @@ body {
 </script>
 </head>
 <body>
-	<#include "top.htm"/>
-	<br/><br/><br/><br/><br/>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="brand" href="?index">System</a>
+			</div>
+		</div>
+	</div>
 	<div class="container">
 		<form id="login" class="form-signin" action="login.do" method="POST">
 			<h2 class="form-signin-heading">登录</h2>
 			<input type="text" name="account.username" class="input-block-level" placeholder="用户名/邮箱" autocomplete="off"> 
 			<input type="password" name="account.password" class="input-block-level" placeholder="密码" autocomplete="off"> 
 			<button class="btn btn-large btn-primary" type="submit">登录</button>
-			<a class="btn btn-large btn-primary" href="register.do">去注册</a>
+			<a class="btn btn-large btn-info" href="register.do">去注册</a>
 		</form>
-		<br/><br/><br/>
 		<hr>
 		<footer style="text-align:center;">
 			<p>&copy; limingwei 2012-2013

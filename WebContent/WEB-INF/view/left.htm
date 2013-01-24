@@ -18,10 +18,9 @@
 			<li class="nav-header">微博管理</li>
 			<@li.menu text="应用管理" url="app_list.do"/>
 			<li class="nav-header">更多功能</li>
-			<@li.menu text="其他功能" url="#"/>
-			<@li.menu text="其他功能" url="#"/>
-			<@li.menu text="其他功能" url="#"/>
-			<@li.menu text="其他功能" url="#"/>
+			<@li.menu text="其他功能" url="/"/>
+			<@li.menu text="其他功能" url="/"/>
+			<@li.menu text="其他功能" url="/"/>
 		</ul>
 	</div>
 </div>
@@ -33,6 +32,7 @@
 			$(this).parent().addClass("active");
 			$.ajax({
 				url : $(this).attr("href"),
+				cache : false,
 				statusCode : {
 					302 : function() {
 						location.href = "login.do?302";

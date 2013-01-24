@@ -21,7 +21,7 @@ body {
 .form-signin {
 	max-width: 300px;
 	padding: 19px 29px 29px;
-	margin: 0 auto 20px;
+	margin: 80px auto;
 	background-color: #fff;
 	border: 1px solid #e5e5e5;
 	-webkit-border-radius: 5px;
@@ -64,8 +64,13 @@ body {
 </script>
 </head>
 <body>
-	<#include "top.htm"/>
-	<br/><br/><br/><br/><br/>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="brand" href="?index">System</a>
+			</div>
+		</div>
+	</div>
 	<div class="container">
 		<form id="register" class="form-signin" action="register.do" method="POST">
 			<h2 class="form-signin-heading">注册</h2>
@@ -73,9 +78,8 @@ body {
 			<input type="text" name="account.password" class="input-block-level" placeholder="密码" autocomplete="off"> 
 			<input type="text" name="account.email" class="input-block-level" placeholder="邮箱">
 			<input type="submit" class="btn btn-large btn-primary" value="注册">
-			<a class="btn btn-large btn-primary" href="login.do">去登录</a>
+			<a class="btn btn-large btn-info" href="login.do">去登录</a>
 		</form>
-		<br/><br/><br/>
 		<hr>
 		<footer style="text-align:center;">
 			<p>&copy; limingwei 2012-2013

@@ -171,6 +171,17 @@
 
 		function reload() {
 			$(".span9").load("${url_0}");
+			$.ajax({
+				url : "${url_0}",
+				cache : false,
+				statusCode : {
+					302 : function() {
+						location.href = "login.do?302";
+					}
+				}
+			}).done(function(data) {
+				$(".span9").html(data);
+			});
 		}
 	</script>
 </#macro>
