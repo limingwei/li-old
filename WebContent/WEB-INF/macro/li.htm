@@ -299,6 +299,7 @@
 			$.ajax({
 				type : "${method}",
 				url : "${action}",
+				cache : false,
 				data : $("form#search_form").serialize()
 			}).done(function(data) {
 				$(".span9").html(data);
