@@ -162,7 +162,7 @@
 		});
 
 		function reload() {
-			$(".span9").load("${request.requestURI}?${request.queryString!}");
+			$(".span9").load("${request.requestURI}?${request.queryString!}");	<#-- 没有POST表单提交的参数 -->
 		}
 	</script>
 </#macro>
@@ -220,10 +220,10 @@
 </#macro>
 
 <#--
-	分页对象,移除url参数
+	分页对象 [URIEncoding="UTF-8"]
 -->
 <#macro page pg pn="page">
-	<#assign url2="${request.requestURI+\"?\"+(request.queryString)!}"/>
+	<#assign url2="${request.requestURI+\"?\"+(request.queryString)!}"/>	<#-- 没有POST表单提交的参数 -->
 	
 	<#if url2?index_of(pn) gt -1>
 		<#assign url3="${url2?substring(0,url2?index_of(pn))}"/>
