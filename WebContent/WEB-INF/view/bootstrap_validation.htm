@@ -1,0 +1,29 @@
+<form class="form-horizontal" id="test_form" action="123">
+    <div class="control-group">
+        <label class="control-label" for="inputEmail">邮箱</label>
+        <div class="controls">
+            <input type="text" id="inputEmail" check-type="mail" value="limw@w.cn">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputPassword">密码</label>
+        <div class="controls">
+            <input type="password" id="inputPassword" check-type="required" required-message="密码不能为空！" >
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <button type="submit" class="btn">FORM提交</button>
+            <input id="ajaxsubmit" type="button" class="btn" value="AJAX提交"/>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+	$("form#test_form").validation2();
+/* 	$("#inputPassword").blur(function(){
+		alert("失去焦点");
+	}); */
+	$("input#ajaxsubmit").click(function() {
+	});
+</script>

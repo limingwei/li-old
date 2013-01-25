@@ -1,6 +1,11 @@
 <#-- 自定义标签 li 20121213 -->
 
 <#--
+	input select 等应当删除,使用原生的,用一个control包裹就是了
+	验证 http://www.oschina.net/p/validation-for-bootstrap
+-->
+
+<#--
     包裹一个操作按钮,有相应权限才会显示
 -->
 <#macro op pm="">
@@ -25,9 +30,9 @@
 <#--
     control div
 -->
-<#macro control name="" label="" wrap="1">
+<#macro control name="" label="" class="control-group" wrap="1">
 	<#if wrap="1" || wrap="true">
-	    <div id="${name}" class="control-group">
+	    <div id="${name}" class="${class}">
 	        <label class="control-label" for="${name}">${label}</label>
 	        <div class="controls">
 	            <#nested><#---->

@@ -15,4 +15,14 @@ public class IndexAction extends AbstractAction {
             view("index");
         }
     }
+
+    @At("bootstrap_datepicker.do")
+    public void bootstrap_datepicker() {
+        view("bootstrap_datepicker");
+    }
+
+    @At("bootstrap_validation.do")
+    public void bootstrap_validation() {
+        view("bootstrap_validation");
+    }
 }
