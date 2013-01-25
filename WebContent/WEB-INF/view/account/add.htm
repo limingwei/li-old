@@ -21,12 +21,15 @@
 				if(""==$(this).val()){
 					$(this).closest("div.control-group").addClass("error"); 
 					$(this).after("<span class='help-inline'><abbr title='这里不允许为空'>非空</abbr></span>");
+				}else{
+					$(this).closest("div.control-group").removeClass("error");
+					$(this).next("span.help-inline").remove();
 				}
 			});
-			$(this).focus(function(){
-				$(this).closest("div.control-group").removeClass("error");
-				$(this).next("span.help-inline").remove();
-			});
+		});
+
+		$("form#account_save").find("input,select").each(function(){
+			$(this).blur();
 		});
 	});
 </script>
