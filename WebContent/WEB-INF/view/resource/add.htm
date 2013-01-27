@@ -2,8 +2,12 @@
 
 <@li.window id="edit_win" title="添加资源">
 	<@li.form id="resource_add" action="resource_save.do">
-		<@li.input name="resource.name" label="名称"/>
-		<@li.input name="resource.description" label="描述"/>
+		<@li.control label="名称">
+			<input name="resource.name" check-type="required"/>
+		</@li.control>
+		<@li.control label="描述">
+			<input name="resource.description" check-type="required"/>
+		</@li.control>
 	</@li.form>
 	<@li.button>
 		<a href="#" class="btn" data-dismiss="modal">取消</a>

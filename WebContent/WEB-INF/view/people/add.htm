@@ -2,10 +2,12 @@
 
 <@li.window id="edit_win" title="添加会员">
 	<@li.form id="people_edit" action="people_update.do">
-		<@li.input name="id" label="ID" value=""/>
-		<@li.input name="username" label="用户名"/>
-		<@li.input name="password" label="密码"/>
-		<@li.input name="email" label="邮箱"/>
+		<@li.control label="学号">
+			<input name="" check-type="required"/>
+		</@li.control>
+		<@li.control label="生日">
+			<input class="datepicker" check-type="required"/>
+		</@li.control>
 	</@li.form>
 	<@li.button>
 		<a href="#" class="btn" data-dismiss="modal">取消</a>

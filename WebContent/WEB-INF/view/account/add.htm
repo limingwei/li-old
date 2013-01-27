@@ -3,16 +3,16 @@
 <@li.window id="edit_win" title="账号添加">
 	<@li.form id="account_save" action="account_save.do">
 		<@li.control label="用户名">
-			<input type="text" name="account.username" check-type="required"/>
+			<input name="account.username" check-type="required"/>
 		</@li.control>
 		<@li.control label="邮箱">
-			<input type="text" name="account.email" check-type="mail"/>
+			<input name="account.email" check-type="mail"/>
 		</@li.control>
 		<@li.control label="密码">
-			<input type="text" name="account.password" check-type="required"/>
+			<input type="password" name="account.password" check-type="required"/>
 		</@li.control>
 		<@li.control label="重复密码">
-			<input type="text" name="password2"/>
+			<input name="password2"/>
 		</@li.control>
 		<@li.select name="account.role_id" label="角色" list=roles key="id" val="name"/>
 	</@li.form>
@@ -22,7 +22,7 @@
 	</@li.button>
 </@li.window>
 
-
+<#--
 <script type="text/javascript">
 	$("input.submit").click(function() {
 		if($("form#account_save").vali()){
@@ -30,7 +30,7 @@
 		}
 	});
 </script>
-<#--
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("form#account_save").find("input,select").each(function(){

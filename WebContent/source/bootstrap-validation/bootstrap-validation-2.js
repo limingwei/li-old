@@ -1,30 +1,58 @@
 
 !function($) {
-    $.fn.validation = function(options) {
-        return this.each(function() {
-            globalOptions = $.extend({}, $.fn.validation.defaults, options);
-            validationForm(this);
-        });
-    };
+	$.fn.validation = function(options) {
+		return this.each(function() {
+			globalOptions = $.extend({}, $.fn.validation.defaults, options);
+			validationForm(this);
+		});
+	};
 
-    $.fn.vali = function(options) {
-    	var flag = true;
-        this.each(function() {
-            globalOptions = $.extend({}, $.fn.validation.defaults, options);
-            flag = valiForm(this);
-        });
-        return flag;
-    };
-    
-    $.fn.validation.defaults = {
-        validRules : [
-            {name: 'required', validate: function(value) {return ($.trim(value) == '');}, defaultMsg: '请输入内容。'},
-            {name: 'number', validate: function(value) {return (!/^[0-9]\d*$/.test(value));}, defaultMsg: '请输入数字。'},
-            {name: 'mail', validate: function(value) {return (!/^[a-zA-Z0-9]{1}([\._a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+){1,3}$/.test(value));}, defaultMsg: '请输入邮箱地址。'},
-            {name: 'char', validate: function(value) {return (!/^[a-z\_\-A-Z]*$/.test(value));}, defaultMsg: '请输入英文字符。'},
-            {name: 'chinese', validate: function(value) {return (!/^[\u4e00-\u9fff]$/.test(value));}, defaultMsg: '请输入汉字。'}
-        ]
-    };
+	$.fn.vali = function(options) {
+		var flag = true;
+		this.each(function() {
+			globalOptions = $.extend({}, $.fn.validation.defaults, options);
+			flag = valiForm(this);
+		});
+		return flag;
+	};
+
+	$.fn.validation.defaults = {
+		validRules : [
+				{
+					name : 'required',
+					validate : function(value) {
+						return ($.trim(value) == '');
+					},
+					defaultMsg : '请输入内容。'
+				},
+				{
+					name : 'number',
+					validate : function(value) {
+						return (!/^[0-9]\d*$/.test(value));
+					},
+					defaultMsg : '请输入数字。'
+				},
+				{
+					name : 'mail',
+					validate : function(value) {
+						return (!/^[a-zA-Z0-9]{1}([\._a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+){1,3}$/
+								.test(value));
+					},
+					defaultMsg : '请输入邮箱地址。'
+				}, {
+					name : 'char',
+					validate : function(value) {
+						return (!/^[a-z\_\-A-Z]*$/.test(value));
+					},
+					defaultMsg : '请输入英文字符。'
+				}, {
+					name : 'chinese',
+					validate : function(value) {
+						return (!/^[\u4e00-\u9fff]$/.test(value));
+					},
+					defaultMsg : '请输入汉字。'
+				} ]
+	};
 
     var formState = false, fieldState = false, wFocus = false, globalOptions = {};
 
@@ -141,8 +169,8 @@
     };
     
     var valiForm = function(obj) { // 表单验证方法
-//        $(obj).submit(function() { // 提交时验证
-/*
+/*        $(obj).submit(function() { // 提交时验证
+
     		if (formState) { // 重复提交则返回
                 return false;
             }
@@ -188,6 +216,8 @@
                 return false;
             }
             return true;
-//        });	//$(obj).submit(function() {
+/*
+        });	//$(obj).submit(function() {
+*/
     };
 }(window.jQuery);

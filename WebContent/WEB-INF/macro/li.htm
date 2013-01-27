@@ -46,7 +46,7 @@
 <#--
     input
 -->
-<#macro input name="" type="text" label="" value="" class="input-xlarge" maxlength="" readonly="" disabled="" placeholder="" onclick="">
+<#macro input name="" type="text" label="" value="" class="input-large" maxlength="" readonly="" disabled="" placeholder="" onclick="">
     <@li.control name="${name}" label="${label}">
         <input type="${type}" class="${class}" id="${name}" name="${name}" maxlength="${maxlength}"
                <#if readonly!="">readonly</#if>
@@ -61,7 +61,7 @@
 <#--
     select
 -->
-<#macro select list key val name="" label="" value="" def="" disabled="" title="" multiple="" class="input-xlarge" wrap="1">
+<#macro select list key val name="" label="" value="" def="" disabled="" title="" multiple="" class="input-large" wrap="1">
     <@li.control name="${name}" label="${label}" wrap="${wrap}">
         <select id="${name}" name="${name}" class="${class}" 
         	<#if disabled!="">disabled</#if>
@@ -175,7 +175,6 @@
 		});
 
 		function reload() {
-			$(".span9").load("${url_0}");
 			$.ajax({
 				url : "${url_0}",
 				cache : false,
@@ -226,13 +225,14 @@
             </fieldset>
         </form>
     </div>
-<#--
+
 	<script type="text/javascript">
 		$("input.submit").click(function() {
-			ajaxPost($("form#${id}"));
+			if($("form#${id}").vali()){
+				ajaxPost($("form#${id}"));
+			}
 		});
 	</script>
--->
 </#macro>
 
 <#--
