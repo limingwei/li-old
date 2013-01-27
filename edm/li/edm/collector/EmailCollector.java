@@ -8,7 +8,6 @@ import java.util.concurrent.Executors;
 
 import li.annotation.Bean;
 import li.annotation.Inject;
-import li.annotation.Trans;
 import li.edm.collector.record.Email;
 import li.edm.collector.record.File;
 import li.util.Log;

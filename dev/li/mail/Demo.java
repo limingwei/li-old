@@ -9,6 +9,9 @@ import java.util.Map;
 
 import javax.mail.internet.MimeUtility;
 
+import li.edm.sender.Mail;
+import li.edm.sender.Sender;
+
 /**
  * smtp.mailgun.org postmaster@limingwei.mailgun.org 6mitwv670n61
  * 
