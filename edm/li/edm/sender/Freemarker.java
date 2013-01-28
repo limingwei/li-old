@@ -15,7 +15,7 @@ public class Freemarker {
     public Freemarker(String name) {
         try {
             Configuration configuration = new Configuration();
-            configuration.setTemplateLoader(new FileTemplateLoader(new File(System.getProperty("user.dir") + "\\dev\\li\\mail\\")));
+            configuration.setTemplateLoader(new FileTemplateLoader(new File(System.getProperty("user.dir"))));
             Properties properties = new Properties();// 默认的参数设置
             properties.put("default_encoding", "UTF-8");
             template = configuration.getTemplate(name);
