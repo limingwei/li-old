@@ -18,19 +18,11 @@ import li.util.Verify;
  */
 public class Demo {
 
-    private static String date = "2013-01-28";
-
-    private static String getDomain(String email) {
-        if (Verify.isEmpty(email)) {
-            return "@";
-        }
-        return email.substring(email.indexOf('@') + 1);
-    }
+    private static Date date = new Date();
 
     public static void main(String[] args) throws Exception {
         Email emailDao = Ioc.get(Email.class);
-
-        List<Email> emails = emailDao.list(new Page(1, 180));
+        List<Email> emails = emailDao.list(new Page(1, 180), "WHERE last_send_date IS NULL");
 
         for (Email email : emails) {
             sendMailTo(email.get(String.class, "address"));
@@ -38,6 +30,13 @@ public class Demo {
             email.set("last_send_date", date);
             emailDao.update(email);
         }
+    }
+
+    private static String getDomain(String email) {
+        if (Verify.isEmpty(email)) {
+            return "";
+        }
+        return email.substring(email.indexOf('@') + 1);
     }
 
     public static void sendMailTo(String mailAddress) throws Exception {
