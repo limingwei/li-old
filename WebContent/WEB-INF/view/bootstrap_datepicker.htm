@@ -1,9 +1,15 @@
-<input class="datepicker" type="text"/>
+<input class="datetimepicker" type="text"/>
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		$(".datepicker").datepicker({
-			format : "yyyy-mm-dd"
+		$(".datetimepicker").datetimepicker({
+			format : "yyyy-mm-dd hh:ii:ss",
+			autoclose: true,
+	        todayBtn: true,
+	        pickerPosition: "bottom-left",
+	        todayHighlight: true,
+	        language: "zh-CN",
+	        minuteStep: 2
 		});
 	});
 </script>

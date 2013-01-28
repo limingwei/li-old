@@ -42,8 +42,9 @@
 <script src="source/bootstrap/js/bootstrap-typeahead.js"></script>
 
 <#-- bootstrap-datepicker -->
-<link rel="stylesheet" href="source/bootstrap-datepicker/css/datepicker.css">
-<script src="source/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script src="source/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+<script src="source/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<link rel="stylesheet" href="source/bootstrap-datetimepicker/css/datetimepicker.css">
 
 <#-- bootstrap-validation -->
 <script src="source/bootstrap-validation/bootstrap-validation-2.js"></script>
@@ -93,4 +94,14 @@
 		}
 		return false;
 	}
+	
+	function datetime(target, options) {
+		if ( !(options.language)) {
+			options.language = "zh-CN";
+		}
+		if ( !(options.autoclose)) {
+			options.autoclose = true;
+		}
+		$(target).datetimepicker(options).datetimepicker('show');
+	}	
 </script>

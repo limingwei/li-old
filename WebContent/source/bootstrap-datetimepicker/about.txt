@@ -1,0 +1,5 @@
+http://www.eyecon.ro/bootstrap-datepicker/
+
+http://www.malot.fr/bootstrap-datetimepicker/demo.php
+
+<input type="password" name="account.password" check-type="required" onclick="$(this).datetimepicker({language: 'zh-CN'}).datetimepicker('show');"/>

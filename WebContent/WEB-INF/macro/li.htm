@@ -232,6 +232,37 @@
 				ajaxPost($("form#${id}"));
 			}
 		});
+
+		$(".date").datetimepicker({
+			format : "yyyy-mm-dd",
+			autoclose: true,
+	        todayBtn: true,
+	        pickerPosition: "bottom-left",
+	        todayHighlight: true,
+	        language: "zh-CN",
+	        minView: "month"
+		});
+
+		$(".time").datetimepicker({
+			format : "hh:ii",
+			autoclose: true,
+	        todayBtn: true,
+	        pickerPosition: "bottom-left",
+	        todayHighlight: true,
+	        language: "zh-CN",
+	        minuteStep: 1,
+	        startView: "day"
+		});
+
+		$(".datetime").datetimepicker({
+			format : "yyyy-mm-dd hh:ii",
+			autoclose: true,
+	        todayBtn: true,
+	        pickerPosition: "bottom-left",
+	        todayHighlight: true,
+	        language: "zh-CN",
+	        minuteStep: 2
+		});
 	</script>
 </#macro>
 
