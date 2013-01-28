@@ -1,5 +1,6 @@
 package li.people.action;
 
+import li.annotation.Arg;
 import li.annotation.At;
 import li.annotation.Bean;
 import li.annotation.Inject;
@@ -56,6 +57,11 @@ public class AccountAction extends AbstractAction implements Const {
     @At(value = "account_delete.do", method = POST)
     public void delete(Integer id) {
         write(accountDao.delete(id) ? "删除用户成功" : "删除用户失败");
+    }
+
+    @At("username_check.do")
+    public void exist(@Arg("account.username") String username) {
+        write(null == accountDao.findByUsername(username) ? "true" : "false");
     }
 
     @At(value = "login.do", method = GET)

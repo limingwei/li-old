@@ -35,8 +35,7 @@
 				{
 					name : 'mail',
 					validate : function(value) {
-						return (!/^[a-zA-Z0-9]{1}([\._a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+){1,3}$/
-								.test(value));
+						return (!/^[a-zA-Z0-9]{1}([\._a-zA-Z0-9-]+)(\.[_a-zA-Z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+){1,3}$/.test(value));
 					},
 					defaultMsg : '请输入邮箱地址。'
 				}, {
@@ -51,6 +50,26 @@
 						return (!/^[\u4e00-\u9fff]$/.test(value));
 					},
 					defaultMsg : '请输入汉字。'
+				}, {
+					name : 'equal',
+					validate : function(value) {//返回为false时表示通过验证
+						return $($(this).attr('equal-to')).val() != $(this).val();
+					},
+					defaultMsg : '请输入相等的值。'
+				} , {
+					name : 'ajax',
+					validate : function(value) {
+						var flag = true;
+						$.ajax({
+							async : false,
+							url : $(this).attr('ajax-url') + "?" + $(this).attr("name") + "=" + $(this).val()
+						}).done(function(data) {
+							flag =  (data==true);
+							document.title=(data);
+						});	
+						return flag;
+					},
+					defaultMsg : '不可用的值。'
 				} ]
 	};
 
