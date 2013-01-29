@@ -1,5 +1,6 @@
 package li.edm.sender;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,32 +12,33 @@ import javax.mail.internet.MimeUtility;
 import li.dao.Page;
 import li.edm.collector.record.Email;
 import li.ioc.Ioc;
+import li.util.Files;
 import li.util.Verify;
 
 /**
  * 663564毫秒 180封 2012-01-28 4s/封 15封/分 900封/小时 21600封/天
  */
 public class Demo {
+    private static String date = "2013-01-29";
 
-    private static Date date = new Date();
+    private static String[] testMail = { "416133823@qq.com" };
 
     public static void main(String[] args) throws Exception {
-        Email emailDao = Ioc.get(Email.class);
-        List<Email> emails = emailDao.list(new Page(1, 180), "WHERE last_send_date IS NULL");
+        preview();
+    }
 
-        for (Email email : emails) {
-            sendMailTo(email.get(String.class, "address"));
-            email.set("domain", getDomain(email.get(String.class, "address")));
-            email.set("last_send_date", date);
-            emailDao.update(email);
+    private static void testSend() throws Exception {
+        for (String address : testMail) {
+            sendMailTo(address);
         }
     }
 
-    private static String getDomain(String email) {
-        if (Verify.isEmpty(email)) {
-            return "";
-        }
-        return email.substring(email.indexOf('@') + 1);
+    private static void preview() {
+        Freemarker freemarker = new Freemarker("edm\\li\\edm\\sender\\edm_tamplate_1.htm");
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("goodsList", data());
+
+        Files.write(new File("E:\\preview.htm"), freemarker.merge(map));
     }
 
     public static void sendMailTo(String mailAddress) throws Exception {
@@ -53,6 +55,25 @@ public class Demo {
 
         mail.setTo(mailAddress);
         sender.send(mail);
+    }
+
+    private static void send() throws Exception {
+        Email emailDao = Ioc.get(Email.class);
+        List<Email> emails = emailDao.list(new Page(1, 180), "WHERE last_send_date IS NULL");
+
+        for (Email email : emails) {
+            sendMailTo(email.get(String.class, "address"));
+            email.set("domain", getDomain(email.get(String.class, "address")));
+            email.set("last_send_date", date);
+            emailDao.update(email);
+        }
+    }
+
+    private static String getDomain(String email) {
+        if (Verify.isEmpty(email)) {
+            return "";
+        }
+        return email.substring(email.indexOf('@') + 1);
     }
 
     private static List<Goods> data() {
