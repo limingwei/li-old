@@ -45,7 +45,7 @@ public class QueryRunner {
                 log.info(sql + "-> " + connection.getClass().getName() + "@" + Integer.toHexString(connection.hashCode()));
             } catch (Exception e) {
                 Trans.EXCEPTION.set(e);// 出现异常,记录起来
-                log.error(e);
+                log.error(sql + " " + e);
                 e.printStackTrace();
             }
         }
@@ -69,7 +69,7 @@ public class QueryRunner {
                 log.info(sql + " -> " + "[" + count + " row] " + connection.getClass().getName() + "@" + Integer.toHexString(connection.hashCode()));
             } catch (Exception e) {
                 Trans.EXCEPTION.set(e); // 出现异常,记录起来
-                log.error(e);
+                log.error(sql + " " + e);
                 e.printStackTrace();
             }
         }
