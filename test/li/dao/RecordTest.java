@@ -1,5 +1,7 @@
 package li.dao;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 
 import li.annotation.Inject;
@@ -15,6 +17,23 @@ public class RecordTest extends BaseTest {
     _UserDao userDao2;
 
     _User user = new _User().set("id", 1).set("username", "u-4-1" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1");
+
+    @Test
+    public void testLike() {
+        System.out.println(userDao.count("WHERE username LIKE ?", "%文%"));
+    }
+
+    @Test
+    public void countByDate() {
+        System.out.println(userDao.count("WHERE id != ?", new Object[] { null }));
+        System.out.println(userDao.count("WHERE id>?", true));
+        System.out.println(userDao.count("WHERE id>?", 1));
+        System.out.println(userDao.count("WHERE id>?", "str"));
+        System.out.println(userDao.count("WHERE id>?", new java.util.Date()));
+        System.out.println(userDao.count("WHERE id>?", new java.sql.Date(System.currentTimeMillis())));
+        System.out.println(userDao.count("WHERE id>?", new Time(System.currentTimeMillis())));
+        System.out.println(userDao.count("WHERE id>?", new Timestamp(System.currentTimeMillis())));
+    }
 
     @Test
     public void count() {

@@ -1,5 +1,6 @@
 package li.dao;
 
+import java.text.SimpleDateFormat;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -214,7 +215,7 @@ public class QueryBuilder {
                 if (args[i] instanceof Map) {
                     sql = setArgMap(sql, (Map) args[i]);// 替换具名参数
                 } else {
-                    sql = sql.replaceFirst("[?]", "'" + args[i] + "'");// 为参数加上引号后替换问号
+                    sql = sql.replaceFirst("[?]", wrap(args[i]));// 为参数加上引号后替换问号
                 }
             }
         }
@@ -230,10 +231,27 @@ public class QueryBuilder {
     public String setArgMap(String sql, Map<?, ?> argMap) {
         if (null != sql && sql.length() > 0 && null != argMap && argMap.size() > 0) {// 非空判断
             for (Entry<?, ?> arg : argMap.entrySet()) {
-                sql = sql.replaceAll(MAP_ARG_SIGN + arg.getKey(), "'" + arg.getValue() + "'");// 为参数加上引号后替换问号
+                sql = sql.replaceAll(MAP_ARG_SIGN + arg.getKey(), wrap(arg.getValue()));// 为参数加上引号后替换问号
             }
         }
         return sql;
+    }
+
+    /**
+     * 处理SQL参数
+     */
+    public String wrap(Object arg) {
+        if (null == arg) {
+            return "NULL";
+        } else if (arg instanceof Number || arg instanceof Boolean) {
+            return String.valueOf(arg);// 数字和Bool不加引号
+        } else if (arg instanceof java.sql.Timestamp) {
+            return "'" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(arg) + "'";
+        } else if (arg.getClass().equals(java.util.Date.class)) {// java.util.Date不包括其子类
+            return "'" + new SimpleDateFormat("yyyy-MM-dd").format(arg) + "'";
+        } else {
+            return "'" + arg + "'";// 其他类型,包括java.sql.Date java.sql.Time
+        }
     }
 
     /**

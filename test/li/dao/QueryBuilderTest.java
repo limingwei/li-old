@@ -89,14 +89,14 @@ public class QueryBuilderTest extends BaseTest {
     public void setArgMap() {
         String sql = "SELECT * FROM WHERE id=#id OR username LIKE #username";
         Map<Object, Object> map = Convert.toMap("id", 1, "username", "%li%");
-        assertEquals("SELECT * FROM WHERE id='1' OR username LIKE '%li%'", queryBuilder.setArgMap(sql, map));
+        assertEquals("SELECT * FROM WHERE id=1 OR username LIKE '%li%'", queryBuilder.setArgMap(sql, map));
     }
 
     @Test
     public void setArgs() {
         String sql = "SELECT * FROM WHERE id=? OR username LIKE ?";
         Object[] args = { 1, "%li%" };
-        assertEquals("SELECT * FROM WHERE id='1' OR username LIKE '%li%'", queryBuilder.setArgs(sql, args));
+        assertEquals("SELECT * FROM WHERE id=1 OR username LIKE '%li%'", queryBuilder.setArgs(sql, args));
     }
 
     @Test
@@ -147,6 +147,6 @@ public class QueryBuilderTest extends BaseTest {
     @Test
     public void updateBySql() {
         String sql = queryBuilder.updateBySql("SET email=? WHERE id>?", new Object[] { "eml", 3 });
-        assertEquals("UPDATE t_account SET email='eml' WHERE id>'3'", sql);
+        assertEquals("UPDATE t_account SET email='eml' WHERE id>3", sql);
     }
 }
