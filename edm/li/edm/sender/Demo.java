@@ -1,6 +1,8 @@
 package li.edm.sender;
 
 import java.io.File;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,8 +20,6 @@ import li.util.Verify;
  * 663564毫秒 180封 2012-01-28 4s/封 15封/分 900封/小时 21600封/天
  */
 public class Demo {
-    private static String date = "2013-01-29";
-
     private static String[] testMail = { "416133823@qq.com" };
 
     public static void main(String[] args) throws Exception {
@@ -40,14 +40,14 @@ public class Demo {
         Files.write(new File("E:\\preview.htm"), freemarker.merge(map));
     }
 
-    private static void send() throws Exception {
+    private static void startSendTask() throws Exception {
         Email emailDao = Ioc.get(Email.class);
         List<Email> emails = emailDao.list(new Page(1, 180), "WHERE last_send_date IS NULL");
 
         for (Email email : emails) {
             sendMailTo(email.get(String.class, "address"));
             email.set("domain", getDomain(email.get(String.class, "address")));
-            email.set("last_send_date", date);
+            email.set("last_send_date", new Timestamp(System.currentTimeMillis()));
             emailDao.update(email);
         }
     }
@@ -60,7 +60,7 @@ public class Demo {
         Sender sender = new Sender("smtp.mailgun.org", "postmaster@limingwei.mailgun.org", "6mitwv670n61");
 
         Mail mail = new Mail();
-        mail.setSubject("精选宝贝推荐 Sense印象 精品女鞋专卖 " + date);
+        mail.setSubject("精选宝贝推荐 Sense印象 精品女鞋专卖 " + new Date(System.currentTimeMillis()));
         mail.setContent(freemarker.merge(map));
         mail.setFrom(MimeUtility.encodeText("Sense印象 精品女鞋专卖") + "<limingwei@mail.com>");// 发件人
 

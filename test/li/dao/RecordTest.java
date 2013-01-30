@@ -25,6 +25,8 @@ public class RecordTest extends BaseTest {
 
     @Test
     public void countByDate() {
+        Integer int1 = null;
+        System.out.println(userDao.count("WHERE id != ?", int1));
         System.out.println(userDao.count("WHERE id != ?", new Object[] { null }));
         System.out.println(userDao.count("WHERE id>?", true));
         System.out.println(userDao.count("WHERE id>?", 1));
