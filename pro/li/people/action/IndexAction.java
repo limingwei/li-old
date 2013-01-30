@@ -10,7 +10,7 @@ public class IndexAction extends AbstractAction {
     @At("index.do")
     public void index() {
         if (null == getSession("account")) {
-            redirect("login.do");
+            redirect("login.do?from_index");
         } else {
             view("index");
         }

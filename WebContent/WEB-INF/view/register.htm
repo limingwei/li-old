@@ -46,18 +46,20 @@ body {
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("form#register").submit(function() {
-			$.ajax({
-				url : $(this).attr("action"),
-				type : $(this).attr("method"),
-				data : $(this).serialize(),
-				dataType : "html"
-			}).done(function(data) {
-				if(data.indexOf("成功")>-1){
-					location.href="index.do";
-				}else{
-					alert(data);
-				}
-			});
+			if($("form#register").vali()){
+				$.ajax({
+					url : $(this).attr("action"),
+					type : $(this).attr("method"),
+					data : $(this).serialize(),
+					dataType : "html"
+				}).done(function(data) {
+					if(data.indexOf("成功")>-1){
+						location.href="index.do";
+					}else{
+						alert(data);
+					}
+				});
+			}
 			return false;
         });
 	});
@@ -74,9 +76,9 @@ body {
 	<div class="container">
 		<form id="register" class="form-signin" action="register.do" method="POST">
 			<h2 class="form-signin-heading">注册</h2>
-			<input type="text" name="account.username" class="input-block-level" placeholder="用户名" autocomplete="off"> 
-			<input type="text" name="account.password" class="input-block-level" placeholder="密码" autocomplete="off"> 
-			<input type="text" name="account.email" class="input-block-level" placeholder="邮箱">
+			<input type="text" name="account.username" class="input-block-level" placeholder="用户名" autocomplete="off" check-type="required"> 
+			<input type="text" name="account.password" class="input-block-level" placeholder="密码" autocomplete="off" check-type="required"> 
+			<input type="text" name="account.email" class="input-block-level" placeholder="邮箱" autocomplete="off" check-type="required">
 			<input type="submit" class="btn btn-large btn-primary" value="注册">
 			<a class="btn btn-large btn-info" href="login.do">去登录</a>
 		</form>
