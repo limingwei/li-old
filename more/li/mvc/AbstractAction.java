@@ -176,7 +176,7 @@ public abstract class AbstractAction implements RequestMethod {
      * 返回Velocity视图
      */
     public String velocity(String path) {
-        return Context.velocity(path);
+        return Ctx.velocity(path);
     }
 
     /**
@@ -190,7 +190,7 @@ public abstract class AbstractAction implements RequestMethod {
      * 返回beetl视图
      */
     public String beetl(String path) {
-        return Context.beetl(path);
+        return Ctx.beetl(path);
     }
 
     /**

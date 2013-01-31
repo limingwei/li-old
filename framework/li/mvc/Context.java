@@ -38,9 +38,9 @@ import li.util.Verify;
 public class Context {
     private static final Log log = Log.init();
 
-    private static final String VIEW_TYPE = Files.load("config.properties").getProperty("view.type", "forward");
-    private static final String VIEW_PREFIX = Files.load("config.properties").getProperty("view.prefix", "");
-    private static final String VIEW_SUFFIX = Files.load("config.properties").getProperty("view.suffix", "");
+    static final String VIEW_TYPE = Files.load("config.properties").getProperty("view.type", "forward");
+    static final String VIEW_PREFIX = Files.load("config.properties").getProperty("view.prefix", "");
+    static final String VIEW_SUFFIX = Files.load("config.properties").getProperty("view.suffix", "");
 
     private static final ThreadLocal<HttpServletRequest> REQUEST = new ThreadLocal<HttpServletRequest>();
     private static final ThreadLocal<HttpServletResponse> RESPONSE = new ThreadLocal<HttpServletResponse>();
@@ -139,7 +139,7 @@ public class Context {
      * 
      * @see li.annotation.At
      */
-    public static String[] pathParams() {
+    public static String[] pathParams() {// getRequestURL ? getContextPath
         Matcher matcher = Pattern.compile(".*" + getAction().path + ".*").matcher(getRequest().getRequestURL().toString());
         String[] params = new String[matcher.groupCount()];
         if (matcher.matches()) {
@@ -221,10 +221,6 @@ public class Context {
             forward(VIEW_PREFIX + viewPath + VIEW_SUFFIX);
         } else if ("freemarker".equals(viewType) || "fm".equals(viewType)) {// freemarker视图
             freemarker(VIEW_PREFIX + viewPath + VIEW_SUFFIX);
-        } else if ("velocity".equals(viewType) || "vl".equals(viewType)) {// velocity视图
-            velocity(VIEW_PREFIX + viewPath + VIEW_SUFFIX);
-        } else if ("beetl".equals(viewType) || "bt".equals(viewType)) {// beetl视图
-            beetl(VIEW_PREFIX + viewPath + VIEW_SUFFIX);
         } else if ("redirect".equals(viewType) || "rd".equals(viewType)) {// redirect跳转
             redirect(viewPath);
         } else if ("write".equals(viewType) || "wt".equals(viewType)) {// 向页面write数据
@@ -262,32 +258,6 @@ public class Context {
     }
 
     /**
-     * 返回velocity视图
-     */
-    public static String velocity(String path) {
-        try {
-            Object initialized = Log.get("velocityInitialized"); // 从缓存中查找velocity是否初始化的标记
-            if (null == initialized) { // 缓存中没有
-                log.debug("velocity initializing ..");
-                Properties properties = new Properties();// 默认的参数设置
-                properties.put("file.resource.loader.path", getServletContext().getRealPath("/"));
-                properties.put("input.encoding", "UTF-8");
-                properties.put("output.encoding", "UTF-8");
-                properties.putAll(Files.load("velocity.properties"));// velocity.properties中的参数设置
-                Reflect.call("org.apache.velocity.app.Velocity", "init", properties);// 初始化Velocity
-                Log.put("velocityInitialized", true); // 设置velocityInitialized标记
-            }
-            Object context = Reflect.born("org.apache.velocity.VelocityContext", new Class[] { Map.class }, new Object[] { getAttributes() });// velocity值栈
-            Object template = Reflect.call("org.apache.velocity.app.Velocity", "getTemplate", path);// velocity模板
-            Reflect.invoke(template, "merge", new Class[] { Reflect.getType("org.apache.velocity.context.Context"), Reflect.getType("java.io.Writer") }, new Object[] { context, getResponse().getWriter() });
-            log.info("velocity to: ?", path);
-        } catch (Throwable e) {
-            error(e);
-        }
-        return "~!@#DONE";
-    }
-
-    /**
      * 返回freemarker视图
      */
     public static String freemarker(String path) {
@@ -306,37 +276,6 @@ public class Context {
             Object template = Reflect.invoke(configuration, "getTemplate", path);// 加载模板
             Reflect.invoke(template, "process", new Class[] { Object.class, Writer.class }, new Object[] { getAttributes(), getResponse().getWriter() });
             log.info("freemarker to: ?", path);
-        } catch (Throwable e) {
-            error(e);
-        }
-        return "~!@#DONE";
-    }
-
-    /**
-     * 返回beetl视图
-     */
-    public static String beetl(String path) {
-        try {
-            Object groupTemplate = Log.get("groupTemplate");// 从缓存中查找GroupTemplate
-            if (null == groupTemplate) {
-                log.debug("beetl initializing ...");
-                Object config = Reflect.born("org.bee.tl.core.Config");// 加载默认配置
-                Reflect.invoke(config, "put", "TEMPLATE_ROOT", getServletContext().getRealPath("/"));
-                Reflect.invoke(config, "put", "TEMPLATE_CHARSET", "UTF-8");
-                Properties properties = Files.load("beetl.properties");// 加载自定义配置,覆盖默认
-                for (Entry<Object, Object> entry : properties.entrySet()) {
-                    Reflect.invoke(config, "put", entry.getKey().toString(), entry.getValue().toString());
-                }
-                groupTemplate = Reflect.invoke(config, "createGroupTemplate");// 生成GroupTemplate,并缓存之
-                Log.put("groupTemplate", groupTemplate);
-            }
-            Object template = Reflect.invoke(groupTemplate, "getFileTemplate", path);// 生成模板
-            Set<Entry<String, Object>> attributes = getAttributes().entrySet();
-            for (Entry<String, Object> entry : attributes) {
-                Reflect.invoke(template, "set", new Class[] { String.class, Object.class }, new Object[] { entry.getKey(), entry.getValue() });// 设置变量
-            }
-            Reflect.invoke(template, "getText", new Class[] { Writer.class }, new Object[] { getResponse().getWriter() });// merge 模板和模型，将内容输出到Writer里
-            log.info("forword to beetl: ?", path);
         } catch (Throwable e) {
             error(e);
         }
