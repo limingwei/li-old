@@ -31,7 +31,7 @@ public abstract class Log {
         } catch (Throwable e) {
             return new Log() {// 返回ConsoleLog
                 protected void log(String method, Object msg, Object... args) {
-                    if (method.toUpperCase().equals("ERROR") || method.toUpperCase().equals("FATAL")) {
+                    if (method.equals("error") || method.equals("fatal")) {
                         System.err.println(method.toUpperCase() + ": " + process(msg, args));
                     } else {
                         System.out.println(method.toUpperCase() + ": " + process(msg, args));
@@ -46,10 +46,16 @@ public abstract class Log {
      */
     private static String process(Object msg, Object... args) {
         StackTraceElement[] traces = Thread.currentThread().getStackTrace();
+        StringBuffer stringBuffer = new StringBuffer(traces[5].getMethodName() + "() #" + traces[5].getLineNumber() + " ");
         if ("li.dao.Trans".equals(traces[5].getClassName())) {
-            msg = "calling by " + traces[8].getClassName() + "." + traces[8].getMethodName() + "() #" + traces[8].getLineNumber() + " " + msg;
+            stringBuffer.append("calling by " + traces[8].getClassName() + "." + traces[8].getMethodName() + "() #" + traces[8].getLineNumber() + " ");
         }
-        return traces[5].getMethodName() + "() #" + traces[5].getLineNumber() + " " + msg;
+        char[] chars = msg.toString().toCharArray();
+        int arg_index = 0;
+        for (int i = 0; i < chars.length; i++) {
+            stringBuffer.append((arg_index < args.length && chars[i] == '?') ? args[arg_index++] : chars[i]);
+        }
+        return stringBuffer.toString();
     }
 
     /**

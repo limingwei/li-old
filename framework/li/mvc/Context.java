@@ -239,7 +239,7 @@ public class Context {
      * 执行客户端跳转
      */
     public static String redirect(String path) {
-        log.info("redirect to " + path);
+        log.info("redirect to ?", path);
         try {
             getResponse().sendRedirect(path);
         } catch (Exception e) {
@@ -252,7 +252,7 @@ public class Context {
      * 返回forward视图
      */
     public static String forward(String path) {
-        log.info("forward to " + path);
+        log.info("forward to ?", path);
         try {
             getRequest().getRequestDispatcher(path).forward(getRequest(), getResponse());
         } catch (Exception e) {
@@ -280,7 +280,7 @@ public class Context {
             Object context = Reflect.born("org.apache.velocity.VelocityContext", new Class[] { Map.class }, new Object[] { getAttributes() });// velocity值栈
             Object template = Reflect.call("org.apache.velocity.app.Velocity", "getTemplate", path);// velocity模板
             Reflect.invoke(template, "merge", new Class[] { Reflect.getType("org.apache.velocity.context.Context"), Reflect.getType("java.io.Writer") }, new Object[] { context, getResponse().getWriter() });
-            log.info("velocity to: " + path);
+            log.info("velocity to: ?", path);
         } catch (Throwable e) {
             error(e);
         }
@@ -305,7 +305,7 @@ public class Context {
             }
             Object template = Reflect.invoke(configuration, "getTemplate", path);// 加载模板
             Reflect.invoke(template, "process", new Class[] { Object.class, Writer.class }, new Object[] { getAttributes(), getResponse().getWriter() });
-            log.info("freemarker to: " + path);
+            log.info("freemarker to: ?", path);
         } catch (Throwable e) {
             error(e);
         }
@@ -336,7 +336,7 @@ public class Context {
                 Reflect.invoke(template, "set", new Class[] { String.class, Object.class }, new Object[] { entry.getKey(), entry.getValue() });// 设置变量
             }
             Reflect.invoke(template, "getText", new Class[] { Writer.class }, new Object[] { getResponse().getWriter() });// merge 模板和模型，将内容输出到Writer里
-            log.info("forword to beetl: " + path);
+            log.info("forword to beetl: ?", path);
         } catch (Throwable e) {
             error(e);
         }

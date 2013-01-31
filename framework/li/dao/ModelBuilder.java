@@ -54,7 +54,7 @@ public class ModelBuilder {
                 }
                 list.add(t);
             }
-            log.trace("build " + list.size() + " " + type.getName());
+            log.trace("build ? ?", list.size(), type.getName());
         } catch (Exception e) {
             throw new RuntimeException("Exception at li.dao.ModelBuilder.list()", e);
         } finally {
@@ -102,11 +102,11 @@ public class ModelBuilder {
         try {
             if (null != resultSet) {
                 resultSet.close();// 关闭ResultSet
-                log.trace("Closed ResultSet " + resultSet);
+                log.trace("Closed ResultSet ?", resultSet);
             }
             if (null != queryRunner) {
                 queryRunner.close();// 关闭QueryRunner,他会关闭PreparedStatement和Connection
-                log.trace("Closed QueryRunner " + queryRunner);
+                log.trace("Closed QueryRunner ?", queryRunner);
             }
         } catch (Exception e) {
             throw new RuntimeException("Exception at li.dao.ModelBuilder.close()", e);

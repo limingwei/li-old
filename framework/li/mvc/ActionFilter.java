@@ -41,7 +41,7 @@ public class ActionFilter implements Filter {
         config.getServletContext().setAttribute("root", config.getServletContext().getContextPath() + "/");// 默认的环境变量
         if ("true".equals(USE_I18N.trim().toLowerCase())) {
             config.getServletContext().setAttribute("lang", Files.load(Locale.getDefault().toString()));// 根据Locale.getDefault()初始化国际化,存到servletContext
-            log.info("Setting default language as " + Locale.getDefault());
+            log.info("Setting default language as ?", Locale.getDefault());
         }
     }
 
@@ -58,7 +58,7 @@ public class ActionFilter implements Filter {
             String lang = request.getParameter("lang");// 根据Parameter参数设置国际化,存到session
             if (!Verify.isEmpty(lang)) {
                 ((HttpServletRequest) request).getSession().setAttribute("lang", Files.load(lang));
-                log.info("Setting language for " + lang);
+                log.info("Setting language for ?", lang);
             }
         }
 
@@ -66,7 +66,7 @@ public class ActionFilter implements Filter {
         Action action = ActionContext.getInstance().getAction(((HttpServletRequest) request).getServletPath(), ((HttpServletRequest) request).getMethod());
         if (null != action) {
             Context.init(request, response, action);// 初始化Context
-            log.info("ACTION FOUND: path=\"" + Context.getRequest().getServletPath() + "\",method=\"" + Context.getRequest().getMethod() + "\" action=" + action.actionInstance.getClass().getName() + "." + action.actionMethod.getName() + "()");
+            log.info("ACTION FOUND: path=\"?\",method=\"?\" action=?.?()", Context.getRequest().getServletPath(), Context.getRequest().getMethod(), action.actionInstance, action.actionMethod);
 
             Object[] args = new Object[action.argTypes.length]; // Action方法参数值列表
             for (int i = 0; i < action.argTypes.length; i++) {// Action方法参数适配
@@ -92,7 +92,7 @@ public class ActionFilter implements Filter {
                 Context.view((String) result);// 则Context.view返回视图
             }
         } else {
-            log.info("ACTION NOT FOUND: path=\"" + ((HttpServletRequest) request).getServletPath() + "\",method=\"" + ((HttpServletRequest) request).getMethod() + "\"");
+            log.info("ACTION NOT FOUND: path=\"?\",method=\"?\"", ((HttpServletRequest) request).getServletPath(), ((HttpServletRequest) request).getMethod());
             chain.doFilter(request, response);
         }
     }

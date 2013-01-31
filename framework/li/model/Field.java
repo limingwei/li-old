@@ -54,7 +54,7 @@ public class Field {
     public static List<Field> list(Class<?> targetType, Boolean annotated) {
         List<Field> fields = FIELDS_MAP.get("class#" + targetType.getName() + "#annotated#" + annotated);
         if (null == fields) { // 如果缓存中没有
-            log.debug("Field.list() by type " + targetType.getName());
+            log.debug("Field.list() by type ?", targetType.getName());
             fields = new ArrayList<Field>();
             java.lang.reflect.Field[] declaredFields = targetType.getDeclaredFields();
             for (java.lang.reflect.Field field : declaredFields) {
@@ -83,7 +83,7 @@ public class Field {
     public static List<Field> list(DataSource dataSource, String table) {
         List<Field> fields = FIELDS_MAP.get("dataSource#" + dataSource + "#table#" + table);
         if (null == fields && null != dataSource) { // 如果缓存中没有
-            log.debug("Field.list() by table " + table);
+            log.debug("Field.list() by table ?", table);
             try {
                 fields = new ArrayList<Field>();
                 Connection connection = dataSource.getConnection();

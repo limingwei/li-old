@@ -69,7 +69,7 @@ public class Files {
             documentBuilderFactory.setNamespaceAware(true);
             return documentBuilderFactory.newDocumentBuilder().parse(path);
         } catch (Exception e) {
-            log.error(e + " Files.build() path=" + path);
+            log.error("? Files.build() path=?", e, path);
             return null;
         }
     }
@@ -84,7 +84,7 @@ public class Files {
         try {
             return XPathFactory.newInstance().newXPath().compile(xpath).evaluate(document, returnType);
         } catch (Exception e) {
-            log.error(e + " Files.xpath() document:" + document + " xpath:" + xpath + " returnType:" + returnType);
+            log.error("? Files.xpath() document:? xpath:? returnType:?", e, document, xpath, returnType);
             return null;
         }
     }
@@ -97,9 +97,10 @@ public class Files {
         if (null == properties) {
             List propertyFiles = (List) Log.get("PROPERTIE_FILES");// 从缓存中查找propertyFiles
             if (null == propertyFiles) {
-                propertyFiles = list(root(), PROPERTIES_REGEX, true);
+                File rootFolder = Files.root();
+                propertyFiles = list(rootFolder, PROPERTIES_REGEX, true);
                 Log.put("PROPERTIE_FILES", propertyFiles); // 将 PROPERTIES文件列表缓存
-                log.info("Found " + propertyFiles.size() + " properties files , at " + root());
+                log.info("Found ? properties files , at ?", propertyFiles.size(), rootFolder);
             }
 
             properties = new Properties();

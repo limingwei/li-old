@@ -1,5 +1,6 @@
 package li.ioc;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +26,9 @@ public class AnnotationIocLoader {
      * 扫描 Source Floder 下的所有类文件, 将其中加了@Bean注解的类返回,然后被加入到IocContext
      */
     public List<Bean> getBeans() {
-        List<String> fileList = Files.list(Files.root(), CLASS_REGEX, true);
-        log.info("Found " + fileList.size() + " class files, at " + Files.root());
+        File rootFolder = Files.root();
+        List<String> fileList = Files.list(rootFolder, CLASS_REGEX, true);
+        log.info("Found ? class files, at ?", fileList.size(), rootFolder);
 
         List<li.model.Bean> beans = new ArrayList<li.model.Bean>();
         for (String classFile : fileList) {
@@ -51,7 +53,7 @@ public class AnnotationIocLoader {
                 }
                 beans.add(iocBean);
 
-                log.debug("ADD BEAN: @Bean " + type.getName() + " " + iocBean.name);
+                log.debug("ADD BEAN: @Bean ? ?", type.getName(), iocBean.name);
             }
         }
         return beans;

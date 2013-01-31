@@ -42,7 +42,7 @@ public class QueryRunner {
                 preparedStatement = connection.prepareStatement(sql);
                 resultSet = preparedStatement.executeQuery();
 
-                log.info(sql + "-> " + connection.getClass().getName() + "@" + Integer.toHexString(connection.hashCode()));
+                log.info("? -> ?", sql, connection);
             } catch (Exception e) {
                 Trans.EXCEPTION.set(e);// 出现异常,记录起来
                 log.error(sql + " " + e);
@@ -66,7 +66,7 @@ public class QueryRunner {
                 this.LAST_INSERT_ID = null != generatedKeys && generatedKeys.next() ? generatedKeys.getInt(1) : -1;// 设置最后更新的主键的值
                 generatedKeys.close();// 关闭主键结果集
 
-                log.info(sql + " -> " + "[" + count + " row] " + connection.getClass().getName() + "@" + Integer.toHexString(connection.hashCode()));
+                log.info("? -> [? row] ?", sql, count, connection);
             } catch (Exception e) {
                 Trans.EXCEPTION.set(e); // 出现异常,记录起来
                 log.error(sql + " " + e);
@@ -84,11 +84,11 @@ public class QueryRunner {
         try {
             if (null != preparedStatement) {
                 preparedStatement.close();
-                log.trace("Closing PreparedStatement " + preparedStatement);
+                log.trace("Closing PreparedStatement ?", preparedStatement);
             }
             if (null != connection && null == Trans.CONNECTION_MAP.get()) {
                 connection.close();// Trans.CONNECTION_MAP.get()为空表示未进入事务,若已进入事务,则由事务关闭连接
-                log.trace("Closing Connection " + connection);
+                log.trace("Closing Connection ?", connection);
             }
         } catch (Exception e) {
             throw new RuntimeException("Exception at li.dao.QueryRunner.close()", e);

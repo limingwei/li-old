@@ -1,5 +1,6 @@
 package li.ioc;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +29,9 @@ public class XmlIocLoader {
      * 解析SourceFloder下搜索到的文件名以config.xml结尾的文件,将其中配置的Bean返回
      */
     public List<Bean> getBeans() {
-        List<String> fileList = Files.list(Files.root(), IOC_CONFIG_REGEX, true);// 搜索以config.xml结尾的文件
-        log.info("Found " + fileList.size() + " Xml config files at " + Files.root());
+        File rootFolder = Files.root();
+        List<String> fileList = Files.list(rootFolder, IOC_CONFIG_REGEX, true);// 搜索以config.xml结尾的文件
+        log.info("Found ? Xml config files at ?", fileList.size(), rootFolder);
 
         List<Bean> beans = new ArrayList<Bean>();
         for (String filePath : fileList) {
@@ -53,7 +55,7 @@ public class XmlIocLoader {
                 }
                 beans.add(iocBean);
 
-                log.debug("ADD BEAN: Xml " + iocBean.type.getName() + " " + iocBean.name);
+                log.debug("ADD BEAN: Xml ? ?", iocBean.type.getName(), iocBean.name);
             }
         }
         return beans;

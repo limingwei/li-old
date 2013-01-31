@@ -53,14 +53,14 @@ public class ActionContext {
                                 action.httpMethod = httpMethod.toUpperCase(); // HTTP请求类型,这里转换为大写
                                 ACTION_CONTEXT.ACTIONS.add(action);
 
-                                log.info("ADD ACTION: @At(value=\"" + action.path + "\"" + (action.httpMethod.equals(".*") ? "" : ",method=\"" + action.httpMethod + "\"") + ") " + action.actionInstance.getClass().getName() + "." + action.actionMethod.getName() + "()");
+                                log.info("ADD ACTION: @At(value=\"?\",method=\"?\") ?.?()", action.path, action.httpMethod, action.actionInstance, action.actionMethod);
                             }
                         }
                     }
                 }
             }
 
-            log.debug(ACTION_CONTEXT.ACTIONS.size() + " actions started up in " + (System.currentTimeMillis() - (Long) Log.get("MVCSTARTUP")) + "ms");
+            log.debug("? actions started up in ?ms", ACTION_CONTEXT.ACTIONS.size(), (System.currentTimeMillis() - (Long) Log.get("MVCSTARTUP")));
         }
         return ACTION_CONTEXT;
     }

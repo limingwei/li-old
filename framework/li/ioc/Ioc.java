@@ -37,10 +37,10 @@ public class Ioc {
     public static Bean init(Bean bean) {
         if (null == bean.instance) {// 如果尚未实例化
             if (!AOP_CAN || AopFilter.class.isAssignableFrom(bean.type)) {
-                log.trace("Ioc initializing " + bean.type);
+                log.trace("Ioc initializing ?", bean.type);
                 bean.instance = Reflect.born(bean.type);
             } else {
-                log.trace("Aop initializing " + bean.type);
+                log.trace("Aop initializing ?", bean.type);
                 bean.instance = AopEnhancer.create(bean.type);// 如果有cglib-nodep-2.2.3.jar,这里每次都进入异常程序,影响性能
             }
 
@@ -50,7 +50,7 @@ public class Ioc {
                 } else {// 非基本类型,设为相应的bean
                     Reflect.set(bean.instance, field.name, Ioc.get(field.type, field.value));
                 }
-                log.trace("Set Field: " + bean.type.getName() + "." + field.name + " = " + field.value);
+                log.trace("Set Field: ?.?=?", bean.type.getName(), field.name, field.value);
             }
         }
         return bean;

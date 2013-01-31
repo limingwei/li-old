@@ -49,7 +49,7 @@ public class IocContext {
                 }
             }
 
-            log.debug(IOC_CONTEXT.BEANS.size() + " beans started up in " + (System.currentTimeMillis() - (Long) Log.get("IOCSTARTUP")) + "ms");
+            log.debug("? beans started up in ?ms", IOC_CONTEXT.BEANS.size(), (System.currentTimeMillis() - (Long) Log.get("IOCSTARTUP")));
         }
         return IOC_CONTEXT;
     }
