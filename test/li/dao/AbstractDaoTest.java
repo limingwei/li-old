@@ -34,7 +34,7 @@ public class AbstractDaoTest extends BaseTest {
 
     @Test
     public void test() {
-        Map<?, ?> map = Convert.toMap("uname", "li", "eml", "li@w.cn");
+        Map<?, ?> map = Convert.toMap("uname", "li-12345", "eml", "li@w.cn");
         dao.list(page, "WHERE username=#uname OR email=#eml", map);
         // SELECT * FROM t_account WHERE username='li' OR email='li@w.cn'
 

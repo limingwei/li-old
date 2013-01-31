@@ -16,6 +16,7 @@ import javax.sql.DataSource;
  * @version 0.1.2 (2012-05-08)
  */
 public class SimpleDataSource implements DataSource {
+
     private String url;
 
     private String username;

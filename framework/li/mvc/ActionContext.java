@@ -53,7 +53,7 @@ public class ActionContext {
                                 action.httpMethod = httpMethod.toUpperCase(); // HTTP请求类型,这里转换为大写
                                 ACTION_CONTEXT.ACTIONS.add(action);
 
-                                log.info("ADD ACTION: @At(value=\"?\",method=\"?\") ?.?()", action.path, action.httpMethod, action.actionInstance, action.actionMethod);
+                                log.info("ADD ACTION: @At(value=\"?\",method=\"?\") ?", action.path, action.httpMethod, action.actionMethod);
                             }
                         }
                     }

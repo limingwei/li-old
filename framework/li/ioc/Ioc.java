@@ -50,7 +50,7 @@ public class Ioc {
                 } else {// 非基本类型,设为相应的bean
                     Reflect.set(bean.instance, field.name, Ioc.get(field.type, field.value));
                 }
-                log.trace("Set Field: ?.?=?", bean.type.getName(), field.name, field.value);
+                log.trace("Set Field: ?.? = ?", bean.type.getName(), field.name, field.value);
             }
         }
         return bean;
