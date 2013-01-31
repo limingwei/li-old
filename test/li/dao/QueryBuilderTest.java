@@ -33,6 +33,34 @@ public class QueryBuilderTest extends BaseTest {
     }
 
     @Test
+    public void testWrap() {
+        Object null_arg = null;
+        Double double_arg = 1.2;
+        double double_arg_2 = 1.22;
+        Float float_arg = 1.23F;
+        float float_arg_2 = 1.232F;
+        Integer integer_arg = 1234;
+        int int_arg_2 = 12342;
+        Long long_arg = 12345L;
+        long long_arg_2 = 123452L;
+        Short short_arg = 12;
+        short short_arg_2 = 122;
+        Boolean boolean_arg = false;
+        boolean bool_arg_2 = true;
+        java.util.Date util_date_arg = new java.util.Date(System.currentTimeMillis());
+        java.sql.Date sql_date_arg = new java.sql.Date(System.currentTimeMillis());
+        java.sql.Time sql_time_arg = new java.sql.Time(System.currentTimeMillis());
+        java.sql.Timestamp sql_timestamp_arg = new java.sql.Timestamp(System.currentTimeMillis());
+
+        String string_arg = "字符串参数";
+
+        Object[] args = { null_arg, double_arg, double_arg_2, float_arg, float_arg_2, integer_arg, int_arg_2, long_arg, long_arg_2, short_arg, short_arg_2, boolean_arg, bool_arg_2, util_date_arg, sql_date_arg, sql_time_arg, sql_timestamp_arg, string_arg };
+        for (Object arg : args) {
+            System.out.println(queryBuilder.wrap(arg));
+        }
+    }
+
+    @Test
     public void countAll() {
         assertEquals("SELECT COUNT(*) FROM t_account", queryBuilder.countAll());
     }

@@ -244,7 +244,7 @@ public class QueryBuilder {
         if (null == arg) {
             return "NULL";
         } else if (arg instanceof Number || arg instanceof Boolean) {
-            return String.valueOf(arg);// 数字和Bool不加引号
+            return arg.toString();// 数字和Bool不加引号
         } else if (arg instanceof java.sql.Timestamp) {
             return "'" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(arg) + "'";
         } else if (arg.getClass().equals(java.util.Date.class)) {// java.util.Date不包括其子类
