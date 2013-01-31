@@ -79,9 +79,8 @@ public abstract class Trans {
      * 开始事务,初始化CONNECTION_MAP,或者标记这个事务已被其他事务包裹融化
      */
     private void begin() {
-        StackTraceElement trace = Thread.currentThread().getStackTrace()[5];
         if (null == CONNECTION_MAP.get()) { // Trans in Trans 时候不会重复执行
-            log.trace("Trans@" + hashCode() + " begin in " + trace.getClassName() + "." + trace.getMethodName() + "() #" + trace.getLineNumber());
+            log.trace("Trans@? beginning", hashCode());
             CONNECTION_MAP.set(new HashMap<Class, Connection>());
         } else {
             this.map.put(hashCode() + "~!@#in_trans", true);
@@ -92,16 +91,15 @@ public abstract class Trans {
      * 结束事务,关闭当前事务中的所有Connection,如果这个事务未在其他事务中的话
      */
     private void end() throws Exception {
-        StackTraceElement trace = Thread.currentThread().getStackTrace()[5];
         Map<Class, Connection> connectionMap = CONNECTION_MAP.get();
         if (null == this.map.get(hashCode() + "~!@#in_trans") && null != connectionMap) { // Trans in Trans 时候不会重复执行
             for (Entry<Class, Connection> connection : connectionMap.entrySet()) {
                 connection.getValue().close();
-                log.trace("Closing Connection in Trans " + connection.getValue().getClass().getName() + "@" + connection.getValue().hashCode());
+                log.trace("Closing Connection in Trans ?", connection.getValue());
             }
             CONNECTION_MAP.set(null);
             EXCEPTION.set(null);
-            log.trace("Trans@" + hashCode() + " end in " + trace.getClassName() + "." + trace.getMethodName() + "() #" + trace.getLineNumber());
+            log.trace("Trans@? ending", hashCode());
         }
     }
 
@@ -109,12 +107,11 @@ public abstract class Trans {
      * 捆绑提交当前事务中所有Connection的事务,如果这个事务未在其他事务中的话
      */
     private void commit() throws Exception {
-        StackTraceElement trace = Thread.currentThread().getStackTrace()[5];
         Map<Class, Connection> connectionMap = CONNECTION_MAP.get();
         if (null == this.map.get(hashCode() + "~!@#in_trans") && null != connectionMap) {
             for (Entry<Class, Connection> connection : connectionMap.entrySet()) {
                 connection.getValue().commit();
-                log.trace("Trans@" + hashCode() + " commit " + connection.getValue() + " in " + trace.getClassName() + "." + trace.getMethodName() + "() #" + trace.getLineNumber());
+                log.trace("Trans@? commiting ?", hashCode(), connection.getValue());
             }
         }
     }
@@ -123,12 +120,11 @@ public abstract class Trans {
      * 捆绑回滚当前事务中所有Connection中的事务,如果这个事务未在其他事务中的话
      */
     private void rollback() throws Exception {
-        StackTraceElement trace = Thread.currentThread().getStackTrace()[5];
         Map<Class, Connection> connectionMap = CONNECTION_MAP.get();
         if (null == this.map.get(hashCode() + "~!@#in_trans") && null != connectionMap) {
             for (Entry<Class, Connection> connection : connectionMap.entrySet()) {
                 connection.getValue().rollback();
-                log.trace("Trans@" + hashCode() + " rollback " + connection.getValue() + " in " + trace.getClassName() + "." + trace.getMethodName() + "() #" + trace.getLineNumber());
+                log.trace("Trans@? rollingback ", hashCode(), connection.getValue());
             }
         }
     }
