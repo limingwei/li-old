@@ -75,7 +75,6 @@ public class AbstractDao<T> {
     protected DataSource getDataSource() {
         if (null == this.dataSource) {
             this.dataSource = Ioc.get(DataSource.class);
-            // log.warn("DataSource not injected for " + getClass().getName() + "@" + hashCode() + ",Tring to search one more time");
             log.warn("DataSource not injected for ?", this);
         }
         return this.dataSource;
