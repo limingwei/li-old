@@ -208,10 +208,8 @@ public class Context {
      * 主视图方法,以冒号分割前缀表示视图类型
      * 
      * @see #forward(String)
-     * @see #redirect(String)
      * @see #freemarker(String)
-     * @see #velocity(String)
-     * @see #beetl(String)
+     * @see #redirect(String)
      * @see #write(String)
      */
     public static String view(String path) {

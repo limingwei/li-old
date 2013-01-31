@@ -17,6 +17,17 @@ import li.util.Reflect;
 public class Ctx {
     private static final Log log = Log.init();
 
+    /**
+     * 主视图方法,以冒号分割前缀表示视图类型
+     * 
+     * @see li.mvc.Context#forward(String)
+     * @see li.mvc.Context#freemarker(String)
+     * @see li.mvc.Context#redirect(String)
+     * @see li.mvc.Context#write(String)
+     * @see #velocity(String)
+     * @see #beetl(String)
+     * @see #httl(String)
+     */
     public static String view(String path) {
         String viewType = path.contains(":") ? path.split(":")[0] : Context.VIEW_TYPE;// 视图类型
         String viewPath = path.startsWith(viewType + ":") ? path.split(viewType + ":")[1] : path;// path冒号后的部分或者path
