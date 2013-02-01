@@ -21,33 +21,3 @@
         <input type="button" class="btn btn-primary submit" value="保存">
 	</@li.button>
 </@li.window>
-
-<#--
-<script type="text/javascript">
-	$("input.submit").click(function() {
-		if($("form#account_save").vali()){
-			ajaxPost($("form#account_save"));
-		}
-	});
-</script>
-
-<script type="text/javascript">
-	$(document).ready(function(){
-		$("form#account_save").find("input,select").each(function(){
-			$(this).blur(function(){
-				if(""==$(this).val()){
-					$(this).closest("div.control-group").addClass("error"); 
-					$(this).after("<span class='help-inline'><abbr title='这里不允许为空'>非空</abbr></span>");
-				}else{
-					$(this).closest("div.control-group").removeClass("error");
-					$(this).next("span.help-inline").remove();
-				}
-			});
-		});
-
-		$("form#account_save").find("input,select").each(function(){
-			$(this).blur();
-		});
-	});
-</script>
--->
