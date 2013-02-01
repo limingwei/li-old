@@ -8,7 +8,7 @@
 	</root>
 	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c.%m %n" />
+			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m %n" />
 		</layout>
 		<filter class="org.apache.log4j.varia.LevelRangeFilter">
 			<param name="LevelMax" value="FATAL" />

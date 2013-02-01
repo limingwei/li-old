@@ -18,10 +18,10 @@ public abstract class Log {
             return new Log() {// 尝试初始化Log4J
                 Object logger = Reflect.call("org.apache.log4j.Logger", "getLogger", new Class[] { Class.class }, new Object[] { type });
 
-                protected void log(String method, Object msg, Object... args) {
+                protected void log(String method, Object msg) {
                     try {
                         if (!(method.equals("debug") || method.equals("info") || method.equals("trace")) || Reflect.invoke(logger, "is" + method.substring(0, 1).toUpperCase() + method.substring(1) + "Enabled").equals(true)) {
-                            logger.getClass().getMethod(method, Object.class).invoke(logger, process(msg, args));
+                            logger.getClass().getMethod(method, Object.class).invoke(logger, msg);
                         }
                     } catch (Exception e) {
                         throw new RuntimeException("Exception at li.util.Log.init().new Log() {}.log(String, Object)", e);
@@ -30,38 +30,16 @@ public abstract class Log {
             };
         } catch (Throwable e) {
             return new Log() {// 返回ConsoleLog
-                protected void log(String method, Object msg, Object... args) {
+                protected void log(String method, Object msg) {
                     if (method.equals("error") || method.equals("fatal")) {
-                        System.err.println(method.toUpperCase() + ": " + process(msg, args));
+                        System.err.println(method.toUpperCase() + ": " + msg);
                     } else {
-                        System.out.println(method.toUpperCase() + ": " + process(msg, args));
+                        System.out.println(method.toUpperCase() + ": " + msg);
                     }
                 }
             };
         }
     }
-
-    /**
-     * 处理log信息
-     */
-    private static String process(Object msg, Object... args) {
-        StackTraceElement[] traces = Thread.currentThread().getStackTrace();
-        StringBuffer stringBuffer = new StringBuffer(traces[5].getMethodName() + "() #" + traces[5].getLineNumber() + " ");
-        if ("li.dao.Trans".equals(traces[5].getClassName())) {
-            stringBuffer.append("calling by " + traces[8].getClassName() + "." + traces[8].getMethodName() + "() #" + traces[8].getLineNumber() + " ");
-        }
-        char[] chars = msg.toString().toCharArray();
-        int arg_index = 0;
-        for (int i = 0; i < chars.length; i++) {
-            stringBuffer.append((arg_index < args.length && chars[i] == '?') ? args[arg_index++] : chars[i]);
-        }
-        return stringBuffer.toString();
-    }
-
-    /**
-     * 抽象方法,由不同的Log做具体的适配
-     */
-    protected abstract void log(String method, Object msg, Object... args);
 
     /**
      * 根据类名初始化Log
@@ -78,45 +56,63 @@ public abstract class Log {
     }
 
     /**
+     * 抽象方法,由不同的Log做具体的适配
+     */
+    protected abstract void log(String method, Object msg);
+
+    /**
+     * 处理log信息
+     */
+    private static String process(Object msg, Object... args) {
+        StringBuffer stringBuffer = new StringBuffer();
+        char[] chars = msg.toString().toCharArray();
+        int arg_index = 0;
+        for (int i = 0; i < chars.length; i++) {
+            stringBuffer.append((arg_index < args.length && chars[i] == '?') ? args[arg_index++] : chars[i]);
+        }
+        return stringBuffer.toString();
+    }
+
+    /**
      * 输出TRACE级别的日志 Level 1
      */
     public void trace(Object msg, Object... args) {
-        log("trace", msg, args);
+        log("trace", process(msg, args));
     }
 
     /**
      * 输出DEBUG级别的日志 Level 2
      */
     public void debug(Object msg, Object... args) {
-        log("debug", msg, args);
+        log("debug", process(msg, args));
     }
 
     /**
      * 输出INFO级别的日志 Level 3
      */
     public void info(Object msg, Object... args) {
-        log("info", msg, args);
+        log("info", process(msg, args));
     }
 
     /**
      * 输出WARN级别的日志 Level 4
      */
     public void warn(Object msg, Object... args) {
-        log("warn", msg, args);
+        log("warn", process(msg, args));
     }
 
     /**
      * 输出ERROR级别的日志 Level 5
      */
     public void error(Object msg, Object... args) {
-        log("error", msg, args);
+        log("error", process(msg, args));
     }
 
     /**
      * 输出FATAL级别的日志 Level 6
      */
     public void fatal(Object msg, Object... args) {
-        log("fatal", msg, args);
+        log("fatal", process(msg, args));
     }
 
     /**
