@@ -10,6 +10,7 @@ import li.ioc.Ioc;
 import li.model.Bean;
 import li.test.BaseTest;
 import li.util.Convert;
+import li.util.Log;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,8 +18,12 @@ import org.junit.Test;
 import demo.model.User;
 
 public class QueryBuilderTest extends BaseTest {
+    private static final Log log = Log.init();
+
     DataSource dataSource = Ioc.get(DataSource.class);
+
     QueryBuilder queryBuilder = new QueryBuilder();
+
     User user = new User();
 
     @Before
@@ -35,18 +40,25 @@ public class QueryBuilderTest extends BaseTest {
     @Test
     public void testWrap() {
         Object null_arg = null;
+
         Double double_arg = 1.2;
         double double_arg_2 = 1.22;
+
         Float float_arg = 1.23F;
         float float_arg_2 = 1.232F;
+
         Integer integer_arg = 1234;
         int int_arg_2 = 12342;
+
         Long long_arg = 12345L;
         long long_arg_2 = 123452L;
+
         Short short_arg = 12;
         short short_arg_2 = 122;
+
         Boolean boolean_arg = false;
         boolean bool_arg_2 = true;
+
         java.util.Date util_date_arg = new java.util.Date(System.currentTimeMillis());
         java.sql.Date sql_date_arg = new java.sql.Date(System.currentTimeMillis());
         java.sql.Time sql_time_arg = new java.sql.Time(System.currentTimeMillis());
@@ -56,7 +68,7 @@ public class QueryBuilderTest extends BaseTest {
 
         Object[] args = { null_arg, double_arg, double_arg_2, float_arg, float_arg_2, integer_arg, int_arg_2, long_arg, long_arg_2, short_arg, short_arg_2, boolean_arg, bool_arg_2, util_date_arg, sql_date_arg, sql_time_arg, sql_timestamp_arg, string_arg };
         for (Object arg : args) {
-            System.out.println(queryBuilder.wrap(arg));
+            log.info(queryBuilder.wrap(arg));
         }
     }
 
@@ -106,13 +118,6 @@ public class QueryBuilderTest extends BaseTest {
         assertEquals("INSERT INTO t_account (username,password,email) VALUES ('username-1','password-1','email-1')", queryBuilder.save(user));
     }
 
-    // @Test
-    // public void setAlias() {
-    // String expected = "SELECT t_account.id,t_account.username,t_account.password,t_account.email,t_account.role_id,t_account.status FROM t_account";
-    // String actual = queryBuilder.setAlias("SELECT t_account.# FROM t_account");
-    // assertEquals(expected, actual);
-    // }
-
     @Test
     public void setArgMap() {
         String sql = "SELECT * FROM WHERE id=#id OR username LIKE #username";
@@ -131,17 +136,6 @@ public class QueryBuilderTest extends BaseTest {
     public void setPage() {
         assertEquals("SELECT * FROM t_account LIMIT 0,10", queryBuilder.setPage("SELECT * FROM t_account", page));
     }
-
-    // @Test
-    // public void testSetAlias() {
-    // String sql = "SELECT t_account.*,t_forum.# as f_#,t_member.#,t_post.# AS p_# FROM t_account";
-    // String expected = "SELECT t_account.id,t_account.username,t_account.password,t_account.email,t_account.status," + //
-    // "t_forum.id as f_id,t_forum.name as f_name,t_forum.status as f_status," + //
-    // "t_member.id,t_member.name,t_member.account_id,t_member.status," + //
-    // "t_post.id AS p_id,t_post.subject AS p_subject,t_post.content AS p_content,t_post.member_id AS p_member_id,t_post.thread_id AS p_thread_id,t_post.status AS p_status" + //
-    // " FROM t_account";
-    // assertEquals(expected, queryBuilder.setAlias(sql));
-    // }
 
     @Test
     public void testSetArgs() {

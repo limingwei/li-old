@@ -13,13 +13,13 @@ public class _Account extends Record<_Account> {
     private static final long serialVersionUID = -3592765768245992120L;
 
     @Trans
-    @Aop({ _LogFilter.class })
+    @Aop(_LogFilter.class)
     public List<_Account> list(Page page) {
         return super.list(page);
     }
 
     @Trans
-    @Aop({ _LogFilter.class })
+    @Aop(_LogFilter.class)
     public Integer update(String sql, Object... args) {
         return super.update(sql, args);
     }

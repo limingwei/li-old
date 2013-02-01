@@ -1,15 +1,20 @@
 package li.dao;
 
-import java.sql.Time;
-import java.sql.Timestamp;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 
 import li.annotation.Inject;
 import li.test.BaseTest;
+import li.util.Log;
 
 import org.junit.Test;
 
 public class RecordTest extends BaseTest {
+    private static final Log log = Log.init();
+
     @Inject
     _User userDao;
 
@@ -20,26 +25,11 @@ public class RecordTest extends BaseTest {
 
     @Test
     public void testLike() {
-        System.out.println(userDao.count("WHERE username LIKE ?", "%文%"));
-    }
-
-    @Test
-    public void countByDate() {
-        Integer int1 = null;
-        System.out.println(userDao.count("WHERE id != ?", int1));
-        System.out.println(userDao.count("WHERE id != ?", new Object[] { null }));
-        System.out.println(userDao.count("WHERE id>?", true));
-        System.out.println(userDao.count("WHERE id>?", 1));
-        System.out.println(userDao.count("WHERE id>?", "str"));
-        System.out.println(userDao.count("WHERE id>?", new java.util.Date()));
-        System.out.println(userDao.count("WHERE id>?", new java.sql.Date(System.currentTimeMillis())));
-        System.out.println(userDao.count("WHERE id>?", new Time(System.currentTimeMillis())));
-        System.out.println(userDao.count("WHERE id>?", new Timestamp(System.currentTimeMillis())));
+        log.info(userDao.count("WHERE username LIKE ?", "%文%"));
     }
 
     @Test
     public void count() {
-        // assertNotNull(userDao.count());
         System.out.println("li.dao.test.RecordTest.count()" + userDao.count());
     }
 
@@ -50,50 +40,39 @@ public class RecordTest extends BaseTest {
 
     @Test
     public void delete() {
-        // assertFalse(userDao.delete(-2));
+        assertFalse(userDao.delete(-2));
     }
 
     @Test
     public void delete2() {
-        // assertNotNull(userDao.delete("where false"));
-        System.err.println("li.dao.test.RecordTest.delete2()\n" + userDao.delete("where false"));
+        assertTrue("delete by sql", userDao.delete("where false") < 1);
     }
 
     @Test
     public void find() {
-        // assertNotNull(userDao.find(1));
-        System.out.println("li.dao.test.RecordTest.find()" + userDao.find(1));
+        Integer id = userDao.find("WHERE id>0").get(Integer.class, "id");
+        assertNotNull("dao.find", userDao.find(id));
     }
 
     @Test
     public void find2() {
-        System.out.println("li.dao.test.RecordTest.find2()" + userDao.find("where 1=1 limit 1"));
+        assertNotNull("dao.find", userDao.find("where 1=1 limit 1"));
     }
 
     @Test
     public void find3() {
-        System.err.println("li.dao.test.RecordTest.find3()");
-        userDao = userDao.find("select t_account.username as uname,t_forum.name as fname from t_account,t_forum limit 1");
-        System.out.println(userDao);
+        assertNotNull("dao.findbysql", userDao.find("select t_account.username as uname,t_forum.name as fname from t_account,t_forum limit 1"));
     }
 
     @Test
     public void list() {
-        System.err.println("li.dao.test.RecordTest.list()");
-        // assertNotNull(userDao.list(page));
-        System.out.println(userDao.list(page));
-    }
-
-    @Test
-    public void list2() {
-        System.err.println("li.dao.test.RecordTest.list2()");
+        assertNotNull("dao.listbypage", userDao.list(page));
     }
 
     @Test
     public void list3() {
-        System.err.println("li.dao.test.RecordTest.list3()");
         List<_User> users = userDao.list(page.setPageSize(5), "select t_account.username as uname,t_forum.name as fname from t_account,t_forum");
-        System.out.println(users);
+        assertNotNull("dao.listByPage2", users);
     }
 
     @Test

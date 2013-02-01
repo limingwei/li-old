@@ -1,21 +1,27 @@
 package li.aop;
 
-import li.ioc.Ioc;
+import li.annotation.Inject;
 import li.test.BaseTest;
+import li.util.Log;
 
 import org.junit.Test;
 
 public class AopTest extends BaseTest {
+    private static final Log log = Log.init();
+
+    @Inject
+    _Account account;
+
+    @Inject
+    _User user;
 
     @Test
     public void testAop() {
-        final _Account account = Ioc.get(_Account.class);
         account.list(null);
     }
 
     @Test
     public void testAop2() {
-        _User user = Ioc.get(_User.class);
-        System.out.println(user.sayHi("abc", "xyz"));
+        log.debug(user.sayHi("abc", "xyz"));
     }
 }

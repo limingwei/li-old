@@ -1,20 +1,21 @@
 package li.dao;
 
-import java.sql.ResultSet;
-
 import li.annotation.Bean;
 import li.annotation.Table;
-import li.model.Field;
+import li.util.Log;
 
 @Bean
 @Table("t_account")
 public class _User extends Record<_User> {
     private static final long serialVersionUID = -2274465783698819130L;
 
+    private static final Log log = Log.init();
+
     @li.annotation.Trans
     public void testMultipleTrans2() {
         new Trans() {
             public void run() {
+                log.debug("calling testMultipleTrans3()");
                 testMultipleTrans3();
             }
         };
@@ -31,11 +32,5 @@ public class _User extends Record<_User> {
                 };
             }
         };
-    }
-
-    public void testDesc() throws Exception {
-        ResultSet resultSet = getConnection().prepareStatement("DESC t_account").executeQuery();
-        ModelBuilder modelBuilder = new ModelBuilder(null, resultSet);
-        System.out.println(modelBuilder.list(Record.class, Field.list(resultSet), 100, false));
     }
 }
