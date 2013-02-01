@@ -15,6 +15,7 @@ import li.annotation.Trans;
 import li.dao.Page;
 import li.mvc.AbstractAction;
 import li.mvc.Context;
+import li.mvc.Ctx;
 import demo.record.Account;
 import demo.record.Member;
 
@@ -25,6 +26,13 @@ public class DemoAction extends AbstractAction {
 
     @Inject
     Account accountDao;
+
+    @At("httl.do")
+    public void httl() {
+        System.out.println(Context.getRootPath());
+
+        Ctx.httl("/WEB-INF/view_ht/httl.htm");
+    }
 
     /**
      * 可以使用继承AbstractAction和Context中静态方法，两者提供一一对应的方法

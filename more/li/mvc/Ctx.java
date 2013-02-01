@@ -117,11 +117,12 @@ public class Ctx {
             if (null == engine) {
                 Properties properties = new Properties();
                 properties.put("loaders", "httl.spi.loaders.FileLoader");
-                properties.put("template.directory", System.getProperty("user.dir") + "/dev/li/httl/");
-                properties.put("template.suffix", ".htm");
+                properties.put("template.directory", Context.getRootPath() + "/");
+                properties.putAll(Files.load("httl.properties"));
                 engine = Engine.getEngine(properties);
+                Log.put("httl_engine", engine);
             }
-            Template template = engine.getTemplate("httl.htm");
+            Template template = engine.getTemplate(path);
             template.render(Context.getAttributes(), Context.getResponse().getWriter());
         } catch (Exception e) {
             Context.error(e);
