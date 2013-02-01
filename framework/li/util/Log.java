@@ -65,7 +65,7 @@ public abstract class Log {
      */
     private static String process(Object msg, Object... args) {
         StringBuffer stringBuffer = new StringBuffer();
-        char[] chars = msg.toString().toCharArray();
+        char[] chars = null == msg ? new char[0] : msg.toString().toCharArray();
         int arg_index = 0;
         for (int i = 0; i < chars.length; i++) {
             stringBuffer.append((arg_index < args.length && chars[i] == '?') ? args[arg_index++] : chars[i]);
