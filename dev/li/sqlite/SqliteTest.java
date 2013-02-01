@@ -11,10 +11,13 @@ import javax.sql.DataSource;
 
 import li.ioc.Ioc;
 import li.test.BaseTest;
+import li.util.Log;
 
 import org.junit.Test;
 
 public class SqliteTest extends BaseTest {
+    private static final Log log = Log.init();
+
     Account userDao = Ioc.get(Account.class);
 
     @Test
@@ -25,17 +28,16 @@ public class SqliteTest extends BaseTest {
         System.out.println("user id = " + user.get("id"));
 
         for (Account u : userDao.list(page.setPageSize(3), "WHERE 1=1 ORDER BY id DESC")) {
-            System.out.println(u.get("id") + "\t" + u.get("username") + "\t" + u.get("password") + "\t" + u.get("email"));
+            log.debug("?\t?\t?\t?", u.get("id"), u.get("username"), u.get("password"), u.get("email"));
         }
-
-        System.out.println("RecordCount = " + page.getRecordCount());
+        log.debug("RecordCount = ?", page.getRecordCount());
     }
 
     @Test
     public void insert() {
         for (int i = 0; i < 3; i++) {
             Account user = new Account().set("status", 1).set("username", "li" + System.currentTimeMillis()).set("password", "wode").set("email", "limw@w.cn");
-            System.out.println(userDao.save(user) + "\t" + user.get("id"));
+            log.debug(userDao.save(user) + "\t" + user.get("id"));
         }
     }
 
@@ -48,7 +50,7 @@ public class SqliteTest extends BaseTest {
                 "email varchar(255) NOT NULL," + //
                 "status int NOT NULL DEFAULT 1)";
         try {
-            System.out.println(Ioc.get(DataSource.class, "sqlite").getConnection().prepareStatement(sql).executeUpdate());
+            log.debug(Ioc.get(DataSource.class, "sqlite").getConnection().prepareStatement(sql).executeUpdate());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -63,7 +65,7 @@ public class SqliteTest extends BaseTest {
 
         ResultSetMetaData meta = resultSet.getMetaData();
         for (int columnCount = (null == meta ? -1 : meta.getColumnCount()), i = 1; i <= columnCount; i++) {
-            System.out.println(meta.getColumnName(i));
+            log.debug(meta.getColumnName(i));
         }
     }
 }

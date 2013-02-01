@@ -30,12 +30,12 @@ public class RecordTest extends BaseTest {
 
     @Test
     public void count() {
-        System.out.println("li.dao.test.RecordTest.count()" + userDao.count());
+        assertTrue("", userDao.count() > -2);
     }
 
     @Test
     public void count2() {
-        System.err.println("li.dao.test.RecordTest.count2()\n" + userDao.count("where false"));
+        assertTrue("", userDao.count("where false") > -2);
     }
 
     @Test
@@ -84,14 +84,14 @@ public class RecordTest extends BaseTest {
     public void save2() {
         _User user = new _User().set("role_id", 1).set("username", "u-3" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1").set("status", 1);
         userDao.save(user);
-        System.out.println("user id = " + user.get("id"));
+        assertNotNull("", user.get("id"));
     }
 
     @Test
     public void test1() {
         new Trans() {
             public void run() {
-                System.out.println("啥都没做");
+                log.debug("啥都没做");
             }
         };
     }
@@ -100,25 +100,26 @@ public class RecordTest extends BaseTest {
     public void test2() {
         new Trans() {
             public void run() {
-                System.out.println("啥都没做");
+                log.debug("啥都没做");
             }
         };
     }
 
     @Test
     public void testRecord() {
-        // List<User> records = userDao.list(page,
-        // "select t_account.username as uname,t_forum.name as fname from t_account,t_forum");
-        // System.out.println(records);
+        List<_User> records = userDao.list(page, "select t_account.username as uname,t_forum.name as fname from t_account,t_forum");
+        assertNotNull("", records);
     }
 
     @Test
     public void update() {
+        log.debug("li.dao.RecordTest.update()");
         userDao.updateIgnoreNull(userDao.set("id", 1).set("username", "u-4" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1").set("status", 1));
     }
 
     @Test
     public void update2() {
+        log.debug("li.dao.RecordTest.update2()");
         userDao.updateIgnoreNull(userDao.set("id", 2).set("username", "u-5" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1").set("status", 1));
     }
 }

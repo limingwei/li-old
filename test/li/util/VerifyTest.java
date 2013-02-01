@@ -8,6 +8,8 @@ import li.test.BaseTest;
 import org.junit.Test;
 
 public class VerifyTest extends BaseTest {
+    private static final Log log = Log.init();
+
     @Test
     public void basicType() {
         assertTrue(Verify.basicType(int.class));
@@ -40,7 +42,7 @@ public class VerifyTest extends BaseTest {
      * {@link li.dao.QueryBuilder#countBySql(String, Object[])}
      */
     @Test
-    public void regex1() {
+    public void regexCount() {
         String REGEX = "COUNT\\(.*\\)";
         String[] tests = { "SELECT COUNT(*) FROM user", "select count(id) from user",//
                 "select * from user_count", "SELECT COUNT(1) FROM USER" };
@@ -55,7 +57,7 @@ public class VerifyTest extends BaseTest {
      */
     @Test
     public void regex2() {
-        System.out.println("test regex ActionContext#getAction");
+        log.debug("test regex ActionContext#getAction");
     }
 
     /**
@@ -63,7 +65,7 @@ public class VerifyTest extends BaseTest {
      */
     @Test
     public void regex3() {
-        System.out.println("test regex Convert#toType");
+        log.debug("test regex Convert#toType");
     }
 
     /**
@@ -71,7 +73,7 @@ public class VerifyTest extends BaseTest {
      */
     @Test
     public void regex4() {
-        System.out.println("test regex Context#write");
+        log.debug("test regex Context#write");
     }
 
     /**

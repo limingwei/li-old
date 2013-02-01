@@ -12,13 +12,15 @@ import li.dao.Record;
 import org.junit.Test;
 
 public class ConvertTest {
+    private static final Log log = Log.init();
+
     @Test
     public void timeConvert() {
         String[] times = { "2012/12/31 12:12:12", "2012-12-31 12:12:12", "2012/12/31 12:12", "2012-12-31 12:12", "2012/12/31", "2012-12-31", "12:12:12", "12:12" };
         Class<?>[] types = { java.util.Date.class, java.sql.Date.class, Time.class, Timestamp.class };
         for (String time : times) {
             for (Class<?> type : types) {
-                System.out.println(Convert.toType(type, time));
+                log.debug(Convert.toType(type, time));
             }
         }
     }
@@ -34,7 +36,7 @@ public class ConvertTest {
             record.set("email", "limw@w.cn");
             list.add(record);
 
-            System.out.println(Convert2.fromJson(Record.class, Convert2.toJson(record)));
+            log.debug(Convert2.fromJson(Record.class, Convert2.toJson(record)));
         }
 
         List<List<Record>> list2 = new ArrayList<List<Record>>();
@@ -46,11 +48,11 @@ public class ConvertTest {
 
         List<Record> records = Convert2.fromJson(Record.class, json);
 
-        System.out.println(records);
+        log.debug(records);
 
         String json2 = Convert2.toJson(Convert2.fromJson(Record.class, Convert2.toJson(Convert2.fromJson(Record.class, Convert2.toJson(list)))));
 
-        System.out.println(json2);
+        log.debug(json2);
 
         assertEquals(json, json2);
     }
@@ -67,7 +69,7 @@ public class ConvertTest {
             list.add(record);
         }
         String json = Convert2.toJson(list);
-        System.out.println(json);
+        log.debug(json);
     }
 
     @Test
@@ -85,6 +87,6 @@ public class ConvertTest {
         java.sql.Time time = Convert.toType(java.sql.Time.class, "17:30:00");
         java.sql.Timestamp timestamp = Convert.toType(java.sql.Timestamp.class, "2012-02-11 17:30:00");
 
-        System.err.println(timestamp + "\t" + date2 + "\t" + time + "\t" + date1);
+        log.debug("?\t?\t?\t?", timestamp, date2, time, date1);
     }
 }

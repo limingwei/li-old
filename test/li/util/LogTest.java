@@ -5,11 +5,11 @@ import li.test.BaseTest;
 import org.junit.Test;
 
 public class LogTest extends BaseTest {
-    private static final Log LOG = Log.init();
+    private static final Log log = Log.init();
 
     @Test
     public void test() {
-        LOG.info("LOG测试信息");
+        log.info("LOG测试信息");
     }
 
     @Test
@@ -19,6 +19,6 @@ public class LogTest extends BaseTest {
 
     @Test
     public void get() {
-        Log.get("123");
+        log.debug(Log.get("123"));
     }
 }

@@ -15,6 +15,7 @@ public class IocTest {
         assertNotNull(Ioc.get(_A.class, "beanA"));
     }
 
+    @Test
     public void getByType() {
         assertNotNull(Ioc.get(_A.class));
     }

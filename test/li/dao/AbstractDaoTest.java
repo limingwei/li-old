@@ -5,12 +5,15 @@ import java.util.Map;
 import li.annotation.Inject;
 import li.test.BaseTest;
 import li.util.Convert;
+import li.util.Log;
 
 import org.junit.Test;
 
 import demo.record.Account;
 
 public class AbstractDaoTest extends BaseTest {
+    private static final Log log = Log.init();
+
     @Inject
     Account dao;
 
@@ -24,12 +27,12 @@ public class AbstractDaoTest extends BaseTest {
 
     @Test
     public void testCount() {
-        System.out.println(userDao.count());
+        log.debug(userDao.count());
     }
 
     @Test
     public void testCountBySql() {
-        System.out.println(userDao.count("SELECT * FROM t_account WHERE id>'1' LIMIT 2,3", new Object[] {}));
+        log.debug(userDao.count("SELECT * FROM t_account WHERE id>'1' LIMIT 2,3", new Object[] {}));
     }
 
     @Test
