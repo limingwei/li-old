@@ -1,64 +1,74 @@
 <div style="MARGIN: 10px auto 20px; WIDTH: 712px">
-	<table style="HEIGHT: 61px" border="0" cellspacing="0" cellpadding="0" width="100%">
+	<table style="height:61px; width:100%" border="0" cellspacing="0" cellpadding="0">
 		<tbody>
 			<tr>
 				<td width="712px">
-					<a style="WIDTH:712px; DISPLAY: block; FLOAT: left; HEIGHT: 61px" 
-						href="http://senseyinxiang.taobao.com/" target="_blank">
+					<a title="进入店铺"  target="_blank"
+						style="WIDTH:712px; DISPLAY: block; FLOAT: left; HEIGHT: 61px" 
+						href="http://senseyinxiang.taobao.com/">
 						<img src="http://bbs.cduer.com/data/attachment/forum/201301/29/1710515xjej95fqmuf2xu1.jpg">
 					</a>
 				</td>
 			</tr>
 		</tbody>
 	</table>
+	
 	<div style="HEIGHT: 10px; CLEAR: both"></div>
 	<div style="HEIGHT: 10px; CLEAR: both"></div>
+	
 	<div style="BORDER-BOTTOM: #ededed 3px solid; BORDER-LEFT: #ededed 3px solid; PADDING-BOTTOM: 20px; BACKGROUND-COLOR: #ffffff; WIDTH: 706px; BORDER-TOP: #ededed 3px solid; BORDER-RIGHT: #ededed 3px solid">
-		<#list goodsList as goods>
-			<div
-				style="BORDER-BOTTOM: #cccccc 1px dashed; PADDING-BOTTOM: 15px; PADDING-LEFT: 15px; PADDING-RIGHT: 15px; PADDING-TOP: 15px">
-				<div style="HEIGHT: 154px">
-					<div
-						style="BORDER-BOTTOM: #d8d7d7 1px solid; BORDER-LEFT: #d8d7d7 1px solid; WIDTH: 239px; FLOAT: left; HEIGHT: 152px; BORDER-TOP: #d8d7d7 1px solid; BORDER-RIGHT: #d8d7d7 1px solid">
-						<a href="http://t.cduer.com/deal-${goods.id!}-${mail!}.htm" target="_blank"> <img
-							style="BORDER-RIGHT-WIDTH: 0px; BORDER-TOP-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px"
-							src="${goods.img}"
-							width="239" height="152">
-						</a>
-					</div>
-					<div style="WIDTH: 406px; MARGIN-LEFT: 260px">
-						<table border="0" cellspacing="0" cellpadding="0" width="100%">
-							<tbody>
-								<tr>
-									<td style="COLOR: #333333; FONT-SIZE: 16px"><a
-										style="COLOR: #333333; TEXT-DECORATION: none" title="" href="http://t.cduer.com/deal-${goods.id!}-${mail!}.htm"
-										target="_blank">${goods.title}</a></td>
-								</tr>
-								<tr>
-									<td height="10"></td>
-								</tr>
-								<tr>
-									<td style="BORDER-BOTTOM: #d3d3d3 1px dashed; BORDER-LEFT: #d3d3d3 1px dashed; 
-									PADDING-LEFT: 5px; COLOR: #666666; FONT-SIZE: 14px; BORDER-TOP: #d3d3d3 1px dashed; 
-									BORDER-RIGHT: #d3d3d3 1px dashed" height="35">
-										仅售： <span style="COLOR: #222222; FONT-WEIGHT: bold"> ¥${goods.price} 元</span>
-									</td>
-								</tr>
-								<tr>
-									<td height="10"></td>
-								</tr>
-								<tr>
-									<td><a href="http://t.cduer.com/deal-${goods.id!}-${mail!}.htm" target="_blank"> 
+	
+	<#list goodsList as goods>
+		<div style="BORDER-BOTTOM: #cccccc 1px dashed; PADDING-BOTTOM: 15px; PADDING-LEFT: 15px; PADDING-RIGHT: 15px; PADDING-TOP: 15px">
+			<div style="HEIGHT: 154px">
+				<div style="BORDER-BOTTOM: #d8d7d7 1px solid; BORDER-LEFT: #d8d7d7 1px solid; WIDTH: 239px; FLOAT: left; HEIGHT: 152px; BORDER-TOP: #d8d7d7 1px solid; BORDER-RIGHT: #d8d7d7 1px solid">
+					<a title="点击进店查看" target="_blank"
+						href="http://t.cduer.com/deal-${goods.id!}-${mail!}.htm"> 
+						<img style="BORDER-RIGHT-WIDTH: 0px; BORDER-TOP-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px"
+							src="${goods.img}" width="239" height="152">
+					</a>
+				</div>
+				<div style="WIDTH: 406px; MARGIN-LEFT: 260px">
+					<table border="0" cellspacing="0" cellpadding="0" width="100%">
+						<tbody>
+							<tr>
+								<td style="COLOR: #333333; FONT-SIZE: 16px">
+									<a style="COLOR: #333333; TEXT-DECORATION: none" 
+										title="点击进店查看" target="_blank"
+										href="http://t.cduer.com/deal-${goods.id!}-${mail!}.htm">
+											${goods.title}
+										</a>
+								</td>
+							</tr>
+							<tr>
+								<td height="10"></td>
+							</tr>
+							<tr>
+								<td style="BORDER-BOTTOM: #d3d3d3 1px dashed; BORDER-LEFT: #d3d3d3 1px dashed; PADDING-LEFT: 5px; 
+									COLOR: #666666; FONT-SIZE: 14px; BORDER-TOP: #d3d3d3 1px dashed; BORDER-RIGHT: #d3d3d3 1px dashed" 
+									height="35">
+									仅售： 
+									<span style="COLOR: #222222; FONT-WEIGHT: bold"> ¥${goods.price} 元</span>
+								</td>
+							</tr>
+							<tr>
+								<td height="10"></td>
+							</tr>
+							<tr>
+								<td>
+									<a title="点击进店查看"  target="_blank"
+										href="http://t.cduer.com/deal-${goods.id!}-${mail!}.htm"> 
 										<img style="BORDER-RIGHT-WIDTH: 0px; BORDER-TOP-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px"
 											src="http://click.juliangli.com/static/css/i/edm_bt.gif">
-									</a></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
-		</#list>
+		</div>
+	</#list>
 
 		<table border="0" cellspacing="0" cellpadding="0" width="100%">
 			<tbody>
@@ -66,21 +76,26 @@
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td style="LINE-HEIGHT: 40px" height="42" align="middle"><a
-						href="http://senseyinxiang.taobao.com/" target="_blank"> <img border="0"
-							src="http://bbs.cduer.com/data/attachment/forum/201301/29/171054bmlgaqbggmgmgajx.jpg"
-							width="700" height="42">
-					</a></td>
+					<td style="LINE-HEIGHT: 40px" height="42" align="center">
+						<a href="http://senseyinxiang.taobao.com/" target="_blank"> 
+							<img title="点击查看更多"  border="0" width="700" height="42"
+								src="http://bbs.cduer.com/data/attachment/forum/201301/29/171054bmlgaqbggmgmgajx.jpg">
+						</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>
 		
 		<div style="margin-top:25px;text-align:center">
 			<p>
-				如果你今后不想再收到此类电子邮件请点击此处<a target="_blank" href="http://t.cduer.com/unsubscribe-${mail!}.htm">退订</a>
+				如果今后不想再收到此类电子邮件请点击此处
+					<a title="点击退订邮件" target="_blank" 
+						href="http://t.cduer.com/unsubscribe-${mail!}.htm">退订</a>
 			</p>
 			<p>
-				其它任何问题欢迎您联系邮箱<a target="_blank" href="mailto:limingwei@mail.com?subject=给你提个建议">limingwei@mail.com</a>
+				其它任何问题欢迎联系邮箱
+					<a title="联系我们" target="_blank" 
+						href="mailto:limingwei@mail.com?subject=给你提个建议">limingwei@mail.com</a>
 			</p>
 			<img height="0px" width="0px" src="http://t.cduer.com/open-${mail!}.jpg"/>
 		</div>
