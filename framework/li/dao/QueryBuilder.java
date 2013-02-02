@@ -67,9 +67,9 @@ public class QueryBuilder {
      * @see li.dao.QueryBuilder#setArgs(String, Object[])
      */
     public String countBySql(String sql, Object[] args) {
-        if (!Verify.startWith(sql, "SELECT")) {
+        if (!Verify.startWith(sql, "SELECT")) {// 不以SELECT开头
             sql = "SELECT COUNT(*) FROM " + beanMeta.table + " " + sql;
-        } else if (!Verify.regex(sql.toUpperCase(), "COUNT\\(.*\\)")) {
+        } else if (!Verify.regex(sql.toUpperCase(), "COUNT\\(.*\\)")) {// 不包括COUNT(*)
             sql = "SELECT COUNT(*) FROM " + sql.substring(sql.toUpperCase().indexOf("FROM") + 4, sql.length()).trim();
         }
         if (Verify.contain(sql, "LIMIT")) {
@@ -101,7 +101,7 @@ public class QueryBuilder {
      * @param page 分页对象
      */
     public String list(Page page) {
-        return listBySql(page, "SELECT * FROM " + beanMeta.table, null);
+        return setPage("SELECT * FROM " + beanMeta.table, page);
     }
 
     /**
@@ -124,32 +124,30 @@ public class QueryBuilder {
      * 根据传入的对象构建一个用于更新一条记录的SQL
      */
     public String update(Object object) {
-        String sets = " SET ";
+        String sql = "UPDATE " + beanMeta.table + " SET ";
         for (Field field : beanMeta.fields) {
             Object fieldValue = Reflect.get(object, field.name);
             if (!beanMeta.getId().name.equals(field.name)) {// 更新所有属性,fieldValue可能为null
-                sets += field.column + "='" + fieldValue + "',";
+                sql += field.column + "='" + fieldValue + "',";
             }
         }
         Object id = Reflect.get(object, beanMeta.getId().name);
-        sets = sets.substring(0, sets.length() - 1);
-        return "UPDATE " + beanMeta.table + sets + " WHERE " + beanMeta.getId().column + "=" + id;
+        return sql.substring(0, sql.length() - 1) + " WHERE " + beanMeta.getId().column + "=" + id;
     }
 
     /**
      * 根据传入的对象构建一个用于更新一条记录的SQL,忽略对象中值为null的属性
      */
     public String updateIgnoreNull(Object object) {
-        String sets = " SET ";
+        String sql = "UPDATE " + beanMeta.table + " SET ";
         for (Field field : beanMeta.fields) {
             Object fieldValue = Reflect.get(object, field.name);
-            if (!beanMeta.getId().name.equals(field.name) && null != fieldValue && !"".equals(fieldValue)) {// 不更新fieldValue为null的属性
-                sets += field.column + "='" + fieldValue + "',";
+            if (!beanMeta.getId().name.equals(field.name) && null != fieldValue && !"".equals(fieldValue)) {// 更新所有属性,fieldValue可能为null
+                sql += field.column + "='" + fieldValue + "',";
             }
         }
         Object id = Reflect.get(object, beanMeta.getId().name);
-        sets = sets.substring(0, sets.length() - 1);
-        return "UPDATE " + beanMeta.table + sets + " WHERE " + beanMeta.getId().column + "=" + id;
+        return sql.substring(0, sql.length() - 1) + " WHERE " + beanMeta.getId().column + "=" + id;
     }
 
     /**
