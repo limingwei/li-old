@@ -45,7 +45,7 @@ public class QueryRunner {
                 log.info("? -> ?", sql, connection);
             } catch (Exception e) {
                 Trans.EXCEPTION.set(e);// 出现异常,记录起来
-                log.error(sql + " " + e);
+                log.error("? ?", sql, e);
                 e.printStackTrace();
             }
         }
@@ -69,7 +69,7 @@ public class QueryRunner {
                 log.info("? -> [? row] ?", sql, count, connection);
             } catch (Exception e) {
                 Trans.EXCEPTION.set(e); // 出现异常,记录起来
-                log.error(sql + " " + e);
+                log.error("? ?", sql, e);
                 e.printStackTrace();
             }
         }
