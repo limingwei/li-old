@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import li.annotation.Inject;
 import li.dao.Trans;
 import li.ioc.Ioc;
+import li.util.Log;
 import li.util.Reflect;
 import li.util.Verify;
 
@@ -20,6 +21,8 @@ import org.junit.runners.model.Statement;
  * @version 0.1.1 (2013-01-14)
  */
 public class JUnit4Li extends BlockJUnit4ClassRunner {
+    private static final Log log = Log.init();
+
     private Class<?> type;
 
     /**
@@ -45,6 +48,7 @@ public class JUnit4Li extends BlockJUnit4ClassRunner {
                 } else {
                     Reflect.set(target, field.getName(), Ioc.get(field.getType(), inject.value()));
                 }
+                log.trace("Set Field: ?.? = ?", type, field.getName(), inject.value());
             }
         }
         return target;
@@ -54,7 +58,7 @@ public class JUnit4Li extends BlockJUnit4ClassRunner {
      * 执行一个测试方法
      */
     protected Statement methodInvoker(final FrameworkMethod method, final Object target) {
-        if (null == getRollback(type)) {
+        if (null == type.getAnnotation(Rollback.class)) {
             return super.methodInvoker(method, target);
         } else {
             return new Statement() {
@@ -72,13 +76,5 @@ public class JUnit4Li extends BlockJUnit4ClassRunner {
                 }// public void evaluate()
             };
         }// else
-    }
-
-    /**
-     * 检测一个类或其超类上是否有@Rollback注解
-     */
-    private Rollback getRollback(Class<?> type) {
-        Rollback rollback = type.getAnnotation(Rollback.class);
-        return null != rollback || Object.class.equals(type.getSuperclass()) ? rollback : getRollback(type.getSuperclass());
     }
 }
