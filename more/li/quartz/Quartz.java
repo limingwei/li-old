@@ -10,6 +10,7 @@ import javax.xml.xpath.XPathConstants;
 
 import li.ioc.Ioc;
 import li.util.Files;
+import li.util.Log;
 import li.util.Reflect;
 
 import org.quartz.CronTrigger;
@@ -25,6 +26,8 @@ import org.quartz.spi.TriggerFiredBundle;
 import org.w3c.dom.NodeList;
 
 public class Quartz {
+    private static final Log log = Log.init();
+
     private static final String QUARTZ_CONFIG_REGEX = "^.*(config|task)\\.xml$";
 
     /**
@@ -37,10 +40,43 @@ public class Quartz {
      */
     public Quartz() {
         try {
+            log.debug("Starting Quartz ...");
             start();
         } catch (Exception e) {
+            log.error("Error when starting Quartz");
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * 启动Quartz,启动所有任务,synchronized方法
+     */
+    private synchronized static void start() throws Exception {
+        if (!started) {// 只开始一次
+            Scheduler scheduler = getScheduler();
+            Set<Entry<Class<? extends Job>, String>> jobs = getJobs().entrySet();
+            for (Entry<Class<? extends Job>, String> entry : jobs) {
+                String name = entry.getKey().getName();// 类名作为name,使用默认的GROUP
+                JobDetail jobDetail = new JobDetailImpl(name, Scheduler.DEFAULT_GROUP, entry.getKey());
+                CronTrigger cronTrigger = new CronTriggerImpl(name, Scheduler.DEFAULT_GROUP, entry.getValue());
+                scheduler.scheduleJob(jobDetail, cronTrigger);
+            }
+            scheduler.start();
+            started = true;
+        }
+    }
+
+    /**
+     * 返回使用Ioc方式生成Job对象的Scheduler
+     */
+    private static Scheduler getScheduler() throws SchedulerException {
+        Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+        scheduler.setJobFactory(new SimpleJobFactory() {// 设置自定义的job生成工厂
+                    public Job newJob(TriggerFiredBundle bundle, Scheduler scheduler) throws SchedulerException {
+                        return Ioc.get(bundle.getJobDetail().getJobClass());// 通过Ioc生成job实例
+                    }
+                });
+        return scheduler;
     }
 
     /**
@@ -60,36 +96,5 @@ public class Quartz {
             }
         }
         return jobs;
-    }
-
-    /**
-     * 返回使用Ioc方式生成Job对象的Scheduler
-     */
-    private static Scheduler getScheduler() throws SchedulerException {
-        Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-        scheduler.setJobFactory(new SimpleJobFactory() {// 设置自定义的job生成工厂
-                    public Job newJob(TriggerFiredBundle bundle, Scheduler scheduler) throws SchedulerException {
-                        return Ioc.get(bundle.getJobDetail().getJobClass());// 通过Ioc生成job实例
-                    }
-                });
-        return scheduler;
-    }
-
-    /**
-     * 启动Quartz,启动所有任务,synchronized方法
-     */
-    private synchronized static void start() throws Exception {
-        if (!started) {// 只开始一次
-            Scheduler scheduler = getScheduler();
-            Set<Entry<Class<? extends Job>, String>> jobs = getJobs().entrySet();
-            for (Entry<Class<? extends Job>, String> entry : jobs) {
-                String name = entry.getKey().getName();// 类名作为name,使用默认的GROUP
-                JobDetail jobDetail = new JobDetailImpl(name, Scheduler.DEFAULT_GROUP, entry.getKey());
-                CronTrigger cronTrigger = new CronTriggerImpl(name, Scheduler.DEFAULT_GROUP, entry.getValue());
-                scheduler.scheduleJob(jobDetail, cronTrigger);
-            }
-            scheduler.start();
-            started = true;
-        }
     }
 }
