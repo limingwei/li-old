@@ -15,7 +15,7 @@ import li.model.Field;
  * @author li (limw@w.cn)
  * @version 0.1.7 (2012-05-08)
  */
-public class ConvertUtil extends li.util.Convert {
+public class ConvertUtil extends Convert {
     /**
      * 将数据对象或对象的集合或数组转换为json
      */
@@ -64,7 +64,7 @@ public class ConvertUtil extends li.util.Convert {
             String[] strs = field.split(":");
             String key = strs[0].substring(strs[0].indexOf('"') + 1, strs[0].lastIndexOf('"'));
             String value = strs[1].substring(strs[1].indexOf('"') + 1, strs[1].lastIndexOf('"'));
-            Reflect.set(one, key, value);// 存在这个属性并不为空字符串且不为null
+            Reflect.set(one, key, value);// 是否要验证空字符串和null
         }
         list.add(one);
         return list;
