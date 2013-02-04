@@ -22,7 +22,9 @@ public class AbstractDaoTest extends BaseTest {
 
     @Test
     public void testQuery() {
-        for (Record record : userDao.query(null, "select * from t_account")) {}
+        for (Record record : userDao.query(null, "select * from t_account")) {
+            log.debug(record);
+        }
     }
 
     @Test
@@ -38,10 +40,10 @@ public class AbstractDaoTest extends BaseTest {
     @Test
     public void test() {
         Map<?, ?> map = Convert.toMap("uname", "li-12345", "eml", "li@w.cn");
-        dao.list(page, "WHERE username=#uname OR email=#eml", map);
+        log.debug(dao.list(page, "WHERE username=#uname OR email=#eml", map));
 
-        dao.find("WHERE username=? OR email=?", "li", "li@w.cn");
+        log.debug(dao.find("WHERE username=? OR email=?", "li", "li@w.cn"));
 
-        dao.delete("WHERE username=#uname OR email=#eml OR id=?", map, 1);
+        log.debug(dao.delete("WHERE username=#uname OR email=#eml OR id=?", map, 1));
     }
 }

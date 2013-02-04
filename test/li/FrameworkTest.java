@@ -7,6 +7,7 @@ import li.dao.QueryBuilderTest;
 import li.dao.QueryRunnerTest;
 import li.dao.RecordTest;
 import li.dao.TransTest;
+import li.h2.H2Test;
 import li.ioc.IocTest;
 import li.model.BeanTest;
 import li.model.FieldTest;
@@ -25,7 +26,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ SqliteTest.class, /* H2Test.class, *///
+@SuiteClasses({ SqliteTest.class, H2Test.class, //
         ContextTest.class,//
         AbstractServiceTest.class, //
         IocTest.class, AopTest.class, //

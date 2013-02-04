@@ -13,6 +13,15 @@ public class LogTest extends BaseTest {
     }
 
     @Test
+    public void test2() {
+        log.info("1 ? ? ? ?", 1);
+        log.info("2 ?", 1, 2, 3, 4);
+        log.info("3 ?");
+        Object arg = null;
+        log.info("4 ?", arg);
+    }
+
+    @Test
     public void put() {
         Log.put("123", "123");
     }

@@ -44,6 +44,7 @@ public class TransTest extends BaseTest {
                 map().put("user", userDao.find("WHERE username!=?", map().get("username")));
             }
         }.map().get("user");
+
         log.debug(user);
 
         Boolean flag = new Trans() {
@@ -51,6 +52,7 @@ public class TransTest extends BaseTest {
                 userDao.update("SET email='li@w.cn' WHERE 1=2", map());
             }
         }.success();
+
         log.debug(flag);
     }
 

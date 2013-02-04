@@ -7,17 +7,20 @@ import javax.sql.DataSource;
 
 import li.ioc.Ioc;
 import li.test.BaseTest;
+import li.util.Log;
 
 import org.junit.Test;
 
 public class H2Test extends BaseTest {
+    private static final Log log = Log.init();
+
     Account dao = Ioc.get(Account.class);
 
     @Test
     public void test() {
         List<Account> list = dao.list(page.setPageSize(3));
         for (Account account : list) {
-            System.out.println(account.get("id") + "\t" + account.get("USERNAME") + "\t" + account.get("PASSWORD") + "\t" + account.get("EMAIL"));
+            log.info(account);
         }
     }
 
@@ -25,7 +28,7 @@ public class H2Test extends BaseTest {
     public void insert() {
         for (int i = 0; i < 3; i++) {
             Account account = new Account().set("STATUS", 1).set("USERNAME", "li" + System.currentTimeMillis()).set("PASSWORD", "wode").set("EMAIL", "limingwei@mail.com");
-            System.out.println(dao.save(account) + "\t" + account.get("ID"));
+            log.info(dao.save(account) + "\t" + account.get("ID"));
         }
     }
 

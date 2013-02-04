@@ -30,17 +30,17 @@ public class RecordTest extends BaseTest {
 
     @Test
     public void count() {
-        assertTrue("", userDao.count() > -2);
+        assertTrue("li.dao.RecordTest.count()", userDao.count() > -2);
     }
 
     @Test
     public void count2() {
-        assertTrue("", userDao.count("where false") > -2);
+        assertTrue("li.dao.RecordTest.count2()", userDao.count("where false") > -2);
     }
 
     @Test
     public void delete() {
-        assertFalse(userDao.delete(-2));
+        assertFalse("li.dao.RecordTest.delete()", userDao.delete(-2));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class RecordTest extends BaseTest {
 
     @Test
     public void save() {
-        userDao.save(new _User().set("role_id", 1).set("username", "u-2" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1").set("status", 1));
+        assertTrue(userDao.save(new _User().set("role_id", 1).set("username", "u-2" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1").set("status", 1)));
     }
 
     @Test
@@ -108,18 +108,20 @@ public class RecordTest extends BaseTest {
     @Test
     public void testRecord() {
         List<_User> records = userDao.list(page, "select t_account.username as uname,t_forum.name as fname from t_account,t_forum");
-        assertNotNull("", records);
+        assertNotNull("li.dao.RecordTest.testRecord()", records);
     }
 
     @Test
     public void update() {
         log.debug("li.dao.RecordTest.update()");
-        userDao.updateIgnoreNull(userDao.set("id", 1).set("username", "u-4" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1").set("status", 1));
+        Boolean flag = userDao.updateIgnoreNull(userDao.set("id", 1).set("username", "u-4" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1").set("status", 1));
+        assertTrue("li.dao.RecordTest.update()", flag || true);
     }
 
     @Test
     public void update2() {
         log.debug("li.dao.RecordTest.update2()");
-        userDao.updateIgnoreNull(userDao.set("id", 2).set("username", "u-5" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1").set("status", 1));
+        Boolean flag = userDao.updateIgnoreNull(userDao.set("id", 2).set("username", "u-5" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1").set("status", 1));
+        assertTrue("li.dao.RecordTest.update2()", flag || true);
     }
 }
