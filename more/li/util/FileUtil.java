@@ -28,7 +28,6 @@ public class FileUtil extends Files {
             bufferedReader.close();
         } catch (Exception e) {
             throw new RuntimeException("Exception in li.util.Files.read(File)", e);
-
         }
         return stringBuffer.toString();
     }
@@ -37,8 +36,8 @@ public class FileUtil extends Files {
      * 把内容写入一个文本文件
      */
     public static void write(File file, String content) {
+        BufferedReader bufferedReader = new BufferedReader(new StringReader(content));
         try {
-            BufferedReader bufferedReader = new BufferedReader(new StringReader(content));
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
             String line = null;
             while ((line = bufferedReader.readLine()) != null) {
