@@ -38,23 +38,13 @@ public abstract class Log {
                 Object logger = Reflect.call("org.apache.log4j.Logger", "getLogger", new Class[] { Class.class }, new Object[] { type });
 
                 protected void log(String method, Object msg) {
-                    try {
-                        if (!(method.equals("debug") || method.equals("info") || method.equals("trace")) || Reflect.invoke(logger, "is" + method.substring(0, 1).toUpperCase() + method.substring(1) + "Enabled").equals(true)) {
-                            logger.getClass().getMethod(method, Object.class).invoke(logger, msg);
-                        }
-                    } catch (Exception e) {
-                        throw new RuntimeException("Exception at li.util.Log.init().new Log() {}.log(String, Object)", e);
-                    }
+                    Reflect.invoke(logger, method, new Class<?>[] { Object.class }, new Object[] { msg });
                 };
             };
         } catch (Throwable e) {
             return new Log() {// 返回ConsoleLog
                 protected void log(String method, Object msg) {
-                    if (method.equals("error") || method.equals("fatal")) {
-                        System.err.println(method.toUpperCase() + ": " + msg);
-                    } else {
-                        System.out.println(method.toUpperCase() + ": " + msg);
-                    }
+                    ((method.equals("error") || method.equals("fatal")) ? System.err : System.out).println(method.toUpperCase() + ": " + msg);
                 }
             };
         }
