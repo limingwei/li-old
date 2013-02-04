@@ -11,6 +11,25 @@ import java.util.Map;
  */
 public abstract class Log {
     /**
+     * 一个缓存,可用于暂时保存一个值
+     */
+    private static final Map LOG_MAP = new HashMap();
+
+    /**
+     * 向LOG_MAP中设值,synchronized方法
+     */
+    public synchronized static void put(Object key, Object value) {
+        LOG_MAP.put(key, value);
+    }
+
+    /**
+     * 从LOG_MAP中取值,synchronized方法
+     */
+    public synchronized static Object get(Object key) {
+        return LOG_MAP.get(key);
+    }
+
+    /**
      * Log初始化方法,自动适配Log4j或Console
      */
     public static Log init(final Class<?> type) {
@@ -113,24 +132,5 @@ public abstract class Log {
      */
     public void fatal(Object msg, Object... args) {
         log("fatal", process(msg, args));
-    }
-
-    /**
-     * 一个缓存,可用于暂时保存一个值
-     */
-    private static final Map LOG_MAP = new HashMap();
-
-    /**
-     * 向LOG_MAP中设值,synchronized方法
-     */
-    public synchronized static void put(Object key, Object value) {
-        LOG_MAP.put(key, value);
-    }
-
-    /**
-     * 从LOG_MAP中取值,synchronized方法
-     */
-    public synchronized static Object get(Object key) {
-        return LOG_MAP.get(key);
     }
 }
