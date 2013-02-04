@@ -14,7 +14,6 @@ import java.io.StringReader;
  * @version 0.1.1 (2013-02-04)
  */
 public class FileUtil extends Files {
-
     /**
      * 读取一个文本文件并返回其文本内容
      */
