@@ -2,6 +2,7 @@ package li.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,6 +21,9 @@ public class ConvertUtil extends Convert {
      * 将数据对象或对象的集合或数组转换为json
      */
     public static String toJson(Object target) {
+        if (null == target) {
+            return "";
+        }
         if (target instanceof Collection) {// 如果是集合,转换成数组处理
             return toJson(((Collection) target).toArray());
         }
@@ -49,6 +53,9 @@ public class ConvertUtil extends Convert {
      * 将json转换为数据对象的List
      */
     public static <T> List<T> fromJson(Class<T> type, String json) {
+        if (Verify.isEmpty(json)) {
+            return Collections.EMPTY_LIST;
+        }
         final String JSON_REGEX = "^.*}[]]{0,1},[\\[]{0,1}\\{.*$", JSON_SPLIT = "}[]]{0,1},[\\[]{0,1}\\{";
         List<T> list = new ArrayList<T>();
         if (Verify.regex(json, JSON_REGEX)) {// 处理多个对象
