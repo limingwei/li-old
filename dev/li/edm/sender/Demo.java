@@ -93,7 +93,7 @@ public class Demo {
 
         Deal goods2 = new Deal();
         goods2.set("id", "18524463825");
-        goods2.set("title", "春秋冬季新款包邮皮带扣超高跟保暖马丁靴雪地靴坡跟厚底女鞋子");
+        goods2.set("title", "春秋冬季新款皮带扣超高跟保暖马丁靴雪地靴坡跟厚底女鞋子");
         goods2.set("url", "http://item.taobao.com/item.htm?spm=a1z10.1.137712-558047901.3.tGvb74&id=18524463825");
         goods2.set("img", "http://bbs.cduer.com/data/attachment/forum/201301/28/220153cfyzuyl6yf3nidyi.jpg");
         goods2.set("price", "118.00");
@@ -101,7 +101,7 @@ public class Demo {
 
         Deal goods3 = new Deal();
         goods3.set("id", "16927542626");
-        goods3.set("title", "包邮冬季保暖纯色水钻内增高高跟防滑橡胶底磨砂短靴雪地靴女鞋子");
+        goods3.set("title", "冬季保暖纯色水钻内增高高跟防滑橡胶底磨砂短靴雪地靴女鞋子");
         goods3.set("url", "http://item.taobao.com/item.htm?spm=a1z10.1.137712-558047901.8.tGvb74&id=16927542626");
         goods3.set("img", "http://bbs.cduer.com/data/attachment/forum/201301/28/220151cgb5tk4vvyttntyv.jpg.thumb.jpg");
         goods3.set("price", "78.00");
@@ -109,7 +109,7 @@ public class Demo {
 
         Deal goods4 = new Deal();
         goods4.set("id", "21986128462");
-        goods4.set("title", "新款实物拍摄包邮前系带高跟粗跟中筒加厚雪地短靴可大小码女鞋子");
+        goods4.set("title", "新款实物拍摄前系带高跟粗跟中筒加厚雪地短靴可大小码女鞋子");
         goods4.set("url", "http://item.taobao.com/item.htm?spm=a1z10.1.137712-558047901.2.tGvb74&id=21986128462");
         goods4.set("img", "http://bbs.cduer.com/data/attachment/forum/201301/28/22014855n3yqeyuoeuy333.jpg");
         goods4.set("price", "118.00");
