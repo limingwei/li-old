@@ -6,7 +6,7 @@ import java.util.List;
 import li.ioc.AnnotationIocLoader;
 import li.model.Bean;
 import li.model.Field;
-import li.util.Files;
+import li.util.FileUtil;
 import li.util.Log;
 import li.util.Verify;
 
@@ -27,7 +27,7 @@ public class IocExporter {
     public void extract(File file) {
         log.info("extract start");
         List<Bean> beans = new AnnotationIocLoader().getBeans();
-        Files.write(file, doc(beans));
+        FileUtil.write(file, doc(beans));
         log.info("extract finished");
     }
 

@@ -36,7 +36,7 @@ public class ConvertTest {
             record.set("email", "limw@w.cn");
             list.add(record);
 
-            log.debug(Convert2.fromJson(Record.class, Convert2.toJson(record)));
+            log.debug(ConvertUtil.fromJson(Record.class, ConvertUtil.toJson(record)));
         }
 
         List<List<Record>> list2 = new ArrayList<List<Record>>();
@@ -44,13 +44,13 @@ public class ConvertTest {
         list2.add(list);
         list2.add(list);
 
-        String json = Convert2.toJson(list);
+        String json = ConvertUtil.toJson(list);
 
-        List<Record> records = Convert2.fromJson(Record.class, json);
+        List<Record> records = ConvertUtil.fromJson(Record.class, json);
 
         log.debug(records);
 
-        String json2 = Convert2.toJson(Convert2.fromJson(Record.class, Convert2.toJson(Convert2.fromJson(Record.class, Convert2.toJson(list)))));
+        String json2 = ConvertUtil.toJson(ConvertUtil.fromJson(Record.class, ConvertUtil.toJson(ConvertUtil.fromJson(Record.class, ConvertUtil.toJson(list)))));
 
         log.debug(json2);
 
@@ -68,7 +68,7 @@ public class ConvertTest {
             record.set("email", "limw@w.cn");
             list.add(record);
         }
-        String json = Convert2.toJson(list);
+        String json = ConvertUtil.toJson(list);
         log.debug(json);
     }
 

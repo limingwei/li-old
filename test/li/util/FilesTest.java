@@ -26,7 +26,7 @@ public class FilesTest extends BaseTest {
 
     @Test
     public void read() {
-        log.debug(Files.read(new File(Files.list(Files.root(), ".xml", true).get(0))));
+        log.debug(FileUtil.read(new File(Files.list(Files.root(), ".xml", true).get(0))));
     }
 
     @Test

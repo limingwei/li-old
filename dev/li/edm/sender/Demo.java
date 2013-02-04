@@ -13,7 +13,7 @@ import javax.mail.internet.MimeUtility;
 import li.dao.Page;
 import li.edm.collector.record.Email;
 import li.ioc.Ioc;
-import li.util.Files;
+import li.util.FileUtil;
 import li.util.Verify;
 
 /**
@@ -43,7 +43,7 @@ public class Demo {
         map.put("goodsList", data());
         map.put("mail", "preview@w.cn");
 
-        Files.write(new File("E:\\preview.htm"), freemarker.merge(map));
+        FileUtil.write(new File("E:\\preview.htm"), freemarker.merge(map));
     }
 
     private static void startSendTask() throws Exception {

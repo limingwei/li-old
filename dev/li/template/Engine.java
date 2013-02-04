@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import li.template.compiler.Compiler;
-import li.util.Files;
+import li.util.FileUtil;
 import li.util.Log;
 
 /**
@@ -29,7 +29,7 @@ public class Engine {
     public Template getTemplate(String name) {
         Template template = templates.get(name);
         if (null == template) {
-            template = parse(name, Files.read(new File(config.get("TEMPLATE_DIRECTORY") + name)));
+            template = parse(name, FileUtil.read(new File(config.get("TEMPLATE_DIRECTORY") + name)));
             templates.put(name, template);
         }
         return template;

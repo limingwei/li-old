@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import li.util.Files;
+import li.util.FileUtil;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -39,6 +39,6 @@ public class Feixin {
         post.setEntity(entity);
         HttpResponse response = client.execute(post);
 
-        Files.write(new File("D:/Users/li/Desktop/feixin.htm"), EntityUtils.toString(response.getEntity()));
+        FileUtil.write(new File("D:/Users/li/Desktop/feixin.htm"), EntityUtils.toString(response.getEntity()));
     }
 }
