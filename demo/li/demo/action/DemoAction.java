@@ -27,6 +27,11 @@ public class DemoAction extends AbstractAction {
     @Inject
     Account accountDao;
 
+    @At("1.htm")
+    public void do_htm() {
+        write("1.htm");
+    }
+
     @At("httl.do")
     public void httl() {
         System.out.println(Context.getRootPath());

@@ -28,6 +28,7 @@
 		<a href="vl2.do">vl2</a>
 		<a href="bt.do">bt</a>
 		<a href="testjsp.do">testjsp</a>
+		<a href="1.htm">1.htm</a>
 		<br/>
 		<a href="404">404</a>
 		<a href="test_3">test_3</a>

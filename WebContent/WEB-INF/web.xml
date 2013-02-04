@@ -20,6 +20,7 @@
 	<filter-mapping>
 		<filter-name>actionFilter</filter-name>
 		<url-pattern>*.do</url-pattern>
+		<url-pattern>*.htm</url-pattern><!-- 一个 filter 可以配置多个 url-pattern -->
 	</filter-mapping>
 
 	<servlet>
