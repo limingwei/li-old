@@ -1,4 +1,4 @@
-package demo.action;
+package li.demo.action;
 
 import li.annotation.Arg;
 import li.annotation.At;
@@ -6,9 +6,9 @@ import li.annotation.Bean;
 import li.annotation.Inject;
 import li.annotation.Trans;
 import li.dao.Page;
+import li.demo.record.Post;
+import li.demo.record.Thread;
 import li.mvc.AbstractAction;
-import demo.record.Post;
-import demo.record.Thread;
 
 @Bean
 public class ThreadAction extends AbstractAction {

@@ -1,6 +1,7 @@
 package demo.action;
 
 import li.annotation.Inject;
+import li.demo.action.DemoAction;
 import li.test.ActionTest;
 
 import org.junit.Test;

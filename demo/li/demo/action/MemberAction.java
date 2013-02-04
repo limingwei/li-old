@@ -1,11 +1,11 @@
-package demo.action;
+package li.demo.action;
 
 import li.annotation.At;
 import li.annotation.Bean;
 import li.annotation.Inject;
+import li.demo.record.Account;
+import li.demo.record.Member;
 import li.mvc.AbstractAction;
-import demo.record.Account;
-import demo.record.Member;
 
 @Bean
 public class MemberAction extends AbstractAction {

@@ -1,4 +1,4 @@
-package demo.model;
+package li.demo.model;
 
 import li.annotation.Field;
 import li.annotation.Table;

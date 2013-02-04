@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import li.demo.model.User;
 import li.ioc.Ioc;
 import li.model.Bean;
 import li.test.BaseTest;
@@ -14,8 +15,6 @@ import li.util.Log;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import demo.model.User;
 
 public class QueryBuilderTest extends BaseTest {
     private static final Log log = Log.init();

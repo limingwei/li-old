@@ -1,13 +1,13 @@
-package demo.action;
+package li.demo.action;
 
 import li.annotation.Arg;
 import li.annotation.At;
 import li.annotation.Bean;
 import li.annotation.Inject;
 import li.dao.Page;
+import li.demo.record.Forum;
+import li.demo.record.Thread;
 import li.mvc.AbstractAction;
-import demo.record.Forum;
-import demo.record.Thread;
 
 @Bean
 public class ForumAction extends AbstractAction {

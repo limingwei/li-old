@@ -1,4 +1,4 @@
-package demo.action;
+package li.demo.action;
 
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
@@ -13,11 +13,11 @@ import li.annotation.Bean;
 import li.annotation.Inject;
 import li.annotation.Trans;
 import li.dao.Page;
+import li.demo.record.Account;
+import li.demo.record.Member;
 import li.mvc.AbstractAction;
 import li.mvc.Context;
 import li.mvc.Ctx;
-import demo.record.Account;
-import demo.record.Member;
 
 @Bean
 public class DemoAction extends AbstractAction {

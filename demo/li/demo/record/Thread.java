@@ -1,4 +1,4 @@
-package demo.record;
+package li.demo.record;
 
 import java.util.List;
 

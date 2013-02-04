@@ -2,6 +2,7 @@ package demo.record;
 
 import static org.junit.Assert.assertNotNull;
 import li.annotation.Inject;
+import li.demo.record.Post;
 import li.test.BaseTest;
 
 import org.junit.Before;

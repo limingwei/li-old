@@ -1,13 +1,13 @@
-package demo.action;
+package li.demo.action;
 
 import li.annotation.Arg;
 import li.annotation.At;
 import li.annotation.Bean;
 import li.annotation.Inject;
 import li.dao.Page;
+import li.demo.record.Account;
 import li.mvc.AbstractAction;
 import li.util.Convert;
-import demo.record.Account;
 
 @Bean
 public class AccountAction extends AbstractAction {

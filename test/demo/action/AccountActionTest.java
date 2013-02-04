@@ -2,12 +2,12 @@ package demo.action;
 
 import static org.junit.Assert.assertNotNull;
 import li.annotation.Inject;
+import li.demo.action.AccountAction;
+import li.demo.record.Account;
 import li.test.ActionTest;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import demo.record.Account;
 
 public class AccountActionTest extends ActionTest {
     @Inject

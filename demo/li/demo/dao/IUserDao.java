@@ -1,7 +1,7 @@
-package demo.dao;
+package li.demo.dao;
 
 import li.dao.IBaseDao;
-import demo.model.User;
+import li.demo.model.User;
 
 /**
  * 泛型的IBaseDao接口定义了几个基础的Dao方法,你可以选择让你的Dao接口扩展自这个接口

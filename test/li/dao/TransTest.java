@@ -1,13 +1,12 @@
 package li.dao;
 
 import li.annotation.Inject;
+import li.demo.record.Account;
 import li.test.BaseTest;
 import li.util.Convert;
 import li.util.Log;
 
 import org.junit.Test;
-
-import demo.record.Account;
 
 public class TransTest extends BaseTest {
     private static final Log log = Log.init();

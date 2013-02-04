@@ -1,4 +1,4 @@
-package demo.record;
+package li.demo.record;
 
 import li.annotation.Bean;
 import li.annotation.Table;

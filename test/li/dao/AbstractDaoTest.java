@@ -3,13 +3,12 @@ package li.dao;
 import java.util.Map;
 
 import li.annotation.Inject;
+import li.demo.record.Account;
 import li.test.BaseTest;
 import li.util.Convert;
 import li.util.Log;
 
 import org.junit.Test;
-
-import demo.record.Account;
 
 public class AbstractDaoTest extends BaseTest {
     private static final Log log = Log.init();
