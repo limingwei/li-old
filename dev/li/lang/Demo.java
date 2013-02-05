@@ -10,10 +10,14 @@ public class Demo {
         boolean countSubFolder = true;
         CodeAnalysisConf conf = null;
 
-        System.out.println(Code.countingCode(new File("D:\\workspace\\li\\framework"), suffix, countSubFolder, conf));
-        System.out.println(Code.countingCode(new File("D:\\workspace\\li\\more"), suffix, countSubFolder, conf));
-        System.out.println(Code.countingCode(new File("D:\\workspace\\li\\dev"), suffix, countSubFolder, conf));
-        System.out.println(Code.countingCode(new File("D:\\workspace\\li\\test"), suffix, countSubFolder, conf));
-        System.out.println(Code.countingCode(new File("D:\\workspace\\li\\demo"), suffix, countSubFolder, conf));
+        System.out.println(Code.countingCode(new File("framework"), suffix, countSubFolder, conf));
+        System.out.println();
+        System.out.println(Code.countingCode(new File("more"), suffix, countSubFolder, conf));
+        System.out.println();
+        System.out.println(Code.countingCode(new File("dev"), suffix, countSubFolder, conf));
+        System.out.println();
+        System.out.println(Code.countingCode(new File("test"), suffix, countSubFolder, conf));
+        System.out.println();
+        System.out.println(Code.countingCode(new File("demo"), suffix, countSubFolder, conf));
     }
 }
