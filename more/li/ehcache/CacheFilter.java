@@ -1,5 +1,6 @@
 package li.ehcache;
 
+import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -32,8 +33,8 @@ public class CacheFilter implements AopFilter {
      * 
      */
     public void doFilter(AopChain chain) {
-        String cacheName = chain.getMethod().getDeclaringClass().getName() + "." + chain.getMethod().getName();
-        String cacheKey = ConvertUtil.toJson(chain.getArgs());
+        String cacheName = cacheName(chain.getMethod());
+        String cacheKey = cacheKey(chain.getArgs());
         Object cacheData = getElement(cacheName, cacheKey);
         if (cacheData == null) {
             Lock lock = getLock(cacheName);
@@ -74,7 +75,6 @@ public class CacheFilter implements AopFilter {
     /**
      * 
      * @param cacheName
-     * @return
      */
     public static Cache getOrAddCache(String cacheName) {
         Cache cache = cacheManager.getCache(cacheName);
@@ -93,7 +93,6 @@ public class CacheFilter implements AopFilter {
     /**
      * 
      * @param key
-     * @return
      */
     private ReentrantLock getLock(String key) {
         ReentrantLock lock = lockMap.get(key);
@@ -103,5 +102,26 @@ public class CacheFilter implements AopFilter {
         lock = new ReentrantLock();
         ReentrantLock previousLock = lockMap.putIfAbsent(key, lock);
         return previousLock == null ? lock : previousLock;
+    }
+
+    /**
+     * 
+     * @param method
+     */
+    private static String cacheName(Method method) {
+        li.ehcache.Cache cache = method.getAnnotation(li.ehcache.Cache.class);
+        if (null != cache) {
+            return cache.value();
+        } else {
+            return method.getDeclaringClass().getName() + "." + method.getName();
+        }
+    }
+
+    /**
+     * 
+     * @param method
+     */
+    private static String cacheKey(Object[] args) {
+        return ConvertUtil.toJson(args);
     }
 }

@@ -15,7 +15,7 @@ public class Demo {
 
         for (int i = 0; true; i++) {
             System.out.println(i + "\t" + hello.say("123"));
-            Thread.sleep(2000);
+            Thread.sleep(500);
         }
     }
 }

@@ -1,7 +1,10 @@
+<!-- 
+	http://ehcache.org/ehcache.xml 
+-->
+
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:noNamespaceSchemaLocation="../config/ehcache.xsd">
-	<!-- http://ehcache.org/ehcache.xml -->
-	
+
 	<diskStore path="java.io.tmpdir/ehcache/tmp" />
 	
 	<!-- name:缓存名称。 
@@ -15,21 +18,22 @@
 		diskPersistent：是否缓存虚拟机重启期数据 Whether the disk store persists between restarts of the Virtual Machine. The default value is false. diskExpiryThreadIntervalSeconds：磁盘失效线程运行时间间隔，默认是120秒。 
 		memoryStoreEvictionPolicy：当达到maxElementsInMemory限制时，Ehcache将会根据指定的策略去清理内存。默认策略是LRU（最近最少使用）。你可以设置为FIFO（先进先出）或是LFU（较少使用）。 
 		clearOnFlush：内存数量最大时是否清除。 -->
-		
-	<defaultCache maxElementsInMemory="10000" 
-		eternal="false" 
-		timeToIdleSeconds="5" 
-		timeToLiveSeconds="10" 
-		overflowToDisk="true" 
-		maxElementsOnDisk="10000000" 
-		diskPersistent="false" 
-		diskExpiryThreadIntervalSeconds="15" 
-		memoryStoreEvictionPolicy="LRU" />
-		
-    <cache name="li.ehcache.Hello.say"
+
+	<defaultCache maxElementsInMemory="10000"
+		eternal="false"
+		timeToIdleSeconds="600"
+		timeToLiveSeconds="600"
+		overflowToDisk="true"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="15"
+		memoryStoreEvictionPolicy="LRU"/>
+
+    <cache name="cache_name_1"
+           timeToLiveSeconds="5"
            maxElementsInMemory="10000"
            overflowToDisk="true"
            diskPersistent="true"
-           timeToLiveSeconds="5"
            diskExpiryThreadIntervalSeconds="1200"/>
+
 </ehcache>

@@ -35,13 +35,13 @@ public class ConvertUtil extends Convert {
             return json.substring(0, json.length() - 1) + "]";// 返回
         }
         String json = "{";// 处理单个对象
-        if (Map.class.isAssignableFrom(target.getClass())) {// 如果是Map
+        if (Verify.basicType(target.getClass())) {// 单个基本类型的数据
+            json += "\"" + target.getClass().getName() + "\":\"" + target + "\",";
+        } else if (Map.class.isAssignableFrom(target.getClass())) {// 如果是Map
             Set<Entry> entries = ((Map) target).entrySet();
             for (Entry<String, Object> entry : entries) {// Map的每个属性
                 json += "\"" + entry.getKey() + "\":\"" + entry.getValue() + "\",";
             }
-        } else if (Verify.basicType(target.getClass())) {
-            json += "\"" + target.getClass().getName() + "\":\"" + target + "\",";
         } else {// 不是Map，按照POJO处理
             List<Field> fields = Field.list(target.getClass(), true);
             for (Field field : fields) {// POJO的每个属性
