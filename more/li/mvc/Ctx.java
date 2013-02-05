@@ -1,17 +1,22 @@
 package li.mvc;
 
 import java.io.Writer;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+
+import javax.servlet.http.Cookie;
 
 import li.util.Convert;
 import li.util.Files;
 import li.util.Log;
 import li.util.Reflect;
 
-public class Ctx {
+public class Ctx extends Context {
     private static final Log log = Log.init();
+
+    private static final AbstractAction ABSTRACT_ACTION = new AbstractAction() {};
 
     /**
      * 主视图方法,以冒号分割前缀表示视图类型
@@ -26,16 +31,16 @@ public class Ctx {
      * @see li.mvc.Context#view(String)
      */
     public static String view(String path) {
-        String viewType = path.contains(":") ? path.split(":")[0] : Context.VIEW_TYPE;// 视图类型
+        String viewType = path.contains(":") ? path.split(":")[0] : VIEW_TYPE;// 视图类型
         String viewPath = path.startsWith(viewType + ":") ? path.split(viewType + ":")[1] : path;// path冒号后的部分或者path
         if ("velocity".equals(viewType) || "vl".equals(viewType)) {// velocity视图
-            return velocity(Context.VIEW_PREFIX + viewPath + Context.VIEW_SUFFIX);
+            return velocity(VIEW_PREFIX + viewPath + VIEW_SUFFIX);
         } else if ("beetl".equals(viewType) || "bt".equals(viewType)) {// beetl视图
-            return beetl(Context.VIEW_PREFIX + viewPath + Context.VIEW_SUFFIX);
+            return beetl(VIEW_PREFIX + viewPath + VIEW_SUFFIX);
         } else if ("httl".equals(viewType) || "ht".equals(viewType)) {// beetl视图
-            return httl(Context.VIEW_PREFIX + viewPath + Context.VIEW_SUFFIX);
+            return httl(VIEW_PREFIX + viewPath + VIEW_SUFFIX);
         } else {
-            return Context.view(path);
+            return view(path);
         }
     }
 
@@ -48,7 +53,7 @@ public class Ctx {
             if (null == groupTemplate) {
                 log.debug("beetl initializing ...");
                 Properties properties = new Properties();
-                properties.put("TEMPLATE_ROOT", Context.getRootPath());
+                properties.put("TEMPLATE_ROOT", getRootPath());
                 properties.put("TEMPLATE_CHARSET", "UTF-8");
                 properties.putAll(Files.load("beetl.properties"));// 加载自定义配置,覆盖默认
                 Object config = Reflect.born("org.bee.tl.core.Config");// 加载默认配置
@@ -57,14 +62,14 @@ public class Ctx {
                 Log.put("group_template", groupTemplate);
             }
             Object template = Reflect.invoke(groupTemplate, "getFileTemplate", path);// 生成模板
-            Map<String, Object> attributes = Context.getAttributes();
+            Map<String, Object> attributes = getAttributes();
             for (Entry<String, Object> entry : attributes.entrySet()) {
                 Reflect.invoke(template, "set", new Class[] { String.class, Object.class }, new Object[] { entry.getKey(), entry.getValue() });// 设置变量
             }
-            Reflect.invoke(template, "getText", new Class[] { Writer.class }, new Object[] { Context.getResponse().getWriter() });// merge 模板和模型，将内容输出到Writer里
+            Reflect.invoke(template, "getText", new Class[] { Writer.class }, new Object[] { getResponse().getWriter() });// merge 模板和模型，将内容输出到Writer里
             log.info("beetl to : ?", path);
         } catch (Throwable e) {
-            Context.error(e);
+            error(e);
         }
         return "~!@#DONE";
     }
@@ -78,19 +83,19 @@ public class Ctx {
             if (null == initialized) { // 缓存中没有
                 log.debug("velocity initializing ..");
                 Properties properties = new Properties();// 默认的参数设置
-                properties.put("file.resource.loader.path", Context.getRootPath());
+                properties.put("file.resource.loader.path", getRootPath());
                 properties.put("input.encoding", "UTF-8");
                 properties.put("output.encoding", "UTF-8");
                 properties.putAll(Files.load("velocity.properties"));// velocity.properties中的参数设置
                 Reflect.call("org.apache.velocity.app.Velocity", "init", properties);// 初始化Velocity
                 Log.put("velocity_initialized", true); // 设置velocityInitialized标记
             }
-            Object context = Reflect.born("org.apache.velocity.VelocityContext", new Class[] { Map.class }, new Object[] { Context.getAttributes() });// velocity值栈
+            Object context = Reflect.born("org.apache.velocity.VelocityContext", new Class[] { Map.class }, new Object[] { getAttributes() });// velocity值栈
             Object template = Reflect.call("org.apache.velocity.app.Velocity", "getTemplate", path);// velocity模板
-            Reflect.invoke(template, "merge", new Class[] { Reflect.getType("org.apache.velocity.context.Context"), java.io.Writer.class }, new Object[] { context, Context.getResponse().getWriter() });
+            Reflect.invoke(template, "merge", new Class[] { Reflect.getType("org.apache.velocity.context.Context"), java.io.Writer.class }, new Object[] { context, getResponse().getWriter() });
             log.info("velocity to : ?", path);
         } catch (Throwable e) {
-            Context.error(e);
+            error(e);
         }
         return "~!@#DONE";
     }
@@ -105,7 +110,7 @@ public class Ctx {
                 log.debug("httl initializing ..");
                 Properties properties = new Properties();
                 properties.put("loaders", "httl.spi.loaders.FileLoader");
-                properties.put("template.directory", Context.getRootPath());
+                properties.put("template.directory", getRootPath());
                 properties.put("template.suffix", ".htm");
                 properties.put("input.encoding", "UTF-8");
                 properties.putAll(Files.load("httl.properties"));// httl.properties中的参数设置
@@ -113,10 +118,10 @@ public class Ctx {
                 Log.put("httl_engine", engine);
             }
             Object template = Reflect.invoke(engine, "getTemplate", path);
-            Reflect.invoke(template, "render", new Class<?>[] { Object.class, Object.class }, new Object[] { Context.getAttributes(), Context.getResponse().getWriter() });
+            Reflect.invoke(template, "render", new Class<?>[] { Object.class, Object.class }, new Object[] { getAttributes(), getResponse().getWriter() });
             log.info("httl to : ?", path);
         } catch (Exception e) {
-            Context.error(e);
+            error(e);
         }
         return "~!@#DONE";
     }
@@ -125,35 +130,84 @@ public class Ctx {
      * getServletPath
      */
     public static String getServletPath() {
-        return Context.getRequest().getServletPath();
+        return getRequest().getServletPath();
     }
 
     /**
      * getRequestURI
      */
     public static String getRequestURI() {
-        return Context.getRequest().getRequestURI();
+        return getRequest().getRequestURI();
     }
 
     /**
      * getParameterMap
      */
     public static Map<String, String[]> getParameterMap() {
-        return Context.getRequest().getParameterMap();
+        return getRequest().getParameterMap();
+    }
+
+    /**
+     * getParameter
+     */
+    public static Object getParameter(String key) {
+        return getRequest().getParameter(key);
+    }
+
+    /**
+     * getParameter
+     */
+    public static <C> C getParameter(String key, Class<C> type) {
+        return Convert.toType(type, getParameter(key));
+    }
+
+    /**
+     * getParameter
+     */
+    public static <C> C getParameter(String key, C defaultValue) {
+        String result = getRequest().getParameter(key);
+        return null == result || null == defaultValue ? defaultValue : (C) Convert.toType(defaultValue.getClass(), getParameter(key));
+    }
+
+    /**
+     * setRequest
+     */
+    public static AbstractAction setRequest(String name, Object value) {
+        getRequest().setAttribute(name, value);
+        return ABSTRACT_ACTION;
+    }
+
+    /**
+     * removeRequest
+     */
+    public static AbstractAction removeRequest(String name) {
+        getRequest().removeAttribute(name);
+        return ABSTRACT_ACTION;
+    }
+
+    /**
+     * setRequest
+     */
+    public static AbstractAction setRequest(Map<String, Object> map) {
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            setRequest(entry.getKey(), entry.getValue());
+        }
+        return ABSTRACT_ACTION;
     }
 
     /**
      * setSession
      */
-    public static void setSession(String key, Object value) {
-        Context.getSession().setAttribute(key, value);
+    public static AbstractAction setSession(String key, Object value) {
+        getSession().setAttribute(key, value);
+        return ABSTRACT_ACTION;
     }
 
     /**
      * getSession
      */
     public static Object getSession(String key) {
-        return Context.getSession().getAttribute(key);
+        return getSession().getAttribute(key);
     }
 
     /**
@@ -164,16 +218,138 @@ public class Ctx {
     }
 
     /**
-     * getParameter
+     * getParameterValues
      */
-    public static Object getParameter(String key) {
-        return Context.getRequest().getParameter(key);
+    public static String[] getParameterValues(String key) {
+        return getRequest().getParameterValues(key);
     }
 
     /**
-     * getParameter
+     * getParameterValues
      */
-    public static <C> C getParameter(Class<C> type, String key) {
-        return Convert.toType(type, getParameter(key));
+    public static <C> C[] getParameterValues(String key, Class<C> type) {
+        return Convert.toType(type, getRequest().getParameterValues(key));
+    }
+
+    /**
+     * getCookieValue
+     */
+    public String getCookieValue(String name, String defaultValue) {
+        Cookie cookie = getCookie(name);
+        return cookie != null ? cookie.getValue() : defaultValue;
+    }
+
+    /**
+     * getCookieValue
+     */
+    public String getCookieValue(String name) {
+        return getCookieValue(name, null);
+    }
+
+    /**
+     * getCookie
+     */
+    public Cookie getCookie(String name) {
+        Cookie[] cookies = getRequest().getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(name)) {
+                    return cookie;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * getCookies
+     */
+    public Cookie[] getCookies() {
+        return getRequest().getCookies();
+    }
+
+    /**
+     * setCookie
+     */
+    public static AbstractAction setCookie(Cookie cookie) {
+        getResponse().addCookie(cookie);
+        return ABSTRACT_ACTION;
+    }
+
+    /**
+     * setCookie
+     */
+    public static AbstractAction setCookie(String name, String value, int maxAgeInSeconds, String path) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setMaxAge(maxAgeInSeconds);
+        cookie.setPath(path);
+        getResponse().addCookie(cookie);
+        return ABSTRACT_ACTION;
+    }
+
+    /**
+     * setCookie
+     */
+    public static AbstractAction setCookie(String name, String value, int maxAgeInSeconds, String path, String domain) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setDomain(domain);
+        cookie.setMaxAge(maxAgeInSeconds);
+        cookie.setPath(path);
+        getResponse().addCookie(cookie);
+        return ABSTRACT_ACTION;
+    }
+
+    /**
+     * setCookie
+     */
+    public static AbstractAction setCookie(String name, String value, int maxAgeInSeconds) {
+        setCookie(name, value, maxAgeInSeconds, "/");
+        return ABSTRACT_ACTION;
+    }
+
+    /**
+     * removeCookie
+     */
+    public static AbstractAction removeCookie(String name) {
+        setCookie(name, null, 0, "/");
+        return ABSTRACT_ACTION;
+    }
+
+    /**
+     * removeCookie
+     */
+    public static AbstractAction removeCookie(String name, String path) {
+        setCookie(name, null, 0, path);
+        return ABSTRACT_ACTION;
+    }
+
+    /**
+     * setLocaleToCookie
+     */
+    public static AbstractAction setLocaleToCookie(Locale locale) {
+        // setCookie(I18N_LOCALE, locale.toString(), I18N.getI18nMaxAgeOfCookie());
+        return ABSTRACT_ACTION;
+    }
+
+    /**
+     * setLocaleToCookie
+     */
+    public static AbstractAction setLocaleToCookie(Locale locale, int maxAge) {
+        // setCookie(I18N_LOCALE, locale.toString(), maxAge);
+        return ABSTRACT_ACTION;
+    }
+
+    /**
+     * getText
+     */
+    public String getText(String key) {
+        return "I18N.getText(key, getLocaleFromCookie())";
+    }
+
+    /**
+     * getText
+     */
+    public String getText(String key, String defaultValue) {
+        return "I18N.getText(key, defaultValue, getLocaleFromCookie())";
     }
 }
