@@ -1,32 +1,56 @@
 package li.ehcache;
 
-import java.util.Map.Entry;
-import java.util.Set;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import li.aop.AopChain;
 import li.aop.AopFilter;
-import li.mvc.Context;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
 public class CacheFilter implements AopFilter {
-    private static CacheManager cacheManager;
+    private static volatile ConcurrentHashMap<String, ReentrantLock> lockMap = new ConcurrentHashMap<String, ReentrantLock>();
+
+    private static volatile CacheManager cacheManager = CacheManager.create();
+
+    private ReentrantLock getLock(String key) {
+        ReentrantLock lock = lockMap.get(key);
+        if (lock != null) {
+            return lock;
+        }
+        lock = new ReentrantLock();
+        ReentrantLock previousLock = lockMap.putIfAbsent(key, lock);
+        return previousLock == null ? lock : previousLock;
+    }
 
     public void doFilter(AopChain chain) {
-
-        Set<Entry<String, Object>> attributes = Context.getAttributes().entrySet();
-        String cacheName = Context.getAction().toString();
-        String cacheKey = Context.getRequest().getParameterMap() + Context.getRequest().getQueryString();
-        for (Entry<String, Object> entry : attributes) {
-            getOrAddCache(cacheName).put(new Element(entry.getKey(), entry.getValue()));
+        String cacheName = chain.getMethod().toGenericString();
+        String cacheKey = chain.getArgs().toString();
+        Map<String, Object> cacheData = getElement(cacheName, cacheKey);
+        if (cacheData == null) {
+            Lock lock = getLock(cacheName);
+            lock.lock();
+            try {
+                cacheData = getElement(cacheName, cacheKey);
+                if (cacheData == null) {
+                    putElement(cacheName, cacheKey, chain.doFilter().getResult());
+                }
+            } finally {
+                lock.unlock();
+            }
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> T get(String cacheName, Object key) {
+    public static <T> T getElement(String cacheName, Object key) {
         Element element = getOrAddCache(cacheName).get(key);
         return element != null ? (T) element.getObjectValue() : null;
+    }
+
+    public static void putElement(String cacheName, Object key, Object value) {
+        getOrAddCache(cacheName).put(new Element(key, value));
     }
 
     private static Cache getOrAddCache(String cacheName) {
