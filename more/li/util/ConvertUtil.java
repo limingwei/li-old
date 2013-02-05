@@ -40,6 +40,8 @@ public class ConvertUtil extends Convert {
             for (Entry<String, Object> entry : entries) {// Map的每个属性
                 json += "\"" + entry.getKey() + "\":\"" + entry.getValue() + "\",";
             }
+        } else if (Verify.basicType(target.getClass())) {
+            json += "\"" + target.getClass().getName() + "\":\"" + target + "\",";
         } else {// 不是Map，按照POJO处理
             List<Field> fields = Field.list(target.getClass(), true);
             for (Field field : fields) {// POJO的每个属性

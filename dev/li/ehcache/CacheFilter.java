@@ -1,16 +1,18 @@
 package li.ehcache;
 
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import li.annotation.Bean;
 import li.aop.AopChain;
 import li.aop.AopFilter;
+import li.util.ConvertUtil;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
+@Bean
 public class CacheFilter implements AopFilter {
     private static volatile ConcurrentHashMap<String, ReentrantLock> lockMap = new ConcurrentHashMap<String, ReentrantLock>();
 
@@ -27,9 +29,9 @@ public class CacheFilter implements AopFilter {
     }
 
     public void doFilter(AopChain chain) {
-        String cacheName = chain.getMethod().toGenericString();
-        String cacheKey = chain.getArgs().toString();
-        Map<String, Object> cacheData = getElement(cacheName, cacheKey);
+        String cacheName = chain.getMethod().getDeclaringClass().getName() + "." + chain.getMethod().getName();
+        String cacheKey = ConvertUtil.toJson(chain.getArgs());
+        Object cacheData = getElement(cacheName, cacheKey);
         if (cacheData == null) {
             Lock lock = getLock(cacheName);
             lock.lock();
@@ -41,6 +43,8 @@ public class CacheFilter implements AopFilter {
             } finally {
                 lock.unlock();
             }
+        } else {
+            chain.setResult(cacheData);
         }
     }
 
