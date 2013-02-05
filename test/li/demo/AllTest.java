@@ -1,22 +1,21 @@
-package demo;
+package li.demo;
 
 import li.FrameworkTest;
+import li.demo.action.AccountActionTest;
+import li.demo.action.DemoActionTest;
+import li.demo.action.ForumActionTest;
+import li.demo.action.MemberActionTest;
+import li.demo.action.PostActionTest;
+import li.demo.action.ThreadActionTest;
+import li.demo.record.AccountTest;
+import li.demo.record.ForumTest;
+import li.demo.record.MemberTest;
+import li.demo.record.PostTest;
+import li.demo.record.ThreadTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
-
-import demo.action.AccountActionTest;
-import demo.action.DemoActionTest;
-import demo.action.ForumActionTest;
-import demo.action.MemberActionTest;
-import demo.action.PostActionTest;
-import demo.action.ThreadActionTest;
-import demo.record.AccountTest;
-import demo.record.ForumTest;
-import demo.record.MemberTest;
-import demo.record.PostTest;
-import demo.record.ThreadTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({ FrameworkTest.class, //

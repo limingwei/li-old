@@ -1,8 +1,7 @@
-package demo.action;
+package li.demo.action;
 
 import static org.junit.Assert.assertNotNull;
 import li.annotation.Inject;
-import li.demo.action.AccountAction;
 import li.demo.record.Account;
 import li.test.ActionTest;
 

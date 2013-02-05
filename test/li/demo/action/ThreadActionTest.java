@@ -1,22 +1,23 @@
-package demo.action;
+package li.demo.action;
 
 import static org.junit.Assert.assertNotNull;
 import li.annotation.Inject;
-import li.people.action.PostAction;
 import li.test.ActionTest;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class PostActionTest extends ActionTest {
+public class ThreadActionTest extends ActionTest {
     @Inject
-    PostAction postAction;
+    ThreadAction threadAction;
 
     @Before
     public void before() {
-        assertNotNull(postAction);
+        assertNotNull(threadAction);
     }
 
     @Test
-    public void testList() {}
+    public void testList() {
+        // threadAction.list(1, page);
+    }
 }

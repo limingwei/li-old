@@ -1,4 +1,4 @@
-package demo;
+package li.demo;
 
 import li.aop._Account;
 import li.ioc.Ioc;

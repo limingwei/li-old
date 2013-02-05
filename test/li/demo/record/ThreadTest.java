@@ -1,11 +1,10 @@
-package demo.record;
+package li.demo.record;
 
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Map;
 
 import li.annotation.Inject;
-import li.demo.record.Thread;
 import li.test.BaseTest;
 import li.util.Convert;
 

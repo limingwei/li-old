@@ -1,20 +1,19 @@
-package demo.record;
+package li.demo.record;
 
 import static org.junit.Assert.assertNotNull;
 import li.annotation.Inject;
-import li.demo.record.Account;
 import li.test.BaseTest;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class AccountTest extends BaseTest {
+public class MemberTest extends BaseTest {
     @Inject
-    Account account;
+    Member member;
 
     @Before
     public void before() {
-        assertNotNull(account);
+        assertNotNull(member);
     }
 
     @Test
