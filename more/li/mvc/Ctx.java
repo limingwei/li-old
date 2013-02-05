@@ -16,13 +16,14 @@ public class Ctx {
     /**
      * 主视图方法,以冒号分割前缀表示视图类型
      * 
+     * @see #velocity(String)
+     * @see #beetl(String)
+     * @see #httl(String)
      * @see li.mvc.Context#forward(String)
      * @see li.mvc.Context#freemarker(String)
      * @see li.mvc.Context#redirect(String)
      * @see li.mvc.Context#write(String)
-     * @see #velocity(String)
-     * @see #beetl(String)
-     * @see #httl(String)
+     * @see li.mvc.Context#view(String)
      */
     public static String view(String path) {
         String viewType = path.contains(":") ? path.split(":")[0] : Context.VIEW_TYPE;// 视图类型
@@ -61,7 +62,7 @@ public class Ctx {
                 Reflect.invoke(template, "set", new Class[] { String.class, Object.class }, new Object[] { entry.getKey(), entry.getValue() });// 设置变量
             }
             Reflect.invoke(template, "getText", new Class[] { Writer.class }, new Object[] { Context.getResponse().getWriter() });// merge 模板和模型，将内容输出到Writer里
-            log.info("forword to beetl: ?", path);
+            log.info("beetl to : ?", path);
         } catch (Throwable e) {
             Context.error(e);
         }
@@ -86,8 +87,8 @@ public class Ctx {
             }
             Object context = Reflect.born("org.apache.velocity.VelocityContext", new Class[] { Map.class }, new Object[] { Context.getAttributes() });// velocity值栈
             Object template = Reflect.call("org.apache.velocity.app.Velocity", "getTemplate", path);// velocity模板
-            Reflect.invoke(template, "merge", new Class[] { Reflect.getType("org.apache.velocity.context.Context"), Reflect.getType("java.io.Writer") }, new Object[] { context, Context.getResponse().getWriter() });
-            log.info("velocity to: ?", path);
+            Reflect.invoke(template, "merge", new Class[] { Reflect.getType("org.apache.velocity.context.Context"), java.io.Writer.class }, new Object[] { context, Context.getResponse().getWriter() });
+            log.info("velocity to : ?", path);
         } catch (Throwable e) {
             Context.error(e);
         }
@@ -113,7 +114,7 @@ public class Ctx {
             }
             Object template = Reflect.invoke(engine, "getTemplate", path);
             Reflect.invoke(template, "render", new Class<?>[] { Object.class, Object.class }, new Object[] { Context.getAttributes(), Context.getResponse().getWriter() });
-            log.info("httl to: ?", path);
+            log.info("httl to : ?", path);
         } catch (Exception e) {
             Context.error(e);
         }
@@ -121,49 +122,56 @@ public class Ctx {
     }
 
     /**
-     * 
+     * getServletPath
      */
     public static String getServletPath() {
         return Context.getRequest().getServletPath();
     }
 
     /**
-     * 
+     * getRequestURI
+     */
+    public static String getRequestURI() {
+        return Context.getRequest().getRequestURI();
+    }
+
+    /**
+     * getParameterMap
      */
     public static Map<String, String[]> getParameterMap() {
         return Context.getRequest().getParameterMap();
     }
 
     /**
-     * 
+     * setSession
      */
     public static void setSession(String key, Object value) {
         Context.getSession().setAttribute(key, value);
     }
 
     /**
-     * 
+     * getSession
      */
     public static Object getSession(String key) {
         return Context.getSession().getAttribute(key);
     }
 
     /**
-     * 
+     * getSession
      */
     public static <C> C getSession(Class<C> type, String key) {
         return Convert.toType(type, getSession(key));
     }
 
     /**
-     * 
+     * getParameter
      */
     public static Object getParameter(String key) {
         return Context.getRequest().getParameter(key);
     }
 
     /**
-     * 
+     * getParameter
      */
     public static <C> C getParameter(Class<C> type, String key) {
         return Convert.toType(type, getParameter(key));
