@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Remove {
+public @interface Clear {
     /**
      * 缓存的名称 cache name
      */
