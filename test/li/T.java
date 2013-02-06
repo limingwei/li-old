@@ -1,4 +1,4 @@
-package li.demo;
+package li;
 
 import li.ioc.Ioc;
 import net.sf.cglib.core.DebuggingClassWriter;

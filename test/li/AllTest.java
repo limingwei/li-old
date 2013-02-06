@@ -1,6 +1,5 @@
-package li.demo;
+package li;
 
-import li.FrameworkTest;
 import li.demo.action.AccountActionTest;
 import li.demo.action.DemoActionTest;
 import li.demo.action.ForumActionTest;
