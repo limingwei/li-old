@@ -78,4 +78,37 @@ public class ConvertUtil extends Convert {
         list.add(one);
         return list;
     }
+
+    /**
+     * 将一个字符串出现的HMTL元素进行转义
+     */
+    public static String escapeHtml(CharSequence cs) {
+        if (null == cs) {
+            return null;
+        }
+        char[] cas = cs.toString().toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for (char c : cas) {
+            switch (c) {
+            case '&':
+                sb.append("&amp;");
+                break;
+            case '<':
+                sb.append("&lt;");
+                break;
+            case '>':
+                sb.append("&gt;");
+                break;
+            case '\'':
+                sb.append("&#x27;");
+                break;
+            case '"':
+                sb.append("&quot;");
+                break;
+            default:
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
 }
