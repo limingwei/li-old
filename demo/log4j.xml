@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration>
+
 	<root>
 		<priority value="ALL" />
-		<appender-ref ref="CONSOLE" />
-		<appender-ref ref="FILE" />
+		<appender-ref ref="CONSOLE_APPENDER" />
+		<appender-ref ref="FILE_APPENDER" />
 	</root>
-	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+
+	<appender name="CONSOLE_APPENDER" class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m %n" />
 		</layout>
@@ -15,10 +17,13 @@
 			<param name="LevelMin" value="TRACE" />
 		</filter>
 	</appender>
-	<appender name="FILE" class="org.apache.log4j.RollingFileAppender">
+
+	<appender name="FILE_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
 		<param name="File" value="E:/log4j.log" />
+        <param name="DatePattern" value="yyyy-MM-dd" />   
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c.%m %n" />
 		</layout>
 	</appender>
+
 </log4j:configuration>
