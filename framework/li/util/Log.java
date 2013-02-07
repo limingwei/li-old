@@ -1,7 +1,7 @@
 package li.util;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 日志工具类,自动适配Log4j或Console
@@ -13,7 +13,7 @@ public abstract class Log {
     /**
      * 一个缓存,可用于暂时保存一个值
      */
-    private static final Map LOG_MAP = new HashMap();
+    private static final Map LOG_MAP = new ConcurrentHashMap();
 
     /**
      * 向LOG_MAP中设值,synchronized方法
