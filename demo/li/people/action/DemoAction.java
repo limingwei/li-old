@@ -86,7 +86,7 @@ public class DemoAction extends AbstractAction {
         write(getRequest().getRequestURL().toString() + "<br/>");
         write(getRequest().getServletPath() + "<br/>");
         write("test4\t@At({\"thread-([0-9]{2})-([0-9]*).htm\"})");
-        System.out.println(getRequest().getRequestURL());
+        write(getRequest().getRequestURL());
         for (String param : pathParams()) {
             write(param);
         }
@@ -265,21 +265,22 @@ public class DemoAction extends AbstractAction {
      */
     @At("test_dev_filter.htm")
     public String testAtPar(HttpServletRequest request, HttpServletResponse response, int int1, boolean bol, String str1, Integer[] id, @Arg("int2") Integer int22, @Arg("str2") String str22, Account account1, @Arg("account2.") Account account22) {
-        System.out.println(request.toString());
-        System.out.println(response.toString());
-        System.out.println("int1=" + int1);
-        System.out.println("str1=" + str1);
-        System.out.println("int22=" + int22);
-        System.out.println("str22=" + str22);
-        System.out.println("account1=" + account1);
-        System.out.println("account1=" + account1.get("username"));
-        System.out.println("account22=" + account22);
-        System.out.println("account22=" + (null == account22 ? "account22 is null" : account22.get("username")));
 
-        System.out.println("bol=" + bol);
+        write(request.toString());
+        write(response.toString());
+        write("int1=" + int1);
+        write("str1=" + str1);
+        write("int22=" + int22);
+        write("str22=" + str22);
+        write("account1=" + account1);
+        write("account1=" + account1.get("username"));
+        write("account22=" + account22);
+        write("account22=" + (null == account22 ? "account22 is null" : account22.get("username")));
+
+        write("bol=" + bol);
 
         for (Integer integer : id) {
-            System.out.println(integer);
+            write(integer);
         }
         return view("write:测试成功");
     }
@@ -297,19 +298,19 @@ public class DemoAction extends AbstractAction {
      */
     @At("test_abs_action.htm")
     public void testAbstractAction() {
-        System.out.println(getRequest().toString());
-        System.out.println(getResponse().toString());
-        System.out.println("int1=" + getParameter("int1"));
-        System.out.println("str1=" + getParameter("str1"));
-        System.out.println("int22=" + getParameter("int2"));
-        System.out.println("str22=" + getParameter("str2"));
-        System.out.println("account1=" + get(Account.class, "account1."));
-        System.out.println("account1=" + get(Account.class, "account1.").get("username"));
-        System.out.println("account22=" + get(Account.class, "account2."));
-        System.out.println("account22=" + (null == get(Account.class, "account2.") ? "account22 is null" : get(Account.class, "account2.").get("username")));
+        write(getRequest().toString());
+        write(getResponse().toString());
+        write("int1=" + getParameter("int1"));
+        write("str1=" + getParameter("str1"));
+        write("int22=" + getParameter("int2"));
+        write("str22=" + getParameter("str2"));
+        write("account1=" + get(Account.class, "account1."));
+        write("account1=" + get(Account.class, "account1.").get("username"));
+        write("account22=" + get(Account.class, "account2."));
+        write("account22=" + (null == get(Account.class, "account2.") ? "account22 is null" : get(Account.class, "account2.").get("username")));
 
         for (Integer integer : getArray(int.class, "id")) {
-            System.out.println(integer);
+            write(integer);
         }
         write("测试成功");
     }
