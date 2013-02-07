@@ -86,26 +86,20 @@ public class ConvertUtil extends Convert {
         if (null == cs) {
             return null;
         }
-        char[] cas = cs.toString().toCharArray();
         StringBuilder sb = new StringBuilder();
+        char[] cas = cs.toString().toCharArray();
         for (char c : cas) {
-            switch (c) {
-            case '&':
+            if ('&' == c) {
                 sb.append("&amp;");
-                break;
-            case '<':
+            } else if ('<' == c) {
                 sb.append("&lt;");
-                break;
-            case '>':
+            } else if ('>' == c) {
                 sb.append("&gt;");
-                break;
-            case '\'':
+            } else if ('\'' == c) {
                 sb.append("&#x27;");
-                break;
-            case '"':
+            } else if ('"' == c) {
                 sb.append("&quot;");
-                break;
-            default:
+            } else {
                 sb.append(c);
             }
         }
