@@ -1,4 +1,4 @@
-package li.demo.action;
+package li.people.action;
 
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
@@ -14,17 +14,13 @@ import li.annotation.Bean;
 import li.annotation.Inject;
 import li.annotation.Trans;
 import li.dao.Page;
-import li.demo.record.Account;
-import li.demo.record.Member;
 import li.mvc.AbstractAction;
 import li.mvc.Context;
 import li.mvc.Ctx;
+import li.people.record.Account;
 
 @Bean
 public class DemoAction extends AbstractAction {
-    @Inject
-    Member memberDao;
-
     @Inject
     Account accountDao;
 
@@ -42,7 +38,7 @@ public class DemoAction extends AbstractAction {
     /**
      * 可以使用继承AbstractAction和Context中静态方法，两者提供一一对应的方法
      */
-    @At("testcaa")
+    @At("testcaa.htm")
     public void testContextAndAbstractAction() {
         super.write("用li.mvc.AbstractAction.write(String)展示视图");
         Context.write("用li.mvc.Context.write(String)展示视图");
@@ -110,7 +106,7 @@ public class DemoAction extends AbstractAction {
     /**
      * 返回状态码
      */
-    @At("404")
+    @At("404.htm")
     public void test404() {
         getResponse().setStatus(404);
     }
@@ -118,7 +114,7 @@ public class DemoAction extends AbstractAction {
     /**
      * 这个跳过,研究文件上传的
      */
-    @At(value = "upload", method = POST)
+    @At(value = "upload.htm", method = POST)
     public void testUpload() {
         DataOutputStream dataOutputStream = null;
         try {
@@ -156,7 +152,7 @@ public class DemoAction extends AbstractAction {
         setRequest("str1", "床前明月光 testFreemarker");
         Page page = new Page();
         setSession("pg", page);
-        setRequest("accounts", memberDao.list(page, "select * from t_account"));
+        setRequest("accounts", accountDao.list(page, "select * from t_account"));
         freemarker("WEB-INF/view_fm/fm.htm");
     }
 
@@ -165,7 +161,7 @@ public class DemoAction extends AbstractAction {
      */
     @At("fm2.do")
     public void testFreemarker2() {
-        setRequest("str1", "床前明月光 testFreemarker").setRequest("accounts", memberDao.list(new Page(), "select * from t_account"));
+        setRequest("str1", "床前明月光 testFreemarker").setRequest("accounts", accountDao.list(new Page(), "select * from t_account"));
         freemarker("WEB-INF/view_fm/fm.htm");
     }
 
@@ -177,7 +173,7 @@ public class DemoAction extends AbstractAction {
         setRequest("str1", "床前明月光 testVelocity");
         Page page = new Page();
         setSession("page", page);
-        setRequest("accounts", memberDao.list(page, "select * from t_account"));
+        setRequest("accounts", accountDao.list(page, "select * from t_account"));
         velocity("WEB-INF/view_vl/vl.htm");
     }
 
@@ -186,7 +182,7 @@ public class DemoAction extends AbstractAction {
      */
     @At("vl2.do")
     public void testVelocity2() {
-        setRequest("str1", "床前明月光 testVelocity").setRequest("accounts", memberDao.list(new Page(), "select * from t_account"));
+        setRequest("str1", "床前明月光 testVelocity").setRequest("accounts", accountDao.list(new Page(), "select * from t_account"));
         velocity("WEB-INF/view_vl/vl.htm");
     }
 
@@ -211,7 +207,7 @@ public class DemoAction extends AbstractAction {
     /**
      * 返回json
      */
-    @At("json")
+    @At("json.htm")
     public void testJson() {
         write("{ \"firstName\":\"John\" , \"lastName\":\"Doe中文试试看\" }");
     }
@@ -219,7 +215,7 @@ public class DemoAction extends AbstractAction {
     /**
      * 返回xml
      */
-    @At("xml")
+    @At("xml.htm")
     public void testXml() {
         write("<note><heading>Reminder</heading><body>中文的内容</body></note>");
     }
@@ -227,7 +223,7 @@ public class DemoAction extends AbstractAction {
     /**
      * 返回文本
      */
-    @At("text")
+    @At("text.htm")
     public void testText() {
         write("床前明月光，ABCDE");
     }
@@ -235,7 +231,7 @@ public class DemoAction extends AbstractAction {
     /**
      * 测试不匹配的视图类型
      */
-    @At("testViewType")
+    @At("testViewType.htm")
     public String testViewType() {
         return "视图类型:视图地址";
     }
@@ -243,7 +239,7 @@ public class DemoAction extends AbstractAction {
     /**
      * 测试HTTP Method
      */
-    @At(value = "testPost", method = POST)
+    @At(value = "testPost.htm", method = POST)
     public void testPost() {
         write("POST");
     }
@@ -251,7 +247,7 @@ public class DemoAction extends AbstractAction {
     /**
      * 测试HTTP Method
      */
-    @At(value = "testGet", method = GET)
+    @At(value = "testGet.htm", method = GET)
     public void testGet() {
         write("GET");
     }
@@ -259,7 +255,7 @@ public class DemoAction extends AbstractAction {
     /**
      * 测试HTTP Method
      */
-    @At(value = "testAny")
+    @At(value = "testAny.htm")
     public void testAny() {
         write("ANY");
     }
@@ -267,7 +263,7 @@ public class DemoAction extends AbstractAction {
     /**
      * 测试参数适配
      */
-    @At("test_dev_filter")
+    @At("test_dev_filter.htm")
     public String testAtPar(HttpServletRequest request, HttpServletResponse response, int int1, boolean bol, String str1, Integer[] id, @Arg("int2") Integer int22, @Arg("str2") String str22, Account account1, @Arg("account2.") Account account22) {
         System.out.println(request.toString());
         System.out.println(response.toString());
@@ -291,7 +287,7 @@ public class DemoAction extends AbstractAction {
     /**
      * 测试redirect
      */
-    @At("test_3")
+    @At("test_3.htm")
     public void test3() {
         redirect("http://g.cn");
     }
@@ -299,7 +295,7 @@ public class DemoAction extends AbstractAction {
     /**
      * 测试AbstractAction
      */
-    @At("test_abs_action")
+    @At("test_abs_action.htm")
     public void testAbstractAction() {
         System.out.println(getRequest().toString());
         System.out.println(getResponse().toString());
@@ -321,7 +317,7 @@ public class DemoAction extends AbstractAction {
     /**
      * 测试Context工具类
      */
-    @At("test_ctx")
+    @At("test_ctx.htm")
     public void testCtx() {
         Context.write("Ctx 测试成功");
     }
@@ -329,7 +325,7 @@ public class DemoAction extends AbstractAction {
     /**
      * 各种不同的视图方法
      */
-    @At("test_all")
+    @At("test_all.htm")
     public String testAll(HttpServletResponse response) throws Exception {
         response.getWriter().print("Response write 测试成功");
         super.write("AbstractAction write 测试成功");
@@ -345,7 +341,7 @@ public class DemoAction extends AbstractAction {
     /**
      * action方法参数适配
      */
-    @At("test_get_param")
+    @At("test_get_param.htm")
     public String testGetParam(Integer num1, @Arg("num2") Integer num2) {
         return "";
     }

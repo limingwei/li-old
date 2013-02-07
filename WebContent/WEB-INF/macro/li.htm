@@ -157,7 +157,7 @@
         </#list>
     </table>
     
-	<#assign url_0="${request.requestURI}?"/>
+	<#assign url_0="${(request.requestURI)!}?"/>
 	<#assign parameterMap=request.parameterMap/>
 	<#list parameterMap?keys as key>
 		<#list parameterMap[key] as param>
@@ -279,7 +279,7 @@
 	分页对象
 -->
 <#macro page pg pn="page" method="GET">
-	<#assign url_0="${request.requestURI}?"/>
+	<#assign url_0="${(request.requestURI)!}?"/>
 
 	<#if url_0?index_of(pn) gt -1><#-- 截取掉末尾的page=1 -->
 		<#assign url_0="${url_0?substring(0,url_0?index_of(pn))}"/>

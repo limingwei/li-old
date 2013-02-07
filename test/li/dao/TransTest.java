@@ -1,7 +1,7 @@
 package li.dao;
 
 import li.annotation.Inject;
-import li.demo.record.Account;
+import li.people.record.Account;
 import li.test.BaseTest;
 import li.util.Convert;
 import li.util.Log;

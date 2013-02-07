@@ -3,11 +3,9 @@ package li.dao;
 import java.util.Map;
 
 import li.annotation.Inject;
-import li.demo.dao.IUserDao;
-import li.demo.record.Account;
+import li.people.record.Account;
 import li.test.BaseTest;
 import li.util.Convert;
-import li.util.ConvertUtil;
 import li.util.Log;
 
 import org.junit.Test;
@@ -20,24 +18,6 @@ public class AbstractDaoTest extends BaseTest {
 
     @Inject
     _UserDao userDao;
-
-    @Inject
-    IUserDao userDaoImpl;
-
-    @Test
-    public void testDao() {
-        log.info(ConvertUtil.toJson(userDaoImpl.list(null)));
-    }
-
-    @Test
-    public void testFindByEmail() {
-        log.info(ConvertUtil.toJson(userDaoImpl.findByEmail("")));
-    }
-
-    @Test
-    public void testFindByUsername() {
-        log.info(ConvertUtil.toJson(userDaoImpl.findByUsername("")));
-    }
 
     @Test
     public void testQuery() {

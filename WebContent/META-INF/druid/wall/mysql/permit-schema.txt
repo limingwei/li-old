@@ -1,5 +1,0 @@
-mysql
-test
-performance_schema
-information_schema
-discuz_x25_sc_utf8

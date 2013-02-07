@@ -6,9 +6,9 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import li.demo.model.User;
 import li.ioc.Ioc;
 import li.model.Bean;
+import li.people.record.Account;
 import li.test.BaseTest;
 import li.util.Convert;
 import li.util.Log;
@@ -23,17 +23,17 @@ public class QueryBuilderTest extends BaseTest {
 
     QueryBuilder queryBuilder = new QueryBuilder();
 
-    User user = new User();
+    Account account = new Account();
 
     @Before
     public void before() throws Exception {
         queryBuilder.dataSource = dataSource;
-        queryBuilder.beanMeta = Bean.getMeta(dataSource, User.class);
+        queryBuilder.beanMeta = Bean.getMeta(dataSource, Account.class);
 
-        user.setId(1);
-        user.setUsername("username-1");
-        user.setPassword("password-1");
-        user.setEmail("email-1");
+        account.set("id", 1);
+        account.set("username", "username-1");
+        account.set("password", "password-1");
+        account.set("email", "email-1");
     }
 
     @Test
@@ -114,7 +114,7 @@ public class QueryBuilderTest extends BaseTest {
 
     @Test
     public void save() {
-        assertEquals("INSERT INTO t_account (username,password,email) VALUES ('username-1','password-1','email-1')", queryBuilder.save(user));
+        assertEquals("INSERT INTO t_account (username,password,email,role_id,status) VALUES ('username-1','password-1','email-1',NULL,NULL)", queryBuilder.save(account));
     }
 
     @Test
@@ -161,8 +161,8 @@ public class QueryBuilderTest extends BaseTest {
 
     @Test
     public void update() {
-        String sql = "UPDATE t_account SET username='username-1',password='password-1',email='email-1' WHERE id=1";
-        assertEquals(sql, queryBuilder.update(user));
+        String sql = "UPDATE t_account SET username='username-1',password='password-1',email='email-1',role_id='null',status='null' WHERE id=1";
+        assertEquals(sql, queryBuilder.update(account));
     }
 
     @Test

@@ -2,7 +2,8 @@ package li.demo.action;
 
 import static org.junit.Assert.assertNotNull;
 import li.annotation.Inject;
-import li.demo.record.Account;
+import li.people.action.AccountAction;
+import li.people.record.Account;
 import li.test.ActionTest;
 
 import org.junit.Before;
@@ -11,6 +12,7 @@ import org.junit.Test;
 public class AccountActionTest extends ActionTest {
     @Inject
     AccountAction accountAction;
+
     private Account account = new Account();
 
     @Before
@@ -36,7 +38,7 @@ public class AccountActionTest extends ActionTest {
 
     @Test
     public void list() {
-        accountAction.list(page);
+        accountAction.list(page, "文");
     }
 
     @Test
@@ -61,12 +63,12 @@ public class AccountActionTest extends ActionTest {
 
     @Test
     public void signupView() {
-        accountAction.signup();
+        accountAction.register();
     }
 
     @Test
     public void signup() {
-        accountAction.signup(account);
+        accountAction.register(account);
     }
 
     @Test
