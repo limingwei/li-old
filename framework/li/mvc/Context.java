@@ -283,19 +283,22 @@ public class Context {
     /**
      * 把 content写到页面上
      */
-    public static void write(String content) {
-        final String JSON_REGEX = "^[\\[]*[{]+.*[}]+[]]*$", XML_REGEX = "^<.*>$";
-        if (!Verify.isEmpty(content) && Verify.regex(content, XML_REGEX)) {// 如果内容是XML
-            getResponse().setContentType("text/xml;charset=UTF-8");
-        } else if (!Verify.isEmpty(content) && Verify.regex(content, JSON_REGEX)) {// 如果内容是JSON
-            getResponse().setContentType("application/json;charset=UTF-8");
-        } else if (!Verify.isEmpty(content)) {
-            getResponse().setContentType("text/plain;charset=UTF-8");
-        }
-        try {
-            getResponse().getWriter().write(content);
-        } catch (Exception e) {
-            error(e);
+    public static void write(Object content) {
+        if (!Verify.isEmpty(content)) {
+            String contentStr = content.toString();
+            final String JSON_REGEX = "^[\\[]*[{]+.*[}]+[]]*$", XML_REGEX = "^<.*>$";
+            if (Verify.regex(contentStr, XML_REGEX)) {// 如果内容是XML
+                getResponse().setContentType("text/xml;charset=UTF-8");
+            } else if (Verify.regex(contentStr, JSON_REGEX)) {// 如果内容是JSON
+                getResponse().setContentType("application/json;charset=UTF-8");
+            } else {
+                getResponse().setContentType("text/plain;charset=UTF-8");
+            }
+            try {
+                getResponse().getWriter().write(contentStr);
+            } catch (Exception e) {
+                error(e);
+            }
         }
     }
 

@@ -196,7 +196,7 @@ public abstract class AbstractAction implements RequestMethod {
     /**
      * 把 content写到页面上
      */
-    public AbstractAction write(String content) {
+    public AbstractAction write(Object content) {
         Context.write(content);
         return this;
     }
