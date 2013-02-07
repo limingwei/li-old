@@ -25,7 +25,7 @@ public class SqliteTest extends BaseTest {
         Account user = new Account().set("status", 1).set("username", "li" + System.currentTimeMillis()).set("password", "wode").set("email", "limw@w.cn");
         userDao.save(user);
 
-        System.out.println("user id = " + user.get("id"));
+        log.debug("user id = " + user.get("id"));
 
         for (Account u : userDao.list(page.setPageSize(3), "WHERE 1=1 ORDER BY id DESC")) {
             log.debug("?\t?\t?\t?", u.get("id"), u.get("username"), u.get("password"), u.get("email"));
