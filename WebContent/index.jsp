@@ -19,6 +19,7 @@
 		<a href="login.do">login.do</a>
 		<a href="index.do">index.do</a>
 		<a href="news.do">news.do</a>
+		<a href="druid">druid</a>
 		<br/>
 		<a href="httl.do">httl.do</a>
 		<a href="fm.do">fm</a>
