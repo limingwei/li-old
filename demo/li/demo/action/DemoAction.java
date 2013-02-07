@@ -3,6 +3,7 @@ package li.demo.action;
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,8 +35,7 @@ public class DemoAction extends AbstractAction {
 
     @At("httl.do")
     public void httl() {
-        System.out.println(Context.getRootPath());
-
+        setRequest("date", new Date());
         Ctx.httl("/WEB-INF/view_ht/httl.htm");
     }
 
