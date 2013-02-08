@@ -3,6 +3,7 @@ package li;
 import li.aop.AopTest;
 import li.dao.AbstractDaoTest;
 import li.dao.ModelBuilderTest;
+import li.dao.PageTest;
 import li.dao.QueryBuilderTest;
 import li.dao.QueryRunnerTest;
 import li.dao.RecordTest;
@@ -17,7 +18,6 @@ import li.sqlite.SqliteTest;
 import li.util.ConvertTest;
 import li.util.FilesTest;
 import li.util.LogTest;
-import li.util.PageTest;
 import li.util.ReflectTest;
 import li.util.VerifyTest;
 

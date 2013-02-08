@@ -1,7 +1,6 @@
-package li.util;
+package li.dao;
 
 import static org.junit.Assert.assertTrue;
-import li.dao.Page;
 
 import org.junit.Test;
 
