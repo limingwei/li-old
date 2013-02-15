@@ -13,6 +13,14 @@ import li.util.Files;
 import li.util.Log;
 import li.util.Reflect;
 
+/**
+ * Action工具类
+ * 
+ * @author li (limw@w.cn)
+ * @version 0.1.1 (2013-02-15)
+ * 
+ * @see li.mvc.Context
+ */
 public class Ctx extends Context {
     private static final Log log = Log.init();
 
