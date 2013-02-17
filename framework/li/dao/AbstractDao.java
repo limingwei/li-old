@@ -11,6 +11,7 @@ import li.model.Bean;
 import li.model.Field;
 import li.util.Log;
 import li.util.Reflect;
+import li.util.Verify;
 
 /**
  * AbstractDao,通常,业务对象的Dao要继承这个基类
@@ -122,7 +123,8 @@ public class AbstractDao<T> {
     public Integer count(String sql, Object... args) {
         QueryRunner queryRunner = new QueryRunner(getConnection());
         ModelBuilder modelBuilder = new ModelBuilder(queryRunner, queryRunner.executeQuery(getQueryBuilder().countBySql(sql, args)));
-        return Integer.valueOf(modelBuilder.value(1, true, true));
+        String count = modelBuilder.value(1, true, true);
+        return Verify.isEmpty(count) ? -1 : Integer.valueOf(count);
     }
 
     /**
