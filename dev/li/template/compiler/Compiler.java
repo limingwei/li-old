@@ -21,7 +21,6 @@ import javax.tools.ToolProvider;
  * JdkCompiler. (SPI, Singleton, ThreadSafe)
  * 
  * @see httl.spi.parsers.AbstractParser#setCompiler(Compiler)
- * 
  * @author Liang Fei (liangfei0201 AT gmail DOT com)
  */
 public class Compiler {

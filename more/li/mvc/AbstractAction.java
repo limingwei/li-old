@@ -13,7 +13,6 @@ import li.model.Action;
  * 
  * @author li (limw@w.cn)
  * @version 0.1.1 (2012-07-20)
- * 
  * @see li.mvc.Context
  */
 public abstract class AbstractAction implements RequestMethod {

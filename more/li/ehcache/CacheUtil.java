@@ -21,7 +21,6 @@ public class CacheUtil {
     private static volatile CacheManager cacheManager = CacheManager.create();
 
     /**
-     * 
      * @param cacheName
      */
     public static Cache getOrAddCache(String cacheName) {
@@ -39,7 +38,6 @@ public class CacheUtil {
     }
 
     /**
-     * 
      * @param cacheName
      * @param key
      */
@@ -49,7 +47,6 @@ public class CacheUtil {
     }
 
     /**
-     * 
      * @param cacheName
      * @param key
      * @param value
@@ -59,7 +56,6 @@ public class CacheUtil {
     }
 
     /**
-     * 
      * @param cacheName
      * @param key
      */
@@ -68,7 +64,6 @@ public class CacheUtil {
     }
 
     /**
-     * 
      * @param cacheName
      * @param key
      * @param value
@@ -78,7 +73,6 @@ public class CacheUtil {
     }
 
     /**
-     * 
      * @param method
      */
     public static String cacheName(Method method) {
@@ -91,7 +85,6 @@ public class CacheUtil {
     }
 
     /**
-     * 
      * @param method
      */
     public static String cacheKey(Object[] args) {
@@ -99,7 +92,6 @@ public class CacheUtil {
     }
 
     /**
-     * 
      * @param key
      */
     public static ReentrantLock getLock(String key) {

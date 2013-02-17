@@ -18,7 +18,6 @@ import li.util.Reflect;
  * 
  * @author li (limw@w.cn)
  * @version 0.1.1 (2013-02-15)
- * 
  * @see li.mvc.Context
  */
 public class Ctx extends Context {

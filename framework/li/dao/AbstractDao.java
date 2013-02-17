@@ -142,7 +142,6 @@ public class AbstractDao<T> {
      * @param sql 传入的sql语句,可以包含'?'占位符和具名占位符
      * @param args 替换sql中占位符的值,或者对应具名占位符的Map
      * @return 受影响的行数
-     * 
      * @see li.dao.AbstractDao#update(String, Object...)
      */
     public Integer delete(String sql, Object... args) {
@@ -163,7 +162,6 @@ public class AbstractDao<T> {
      * 
      * @param sql 传入的sql语句,可以包含'?'占位符和具名占位符
      * @param args 替换sql中占位符的值,或者对应具名占位符的Map
-     * 
      * @see li.dao.AbstractDao#list(Page, String, Object...)
      */
     public T find(String sql, Object... args) {
