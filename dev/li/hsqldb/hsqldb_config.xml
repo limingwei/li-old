@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ioc.xsd">
 	<beans>
-		<bean name="hsqldb" class="li.dao.MonitoringDataSource">
+		<!-- <bean name="hsqldb" class="li.dao.MonitoringDataSource">
 			<property name="url" value="jdbc:hsqldb:file:../../program files/hsqldb/db/forum/forum" />
 			<property name="username" value="sa" />			
 		</bean>
 		<bean class="li.hsqldb.Account">
 			<property name="dataSource" value="hsqldb" />
-		</bean>
+		</bean> -->
 	</beans>
 </config>

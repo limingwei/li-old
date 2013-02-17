@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ioc.xsd">
 	<beans>
-		<bean name="derby" class="li.dao.MonitoringDataSource">
+		<!-- <bean name="derby" class="li.dao.MonitoringDataSource">
 			<property name="url" value="jdbc:derby:../../program files/derby/db/forum;create=true" />
 		</bean>
 		<bean class="li.derby.Account">
 			<property name="dataSource" value="derby" />
-		</bean>
+		</bean> -->
 	</beans>
 </config>

@@ -8,13 +8,11 @@ import li.dao.QueryBuilderTest;
 import li.dao.QueryRunnerTest;
 import li.dao.RecordTest;
 import li.dao.TransTest;
-import li.h2.H2Test;
 import li.ioc.IocTest;
 import li.model.BeanTest;
 import li.model.FieldTest;
 import li.mvc.ContextTest;
 import li.service.AbstractServiceTest;
-import li.sqlite.SqliteTest;
 import li.util.ConvertTest;
 import li.util.FilesTest;
 import li.util.LogTest;
@@ -26,8 +24,8 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ SqliteTest.class, H2Test.class, //
-        ContextTest.class,//
+@SuiteClasses({ // SqliteTest.class, H2Test.class, //
+ContextTest.class,//
         AbstractServiceTest.class, //
         IocTest.class, AopTest.class, //
         BeanTest.class, FieldTest.class, //
