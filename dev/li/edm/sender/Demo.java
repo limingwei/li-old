@@ -1,6 +1,9 @@
 package li.edm.sender;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.StringReader;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -13,22 +16,29 @@ import javax.mail.internet.MimeUtility;
 import li.dao.Page;
 import li.edm.collector.record.Email;
 import li.ioc.Ioc;
-import li.util.FileUtil;
+import li.util.Log;
 import li.util.Verify;
+
+import org.apache.commons.io.output.FileWriterWithEncoding;
 
 /**
  * 663564毫秒 180封 2012-01-28 4s/封 15封/分 900封/小时 21600封/天
  */
 public class Demo {
+    private static final String UTF8 = "UTF-8";
+
     private static final String[] testMail = { "416133823@qq.com" };
 
     private static final String tempalte_path = "dev\\li\\edm\\sender\\edm_template_1.htm";
 
     private static final Sender sender = new Sender("smtp.mailgun.org", "postmaster@limingwei.mailgun.org", "6mitwv670n61");
 
+    private static final Log log = Log.init();
+
     public static void main(String[] args) throws Exception {
-        preview();
+        // preview();
         // testSend();
+        startSendTask();
     }
 
     private static void testSend() throws Exception {
@@ -43,7 +53,24 @@ public class Demo {
         map.put("goodsList", data());
         map.put("mail", "preview@w.cn");
 
-        FileUtil.write(new File("E:\\preview.htm"), freemarker.merge(map));
+        write(new File("E:\\preview.htm"), freemarker.merge(map));
+    }
+
+    public static void write(File file, String content) {
+        BufferedReader bufferedReader = new BufferedReader(new StringReader(content));
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriterWithEncoding(file, UTF8));
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                bufferedWriter.write(line);
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+            }
+            bufferedWriter.close();
+            bufferedReader.close();
+        } catch (Exception e) {
+            throw new RuntimeException("Exception in li.util.Files.write(File, String)", e);
+        }
     }
 
     private static void startSendTask() throws Exception {
@@ -59,6 +86,8 @@ public class Demo {
     }
 
     public static void sendMailTo(String mailAddress) throws Exception {
+        log.debug("sendding mail to ?", mailAddress);
+
         Freemarker freemarker = new Freemarker(tempalte_path);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("goodsList", data());
