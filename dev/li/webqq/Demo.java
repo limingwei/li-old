@@ -108,15 +108,15 @@ public class Demo {
 
         Header[] headers = httpResponse.getAllHeaders();
 
-        System.out.println("--- response ---");
+        System.out.println("--- response1 ---");
         System.out.println(response);
 
-        System.out.println("--- headers ---");
+        System.out.println("--- headers1 ---");
         for (Header header : headers) {
             System.out.println(header);
         }
 
-        System.out.println("--- cookies ---");
+        System.out.println("--- cookies1 ---");
         List<Cookie> cookies = cookieStore.getCookies();
         for (Cookie cookie : cookies) {
             System.out.println(cookie);
