@@ -86,8 +86,6 @@ public class Demo {
     }
 
     public static void sendMailTo(String mailAddress) throws Exception {
-        log.debug("sendding mail to ?", mailAddress);
-
         Freemarker freemarker = new Freemarker(tempalte_path);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("goodsList", data());
@@ -99,7 +97,13 @@ public class Demo {
         mail.setFrom(MimeUtility.encodeText("Sense印象 精品女鞋专卖") + "<limingwei@mail.com>");// 发件人
 
         mail.setTo(mailAddress);
-        sender.send(mail);
+        try {
+            sender.send(mail);
+            log.debug("sent mail to ?", mailAddress);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("sent mail error ?", mailAddress);
+        }
     }
 
     private static String getDomain(String email) {

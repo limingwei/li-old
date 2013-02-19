@@ -50,7 +50,7 @@ public class Sender {
             message.setContent(multipart);
             Transport.send(message);// 发送邮件
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }
