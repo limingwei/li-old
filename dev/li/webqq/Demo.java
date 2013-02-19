@@ -24,7 +24,12 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
 public class Demo {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+        System.out.println(new MD5().calcMD5_3("buxiaode"));
+        System.out.println(new MD5().calcMD5("buxiaode"));
+    }
+
+    public static void main2(String[] args) throws Exception {
         String url = "https://ssl.ptlogin2.qq.com/login" + //
                 "?u=1055515958" + //
                 "&p=8BCFAFA136059B769C2CFF89F5F857DB" + //
