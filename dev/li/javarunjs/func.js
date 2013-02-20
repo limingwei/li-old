@@ -10,5 +10,5 @@ function sum(a, b) {
 }
 
 function hello(name) {
-	return "hello , " + name;
+	return "hello 你好 , " + name;
 }
