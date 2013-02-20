@@ -1,5 +1,6 @@
 package li.javarunjs;
 
+import java.io.FileReader;
 import java.util.List;
 
 import javax.script.Invocable;
@@ -8,6 +9,18 @@ import javax.script.ScriptEngineManager;
 
 public class Demo {
     public static void main(String[] args) throws Exception {
+        ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+        ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("javascript");
+        scriptEngine.eval(new FileReader(System.getProperty("user.dir") + "\\dev\\li\\javarunjs\\func.js"));
+
+        System.out.println(((Invocable) scriptEngine).invokeFunction("sum", 1, 2));
+
+        System.out.println(((Invocable) scriptEngine).invokeFunction("hello", "黎明伟"));
+
+        ((Invocable) scriptEngine).invokeFunction("test");
+    }
+
+    public static void main2(String[] args) throws Exception {
         ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
         ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("javascript");
 
