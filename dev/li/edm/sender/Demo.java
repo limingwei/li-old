@@ -99,10 +99,10 @@ public class Demo {
         mail.setTo(mailAddress);
         try {
             sender.send(mail);
-            log.debug("sent mail to ?", mailAddress);
+            log.debug("sent ?", mailAddress);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("sent mail error ?", mailAddress);
+            log.error("sent error ?", mailAddress);
         }
     }
 
