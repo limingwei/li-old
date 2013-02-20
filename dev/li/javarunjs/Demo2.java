@@ -12,10 +12,10 @@ public class Demo2 {
         ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("javascript");
         scriptEngine.eval(new FileReader("D:\\workspace\\li\\dev\\li\\javarunjs\\func.js"));
 
-        Object result = ((Invocable) scriptEngine).invokeFunction("sum", 1, 2);
-
-        System.out.println(result);
+        System.out.println(((Invocable) scriptEngine).invokeFunction("sum", 1, 2));
 
         System.out.println(((Invocable) scriptEngine).invokeFunction("hello", "黎明伟"));
+
+        ((Invocable) scriptEngine).invokeFunction("test");
     }
 }
