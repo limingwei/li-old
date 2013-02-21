@@ -8,16 +8,23 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
 public class Demo {
+    static ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+    static ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("javascript");
+
+    static {
+        try {
+            scriptEngine.eval(new FileReader(System.getProperty("user.dir") + "\\dev\\li\\javarunjs\\func.js"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) throws Exception {
-        ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
-        ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("javascript");
-        scriptEngine.eval(new FileReader(System.getProperty("user.dir") + "\\dev\\li\\javarunjs\\func.js"));
+        System.out.println(invoke("input", "请输入內容"));
+    }
 
-        System.out.println(((Invocable) scriptEngine).invokeFunction("sum", 1, 2));
-
-        System.out.println(((Invocable) scriptEngine).invokeFunction("hello", "黎明伟"));
-
-        ((Invocable) scriptEngine).invokeFunction("test");
+    private static Object invoke(String name, Object... args) throws Exception {
+        return ((Invocable) scriptEngine).invokeFunction(name, args);
     }
 
     public static void main2(String[] args) throws Exception {

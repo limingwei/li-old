@@ -16,8 +16,24 @@ function hello(name) {
 function alert(msg) {
 	importPackage(javax.swing);
 	var optionPane = JOptionPane.showMessageDialog(null, msg);
+	return optionPane;
 }
 
-function test(){
-	alert(sum(123,234)+hello("英雄"));
+function confirm(title, msg) {
+	importPackage(javax.swing);
+	return JOptionPane.showConfirmDialog(null, msg, title,
+			JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+}
+
+function input(msg) {
+	importPackage(javax.swing);
+	return JOptionPane.showInputDialog(msg);
+}
+
+function dialog() {
+
+}
+
+function test() {
+	alert(sum(123, 234) + hello("英雄"));
 }
