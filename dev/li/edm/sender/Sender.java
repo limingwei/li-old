@@ -14,6 +14,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 public class Sender {
+    private static final Integer TIME_OUT = 10;
+
     private Session session;
     private String username;
 
@@ -39,7 +41,7 @@ public class Sender {
             mail.setFrom(this.username);// 设置发件人为sender的用户名
         }
         try {
-            Message message = new MimeMessage(session);
+            final Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(mail.getFrom()));// 发件人
             message.addRecipient(RecipientType.TO, new InternetAddress(mail.getTo()));// 收件人
             message.setSubject(mail.getSubject());// 邮件标题
@@ -48,7 +50,12 @@ public class Sender {
             bodyPart.setContent(mail.getContent(), "text/html;charset=UTF-8");
             multipart.addBodyPart(bodyPart);
             message.setContent(multipart);
-            Transport.send(message);// 发送邮件
+
+            new TimeOut(TIME_OUT) {
+                public void run() throws Throwable {
+                    Transport.send(message);// 发送邮件
+                }
+            };
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -75,13 +75,22 @@ public class Demo {
 
     private static void startSendTask() throws Exception {
         Email emailDao = Ioc.get(Email.class);
-        List<Email> emails = emailDao.list(new Page(1, 180), "WHERE last_send_date IS NULL");
+        List<Email> emails = emailDao.list(new Page(1, 150), "WHERE last_send_date IS NULL");
 
         for (Email email : emails) {
-            sendMailTo(email.get(String.class, "address"));
-            email.set("domain", getDomain(email.get(String.class, "address")));
-            email.set("last_send_date", new Timestamp(System.currentTimeMillis()));
-            emailDao.update(email);
+            String mailAddress = email.get(String.class, "address");
+            try {
+                sendMailTo(mailAddress);
+
+                email.set("domain", getDomain(mailAddress));
+                email.set("last_send_date", new Timestamp(System.currentTimeMillis()));
+                emailDao.update(email);
+
+                log.debug("sent ?", mailAddress);
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("sent error ?", mailAddress);
+            }
         }
     }
 
@@ -97,13 +106,7 @@ public class Demo {
         mail.setFrom(MimeUtility.encodeText("Sense印象 精品女鞋专卖") + "<limingwei@mail.com>");// 发件人
 
         mail.setTo(mailAddress);
-        try {
-            sender.send(mail);
-            log.debug("sent ?", mailAddress);
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("sent error ?", mailAddress);
-        }
+        sender.send(mail);
     }
 
     private static String getDomain(String email) {
