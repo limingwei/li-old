@@ -183,7 +183,7 @@ public class Context {
     /**
      * 将QueryString中对应key的参数设置到request里面
      */
-    public static void passParams(String... keys) {
+    public static void keepParams(String... keys) {
         for (String key : keys) {
             getRequest().setAttribute(key, getRequest().getParameter(key));
         }

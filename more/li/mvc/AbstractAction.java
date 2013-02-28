@@ -110,8 +110,8 @@ public abstract class AbstractAction implements RequestMethod {
     /**
      * 将QueryString中对应key的参数设置到request里面
      */
-    public AbstractAction passParams(String... keys) {
-        Context.passParams(keys);
+    public AbstractAction keepParams(String... keys) {
+        Context.keepParams(keys);
         return this;
     }
 

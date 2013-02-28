@@ -17,7 +17,7 @@ public class ResourceAction extends AbstractAction implements Const {
     public void list(Page page, String key) {
         setRequest(LIST, resourceDao.list(page, key));
         setRequest(PAGE, page);
-        passParams("key");
+        keepParams("key");
         view("resource/list");
     }
 
