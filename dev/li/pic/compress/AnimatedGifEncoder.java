@@ -35,7 +35,6 @@ import java.io.OutputStream;
  * 
  * @author Kevin Weiner, FM Software
  * @version 1.03 November 2003
- * 
  */
 
 public class AnimatedGifEncoder {
@@ -292,7 +291,6 @@ public class AnimatedGifEncoder {
 
     /**
      * Returns index of palette color closest to c
-     * 
      */
     protected int findClosest(Color c) {
         if (colorTab == null)

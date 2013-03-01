@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
 /**
- * 
  * @author 一粒沙
  */
 public class HttpService {
