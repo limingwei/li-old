@@ -1,6 +1,7 @@
 package li.javarunjs;
 
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 import javax.script.Invocable;
@@ -13,7 +14,8 @@ public class Demo {
 
     static {
         try {
-            scriptEngine.eval(new FileReader(System.getProperty("user.dir") + "\\dev\\li\\javarunjs\\func.js"));
+            InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("li/javarunjs/func.js");
+            scriptEngine.eval(new InputStreamReader(inputStream));
         } catch (Exception e) {
             e.printStackTrace();
         }
