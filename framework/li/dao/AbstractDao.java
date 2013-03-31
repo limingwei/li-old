@@ -194,7 +194,7 @@ public class AbstractDao<T> {
         if (null != resultSet && null != page && page.count()) {
             page.setRecordCount(count(sql));
         }
-        Integer count = null == page ? Page.DEFAULT_SIZE : page.getPageSize();
+        Integer count = null == page ? Integer.MAX_VALUE : page.getPageSize();
         return modelBuilder.list(getType(), getBeanMeta().fields, count, true);
     }
 
@@ -211,7 +211,7 @@ public class AbstractDao<T> {
         if (null != resultSet && null != page && page.count()) {
             page.setRecordCount(count(sql));
         }
-        Integer count = null == page ? Page.DEFAULT_SIZE : page.getPageSize();
+        Integer count = null == page ? Integer.MAX_VALUE : page.getPageSize();
         Class<?> type = Record.class.isAssignableFrom(getType()) ? getType() : Record.class;// Record类型或其子类
         return (List<Record>) modelBuilder.list(type, Field.list(resultSet), count, true);
     }
