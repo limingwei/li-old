@@ -15,6 +15,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import li.dao.Record;
 
 /**
  * 反射工具类,封装了一些反射方法
@@ -23,6 +27,24 @@ import java.util.Map;
  * @version 0.1.4 (2012-05-08)
  */
 public class Reflect {
+
+    /**
+     * 得到所有属性,包括超类中的
+     * 
+     * @param type
+     */
+    public static List<Field> getFields(Class<?> type) {
+        List<Field> fields = new ArrayList<>();
+        Field[] fs = type.getDeclaredFields();
+        for (Field field : fs) {
+            fields.add(field);
+        }
+        if (Object.class != type.getSuperclass()) {// 扫描超类的Field
+            fields.addAll(getFields(type.getSuperclass()));
+        }
+        return fields;
+    }
+
     /**
      * 根据传入的类名返回对应的Class对象
      */
@@ -223,6 +245,12 @@ public class Reflect {
             Field field = getField(src.getClass(), attribute.name);
             if (null != field && !Modifier.isFinal(field.getModifiers())) {// 如果两个对象中均有此属性,且目标对象中的此属性可写
                 set(dest, attribute.name, get(src, attribute.name));
+            }
+        }
+        if (src instanceof Record<?> && dest instanceof Record<?>) {
+            Set<Entry<?, ?>> set = ((Record<?>) src).entrySet();
+            for (Entry<?, ?> entry : set) {
+                ((Record<?>) dest).set(entry.getKey(), entry.getValue());
             }
         }
         return dest;
