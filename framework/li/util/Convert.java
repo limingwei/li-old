@@ -20,6 +20,9 @@ public class Convert {
      * 把字符串用一次MD5加密后返回
      */
     public static String toMD5(Object input) {
+        if (Verify.isEmpty(input)) {
+            return "";
+        }
         try {
             StringBuffer stringBuffer = new StringBuffer();
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
