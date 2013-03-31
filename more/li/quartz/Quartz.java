@@ -25,6 +25,12 @@ import org.quartz.simpl.SimpleJobFactory;
 import org.quartz.spi.TriggerFiredBundle;
 import org.w3c.dom.NodeList;
 
+/**
+ * Quartz
+ * 
+ * @author li (limw@w.cn)
+ * @version 0.1.1 (2013-03-19)
+ */
 public class Quartz {
     private static final Log log = Log.init();
 
@@ -43,6 +49,7 @@ public class Quartz {
             log.debug("Starting Quartz ...");
             start();
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("Error when starting Quartz");
             throw new RuntimeException(e);
         }
@@ -63,6 +70,8 @@ public class Quartz {
             }
             scheduler.start();
             started = true;
+        } else {
+            throw new RuntimeException("已经启动Quartz,不要多次启动");
         }
     }
 
