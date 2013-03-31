@@ -1,6 +1,7 @@
 package li.test;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 import li.annotation.Inject;
 import li.dao.Trans;
@@ -39,7 +40,7 @@ public class JUnit4Li extends BlockJUnit4ClassRunner {
     protected Object createTest() throws Exception {
         Object target = super.createTest();
 
-        Field[] fields = type.getDeclaredFields();
+        List<Field> fields = Reflect.getFields(type);
         for (Field field : fields) {
             Inject inject = field.getAnnotation(Inject.class);
             if (null != inject) {

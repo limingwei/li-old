@@ -40,7 +40,7 @@ public class AnnotationIocLoader {
                 iocBean.type = type;
                 iocBean.name = beanAnnotation.value();
 
-                Field[] fields = type.getDeclaredFields();
+                List<Field> fields = Reflect.getFields(type);
                 for (Field field : fields) {
                     Inject inject = field.getAnnotation(Inject.class);
                     if (null != inject) {
