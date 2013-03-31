@@ -74,7 +74,7 @@ public class ModelBuilder {
      */
     public String value(Object column, Boolean next, Boolean close) {
         try {
-            if ((null != resultSet) && ((next && resultSet.next()) || true)) { // 若next==true,则resultSet.next()
+            if ((null != resultSet) && ((next && resultSet.next()) || !next)) { // 若next==true,则resultSet.next()
                 if (column instanceof String) {// 按列名查找
                     return resultSet.getString((String) column);
                 } else if (column instanceof Integer) {// 按index查找
