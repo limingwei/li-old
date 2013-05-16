@@ -1,4 +1,4 @@
-package li.quartz;
+package li.task;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,12 +34,12 @@ import org.w3c.dom.NodeList;
 public class Quartz {
     private static final Log log = Log.init();
 
-    private static final String QUARTZ_CONFIG_REGEX = "^.*(config|task)\\.xml$";
+    private static final String TASK_CONFIG_REGEX = "^.*(config|task)\\.xml$";
 
     /**
      * 防止重复启动的标记
      */
-    private static boolean started = false;
+    private static Scheduler scheduler = null;
 
     /**
      * 初始化此类的时候启动Quartz,唯一的public方法
@@ -56,11 +56,24 @@ public class Quartz {
     }
 
     /**
+     * Quartz是否正在运行
+     * 
+     * @return
+     */
+    public static Boolean isOn() {
+        try {
+            return null != scheduler && scheduler.isStarted();
+        } catch (SchedulerException e) {
+            return false;
+        }
+    }
+
+    /**
      * 启动Quartz,启动所有任务,synchronized方法
      */
     private synchronized static void start() throws Exception {
-        if (!started) {// 只开始一次
-            Scheduler scheduler = getScheduler();
+        if (null == scheduler) {// 只开始一次
+            scheduler = getScheduler();
             Set<Entry<Class<? extends Job>, String>> jobs = getJobs().entrySet();
             for (Entry<Class<? extends Job>, String> entry : jobs) {
                 String name = entry.getKey().getName();// 类名作为name,使用默认的GROUP
@@ -69,7 +82,6 @@ public class Quartz {
                 scheduler.scheduleJob(jobDetail, cronTrigger);
             }
             scheduler.start();
-            started = true;
         } else {
             throw new RuntimeException("已经启动Quartz,不要多次启动");
         }
@@ -89,12 +101,12 @@ public class Quartz {
     }
 
     /**
-     * 扫描以config.xml结尾的Quartz配置文件返回所有任务
+     * 扫描以config.xml或task.xml结尾的Quartz配置文件返回所有任务
      */
     private static Map<Class<? extends Job>, String> getJobs() {
         Map<Class<? extends Job>, String> jobs = new HashMap<Class<? extends Job>, String>();
 
-        List<String> fileList = Files.list(Files.root(), QUARTZ_CONFIG_REGEX, true);// 搜索以config.xml结尾的文件
+        List<String> fileList = Files.list(Files.root(), TASK_CONFIG_REGEX, true);// 搜索以config.xml结尾的文件
         for (String filePath : fileList) {
             NodeList beanNodes = (NodeList) Files.xpath(Files.build(filePath), "//task", XPathConstants.NODESET);
             for (int length = (null == beanNodes ? -1 : beanNodes.getLength()), i = 0; i < length; i++) {

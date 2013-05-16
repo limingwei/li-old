@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<tasks>
+		<task class="li.task.HahaJob" trigger="0/2 * * * * ? *" />
+		<task class="li.task.HelloJob" trigger="0/3 * * * * ? *" />
+	</tasks>
+	<beans>
+		<!-- <bean class="li.task.Quartz" /> -->
+	</beans>
+</config>

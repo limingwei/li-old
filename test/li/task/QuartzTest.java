@@ -1,6 +1,6 @@
-package li.quartz;
+package li.task;
 
-public class Demo {
+public class QuartzTest {
     /**
      * JUnit不支持多线程的测试,不能用于测试Quartz
      */
