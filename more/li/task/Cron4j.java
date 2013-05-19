@@ -26,7 +26,7 @@ import org.w3c.dom.NodeList;
 public class Cron4j {
     private static final Log log = Log.init();
 
-    private static final String TASK_CONFIG_REGEX = "^.*(config|task)\\.xml$";
+    private static final String TASK_CONFIG_REGEX = "^.*(config|task|cron4j)\\.xml$";
 
     /**
      * 防止重复启动的标记

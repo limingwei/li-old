@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<tasks>
+       <!-- Cron4j -->
+       <task class="li.task.HahaJob" trigger="* * * * *" />
+       <task class="li.task.HelloJob" trigger="* * * * *" />
+	</tasks>
+	<beans>
+		<!-- <bean class="li.task.Cron4j" /> -->
+	</beans>
+</config>
