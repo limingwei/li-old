@@ -47,7 +47,7 @@ public class Ctx extends Context {
         } else if ("httl".equals(viewType) || "ht".equals(viewType)) {// beetl视图
             return httl(VIEW_PREFIX + viewPath + VIEW_SUFFIX);
         } else {
-            return view(path);
+            return Context.view(path);
         }
     }
 
