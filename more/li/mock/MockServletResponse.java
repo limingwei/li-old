@@ -18,34 +18,58 @@ import li.util.Log;
 class MockServletResponse implements ServletResponse {
     private static final Log log = Log.init();
 
+    private Locale locale = Locale.getDefault();
+
+    private String characterEncoding = "UTF-8";
+
+    private String contentType;
+
     public PrintWriter getWriter() throws IOException {
         log.info("li.mock.MockServletResponse.getWriter() calling by " + Tool.stackTrace());
 
-        return new PrintWriter(System.out) {
-            public void write(char[] buf, int off, int len) {}
-        };
+        return new PrintWriter(System.out);
     }
 
     public ServletOutputStream getOutputStream() throws IOException {
-        return null;
-    }
+        log.info("li.mock.MockServletResponse.getOutputStream() calling by " + Tool.stackTrace());
 
-    public void flushBuffer() throws IOException {}
-
-    public int getBufferSize() {
-        return 0;
+        return new ServletOutputStream() {
+            public void write(int b) throws IOException {
+                getWriter().write(b);
+            }
+        };
     }
 
     public String getCharacterEncoding() {
-        return null;
+        return this.characterEncoding;
     }
 
-    public String getContentType() {
-        return null;
+    public void setCharacterEncoding(String characterEncoding) {
+        this.characterEncoding = characterEncoding;
     }
 
     public Locale getLocale() {
-        return null;
+        return this.locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
+
+    public String getContentType() {
+        return this.contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public void setBufferSize(int bufferSize) {}
+
+    public void setContentLength(int contentLength) {}
+
+    public int getBufferSize() {
+        return 0;
     }
 
     public boolean isCommitted() {
@@ -56,13 +80,5 @@ class MockServletResponse implements ServletResponse {
 
     public void resetBuffer() {}
 
-    public void setBufferSize(int arg0) {}
-
-    public void setCharacterEncoding(String arg0) {}
-
-    public void setContentLength(int arg0) {}
-
-    public void setContentType(String arg0) {}
-
-    public void setLocale(Locale arg0) {}
+    public void flushBuffer() throws IOException {}
 }
