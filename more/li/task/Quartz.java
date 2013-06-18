@@ -16,10 +16,9 @@ import li.util.Reflect;
 import org.quartz.CronTrigger;
 import org.quartz.Job;
 import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.quartz.impl.JobDetailImpl;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.triggers.CronTriggerImpl;
 import org.quartz.simpl.SimpleJobFactory;
@@ -75,8 +74,8 @@ public class Quartz {
     private synchronized static void start() throws Exception {
         if (null == scheduler) {// 只开始一次
             scheduler = getScheduler();
-            Set<Entry<Class<? extends Runnable>, String>> jobs = getJobs().entrySet();
-            for (Entry<Class<? extends Runnable>, String> entry : jobs) {
+            Set<Entry<Class<? extends Job>, String>> jobs = getJobs().entrySet();
+            for (Entry<Class<? extends Job>, String> entry : jobs) {
                 String name = entry.getKey().getName();// 类名作为name,使用默认的GROUP
                 JobDetail jobDetail = new JobDetailImpl(name, Scheduler.DEFAULT_GROUP, entry.getKey());
                 CronTrigger cronTrigger = new CronTriggerImpl(name, Scheduler.DEFAULT_GROUP, entry.getValue());
@@ -95,11 +94,7 @@ public class Quartz {
         Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
         scheduler.setJobFactory(new SimpleJobFactory() {// 设置自定义的job生成工厂
                     public Job newJob(final TriggerFiredBundle bundle, Scheduler scheduler) throws SchedulerException {
-                        return new Job() {
-                            public void execute(JobExecutionContext context) throws JobExecutionException {
-                                Ioc.get(((JobDetailImpl) bundle.getJobDetail()).getJobClass2()).run();
-                            }
-                        };// 通过Ioc生成job实例
+                        return Ioc.get(bundle.getJobDetail().getJobClass());// 通过Ioc生成job实例
                     }
                 });
         return scheduler;
@@ -108,8 +103,8 @@ public class Quartz {
     /**
      * 扫描以config.xml或task.xml结尾的Quartz配置文件返回所有任务
      */
-    private static Map<Class<? extends Runnable>, String> getJobs() {
-        Map<Class<? extends Runnable>, String> jobs = new HashMap<Class<? extends Runnable>, String>();
+    private static Map<Class<? extends Job>, String> getJobs() {
+        Map<Class<? extends Job>, String> jobs = new HashMap<Class<? extends Job>, String>();
 
         List<String> fileList = Files.list(Files.root(), TASK_CONFIG_REGEX, true);// 搜索以config.xml结尾的文件
         for (String filePath : fileList) {
@@ -118,26 +113,9 @@ public class Quartz {
                 String type = (String) Files.xpath(beanNodes.item(i), "@class", XPathConstants.STRING);
                 String trigger = (String) Files.xpath(beanNodes.item(i), "@trigger", XPathConstants.STRING);
 
-                jobs.put((Class<? extends Runnable>) Reflect.getType(type), trigger);
+                jobs.put((Class<? extends Job>) Reflect.getType(type), trigger);
             }
         }
         return jobs;
-    }
-}
-
-class JobDetailImpl extends org.quartz.impl.JobDetailImpl {
-    private static final long serialVersionUID = 8564390067131366999L;
-
-    private Class<? extends Runnable> jobClass2;
-
-    public JobDetailImpl(String name, String group, Class<? extends Runnable> jobClass) {
-        setName(name);
-        setGroup(group);
-        setJobClass(Job.class);
-        this.jobClass2 = jobClass;
-    }
-
-    public Class<? extends Runnable> getJobClass2() {
-        return this.jobClass2;
     }
 }
