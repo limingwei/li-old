@@ -41,7 +41,7 @@ public class Ioc {
                 bean.instance = Reflect.born(bean.type);
             } else {
                 log.trace("Aop initializing ?", bean.type);
-                bean.instance = AopEnhancer.create(bean.type);// 如果有cglib-nodep-2.2.3.jar,这里每次都进入异常程序,影响性能
+                bean.instance = AopEnhancer.create(bean.type);
             }
 
             for (Field field : bean.fields) {
