@@ -114,7 +114,7 @@ public class QueryBuilderTest extends BaseTest {
 
     @Test
     public void save() {
-        assertEquals("INSERT INTO t_account (username,password,email,role_id,status) VALUES ('username-1','password-1','email-1',NULL,NULL)", queryBuilder.save(account));
+        assertEquals("INSERT INTO t_account (username,password,email,role_id,flag) VALUES ('username-1','password-1','email-1',NULL,NULL)", queryBuilder.save(account));
     }
 
     @Test
@@ -161,7 +161,7 @@ public class QueryBuilderTest extends BaseTest {
 
     @Test
     public void update() {
-        String sql = "UPDATE t_account SET username='username-1',password='password-1',email='email-1',role_id='null',status='null' WHERE id=1";
+        String sql = "UPDATE t_account SET username='username-1',password='password-1',email='email-1',role_id='null',flag='null' WHERE id=1";
         assertEquals(sql, queryBuilder.update(account));
     }
 

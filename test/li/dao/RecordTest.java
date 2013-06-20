@@ -77,13 +77,13 @@ public class RecordTest extends BaseTest {
 
     @Test
     public void save() {
-        assertTrue(userDao.save(new _User().set("role_id", 1).set("username", "u-2" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1").set("status", 1)));
+        assertTrue(userDao.save(new _User().set("role_id", 1).set("username", "u-2" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1").set("flag", 1)));
     }
 
     @Test
     public void save2() {
         _User user = new _User().set("role_id", 1).set("username", "u-3" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1").set("status", 1);
-        userDao.save(user);
+        userDao.saveIgnoreNull(user);
         assertNotNull("", user.get("id"));
     }
 

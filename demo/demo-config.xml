@@ -16,7 +16,7 @@
 			<property name="username" value="${db.username}" />
 			<property name="password" value="${db.password}" />
 
-			<property name="filters" value="wall,stat,mergeStat"/>
+			<!-- <property name="filters" value="wall,stat,mergeStat"/> -->
 		</bean>
 
 		<bean name="wall" class="li.dao.WallFilter">

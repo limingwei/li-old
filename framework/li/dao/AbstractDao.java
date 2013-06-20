@@ -236,7 +236,6 @@ public class AbstractDao<T> {
         Integer updateCount = queryRunner.executeUpdate(getQueryBuilder().saveIgnoreNull(t));
 
         Reflect.set(t, getBeanMeta().getId().name, queryRunner.LAST_INSERT_ID);// 设置对象ID为最后主键值
-
         return 0 < updateCount;
     }
 

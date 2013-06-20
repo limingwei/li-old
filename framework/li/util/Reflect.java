@@ -289,7 +289,7 @@ public class Reflect {
                     GETTER_SETTER_MAP.put(target.getClass() + "#" + fieldName + "#set", 2);
                 } catch (Exception ex) {
                     if (target instanceof Map) {
-                        ((Map) target).get(fieldName);// 通过Map.get()方法
+                        ((Map) target).put(fieldName, value);// 通过Map.get()方法
                         GETTER_SETTER_MAP.put(target.getClass() + "#" + fieldName + "#set", 3);
                     } else {
                         GETTER_SETTER_MAP.put(target.getClass() + "#" + fieldName + "#set", 0);
