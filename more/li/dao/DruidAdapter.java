@@ -14,15 +14,11 @@ public class DruidAdapter extends DruidDataSource {
      * 替换内置的setFilters
      */
     public void setDruidFilters(String filters) throws SQLException {
-        System.out.println("setFilters " + filters);
-
         String[] filterArray = (Verify.isEmpty(filters)) ? new String[] {} : filters.split("\\,");
         for (String item : filterArray) {
             if ("wall".equals(item)) {
-                System.out.println("super.getProxyFilters().add(Ioc.get(WallFilter.class)) " + item);
-                super.getProxyFilters().add(Ioc.get(WallFilter.class));
+                super.getProxyFilters().add(Ioc.get(DruidWallFilter.class));
             } else {
-                System.out.println("super.setFilters(item) " + item);
                 super.setFilters(item);
             }
         }

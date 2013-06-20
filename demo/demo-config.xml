@@ -17,7 +17,7 @@
 			<property name="druidFilters" value="wall,stat,mergeStat" />
 		</bean>
 
-		<bean class="li.dao.WallFilter">
+		<bean class="li.dao.DruidWallFilter">
 			<property name="permitFunctions" value="${DRUID.PERMIT_FUNCTIONS}" />
 			<property name="permitSchemas" value="${DRUID.PERMIT_SCHEMAS}" />
 			<property name="permitTables" value="${DRUID.PERMIT_TABLES}" />

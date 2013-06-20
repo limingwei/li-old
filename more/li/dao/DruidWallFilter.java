@@ -8,10 +8,10 @@ import li.util.Verify;
 
 import com.alibaba.druid.wall.WallConfig;
 
-public class WallFilter extends com.alibaba.druid.wall.WallFilter {
+public class DruidWallFilter extends com.alibaba.druid.wall.WallFilter {
     private WallConfig wallConfig;
 
-    public WallFilter() {
+    public DruidWallFilter() {
         wallConfig = new WallConfig();
         this.setConfig(wallConfig);
     }
