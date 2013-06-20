@@ -2,13 +2,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="ioc.xsd">
 	<beans>
-
-		<!-- <bean name="monitoring" class="li.dao.MonitoringDataSource"> <property 
-			name="url" value="${db.url}" /> <property name="username" value="${db.username}" 
-			/> <property name="password" value="${db.password}" /> </bean> -->
-
-		<bean class="li.ehcache.CacheFilter" />
-
 		<bean name="druid" class="li.dao.DruidAdapter">
 			<property name="url" value="${db.url}" />
 			<property name="username" value="${db.username}" />
@@ -44,9 +37,12 @@
 			value="${db.url}" /> <property name="username" value="${db.username}" /> 
 			<property name="password" value="${db.password}" /> </bean> -->
 
+		<!-- <bean name="monitoring" class="li.dao.MonitoringDataSource"> <property 
+			name="url" value="${db.url}" /> <property name="username" value="${db.username}" 
+			/> <property name="password" value="${db.password}" /> </bean> -->
+
 		<bean class="li.aop._Account">
 			<property name="dataSource" />
 		</bean>
-
 	</beans>
 </config>
