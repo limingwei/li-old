@@ -29,7 +29,7 @@ public class MoreTest {
     public void multiThreadDao() throws InterruptedException {
         final _Account accountDao = Ioc.get(_Account.class);
 
-        final int threadNum = 100, execNum = 100;
+        final int threadNum = 500, execNum = 100;
         long threadSleep = 50, stop = 0, start = System.currentTimeMillis();
 
         for (int i = 0; i < threadNum; i++) {

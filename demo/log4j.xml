@@ -10,7 +10,7 @@
 
 	<appender name="CONSOLE_APPENDER" class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m %n" />
+			<param name="ConversionPattern" value="%nLOG4J:[%t] %r %p %d %c %m" />
 		</layout>
 		<filter class="org.apache.log4j.varia.LevelRangeFilter">
 			<param name="LevelMax" value="FATAL" />
@@ -22,7 +22,7 @@
 		<param name="File" value="/data/li/logs/all" />
         <param name="DatePattern" value="'-'yyyy-MM-dd'.log'" />   
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m %n" />
+			<param name="ConversionPattern" value="%nLOG4J:[%t] %r %p %d %c %m" />
 		</layout>
 	</appender>
 </log4j:configuration>
