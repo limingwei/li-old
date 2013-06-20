@@ -3,54 +3,46 @@
 	xsi:noNamespaceSchemaLocation="ioc.xsd">
 	<beans>
 
-		<!-- <bean name="monitoring" class="li.dao.MonitoringDataSource">
-			<property name="url" value="${db.url}" />
-			<property name="username" value="${db.username}" />
-			<property name="password" value="${db.password}" />
-		</bean> -->
+		<!-- <bean name="monitoring" class="li.dao.MonitoringDataSource"> <property 
+			name="url" value="${db.url}" /> <property name="username" value="${db.username}" 
+			/> <property name="password" value="${db.password}" /> </bean> -->
 
-		<bean class="li.ehcache.CacheFilter"/>
+		<bean class="li.ehcache.CacheFilter" />
 
 		<bean name="druid" class="li.dao.DruidAdapter">
 			<property name="url" value="${db.url}" />
 			<property name="username" value="${db.username}" />
 			<property name="password" value="${db.password}" />
 
-			<!-- <property name="filters" value="wall,stat,mergeStat"/> -->
+			<property name="druidFilters" value="wall,stat,mergeStat" />
 		</bean>
 
-		<bean name="wall" class="li.dao.WallFilter">
-			<property name="permitFunctions" value="${DRUID.PERMIT_FUNCTIONS}"/>
-			<property name="permitSchemas" value="${DRUID.PERMIT_SCHEMAS}"/>
-			<property name="permitTables" value="${DRUID.PERMIT_TABLES}"/>
-			<property name="permitVariants" value="${DRUID.PERMIT_VARIANTS}"/>
-			<property name="permitObjects" value="${DRUID.PERMIT_OBJECTS}"/>
-			<property name="readonlyTables" value="${DRUID.READONLY_TABLES}"/>
+		<bean class="li.dao.WallFilter">
+			<property name="permitFunctions" value="${DRUID.PERMIT_FUNCTIONS}" />
+			<property name="permitSchemas" value="${DRUID.PERMIT_SCHEMAS}" />
+			<property name="permitTables" value="${DRUID.PERMIT_TABLES}" />
+			<property name="permitVariants" value="${DRUID.PERMIT_VARIANTS}" />
+			<property name="permitObjects" value="${DRUID.PERMIT_OBJECTS}" />
+			<property name="readonlyTables" value="${DRUID.READONLY_TABLES}" />
 
-			<property name="wallConfigTrue" value="${DRUID.WALLCONFIG_TRUE}"/>
-			<property name="wallConfigFalse" value="${DRUID.WALLCONFIG_FALSE}"/>
+			<property name="wallConfigTrue" value="${DRUID.WALLCONFIG_TRUE}" />
+			<property name="wallConfigFalse" value="${DRUID.WALLCONFIG_FALSE}" />
 
-			<property name="logViolation" value="true"/>
-			<property name="throwException" value="true"/>
+			<property name="logViolation" value="true" />
+			<property name="throwException" value="true" />
 		</bean>
 
-		<!-- <bean name="c3p0" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-			<property name="jdbcUrl" value="${db.url}" />
-			<property name="user" value="${db.username}" />
-			<property name="password" value="${db.password}" />
-		</bean> -->
+		<!-- <bean name="c3p0" class="com.mchange.v2.c3p0.ComboPooledDataSource"> 
+			<property name="jdbcUrl" value="${db.url}" /> <property name="user" value="${db.username}" 
+			/> <property name="password" value="${db.password}" /> </bean> -->
 
-		<!-- <bean name="dbcp" class="org.apache.commons.dbcp.BasicDataSource">
-			<property name="url" value="${db.url}" />
-			<property name="username" value="${db.username}" />
-			<property name="password" value="${db.password}" />
-		</bean> -->
+		<!-- <bean name="dbcp" class="org.apache.commons.dbcp.BasicDataSource"> 
+			<property name="url" value="${db.url}" /> <property name="username" value="${db.username}" 
+			/> <property name="password" value="${db.password}" /> </bean> -->
 
-		<!-- <bean name="simple" class="li.dao.SimpleDataSource">
-			<property name="url" value="${db.url}" />
-			<property name="username" value="${db.username}" />
-			<property name="password" value="${db.password}" />
-		</bean> -->
+		<!-- <bean name="simple" class="li.dao.SimpleDataSource"> <property name="url" 
+			value="${db.url}" /> <property name="username" value="${db.username}" /> 
+			<property name="password" value="${db.password}" /> </bean> -->
 
 		<bean class="li.aop._Account">
 			<property name="dataSource" />

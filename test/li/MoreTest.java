@@ -3,6 +3,7 @@ package li;
 import java.io.File;
 
 import li.aop._Account;
+import li.dao.DruidAdapter;
 import li.ioc.Ioc;
 import li.lang.Code;
 import net.sf.cglib.core.DebuggingClassWriter;
@@ -23,6 +24,12 @@ public class MoreTest {
     public void debugClassWriter() {
         System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "C:\\Users\\li\\Desktop\\classes");
         Ioc.get("");
+    }
+
+    public static void main(String[] args) {
+        DruidAdapter druidAdapter = Ioc.get(DruidAdapter.class);
+        System.out.println(druidAdapter);
+        System.out.println(druidAdapter.getProxyFilters());
     }
 
     @Test
