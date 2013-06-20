@@ -8,11 +8,6 @@
 		<appender-ref ref="FILE_APPENDER" />
 	</root>
 
-	<logger name="li.edm">  
-		<level value="ALL"/>
-		<appender-ref ref="EDM_APPENDER"/> 
-	</logger>
-
 	<appender name="CONSOLE_APPENDER" class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m %n" />
@@ -30,12 +25,4 @@
 			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m %n" />
 		</layout>
 	</appender>
-
-	<appender name="EDM_APPENDER" class="org.apache.log4j.FileAppender">
-		<param name="File" value="/data/li/logs/edm" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m %n" />
-		</layout>
-	</appender>
-
 </log4j:configuration>
