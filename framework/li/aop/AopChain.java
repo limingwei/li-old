@@ -94,11 +94,11 @@ public class AopChain {
     }
 
     /**
-     * 跳过所有剩下的拦截器,直接调用方法
+     * 执行目标方法
      */
     public AopChain invoke() {
         try {
-            this.result = proxy.invokeSuper(target, args);// 则执行目标方法
+            this.result = proxy.invokeSuper(target, args);
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }

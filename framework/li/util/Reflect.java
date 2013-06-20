@@ -229,9 +229,9 @@ public class Reflect {
                 try {
                     result = getByField(target, fieldName);// 通过属性访问
                     GETTER_SETTER_MAP.put(target.getClass() + "#" + fieldName + "#get", 2);
-                } catch (Exception ex) {
-                    if (target instanceof Map) {
-                        result = ((Map) target).get(fieldName);// 通过Record.get()方法
+                } catch (Exception ex) {// 没有匹配的属性
+                    if (target instanceof Map) {// 是Map类型
+                        result = ((Map) target).get(fieldName);// 通过Map.get()方法
                         GETTER_SETTER_MAP.put(target.getClass() + "#" + fieldName + "#get", 3);
                     } else {
                         GETTER_SETTER_MAP.put(target.getClass() + "#" + fieldName + "#get", 0);
@@ -287,9 +287,9 @@ public class Reflect {
                 try {
                     setByField(target, fieldName, value);// 通过属性访问
                     GETTER_SETTER_MAP.put(target.getClass() + "#" + fieldName + "#set", 2);
-                } catch (Exception ex) {
-                    if (target instanceof Map) {
-                        ((Map) target).put(fieldName, value);// 通过Map.get()方法
+                } catch (Exception ex) {// 没有这个属性
+                    if (target instanceof Map) {// Map类型
+                        ((Map) target).put(fieldName, value);// 通过Map.put()方法
                         GETTER_SETTER_MAP.put(target.getClass() + "#" + fieldName + "#set", 3);
                     } else {
                         GETTER_SETTER_MAP.put(target.getClass() + "#" + fieldName + "#set", 0);
