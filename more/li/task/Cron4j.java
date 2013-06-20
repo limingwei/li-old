@@ -28,9 +28,6 @@ public class Cron4j {
 
     private static final String TASK_CONFIG_REGEX = "^.*(config|task|cron4j)\\.xml$";
 
-    /**
-     * 防止重复启动的标记
-     */
     private static Scheduler scheduler = null;
 
     /**
@@ -77,7 +74,7 @@ public class Cron4j {
     }
 
     /**
-     * 扫描以config.xml或task.xml结尾的Cron4j配置文件返回所有任务
+     * 扫描以config.xml或task.xml或cron4j.xml结尾的Cron4j配置文件返回所有任务
      */
     private static Map<Class<? extends Runnable>, String> getJobs() {
         Map<Class<? extends Runnable>, String> jobs = new HashMap<Class<? extends Runnable>, String>();

@@ -36,9 +36,6 @@ public class Quartz {
 
     private static final String TASK_CONFIG_REGEX = "^.*(config|task|quartz)\\.xml$";
 
-    /**
-     * 防止重复启动的标记
-     */
     private static Scheduler scheduler = null;
 
     /**
@@ -101,7 +98,7 @@ public class Quartz {
     }
 
     /**
-     * 扫描以config.xml或task.xml结尾的Quartz配置文件返回所有任务
+     * 扫描以config.xml或task.xml或quartz.xml结尾的Quartz配置文件返回所有任务
      */
     private static Map<Class<? extends Job>, String> getJobs() {
         Map<Class<? extends Job>, String> jobs = new HashMap<Class<? extends Job>, String>();
