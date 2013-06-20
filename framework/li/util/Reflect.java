@@ -28,7 +28,7 @@ import li.dao.Record;
  */
 public class Reflect {
     /**
-     * 缓存指定类型的指定属性的读写值方式,0或null=第一次或出错,1=通过get方法,2=通过Field,3=是Map
+     * 缓存指定类型的指定属性的读写值方式,0或null=第一次或出错,1=通过get/set方法,2=通过Field,3=是Map
      */
     private static final Map<String, Integer> GETTER_SETTER_MAP = new HashMap<String, Integer>();
 
