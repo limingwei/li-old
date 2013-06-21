@@ -13,11 +13,10 @@ import org.junit.Test;
 public class MoreTest {
     @Test
     public void codeAnalysis() {
-        System.out.println(Code.countingCode(new File("framework"), "java", true, null) + "\n");
-        System.out.println(Code.countingCode(new File("more"), "java", true, null) + "\n");
-        System.out.println(Code.countingCode(new File("dev"), "java", true, null) + "\n");
-        System.out.println(Code.countingCode(new File("test"), "java", true, null) + "\n");
-        System.out.println(Code.countingCode(new File("demo"), "java", true, null) + "\n");
+        String[] srcs = { "framework", "more", "dev", "test", "demo" };
+        for (String src : srcs) {
+            System.out.println(Code.countingCode(new File(src), "java", true, null) + "\n");
+        }
     }
 
     @Test
@@ -36,7 +35,7 @@ public class MoreTest {
     public void multiThreadDao() throws InterruptedException {
         final _Account accountDao = Ioc.get(_Account.class);
 
-        final int threadNum = 1000, execNum = 100 * 100;
+        final int threadNum = 100, execNum = 100 * 100;
         long threadSleep = 50, stop = 0, start = System.currentTimeMillis();
 
         for (int i = 0; i < threadNum; i++) {
