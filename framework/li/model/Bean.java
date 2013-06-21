@@ -1,14 +1,13 @@
 package li.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.sql.DataSource;
 
 import li.annotation.Table;
 import li.dao.Record;
+import li.util.Log;
 import li.util.Verify;
 
 /**
@@ -18,8 +17,6 @@ import li.util.Verify;
  * @version 0.1.6 (2012-05-08)
  */
 public class Bean {
-    private static final Map<Class, Bean> BEAN_MAP = new HashMap<Class, Bean>();// 缓存Bean结构的Map
-
     /**
      * Bean的一个实例
      */
@@ -67,7 +64,7 @@ public class Bean {
      * @param type 目标类型
      */
     public static Bean getMeta(DataSource dataSource, Class<?> type) {
-        Bean bean = BEAN_MAP.get(type);
+        Bean bean = (Bean) Log.get("BEAN_MAP#" + type);
         if (null == bean) {
             bean = new Bean();
             Table table = type.getAnnotation(Table.class);
@@ -79,7 +76,7 @@ public class Bean {
                     break;
                 }
             }
-            BEAN_MAP.put(type, bean);
+            Log.put("BEAN_MAP#" + type, bean);
         }
         return bean;
     }

@@ -12,13 +12,10 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import li.dao.Record;
 
 /**
  * 反射工具类,封装了一些反射方法
@@ -28,26 +25,13 @@ import li.dao.Record;
  */
 public class Reflect {
     /**
-     * 缓存指定类型的指定属性的读写值方式,0或null=第一次或出错,1=通过get/set方法,2=通过Field,3=是Map
-     */
-    private static final Map<String, Integer> GETTER_SETTER_MAP = new HashMap<String, Integer>();
-
-    /**
-     * 缓存指定类型的指定属性的数据类型
-     */
-    private static final Map<String, Class<?>> FIELD_TYPE_MAP = new HashMap<String, Class<?>>();
-
-    /**
      * 得到所有属性,包括超类中的
      * 
      * @param type
      */
     public static List<Field> getFields(Class<?> type) {
-        List<Field> fields = new ArrayList<>();
-        Field[] fs = type.getDeclaredFields();
-        for (Field field : fs) {
-            fields.add(field);
-        }
+        List<Field> fields = new ArrayList<Field>();
+        Collections.addAll(fields, type.getDeclaredFields());
         if (Object.class != type.getSuperclass()) {// 扫描超类的Field
             fields.addAll(getFields(type.getSuperclass()));
         }
@@ -168,7 +152,7 @@ public class Reflect {
      * 探测一个属性的类型,从Setter或Field或Getter,有缓存不会多次执行
      */
     public static Class<?> fieldType(Class<?> targetType, String fieldName) {
-        Class<?> fieldType = FIELD_TYPE_MAP.get(targetType + "#" + fieldName);
+        Class<?> fieldType = (Class<?>) Log.get("FIELD_TYPE#" + targetType + "#" + fieldName);
         if (null == fieldType) {
             String setterName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
             Method[] methods = targetType.getMethods();
@@ -186,8 +170,8 @@ public class Reflect {
             if (null != getter) {// 从getter探测
                 fieldType = getter.getReturnType();
             }
+            Log.put("FIELD_TYPE#" + targetType + "#" + fieldName, fieldType);
         }
-        FIELD_TYPE_MAP.put(targetType + "#" + fieldName, fieldType);
         return fieldType;
     }
 
@@ -219,22 +203,22 @@ public class Reflect {
      * 返回target的名为fieldName的属性的值,优先采用Getter方法,Field字段其次
      */
     public static Object get(Object target, String fieldName) {
-        Integer getFlag = GETTER_SETTER_MAP.get(target.getClass() + "#" + fieldName + "#get");
+        Integer getFlag = (Integer) Log.get("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#get");
         Object result = null;
         if (null == getFlag || getFlag.equals(0)) {// 第一次或出错
             try {
                 result = getByGetter(target, fieldName);// 使用Getter方法
-                GETTER_SETTER_MAP.put(target.getClass() + "#" + fieldName + "#get", 1);
+                Log.put("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#get", 1);
             } catch (Exception e) {// 没有匹配的Getter方法
                 try {
                     result = getByField(target, fieldName);// 通过属性访问
-                    GETTER_SETTER_MAP.put(target.getClass() + "#" + fieldName + "#get", 2);
+                    Log.put("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#get", 2);
                 } catch (Exception ex) {// 没有匹配的属性
                     if (target instanceof Map) {// 是Map类型
                         result = ((Map) target).get(fieldName);// 通过Map.get()方法
-                        GETTER_SETTER_MAP.put(target.getClass() + "#" + fieldName + "#get", 3);
+                        Log.put("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#get", 3);
                     } else {
-                        GETTER_SETTER_MAP.put(target.getClass() + "#" + fieldName + "#get", 0);
+                        Log.put("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#get", 0);
                         throw new RuntimeException("Reflect.get() target=" + target + ",fieldName=" + fieldName);
                     }
                 }
@@ -250,7 +234,7 @@ public class Reflect {
     }
 
     /**
-     * 访问setter方法给属性设值
+     * 访问setter方法给属性设值,没做类型转换
      */
     public static void setBySetter(Object target, String fieldName, Object value) {
         try {
@@ -263,7 +247,7 @@ public class Reflect {
     }
 
     /**
-     * 访问字段以设值
+     * 访问字段以设值,有做类型转换
      */
     public static void setByField(Object target, String fieldName, Object value) {
         try {
@@ -278,21 +262,21 @@ public class Reflect {
      * 设置 target的名为fieldName的属性的值为 value,优先采用Setter方法,Field字段其次
      */
     public static void set(Object target, String fieldName, Object value) {
-        Integer setFlag = GETTER_SETTER_MAP.get(target.getClass() + "#" + fieldName + "#set");
+        Integer setFlag = (Integer) Log.get("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#set");
         if (null == setFlag || setFlag.equals(0)) {// 第一次或出错
             try {
                 setBySetter(target, fieldName, value);// 使用Setter方法
-                GETTER_SETTER_MAP.put(target.getClass() + "#" + fieldName + "#set", 1);
+                Log.put("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#set", 1);
             } catch (Exception e) {// 没有匹配的Getter方法
                 try {
                     setByField(target, fieldName, value);// 通过属性访问
-                    GETTER_SETTER_MAP.put(target.getClass() + "#" + fieldName + "#set", 2);
+                    Log.put("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#set", 2);
                 } catch (Exception ex) {// 没有这个属性
                     if (target instanceof Map) {// Map类型
                         ((Map) target).put(fieldName, value);// 通过Map.put()方法
-                        GETTER_SETTER_MAP.put(target.getClass() + "#" + fieldName + "#set", 3);
+                        Log.put("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#set", 3);
                     } else {
-                        GETTER_SETTER_MAP.put(target.getClass() + "#" + fieldName + "#set", 0);
+                        Log.put("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#set", 0);
                         throw new RuntimeException("Reflect.get() target=" + target + ",fieldName=" + fieldName);
                     }
                 }
@@ -325,18 +309,15 @@ public class Reflect {
      * @return 返回目的对象
      */
     public static <T> T copy(Object src, T dest) {
-        List<li.model.Field> fields = li.model.Field.list(dest.getClass(), false);
-        for (li.model.Field attribute : fields) {// 迭代目标对象中的每一个属性
-            Field field = getField(src.getClass(), attribute.name);
-            if (null != field && !Modifier.isFinal(field.getModifiers())) {// 如果两个对象中均有此属性,且目标对象中的此属性可写
-                set(dest, attribute.name, get(src, attribute.name));
+        List<li.model.Field> srcFields = li.model.Field.list(src.getClass(), false);
+        for (li.model.Field srcField : srcFields) {// 迭代源对象中的每一个属性
+            Field destField = getField(src.getClass(), srcField.name);// 获取目标对象的同名属性
+            if (null != destField && !Modifier.isFinal(destField.getModifiers())) {// 目标对象中均有此属性且可写
+                set(dest, srcField.name, get(src, srcField.name));
             }
         }
-        if (src instanceof Record<?> && dest instanceof Record<?>) {
-            Set<Entry<?, ?>> set = ((Record<?>) src).entrySet();
-            for (Entry<?, ?> entry : set) {
-                ((Record<?>) dest).set(entry.getKey(), entry.getValue());
-            }
+        if (src instanceof Map && dest instanceof Map) {
+            ((Map) dest).putAll((Map) src);
         }
         return dest;
     }

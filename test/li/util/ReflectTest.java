@@ -12,23 +12,32 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ReflectTest {
-    _Model2 attr = new _Model2();
+    DestModel attr = new DestModel();
 
-    _Model1 model1 = new _Model1();
+    SrcModel srcModel = new SrcModel();
 
-    _Model2 model2 = new _Model2();
+    DestModel destModel = new DestModel();
 
     @Before
     public void before() {
         attr.attr1 = "Model2.attr.attr1";
-        model1.attr1 = "123123";
-        model1.attr2 = false;
-        model1.model2 = attr;
+        srcModel.attr1 = "123123";
+        srcModel.attr2 = false;
+        srcModel.destModel = attr;
+    }
+
+    @Test
+    public void copy() {
+        Reflect.copy(srcModel, destModel);
+
+        assertEquals("123123", destModel.attr1);
+        assertEquals(false, destModel.attr2);
+        assertEquals(attr, destModel.destModel);
     }
 
     @Test
     public void getTest1() {
-        int num = 100 * 100;
+        int num = 100;
         long start = System.currentTimeMillis();
         Map<String, String> map = new HashMap<String, String>();
         for (int i = 0; i < num; i++) {
@@ -39,7 +48,7 @@ public class ReflectTest {
 
     @Test
     public void getTest2() {
-        int num = 100 * 100;
+        int num = 100;
         long start = System.currentTimeMillis();
         Map<String, String> map = new HashMap<String, String>();
         for (int i = 0; i < num; i++) {
@@ -71,7 +80,7 @@ public class ReflectTest {
 
     @Test
     public void setTest1() {
-        int num = 100 * 100;
+        int num = 100;
         long start = System.currentTimeMillis();
         Map<String, String> map = new HashMap<String, String>();
         for (int i = 0; i < num; i++) {
@@ -82,7 +91,7 @@ public class ReflectTest {
 
     @Test
     public void setTest2() {
-        int num = 100 * 100;
+        int num = 100;
         long start = System.currentTimeMillis();
         Map<String, String> map = new HashMap<String, String>();
         for (int i = 0; i < num; i++) {
@@ -115,7 +124,7 @@ public class ReflectTest {
 
     @Test
     public void fieldType1() {
-        int num = 100 * 100 * 10;
+        int num = 100;
         long start = System.currentTimeMillis();
         for (int i = 0; i < num; i++) {
             Class<?> type = Reflect.fieldType(li.dao.AbstractDao.class, "beanMeta");
@@ -125,7 +134,7 @@ public class ReflectTest {
 
     @Test
     public void fieldType2() {
-        int num = 100 * 100 * 10;
+        int num = 100;
         long start = System.currentTimeMillis();
         for (int i = 0; i < num; i++) {
             Class<?> type = fieldType2(li.dao.AbstractDao.class, "beanMeta");
@@ -154,15 +163,6 @@ public class ReflectTest {
             return getter.getReturnType();
         }
         return null;
-    }
-
-    @Test
-    public void copy() {
-        Reflect.copy(model1, model2);
-
-        assertEquals("123123", model2.attr1);
-        assertEquals(false, model2.attr2);
-        assertEquals(attr, model2.model2);
     }
 
     @Test

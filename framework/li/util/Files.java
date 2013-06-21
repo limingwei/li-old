@@ -88,7 +88,7 @@ public class Files {
      * 搜索并返回文件名包含 name的 Properties的并集,有缓存的
      */
     public static Properties load(String name) {
-        Properties properties = (Properties) Log.get("prop_" + name);// 从缓存中查找properties
+        Properties properties = (Properties) Log.get("PROPERTIE#" + name);// 从缓存中查找properties
         if (null == properties) {
             List propertyFiles = (List) Log.get("PROPERTIE_FILES");// 从缓存中查找propertyFiles
             if (null == propertyFiles) {
@@ -110,7 +110,7 @@ public class Files {
                     }
                 }
             }
-            Log.put("prop_" + name, properties);// 将 properties 缓存
+            Log.put("PROPERTIE#" + name, properties);// 将 properties 缓存
         }
         return properties;
     }
