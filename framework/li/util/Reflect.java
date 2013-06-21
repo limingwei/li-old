@@ -25,20 +25,6 @@ import java.util.Map;
  */
 public class Reflect {
     /**
-     * 得到所有属性,包括超类中的
-     * 
-     * @param type
-     */
-    public static List<Field> getFields(Class<?> type) {
-        List<Field> fields = new ArrayList<Field>();
-        Collections.addAll(fields, type.getDeclaredFields());
-        if (Object.class != type.getSuperclass()) {// 扫描超类的Field
-            fields.addAll(getFields(type.getSuperclass()));
-        }
-        return fields;
-    }
-
-    /**
      * 根据传入的类名返回对应的Class对象
      */
     public static <T> Class<T> getType(String type) {
@@ -133,6 +119,20 @@ public class Reflect {
      */
     public static Object call(String targetType, String methodName, Object... args) {
         return invoke(null, getMethod(getType(targetType), methodName, typesOf(args)), args);
+    }
+
+    /**
+     * 得到所有属性,包括超类中的
+     * 
+     * @param type
+     */
+    public static List<Field> getFields(Class<?> type) {
+        List<Field> fields = new ArrayList<Field>();
+        Collections.addAll(fields, type.getDeclaredFields());
+        if (Object.class != type.getSuperclass()) {// 扫描超类的Field
+            fields.addAll(getFields(type.getSuperclass()));
+        }
+        return fields;
     }
 
     /**

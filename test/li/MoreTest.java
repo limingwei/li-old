@@ -36,7 +36,7 @@ public class MoreTest {
     public void multiThreadDao() throws InterruptedException {
         final _Account accountDao = Ioc.get(_Account.class);
 
-        final int threadNum = 500, execNum = 100;
+        final int threadNum = 1000, execNum = 100 * 100;
         long threadSleep = 50, stop = 0, start = System.currentTimeMillis();
 
         for (int i = 0; i < threadNum; i++) {
@@ -52,6 +52,7 @@ public class MoreTest {
         }
 
         long now = System.currentTimeMillis();
+        System.out.println();
         System.out.println("线程总数\t\t" + threadNum);
         System.out.println("单线程操作数\t" + execNum);
         System.out.println("操作总数\t\t" + (threadNum * execNum));

@@ -26,7 +26,7 @@ public class XmlIocLoader {
     private static final String IOC_CONFIG_REGEX = "^.*(config|ioc)\\.xml$";
 
     /**
-     * 解析SourceFloder下搜索到的文件名以config.xml结尾的文件,将其中配置的Bean返回
+     * 解析SourceFloder下搜索到的文件名以config.xml或ioc.xml结尾的文件,将其中配置的Bean返回
      */
     public List<Bean> getBeans() {
         File rootFolder = Files.root();

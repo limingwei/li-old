@@ -48,7 +48,7 @@ public class Field {
      * @param annotated 是否只列出有Field注解的字段
      */
     public static List<Field> list(Class<?> targetType, Boolean annotated) {
-        List<Field> fields = (List<Field>) Log.get("FIELDS_MAP#class#" + targetType.getName() + "#annotated#" + annotated);
+        List<Field> fields = (List<Field>) Log.get("FIELDS_MAP#CLASS#" + targetType.getName() + "#ANNOTATED#" + annotated);
         if (null == fields) { // 如果缓存中没有
             log.debug("Field.list() by type ?", targetType.getName());
             fields = new ArrayList<Field>();
@@ -65,7 +65,7 @@ public class Field {
             if (Object.class != targetType.getSuperclass()) {// 扫描超类的Field
                 fields.addAll(list(targetType.getSuperclass(), annotated));
             }
-            Log.put("FIELDS_MAP#class#" + targetType.getName() + "#annotated#" + annotated, fields); // 加入缓存
+            Log.put("FIELDS_MAP#CLASS#" + targetType.getName() + "#ANNOTATED#" + annotated, fields); // 加入缓存
         }
         return fields;
     }
@@ -77,7 +77,7 @@ public class Field {
      * @param table 需要探测表结构的数据表名称
      */
     public static List<Field> list(DataSource dataSource, String table) {
-        List<Field> fields = (List<Field>) Log.get("FIELDS_MAP#dataSource#" + dataSource + "#table#" + table);
+        List<Field> fields = (List<Field>) Log.get("FIELDS_MAP#DATASOURCE#" + dataSource + "#TABLE#" + table);
         if (null == fields && null != dataSource) { // 如果缓存中没有
             log.debug("Field.list() by table ?", table);
             try {
@@ -91,7 +91,7 @@ public class Field {
                 }
                 queryRunner.close();// 关闭QueryRunner,主要是关闭PrerparedStatement
                 connection.close();// 关闭connection,QueryRunner中可能因为事务没有关闭之
-                Log.put("FIELDS_MAP#dataSource#" + dataSource + "#table#" + table, fields); // 加入缓存
+                Log.put("FIELDS_MAP#DATASOURCE#" + dataSource + "#TABLE#" + table, fields); // 加入缓存
             } catch (Exception e) {
                 throw new RuntimeException("Exception in li.model.Field.list(DataSource, String) ", e);
             }

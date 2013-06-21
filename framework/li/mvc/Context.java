@@ -46,6 +46,15 @@ public class Context {
     private static final ThreadLocal<Action> ACTION = new ThreadLocal<Action>();
 
     /**
+     * 初始化方法,会将request,response,action分别存入ThreadLocal
+     */
+    public static void init(ServletRequest request, ServletResponse response, Action action) {
+        REQUEST.set((HttpServletRequest) request);
+        RESPONSE.set((HttpServletResponse) response);
+        ACTION.set(action);
+    }
+
+    /**
      * 视图层异常处理,为了安全,页面上没有异常信息
      */
     protected static void error(Throwable e) {
@@ -80,15 +89,6 @@ public class Context {
             map.put(name, getRequest().getAttribute(name));
         }
         return map;
-    }
-
-    /**
-     * 初始化方法,会将request,response,action分别存入ThreadLocal
-     */
-    public static void init(ServletRequest request, ServletResponse response, Action action) {
-        REQUEST.set((HttpServletRequest) request);
-        RESPONSE.set((HttpServletResponse) response);
-        ACTION.set(action);
     }
 
     /**

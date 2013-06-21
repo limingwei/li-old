@@ -14,9 +14,9 @@ public class Page {
      */
     public static final Integer DEFAULT_SIZE = Integer.valueOf(Files.load("config.properties").getProperty("pageSize", "20"));
 
-    private Integer pageNumber = 1;// 当前页数
-
     private Integer pageSize = DEFAULT_SIZE;// 单页记录数
+
+    private Integer pageNumber = 1;// 当前页数
 
     private Integer recordCount = 0;// 总记录数
 
