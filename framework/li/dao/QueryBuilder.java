@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.sql.DataSource;
-
 import li.model.Bean;
 import li.model.Field;
 import li.util.Files;
@@ -24,12 +22,14 @@ public class QueryBuilder {
     /**
      * 表示对象结构的beanMeta
      */
-    protected Bean beanMeta;
+    private Bean beanMeta;
 
     /**
-     * 数据源,用以探测数据表结构
+     * 设置对象结构
      */
-    protected DataSource dataSource;
+    public void setBeanMeta(Bean beanMeta) {
+        this.beanMeta = beanMeta;
+    }
 
     /**
      * 根据传入的ID,构建一个用于删除单条记录的SQL

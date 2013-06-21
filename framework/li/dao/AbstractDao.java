@@ -60,12 +60,7 @@ public class AbstractDao<T> {
     protected QueryBuilder getQueryBuilder() {
         if (null == this.queryBuilder) {
             this.queryBuilder = new QueryBuilder();
-        }
-        if (null == this.queryBuilder.dataSource) {
-            this.queryBuilder.dataSource = getDataSource();
-        }
-        if (null == this.queryBuilder.beanMeta) {
-            this.queryBuilder.beanMeta = getBeanMeta();
+            this.queryBuilder.setBeanMeta(getBeanMeta());
         }
         return this.queryBuilder;
     }

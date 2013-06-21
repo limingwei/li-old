@@ -27,9 +27,7 @@ public class QueryBuilderTest extends BaseTest {
 
     @Before
     public void before() throws Exception {
-        queryBuilder.dataSource = dataSource;
-        queryBuilder.beanMeta = Bean.getMeta(dataSource, Account.class);
-
+        queryBuilder.setBeanMeta(Bean.getMeta(dataSource, Account.class));
         account.set("id", 1);
         account.set("username", "username-1");
         account.set("password", "password-1");
