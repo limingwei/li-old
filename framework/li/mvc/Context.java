@@ -223,7 +223,7 @@ public class Context {
         } else if ("write".equals(viewType) || "wt".equals(viewType)) {// 向页面write数据
             write(viewPath);
         } else {
-            throw new RuntimeException("view error, not supported viewtype: " + viewType);
+            error(new RuntimeException("view error, not supported viewtype: " + viewType));
         }
         return "~!@#DONE";
     }

@@ -29,6 +29,11 @@ public class DemoAction extends AbstractAction {
         write("1.htm");
     }
 
+    @At("smarty4j.htm")
+    public String smarty4j() {
+        return "smarty4j:smarty4j.htm";
+    }
+
     @At("httl.do")
     public void httl() {
         setRequest("date", new Date());
