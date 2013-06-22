@@ -203,22 +203,22 @@ public class Reflect {
      * 返回target的名为fieldName的属性的值,优先采用Getter方法,Field字段其次
      */
     public static Object get(Object target, String fieldName) {
-        Integer getFlag = (Integer) Log.get("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#get");
+        Integer getFlag = (Integer) Log.get("GETTER#" + target.getClass() + "#" + fieldName + "#get");
         Object result = null;
         if (null == getFlag || getFlag.equals(0)) {// 第一次或出错
             try {
                 result = getByGetter(target, fieldName);// 使用Getter方法
-                Log.put("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#get", 1);
+                Log.put("GETTER#" + target.getClass() + "#" + fieldName, 1);
             } catch (Exception e) {// 没有匹配的Getter方法
                 try {
                     result = getByField(target, fieldName);// 通过属性访问
-                    Log.put("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#get", 2);
+                    Log.put("GETTER#" + target.getClass() + "#" + fieldName, 2);
                 } catch (Exception ex) {// 没有匹配的属性
                     if (target instanceof Map) {// 是Map类型
                         result = ((Map) target).get(fieldName);// 通过Map.get()方法
-                        Log.put("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#get", 3);
+                        Log.put("GETTER#" + target.getClass() + "#" + fieldName, 3);
                     } else {
-                        Log.put("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#get", 0);
+                        Log.put("GETTER#" + target.getClass() + "#" + fieldName, 0);
                         throw new RuntimeException("Reflect.get() target=" + target + ",fieldName=" + fieldName);
                     }
                 }
@@ -262,21 +262,21 @@ public class Reflect {
      * 设置 target的名为fieldName的属性的值为 value,优先采用Setter方法,Field字段其次
      */
     public static void set(Object target, String fieldName, Object value) {
-        Integer setFlag = (Integer) Log.get("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#set");
+        Integer setFlag = (Integer) Log.get("SETTER#" + target.getClass() + "#" + fieldName);
         if (null == setFlag || setFlag.equals(0)) {// 第一次或出错
             try {
                 setBySetter(target, fieldName, value);// 使用Setter方法
-                Log.put("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#set", 1);
+                Log.put("SETTER#" + target.getClass() + "#" + fieldName, 1);
             } catch (Exception e) {// 没有匹配的Getter方法
                 try {
                     setByField(target, fieldName, value);// 通过属性访问
-                    Log.put("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#set", 2);
+                    Log.put("SETTER#" + target.getClass() + "#" + fieldName, 2);
                 } catch (Exception ex) {// 没有这个属性
                     if (target instanceof Map) {// Map类型
                         ((Map) target).put(fieldName, value);// 通过Map.put()方法
-                        Log.put("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#set", 3);
+                        Log.put("SETTER#" + target.getClass() + "#" + fieldName, 3);
                     } else {
-                        Log.put("GETTER_SETTER#" + target.getClass() + "#" + fieldName + "#set", 0);
+                        Log.put("SETTER#" + target.getClass() + "#" + fieldName, 0);
                         throw new RuntimeException("Reflect.get() target=" + target + ",fieldName=" + fieldName);
                     }
                 }
