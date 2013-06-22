@@ -142,7 +142,7 @@ public class QueryBuilder {
         String sql = "UPDATE " + beanMeta.table + " SET ";
         for (Field field : beanMeta.fields) {
             Object fieldValue = Reflect.get(object, field.name);
-            if (!beanMeta.getId().name.equals(field.name) && null != fieldValue && !"".equals(fieldValue)) {// 更新所有属性,fieldValue可能为null
+            if (!beanMeta.getId().name.equals(field.name) && !Verify.isEmpty(fieldValue)) {// 更新所有属性,fieldValue可能为null
                 sql += field.column + "='" + fieldValue + "',";
             }
         }
