@@ -25,17 +25,16 @@ public class MoreTest {
         Ioc.get("");
     }
 
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
         DruidAdapter druidAdapter = Ioc.get(DruidAdapter.class);
         System.out.println(druidAdapter);
         System.out.println(druidAdapter.getProxyFilters());
     }
 
-    @Test
-    public void multiThreadDao() throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         final _Account accountDao = Ioc.get(_Account.class);
 
-        final int threadNum = 100, execNum = 100 * 100;
+        final int threadNum = 10, execNum = 100 * 100 * 100;
         long threadSleep = 50, stop = 0, start = System.currentTimeMillis();
 
         for (int i = 0; i < threadNum; i++) {
