@@ -64,7 +64,7 @@ public class Bean {
      * @param type 目标类型
      */
     public static Bean getMeta(DataSource dataSource, Class<?> type) {
-        Bean bean = (Bean) Log.get("BEAN_MAP#" + type);
+        Bean bean = (Bean) Log.get("~!@#BEAN_MAP#" + type);
         if (null == bean) {
             bean = new Bean();
             Table table = type.getAnnotation(Table.class);
@@ -76,7 +76,7 @@ public class Bean {
                     break;
                 }
             }
-            Log.put("BEAN_MAP#" + type, bean);
+            Log.put("~!@#BEAN_MAP#" + type, bean);
         }
         return bean;
     }

@@ -1,16 +1,12 @@
 package li.mvc;
 
-import java.io.File;
 import java.io.Writer;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -134,22 +130,6 @@ public class Context {
     }
 
     /**
-     * 路径中对应于Action的url正则表达式的可变部分的值的数组
-     * 
-     * @see li.annotation.At
-     */
-    public static String[] pathParams() {// getRequestURL ? getContextPath
-        Matcher matcher = Pattern.compile(".*" + getAction().path + ".*").matcher(getRequest().getRequestURL().toString());
-        String[] params = new String[matcher.groupCount()];
-        if (matcher.matches()) {
-            for (int groupCount = matcher.groupCount(), i = 0; i < groupCount; i++) {
-                params[i] = matcher.group(i + 1);
-            }
-        }
-        return params;
-    }
-
-    /**
      * 根据QueryString中的页码参数构建一个Page,或者一个默认的Page
      */
     public static Page getPage(String pageNumberKey) {
@@ -223,7 +203,7 @@ public class Context {
         } else if ("write".equals(viewType) || "wt".equals(viewType)) {// 向页面write数据
             write(viewPath);
         } else {
-            error(new RuntimeException("view error, not supported viewtype: " + viewType));
+            error(new RuntimeException("view error, not supported viewtype: " + path));
         }
         return "~!@#DONE";
     }
@@ -259,16 +239,16 @@ public class Context {
      */
     public static String freemarker(String path) {
         try {
-            Object configuration = Log.get("freemarkerConfiguration"); // 从缓存中查找freemarkerTemplate
+            Object configuration = Log.get("~!@#FREEMARKER_CONFIGURATION"); // 从缓存中查找freemarkerConfiguration
             if (null == configuration) { // 缓存中没有
                 log.debug("freemarker initializing ..");
-                configuration = Reflect.born("freemarker.template.Configuration"); // 初始化freemarkerTemplate
+                configuration = Reflect.born("freemarker.template.Configuration"); // 初始化freemarkerConfiguration
                 Reflect.invoke(configuration, "setServletContextForTemplateLoading", new Class[] { Object.class, String.class }, new Object[] { getServletContext(), "/" });// 设置模板加载跟路径
                 Properties properties = new Properties();// 默认的参数设置
                 properties.put("default_encoding", "UTF-8");
                 properties.putAll(Files.load("freemarker.properties"));// freemarker.properties中的参数设置
                 Reflect.invoke(configuration, "setSettings", properties);// 加载自定义配置
-                Log.put("freemarkerConfiguration", configuration); // 缓存freemarkerTemplate
+                Log.put("~!@#FREEMARKER_CONFIGURATION", configuration); // 缓存freemarkerConfiguration
             }
             Object template = Reflect.invoke(configuration, "getTemplate", path);// 加载模板
             Reflect.invoke(template, "process", new Class[] { Object.class, Writer.class }, new Object[] { getAttributes(), getResponse().getWriter() });
@@ -298,24 +278,6 @@ public class Context {
             } catch (Exception e) {
                 error(e);
             }
-        }
-    }
-
-    /**
-     * 上传文件
-     */
-    public static void upload(String uploadPath) {
-        try {
-            Object factory = Reflect.born("org.apache.commons.fileupload.disk.DiskFileItemFactory");
-            Object upload = Reflect.born("org.apache.commons.fileupload.servlet.ServletFileUpload", new Class[] { Reflect.getType("org.apache.commons.fileupload.FileItemFactory") }, factory);
-            List fileItems = (List) Reflect.invoke(upload, "parseRequest", getRequest());
-            for (Object fileItem : fileItems) {
-                File saveFile = new File(uploadPath, Reflect.invoke(fileItem, "getName").toString());
-                Reflect.invoke(fileItem, "write", saveFile);
-            }
-            log.info("upload success");
-        } catch (Throwable e) {
-            error(e);
         }
     }
 }

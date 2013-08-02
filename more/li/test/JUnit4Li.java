@@ -39,18 +39,9 @@ public class JUnit4Li extends BlockJUnit4ClassRunner {
      */
     protected Object createTest() throws Exception {
         Object target = super.createTest();
-
         List<Field> fields = Reflect.getFields(type);
         for (Field field : fields) {
-            Inject inject = field.getAnnotation(Inject.class);
-            if (null != inject) {
-                if (Verify.basicType(field.getType())) {
-                    Reflect.set(target, field.getName(), inject.value());
-                } else {
-                    Reflect.set(target, field.getName(), Ioc.get(field.getType(), inject.value()));
-                }
-                log.trace("Set Field: ?.? = ?", type, field.getName(), inject.value());
-            }
+            injectField(target, field);
         }
         return target;
     }
@@ -64,18 +55,40 @@ public class JUnit4Li extends BlockJUnit4ClassRunner {
         } else {
             return new Statement() {
                 public void evaluate() throws Throwable {
-                    new Trans() {
-                        public void run() {
-                            try {
-                                method.invokeExplosively(target);
-                            } catch (Throwable e) {
-                                throw new RuntimeException(e);
-                            }
-                            Trans.EXCEPTION.set(new RuntimeException("rollback when test"));
-                        }// public void run()
-                    };
-                }// public void evaluate()
+                    transInvoke(method, target);
+                }
             };
-        }// else
+        }
+    }
+
+    /**
+     * 为Bean注入其依赖的一个Bean
+     */
+    private void injectField(Object target, Field field) {
+        Inject inject = field.getAnnotation(Inject.class);
+        if (null != inject) {
+            if (Verify.basicType(field.getType())) {
+                Reflect.set(target, field.getName(), inject.value());
+            } else {
+                Reflect.set(target, field.getName(), Ioc.get(field.getType(), inject.value()));
+            }
+            log.trace("Set Field: ?.? = ?", type, field.getName(), inject.value());
+        }
+    }
+
+    /**
+     * 在事务中运行方法
+     */
+    private void transInvoke(final FrameworkMethod method, final Object target) {
+        new Trans() {
+            public void run() {
+                try {
+                    method.invokeExplosively(target);
+                    Trans.EXCEPTION.set(new Exception("rollback when test"));// 这里设置异常,使事务回滚
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
     }
 }

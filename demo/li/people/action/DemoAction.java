@@ -1,13 +1,11 @@
 package li.people.action;
 
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import li.annotation.Aop;
 import li.annotation.Arg;
 import li.annotation.At;
 import li.annotation.Bean;
@@ -17,6 +15,11 @@ import li.dao.Page;
 import li.mvc.AbstractAction;
 import li.mvc.Context;
 import li.mvc.Ctx;
+import li.mvc.adapter.FileMeta;
+import li.mvc.adapter.UploadAdapter;
+import li.mvc.view.BeetlView;
+import li.mvc.view.HttlView;
+import li.mvc.view.VelocityView;
 import li.people.record.Account;
 
 @Bean
@@ -29,6 +32,47 @@ public class DemoAction extends AbstractAction {
         write("1.htm");
     }
 
+    @At("performance_test_action.htm")
+    public void performanceTestAction() {
+        setRequest("accounts", accountDao.list(new Page().count(false)));
+        freemarker("/WEB-INF/view_performance_test/performance_test.htm");
+    }
+
+    @At("upload_adapter.do")
+    @Aop({ UploadAdapter.class, HttlView.class })
+    public String upload(FileMeta[] fileMetas, HttpServletRequest request, String name_1, String[] name_2) {
+        if (null != fileMetas) {
+            for (FileMeta fileMeta : fileMetas) {
+                System.out.println(fileMeta);
+            }
+        }
+        System.out.println(request.getContentType());
+        System.out.println("name_1\t" + name_1);
+        for (String string : name_2) {
+            System.out.println("name_2\t" + string);
+        }
+        System.out.println(Context.getRequest());
+        return "/WEB-INF/view_ht/httl_view.htm";
+    }
+
+    @At("httl_view.htm")
+    @Aop(HttlView.class)
+    public String testHttlView() {
+        return "/WEB-INF/view_ht/httl_view.htm";
+    }
+
+    @At("beetl_view.htm")
+    @Aop(BeetlView.class)
+    public String testBeetlView() {
+        return "/WEB-INF/view_bt/beetl_view.htm";
+    }
+
+    @At("velocity_view.htm")
+    @Aop(VelocityView.class)
+    public String testVelocityView() {
+        return "/WEB-INF/view_vl/velocity_view.htm";
+    }
+
     @At("smarty4j.htm")
     public String smarty4j() {
         return "smarty4j:smarty4j.htm";
@@ -37,7 +81,7 @@ public class DemoAction extends AbstractAction {
     @At("httl.do")
     public void httl() {
         setRequest("date", new Date());
-        Ctx.httl("/WEB-INF/view_ht/httl.htm");
+        Ctx.httl("/WEB-INF/view_ht/httl.httl");
     }
 
     /**
@@ -50,102 +94,11 @@ public class DemoAction extends AbstractAction {
     }
 
     /**
-     * 用正则表达式配置Action路径
-     */
-    @At({ "thread-([0-9]{1})-([0-9]*).htm" })
-    public void test1() {
-        write("test1\t@At({\"thread-([0-9]{1})-([0-9]*).htm\"})");
-        for (String param : pathParams()) {
-            write(param);
-        }
-    }
-
-    /**
-     * 用正则表达式配置Action路径
-     */
-    @At({ "thread-([0-9]*)-([a-z]*).htm" })
-    public void test2() {
-        write("test2\t@At({\"thread-([0-9]*)-([a-z]*).htm\"})");
-        for (String param : pathParams()) {
-            write(param);
-        }
-    }
-
-    /**
-     * 用正则表达式配置Action路径
-     */
-    @At({ "thread-([0-9]*)-([A-Z]*).htm" })
-    public void test31() {
-        write("test3\t@At({\"thread-([0-9]*)-([A-Z]*).htm\"})");
-        for (String param : pathParams()) {
-            write(param);
-        }
-    }
-
-    /**
-     * 用正则表达式配置Action路径
-     */
-    @At({ "thread-([0-9]{2})-([0-9]*).htm" })
-    public void test4() {
-        write(getRequest().getRequestURI() + "<br/>");
-        write(getRequest().getRequestURL().toString() + "<br/>");
-        write(getRequest().getServletPath() + "<br/>");
-        write("test4\t@At({\"thread-([0-9]{2})-([0-9]*).htm\"})");
-        write(getRequest().getRequestURL());
-        for (String param : pathParams()) {
-            write(param);
-        }
-    }
-
-    /**
-     * 用正则表达式配置Action路径
-     */
-    @At({ "thread-(.*).htm" })
-    public void test5() {
-        write("test5\t@At({\"thread-(.*).htm\"})");
-        for (String param : pathParams()) {
-            write(param);
-        }
-    }
-
-    /**
      * 返回状态码
      */
     @At("404.htm")
     public void test404() {
         getResponse().setStatus(404);
-    }
-
-    /**
-     * 这个跳过,研究文件上传的
-     */
-    @At(value = "upload.htm", method = POST)
-    public void testUpload() {
-        DataOutputStream dataOutputStream = null;
-        try {
-            int len;
-            byte[] buf = new byte[4048];
-            String lines[] = new String[3];
-            for (int i = 0; (len = getRequest().getInputStream().readLine(buf, 0, buf.length)) != -1; i++) {
-                if (i < 3) {
-                    lines[i] = new String(buf, 0, len - 1);
-                } else if (i < 4) {
-                    String uploadPath = "D:\\Users\\明伟\\Desktop\\";
-
-                    String uploadFileName = lines[1].substring(lines[1].indexOf("filename") + 10, lines[1].length() - 2);
-                    uploadFileName = new String(uploadFileName.getBytes(), "UTF-8");
-                    String saveFileName = uploadPath + System.currentTimeMillis() + "_" + getSession().getId() + "_" + uploadFileName.replaceAll("[:]{0,1}\\\\", "_");
-
-                    dataOutputStream = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(saveFileName)));
-                } else if (!new String(buf, 0, len - 1).contains(lines[0].substring(2, lines[0].length() - 2))) {
-                    dataOutputStream.write(buf, 0, len);
-                }
-            }
-            dataOutputStream.flush();
-            dataOutputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -258,14 +211,6 @@ public class DemoAction extends AbstractAction {
     }
 
     /**
-     * 测试HTTP Method
-     */
-    @At(value = "testAny.htm")
-    public void testAny() {
-        write("ANY");
-    }
-
-    /**
      * 测试参数适配
      */
     @At("test_dev_filter.htm")
@@ -318,14 +263,6 @@ public class DemoAction extends AbstractAction {
             write(integer);
         }
         write("测试成功");
-    }
-
-    /**
-     * 测试Context工具类
-     */
-    @At("test_ctx.htm")
-    public void testCtx() {
-        Context.write("Ctx 测试成功");
     }
 
     /**

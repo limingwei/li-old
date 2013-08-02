@@ -87,6 +87,7 @@ public class Reflect {
         try {
             return method.invoke(target, args);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("method invoking Exception", e);
         }
     }
@@ -152,7 +153,7 @@ public class Reflect {
      * 探测一个属性的类型,从Setter或Field或Getter,有缓存不会多次执行
      */
     public static Class<?> fieldType(Class<?> targetType, String fieldName) {
-        Class<?> fieldType = (Class<?>) Log.get("FIELD_TYPE#" + targetType + "#" + fieldName);
+        Class<?> fieldType = (Class<?>) Log.get("~!@#FIELD_TYPE#" + targetType + "#" + fieldName);
         if (null == fieldType) {
             String setterName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
             Method[] methods = targetType.getMethods();
@@ -170,7 +171,7 @@ public class Reflect {
             if (null != getter) {// 从getter探测
                 fieldType = getter.getReturnType();
             }
-            Log.put("FIELD_TYPE#" + targetType + "#" + fieldName, fieldType);
+            Log.put("~!@#FIELD_TYPE#" + targetType + "#" + fieldName, fieldType);
         }
         return fieldType;
     }
@@ -203,23 +204,23 @@ public class Reflect {
      * 返回target的名为fieldName的属性的值,优先采用Getter方法,Field字段其次
      */
     public static Object get(Object target, String fieldName) {
-        Integer getFlag = (Integer) Log.get("GETTER#" + target.getClass() + "#" + fieldName + "#get");
+        Integer getFlag = (Integer) Log.get("~!@#GETTER#" + target.getClass() + "#" + fieldName + "#get");
         Object result = null;
         if (null == getFlag || getFlag.equals(0)) {// 第一次或出错
             try {
                 result = getByGetter(target, fieldName);// 使用Getter方法
-                Log.put("GETTER#" + target.getClass() + "#" + fieldName, 1);
+                Log.put("~!@#GETTER#" + target.getClass() + "#" + fieldName, 1);
             } catch (Exception e) {// 没有匹配的Getter方法
                 try {
                     result = getByField(target, fieldName);// 通过属性访问
-                    Log.put("GETTER#" + target.getClass() + "#" + fieldName, 2);
+                    Log.put("~!@#GETTER#" + target.getClass() + "#" + fieldName, 2);
                 } catch (Exception ex) {// 没有匹配的属性
                     if (target instanceof Map) {// 是Map类型
                         result = ((Map) target).get(fieldName);// 通过Map.get()方法
-                        Log.put("GETTER#" + target.getClass() + "#" + fieldName, 3);
+                        Log.put("~!@#GETTER#" + target.getClass() + "#" + fieldName, 3);
                     } else {
-                        Log.put("GETTER#" + target.getClass() + "#" + fieldName, 0);
-                        throw new RuntimeException("Reflect.get() target=" + target + ",fieldName=" + fieldName);
+                        Log.put("~!@#GETTER#" + target.getClass() + "#" + fieldName, 0);
+                        throw new RuntimeException("Reflect.get() target=" + target + ",fieldName=" + fieldName + " " + e.getMessage() + " and " + ex.getMessage());// 这里没有给出根异常信息
                     }
                 }
             }
@@ -231,6 +232,24 @@ public class Reflect {
             result = ((Map) target).get(fieldName);// 通过Map.get()方法
         }
         return result;
+    }
+
+    /**
+     * 获取静态变量
+     */
+    public static Object getStatic(String type, String fieldName) {
+        return getStatic(Reflect.getType(type), fieldName);
+    }
+
+    /**
+     * 获取静态变量
+     */
+    public static Object getStatic(Class<?> type, String fieldName) {
+        try {
+            return getField(type, fieldName).get(null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -262,22 +281,22 @@ public class Reflect {
      * 设置 target的名为fieldName的属性的值为 value,优先采用Setter方法,Field字段其次
      */
     public static void set(Object target, String fieldName, Object value) {
-        Integer setFlag = (Integer) Log.get("SETTER#" + target.getClass() + "#" + fieldName);
+        Integer setFlag = (Integer) Log.get("~!@#SETTER#" + target.getClass() + "#" + fieldName);
         if (null == setFlag || setFlag.equals(0)) {// 第一次或出错
             try {
                 setBySetter(target, fieldName, value);// 使用Setter方法
-                Log.put("SETTER#" + target.getClass() + "#" + fieldName, 1);
+                Log.put("~!@#SETTER#" + target.getClass() + "#" + fieldName, 1);
             } catch (Exception e) {// 没有匹配的Getter方法
                 try {
                     setByField(target, fieldName, value);// 通过属性访问
-                    Log.put("SETTER#" + target.getClass() + "#" + fieldName, 2);
+                    Log.put("~!@#SETTER#" + target.getClass() + "#" + fieldName, 2);
                 } catch (Exception ex) {// 没有这个属性
                     if (target instanceof Map) {// Map类型
                         ((Map) target).put(fieldName, value);// 通过Map.put()方法
-                        Log.put("SETTER#" + target.getClass() + "#" + fieldName, 3);
+                        Log.put("~!@#SETTER#" + target.getClass() + "#" + fieldName, 3);
                     } else {
-                        Log.put("SETTER#" + target.getClass() + "#" + fieldName, 0);
-                        throw new RuntimeException("Reflect.get() target=" + target + ",fieldName=" + fieldName);
+                        Log.put("~!@#SETTER#" + target.getClass() + "#" + fieldName, 0);
+                        throw new RuntimeException("Reflect.set() target=" + target + ",fieldName=" + fieldName + " " + e.getMessage() + " and " + ex.getMessage());// 这里没有给出根异常信息
                     }
                 }
             }
@@ -287,6 +306,24 @@ public class Reflect {
             setByField(target, fieldName, value);// 通过属性访问
         } else if (setFlag.equals(3)) {// 是Map
             ((Map) target).put(fieldName, value);// 通过Record.set()方法,这里也没做类型转换
+        }
+    }
+
+    /**
+     * 设置静态变量
+     */
+    public static void setStatic(String type, String fieldName, Object value) {
+        setStatic(Reflect.getType(type), fieldName, value);
+    }
+
+    /**
+     * 设置静态变量
+     */
+    public static void setStatic(Class<?> type, String fieldName, Object value) {
+        try {
+            getField(type, fieldName).set(null, value);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -354,10 +391,15 @@ public class Reflect {
     }
 
     /**
-     * 获得传入的方法的形参名列表,有性能问题但此方法不会多次执行
+     * 获得传入的方法的形参名列表
      */
     public static String[] argNames(Method method) {
-        return MethodParameterScaner.getParameterNames(method);
+        String[] temp = (String[]) Log.get("~!@#ARGNAMES#" + method);
+        if (null == temp) {
+            temp = MethodParameterScaner.getParameterNames(method);
+            Log.put("~!@#ARGNAMES#" + method, temp);
+        }
+        return temp;
     }
 
     /**

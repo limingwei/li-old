@@ -1,11 +1,11 @@
 package li.dao;
 
-import java.text.SimpleDateFormat;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import li.model.Bean;
 import li.model.Field;
+import li.util.Convert;
 import li.util.Files;
 import li.util.Reflect;
 import li.util.Verify;
@@ -167,7 +167,7 @@ public class QueryBuilder {
     /**
      * 根据传入的对象构建一个插入一条记录的SQL
      */
-    public String save(Object object) {
+    public String insert(Object object) {
         String columns = " (", values = " VALUES (";
         for (Field field : beanMeta.fields) {
             if (!beanMeta.getId().name.equals(field.name)) {
@@ -184,7 +184,7 @@ public class QueryBuilder {
     /**
      * 根据传入的对象构建一个插入一条记录的SQL,忽略为空的属性
      */
-    public String saveIgnoreNull(Object object) {
+    public String insertIgnoreNull(Object object) {
         String columns = " (", values = " VALUES (";
         for (Field field : beanMeta.fields) {
             if (!beanMeta.getId().name.equals(field.name)) {
@@ -242,13 +242,11 @@ public class QueryBuilder {
         if (null == arg) {
             return "NULL";
         } else if (arg instanceof Number || arg instanceof Boolean) {
-            return arg.toString();// 数字和Bool不加引号
-        } else if (arg instanceof java.sql.Timestamp) {
-            return "'" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(arg) + "'";
-        } else if (arg.getClass().equals(java.util.Date.class)) {// java.util.Date不包括其子类
-            return "'" + new SimpleDateFormat("yyyy-MM-dd").format(arg) + "'";
+            return arg + "";// 数字和Boolean不加引号
+        } else if (arg instanceof java.util.Date) {// 日期
+            return "'" + Convert.format((java.util.Date) arg) + "'";
         } else {
-            return "'" + arg + "'";// 其他类型,包括java.sql.Date java.sql.Time
+            return "'" + arg + "'";// 其他类型
         }
     }
 

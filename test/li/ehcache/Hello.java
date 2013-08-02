@@ -11,4 +11,10 @@ public class Hello {
         System.out.println("执行方法");
         return "hello," + name;
     }
+
+    @Aop(CacheFilter.class)
+    @Clear("cache_name_1")
+    public void clear() {
+
+    }
 }

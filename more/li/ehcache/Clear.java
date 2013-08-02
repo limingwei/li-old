@@ -17,5 +17,5 @@ public @interface Clear {
     /**
      * 缓存的名称 cache name
      */
-    public String value() default "";
+    public String value();
 }

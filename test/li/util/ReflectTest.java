@@ -27,6 +27,16 @@ public class ReflectTest {
     }
 
     @Test
+    public void argNames() {
+        Method method = Reflect.getMethod(Reflect.class, "argNames", Method.class);
+
+        String[] argNames = Reflect.argNames(method);
+        for (String argName : argNames) {
+            System.out.println(argName);
+        }
+    }
+
+    @Test
     public void copy() {
         Reflect.copy(srcModel, destModel);
 

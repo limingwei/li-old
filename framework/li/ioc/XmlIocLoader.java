@@ -30,8 +30,8 @@ public class XmlIocLoader {
      */
     public List<Bean> getBeans() {
         File rootFolder = Files.root();
-        List<String> fileList = Files.list(rootFolder, IOC_CONFIG_REGEX, true);// 搜索以config.xml结尾的文件
-        log.info("Found ? Xml config files at ?", fileList.size(), rootFolder);
+        List<String> fileList = Files.list(rootFolder, IOC_CONFIG_REGEX, true);// 搜索配置文件
+        log.info("Found ? ioc config xml files at ?", fileList.size(), rootFolder);
 
         List<Bean> beans = new ArrayList<Bean>();
         for (String filePath : fileList) {
@@ -40,16 +40,12 @@ public class XmlIocLoader {
                 Bean iocBean = new Bean();// 一个新的Bean
                 iocBean.name = Files.xpath(beanNodes.item(i), "@name", XPathConstants.STRING).toString();
                 String type = Files.xpath(beanNodes.item(i), "@class", XPathConstants.STRING).toString();
-                try {
-                    iocBean.type = Class.forName(type);
-                } catch (ClassNotFoundException e) {// 配置文件中把类名写错了
-                    throw new RuntimeException("Class " + type + " not found , which is configured in " + filePath, e);
-                }
+                iocBean.type = this.getType(type, filePath);
                 NodeList propertyNodes = (NodeList) Files.xpath(beanNodes.item(i), "property", XPathConstants.NODESET);
                 for (int len = (null == propertyNodes ? -1 : propertyNodes.getLength()), m = 0; m < len; m++) {
                     Field field = new Field();// 一个新的Field
                     field.name = (String) Files.xpath(propertyNodes.item(m), "@name", XPathConstants.STRING);
-                    field.type = Reflect.fieldType(iocBean.type, field.name);
+                    field.type = this.fieldType(iocBean.type, field.name, filePath);
                     field.value = (String) Files.xpath(propertyNodes.item(m), "@value", XPathConstants.STRING);
                     iocBean.fields.add(field);
                 }
@@ -59,5 +55,21 @@ public class XmlIocLoader {
             }
         }
         return beans;
+    }
+
+    private Class<?> fieldType(Class<?> type, String name, String filePath) {
+        try {
+            return Reflect.fieldType(type, name);
+        } catch (NullPointerException e) {// 配置文件中把属性名写错了
+            throw new RuntimeException("Field " + name + " in " + type + " not found , which is configured in " + filePath, e);
+        }
+    }
+
+    private Class<?> getType(String type, String filePath) {
+        try {
+            return Class.forName(type);
+        } catch (ClassNotFoundException e) {// 配置文件中把类名写错了
+            throw new RuntimeException(type + " not found , which is configured in " + filePath, e);
+        }
     }
 }

@@ -2,6 +2,7 @@ package li.task;
 
 import it.sauronsoftware.cron4j.Scheduler;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +80,10 @@ public class Cron4j {
     private static Map<Class<? extends Runnable>, String> getJobs() {
         Map<Class<? extends Runnable>, String> jobs = new HashMap<Class<? extends Runnable>, String>();
 
-        List<String> fileList = Files.list(Files.root(), TASK_CONFIG_REGEX, true);// 搜索以config.xml结尾的文件
+        File rootFolder = Files.root();
+        List<String> fileList = Files.list(rootFolder, TASK_CONFIG_REGEX, true);// 搜索配置文件
+        log.info("Found ? cron4j task xml config files, at ?", fileList.size(), rootFolder);
+
         for (String filePath : fileList) {
             NodeList beanNodes = (NodeList) Files.xpath(Files.build(filePath), "//task", XPathConstants.NODESET);
             for (int length = (null == beanNodes ? -1 : beanNodes.getLength()), i = 0; i < length; i++) {

@@ -15,4 +15,11 @@ public class _User {
         log.debug("user say hi");
         return msg1 + "\t" + msg2;
     }
+
+    public void test() {
+        try {
+            Thread.sleep(123);
+        } catch (Exception e) {}
+        System.out.println("目标方法正在执行");
+    }
 }

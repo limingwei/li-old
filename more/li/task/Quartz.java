@@ -1,5 +1,6 @@
 package li.task;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,6 @@ import java.util.Set;
 
 import javax.xml.xpath.XPathConstants;
 
-import li.ioc.Ioc;
 import li.util.Files;
 import li.util.Log;
 import li.util.Reflect;
@@ -21,8 +21,6 @@ import org.quartz.SchedulerException;
 import org.quartz.impl.JobDetailImpl;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.triggers.CronTriggerImpl;
-import org.quartz.simpl.SimpleJobFactory;
-import org.quartz.spi.TriggerFiredBundle;
 import org.w3c.dom.NodeList;
 
 /**
@@ -89,11 +87,7 @@ public class Quartz {
      */
     private static Scheduler getScheduler() throws SchedulerException {
         Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-        scheduler.setJobFactory(new SimpleJobFactory() {// 设置自定义的job生成工厂
-                    public Job newJob(final TriggerFiredBundle bundle, Scheduler scheduler) throws SchedulerException {
-                        return Ioc.get(bundle.getJobDetail().getJobClass());// 通过Ioc生成job实例
-                    }
-                });
+        scheduler.setJobFactory(new LiJobFactory());
         return scheduler;
     }
 
@@ -103,7 +97,10 @@ public class Quartz {
     private static Map<Class<? extends Job>, String> getJobs() {
         Map<Class<? extends Job>, String> jobs = new HashMap<Class<? extends Job>, String>();
 
-        List<String> fileList = Files.list(Files.root(), TASK_CONFIG_REGEX, true);// 搜索以config.xml结尾的文件
+        File rootFolder = Files.root();
+        List<String> fileList = Files.list(rootFolder, TASK_CONFIG_REGEX, true);// 搜索配置文件
+        log.info("Found ? quartz task xml config files, at ?", fileList.size(), rootFolder);
+
         for (String filePath : fileList) {
             NodeList beanNodes = (NodeList) Files.xpath(Files.build(filePath), "//task", XPathConstants.NODESET);
             for (int length = (null == beanNodes ? -1 : beanNodes.getLength()), i = 0; i < length; i++) {

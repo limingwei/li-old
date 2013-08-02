@@ -1,5 +1,7 @@
 package li.test;
 
+import java.io.Writer;
+
 import javax.servlet.ServletException;
 
 import li.mock.MockFilterConfig;
@@ -73,5 +75,9 @@ public class ActionTest extends BaseTest {
 
     public void setMethod(String method) {
         request.setMethod(method);
+    }
+
+    public void setWritter(Writer writer) {
+        this.response.setWritter(writer);
     }
 }

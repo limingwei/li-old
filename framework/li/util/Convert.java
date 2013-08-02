@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.security.MessageDigest;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -16,6 +17,72 @@ import java.util.Map;
  * @version 0.1.7 (2012-05-08)
  */
 public class Convert {
+    /**
+     * 将字符串转换为Date
+     */
+    public static java.util.Date parse(Object value) {
+        if (Verify.regex(value.toString().trim(), "^[0-9]{4}-[0-1]{0,1}[0-9]{1}-[0-3]{0,1}[0-9]{1} [0-2]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}$")) {
+            return parse(DATE_TIME_FORMAT, value);
+        } else if (Verify.regex(value.toString().trim(), "^[0-9]{4}/[0-1]{0,1}[0-9]{1}/[0-3]{0,1}[0-9]{1} [0-2]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}$")) {
+            return parse(DATE_TIME_FORMAT_2, value);
+        } else if (Verify.regex(value.toString().trim(), "^[0-9]{4}-[0-1]{0,1}[0-9]{1}-[0-3]{0,1}[0-9]{1} [0-2]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}$")) {
+            return parse(DATE_TIME_FORMAT_3, value);
+        } else if (Verify.regex(value.toString().trim(), "^[0-9]{4}/[0-1]{0,1}[0-9]{1}/[0-3]{0,1}[0-9]{1} [0-2]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}$")) {
+            return parse(DATE_TIME_FORMAT_4, value);
+        } else if (Verify.regex(value.toString().trim(), "^[0-9]{4}-[0-1]{0,1}[0-9]{1}-[0-3]{0,1}[0-9]{1}$")) {
+            return parse(DATE_FORMAT, value);
+        } else if (Verify.regex(value.toString().trim(), "^[0-9]{4}/[0-1]{0,1}[0-9]{1}/[0-3]{0,1}[0-9]{1}$")) {
+            return parse(DATE_FORMAT_2, value);
+        } else if (Verify.regex(value.toString().trim(), "^[0-2]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}$")) {
+            return parse(TIME_FORMAT, value);
+        } else if (Verify.regex(value.toString().trim(), "^[0-2]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}$")) {// 表达式匹配
+            return parse(TIME_FORMAT_2, value);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 将时间转换为String, java.sql.Timestamp > yyyy-MM-dd HH:mm:ss, java.sql.Time > HH:mm:ss, java.sql.Date > yyyy-MM-dd, java.util.Date yyyy-MM-dd
+     */
+    public static String format(java.util.Date date) {
+        if (date instanceof java.sql.Timestamp) {
+            return DATE_TIME_FORMAT.format(date);
+        } else if (date instanceof java.sql.Time) {
+            return TIME_FORMAT.format(date);
+        } else {// arg instanceof java.sql.Date || arg.getClass().equals(java.util.Date.class)
+            return DATE_FORMAT.format(date);
+        }
+    }
+
+    /**
+     * 字符串转Date
+     */
+    public static java.util.Date parse(DateFormat format, Object value) {
+        try {// 日期时间转换
+            return format.parse(value.toString());
+        } catch (ParseException e) {
+            throw new RuntimeException("ParseException in li.util.Convert.parse(Object) " + value, e);
+        }
+    }
+
+    /**
+     * 将字符串转换为时间
+     */
+    public static java.util.Date parse(Class<?> type, Object value) {
+        if (type.equals(Time.class) && !(value instanceof Time)) {
+            return new Time(parse(value).getTime());// 日期时间类型数据转换
+        } else if (type.equals(Timestamp.class) && !(value instanceof Timestamp)) {
+            return new Timestamp(parse(value).getTime());
+        } else if (type.equals(java.sql.Date.class) && !(value instanceof java.sql.Date)) {
+            return new java.sql.Date(parse(value).getTime());
+        } else if (type.equals(java.util.Date.class) && !(value instanceof java.util.Date)) {
+            return parse(value);
+        } else {
+            return (java.util.Date) value;
+        }
+    }
+
     /**
      * 把字符串用一次MD5加密后返回
      */
@@ -77,36 +144,8 @@ public class Convert {
                 return (T) Byte.valueOf(value.toString().trim());
             } else if ((type.equals(Character.TYPE) || type.equals(Character.class)) && !(value instanceof Character)) {
                 return (T) Character.valueOf(value.toString().trim().charAt(0));
-            } else if (type.equals(Time.class) && !(value instanceof Time)) {
-                return (T) new Time(toType(java.util.Date.class, value).getTime());// 日期时间类型数据转换
-            } else if (type.equals(Timestamp.class) && !(value instanceof Timestamp)) {
-                return (T) new Timestamp(toType(java.util.Date.class, value).getTime());
-            } else if (type.equals(java.sql.Date.class) && !(value instanceof java.sql.Date)) {
-                return (T) new java.sql.Date(toType(java.util.Date.class, value).getTime());
-            } else if (type.equals(java.util.Date.class) && !(value instanceof java.util.Date)) {
-                String pattern = "";
-                if (Verify.regex(value.toString().trim(), "^[0-9]{4}/[0-1]{0,1}[0-9]{1}/[0-3]{0,1}[0-9]{1} [0-2]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}$")) {
-                    pattern = "yyyy/MM/dd HH:mm:ss";
-                } else if (Verify.regex(value.toString().trim(), "^[0-9]{4}-[0-1]{0,1}[0-9]{1}-[0-3]{0,1}[0-9]{1} [0-2]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}$")) {
-                    pattern = "yyyy-MM-dd HH:mm:ss";
-                } else if (Verify.regex(value.toString().trim(), "^[0-9]{4}/[0-1]{0,1}[0-9]{1}/[0-3]{0,1}[0-9]{1} [0-2]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}$")) {
-                    pattern = "yyyy/MM/dd HH:mm";
-                } else if (Verify.regex(value.toString().trim(), "^[0-9]{4}-[0-1]{0,1}[0-9]{1}-[0-3]{0,1}[0-9]{1} [0-2]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}$")) {
-                    pattern = "yyyy-MM-dd HH:mm";
-                } else if (Verify.regex(value.toString().trim(), "^[0-9]{4}/[0-1]{0,1}[0-9]{1}/[0-3]{0,1}[0-9]{1}$")) {
-                    pattern = "yyyy/MM/dd";
-                } else if (Verify.regex(value.toString().trim(), "^[0-9]{4}-[0-1]{0,1}[0-9]{1}-[0-3]{0,1}[0-9]{1}$")) {
-                    pattern = "yyyy-MM-dd";
-                } else if (Verify.regex(value.toString().trim(), "^[0-2]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}$")) {
-                    pattern = "HH:mm:ss";
-                } else if (Verify.regex(value.toString().trim(), "^[0-2]{0,1}[0-9]{1}:[0-6]{0,1}[0-9]{1}$")) {// 表达式匹配
-                    pattern = "HH:mm";
-                }
-                try {// 日期时间转换
-                    return (T) new SimpleDateFormat(pattern).parse(value.toString());
-                } catch (ParseException e) {
-                    throw new RuntimeException("ParseException in li.util.Convert.toType(" + type + ", \"" + value + "\")", e);
-                }
+            } else if (java.util.Date.class.isAssignableFrom(type)) {
+                return (T) parse(type, value);
             }
         }
         return (T) value;// 缺省的返回方式
@@ -144,4 +183,44 @@ public class Convert {
         }
         return dest;
     }
+
+    /**
+     * yyyy-MM-dd HH:mm:ss
+     */
+    public static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    /**
+     * yyyy/MM/dd HH:mm:ss
+     */
+    public static final SimpleDateFormat DATE_TIME_FORMAT_2 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
+    /**
+     * yyyy-MM-dd HH:mm
+     */
+    public static final SimpleDateFormat DATE_TIME_FORMAT_3 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+    /**
+     * yyyy/MM/dd HH:mm
+     */
+    public static final SimpleDateFormat DATE_TIME_FORMAT_4 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+
+    /**
+     * yyyy-MM-dd
+     */
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+
+    /**
+     * yyyy/MM/dd
+     */
+    public static final SimpleDateFormat DATE_FORMAT_2 = new SimpleDateFormat("yyyy/MM/dd");
+
+    /**
+     * HH:mm:ss
+     */
+    public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss");
+
+    /**
+     * HH:mm
+     */
+    public static final SimpleDateFormat TIME_FORMAT_2 = new SimpleDateFormat("HH:mm");
 }

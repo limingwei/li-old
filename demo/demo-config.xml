@@ -1,28 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="ioc.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../more/li.xsd">
 	<beans>
-		<bean name="druid" class="li.dao.DruidAdapter">
+		<bean name="druid" class="li.datasource.druid.DruidAdapter">
 			<property name="url" value="${db.url}" />
 			<property name="username" value="${db.username}" />
 			<property name="password" value="${db.password}" />
 
-			<property name="druidFilters" value="wall" />
-		</bean>
-
-		<bean class="li.dao.DruidWallFilter">
-			<property name="permitFunctions" value="${DRUID.PERMIT_FUNCTIONS}" />
-			<property name="permitSchemas" value="${DRUID.PERMIT_SCHEMAS}" />
-			<property name="permitTables" value="${DRUID.PERMIT_TABLES}" />
-			<property name="permitVariants" value="${DRUID.PERMIT_VARIANTS}" />
-			<property name="permitObjects" value="${DRUID.PERMIT_OBJECTS}" />
-			<property name="readonlyTables" value="${DRUID.READONLY_TABLES}" />
-
-			<property name="wallConfigTrue" value="${DRUID.WALLCONFIG_TRUE}" />
-			<property name="wallConfigFalse" value="${DRUID.WALLCONFIG_FALSE}" />
-
-			<property name="logViolation" value="true" />
-			<property name="throwException" value="true" />
+			<property name="druidFilters" value="wall,stat,log4j" />
 		</bean>
 	</beans>
+	<aops>
+		<aop type="li.people.*" method=".*" aops="log,trans" />
+	</aops>
 </config>

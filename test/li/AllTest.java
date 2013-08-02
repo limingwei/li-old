@@ -39,8 +39,5 @@ import org.junit.runners.Suite.SuiteClasses;
         AbstractDaoTest.class, QueryRunnerTest.class, RecordTest.class, PageTest.class, QueryBuilderTest.class, ModelBuilderTest.class, TransTest.class,// Dao
         ConvertTest.class, ReflectTest.class, FilesTest.class, LogTest.class, VerifyTest.class, // Util
         AccountTest.class, PostTest.class, ForumTest.class, RoleTest.class,// Record
-        DemoActionTest.class, AccountActionTest.class, PostActionTest.class // Action
-})
-public class AllTest {
-
-}
+        DemoActionTest.class, AccountActionTest.class, PostActionTest.class /* Action */})
+public class AllTest {}

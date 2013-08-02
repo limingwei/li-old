@@ -13,19 +13,19 @@ public abstract class Log {
     /**
      * 一个缓存,可用于暂时保存一个值
      */
-    private static final Map LOG_MAP = new ConcurrentHashMap();
+    private static final Map<Object, Object> LOG_MAP = new ConcurrentHashMap<Object, Object>();
 
     /**
-     * 向LOG_MAP中设值,synchronized方法
+     * 向LOG_MAP中设值
      */
-    public synchronized static void put(Object key, Object value) {
+    public static void put(Object key, Object value) {
         LOG_MAP.put(key, value);
     }
 
     /**
-     * 从LOG_MAP中取值,synchronized方法
+     * 从LOG_MAP中取值
      */
-    public synchronized static Object get(Object key) {
+    public static Object get(Object key) {
         return LOG_MAP.get(key);
     }
 
@@ -39,7 +39,7 @@ public abstract class Log {
 
                 protected void log(String method, Object msg) {
                     Reflect.invoke(logger, method, new Class<?>[] { Object.class }, new Object[] { msg });
-                };
+                }
             };
         } catch (Throwable e) {
             return new Log() {// 返回ConsoleLog
@@ -73,6 +73,9 @@ public abstract class Log {
      * 处理log信息
      */
     private static String process(Object msg, Object... args) {
+        if (null == args || args.length < 1) {
+            return msg + "";
+        }
         StringBuffer stringBuffer = new StringBuffer();
         char[] chars = null == msg ? new char[0] : msg.toString().toCharArray();
         int arg_index = 0;

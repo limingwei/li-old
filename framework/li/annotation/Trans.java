@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 注解一个需要事务支持的方法
+ * 标记一个需要事务包裹的方法
  * 
  * @author li (limw@w.cn)
  * @version 0.1.1 (2012-09-20)

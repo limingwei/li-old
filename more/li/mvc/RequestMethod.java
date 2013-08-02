@@ -20,6 +20,4 @@ public interface RequestMethod {
     public static final String OPTIONS = "OPTIONS";
 
     public static final String TRACE = "TRACE";
-
-    public static final String ALL = ".*";// 任何类型
 }

@@ -112,7 +112,7 @@ public class QueryBuilderTest extends BaseTest {
 
     @Test
     public void save() {
-        assertEquals("INSERT INTO t_account (username,password,email,role_id,flag) VALUES ('username-1','password-1','email-1',NULL,NULL)", queryBuilder.save(account));
+        assertEquals("INSERT INTO t_account (username,password,email,role_id,flag) VALUES ('username-1','password-1','email-1',NULL,NULL)", queryBuilder.insert(account));
     }
 
     @Test

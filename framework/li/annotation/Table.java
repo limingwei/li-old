@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface Table {
     /**
-     * 与所标记的类对应的数据表的表名,留空则使用类名
+     * 标记对应的表名,留空则使用类名
      */
     public String value() default "";
 

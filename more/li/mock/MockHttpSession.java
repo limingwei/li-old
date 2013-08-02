@@ -55,7 +55,7 @@ public class MockHttpSession implements HttpSession {
 
     public void removeAttribute(String key) {
         sessionMap.remove(key);
-        log.info("remove session " + key + " calling by " + Tool.stackTrace());
+        log.info("remove session " + key + " calling by " + Util.stackTrace());
     }
 
     public void setAttribute(String key, Object value) {

@@ -24,4 +24,9 @@ public class AopTest extends BaseTest {
     public void testAop2() {
         log.debug(user.sayHi("abc", "xyz"));
     }
+
+    @Test
+    public void testAop3() {
+        user.test();
+    }
 }

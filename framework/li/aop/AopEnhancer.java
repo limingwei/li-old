@@ -1,18 +1,27 @@
 package li.aop;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.xpath.XPathConstants;
+
 import li.annotation.Aop;
 import li.ioc.Ioc;
+import li.util.Files;
+import li.util.Log;
+import li.util.Reflect;
+import li.util.Verify;
 import net.sf.cglib.core.NamingPolicy;
 import net.sf.cglib.core.Predicate;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+
+import org.w3c.dom.NodeList;
 
 /**
  * Aop增强类生成器,依赖CGLIB
@@ -21,61 +30,146 @@ import net.sf.cglib.proxy.MethodProxy;
  * @version 0.1.1 (2012-09-20)
  */
 public class AopEnhancer {
+    private static final Log log = Log.init();
     /**
-     * 内置的AopFilter,用li.dao.Trans包裹执行chain.doFilter,使被包裹的方法在事务中执行
+     * AopXml配置文件
      */
-    private static final AopFilter TRANS_FILTER = new AopFilter() {
-        public void doFilter(final AopChain chain) {
-            new li.dao.Trans() {
-                public void run() {
-                    chain.doFilter();
-                }
-            };
-        }
-    };
+    private static final String AOP_CONFIG_REGEX = "^.*(config|ioc|aop)\\.xml$";
+
+    /**
+     * Aop功能是否可用
+     */
+    public Boolean aopCan = false;
+
+    /**
+     * 内置AopFilter
+     */
+    private final Map<String, AopFilter> filtersBuiltIn = new HashMap<String, AopFilter>();
+
+    /**
+     * Xml配置的Aop规则
+     */
+    private final List<String[]> xmlAopRules = new ArrayList<String[]>();
 
     /**
      * 自定义的NamingPolicy,使Aop子类类名以$Aop结尾
      */
-    private static final NamingPolicy NAMING_POLICY = new NamingPolicy() {
-        public String getClassName(String prefix, String source, Object key, Predicate names) {
-            prefix = null == prefix ? "net.sf.cglib.empty.Object" : prefix.startsWith("java") ? "$" + prefix : prefix;
-            return source.endsWith("Enhancer") ? prefix + "$Aop" : prefix + "$FastClass";
-        } // http://www.oschina.net/code/explore/cglib-2.2/src/proxy/net/sf/cglib/core/DefaultNamingPolicy.java
-    };
+    private NamingPolicy namingPolicy;
 
     /**
-     * 构造一个类型所有方法的AopFilter的集合
+     * 内置的AopFilter,用li.dao.Trans包裹执行chain.doFilter,使被包裹的方法在事务中执行
      */
-    private static Map<Method, List<AopFilter>> getAopFiltersMap(Class<?> type) {
-        Map<Method, List<AopFilter>> filtersMap = new HashMap<Method, List<AopFilter>>();// 构造这个类型所有方法的AopFilter的集合
-        Method[] methods = type.getDeclaredMethods();
-        for (Method method : methods) {// 对每一个方法
-            List<AopFilter> filters = new ArrayList<AopFilter>();
-            Aop aop = method.getAnnotation(Aop.class);
-            for (int length = (null == aop ? -1 : aop.value().length), i = 0; i < length; i++) {// 如果有@Aop注解,对每一个@Aop.value()的值
-                filters.add(Ioc.get(aop.value()[i]));// 通过Ioc得到AopFilter
+    private AopFilter transFilter;
+
+    /**
+     * 初始化
+     */
+    public AopEnhancer() {
+        try {
+            Class.forName("net.sf.cglib.proxy.Enhancer");// 判断是否有Aop依赖包Aop功能是否可用
+
+            aopCan = true;// 设置Aop功能可用
+
+            namingPolicy = new NamingPolicy() {// 自定义的NamingPolicy,使Aop子类类名以$Aop结尾
+                public String getClassName(String prefix, String source, Object key, Predicate names) {
+                    prefix = null == prefix ? "net.sf.cglib.empty.Object" : prefix.startsWith("java") ? "$" + prefix : prefix;
+                    return source.endsWith("Enhancer") ? prefix + "$Aop" : prefix + "$FastClass";
+                } // http://www.oschina.net/code/explore/cglib-2.2/src/proxy/net/sf/cglib/core/DefaultNamingPolicy.java
+            };
+
+            transFilter = new AopFilter() {// 内置的AopFilter,用li.dao.Trans包裹执行chain.doFilter,使被包裹的方法在事务中执行
+                public void doFilter(final AopChain chain) {
+                    new li.dao.Trans() {
+                        public void run() {
+                            chain.doFilter();
+                        }
+                    };
+                }
+            };
+
+            filtersBuiltIn.put("~!@#trans", transFilter);// 内置AopFilter
+
+            // 解析XmlAop配置
+            File rootFolder = Files.root();
+            List<String> fileList = Files.list(rootFolder, AOP_CONFIG_REGEX, true);// 搜索配置文件
+            log.info("Found ? aop config xml files, at ?", fileList.size(), rootFolder);
+
+            for (String filePath : fileList) {
+                NodeList beanNodes = (NodeList) Files.xpath(Files.build(filePath), "//aop", XPathConstants.NODESET);
+                for (int length = (null == beanNodes ? -1 : beanNodes.getLength()), i = 0; i < length; i++) {
+                    String type = Files.xpath(beanNodes.item(i), "@type", XPathConstants.STRING).toString();
+                    String method = Files.xpath(beanNodes.item(i), "@method", XPathConstants.STRING).toString();
+                    String aops = Files.xpath(beanNodes.item(i), "@aops", XPathConstants.STRING).toString();
+                    xmlAopRules.add(new String[] { type, method, aops });
+                }
             }
-            if (null != method.getAnnotation(li.annotation.Trans.class)) {// 如果有@Trans注解
-                filters.add(TRANS_FILTER);
-            }
-            filtersMap.put(method, filters);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return filtersMap;
+    }
+
+    /**
+     * 获取一个方法通过注解配置的AopFilters
+     */
+    private List<AopFilter> getAnnotationFilters(Method method) {
+        List<AopFilter> filters = new ArrayList<AopFilter>();
+        Aop aop = method.getAnnotation(Aop.class);
+        for (int length = (null == aop ? -1 : aop.value().length), i = 0; i < length; i++) {// 如果有@Aop注解,对每一个@Aop.value()的值
+            AopFilter filter = Ioc.get(aop.value()[i]);// 通过Ioc得到AopFilter
+            if (null == filter) {
+                filter = Reflect.born(aop.value()[i]);// 非Ioc管理,直接new
+            }
+            if (null != filter) {
+                filters.add(filter);
+            }
+        }
+        if (null != method.getAnnotation(li.annotation.Trans.class)) {// 如果有@Trans注解
+            filters.add(transFilter);
+        }
+        return filters;
+    }
+
+    /**
+     * 获取一个方法通过Xml配置的AopFilters
+     */
+    private List<AopFilter> getXmlFilters(Method method) {
+        List<AopFilter> filters = new ArrayList<AopFilter>();
+        for (String[] role : xmlAopRules) {// 所有的规则
+            if (Verify.regex(method.getDeclaringClass().getName(), role[0]) && Verify.regex(method.getName(), role[1])) {// 类名和方法名均匹配
+                String[] names = role[2].split(",");// 所有Aop切入类
+                for (String name : names) {
+                    AopFilter filter = Ioc.get(name);// 通过Ioc得到AopFilter
+                    if (null == filter) {
+                        filter = filtersBuiltIn.get("~!@#" + name);// 内置的AopFilter
+                    }
+                    if (null != filter) {
+                        filters.add(filter);
+                    }
+                }
+            }
+        }
+        return filters;
+    }
+
+    /**
+     * 获取一个方法的所有AopFilters
+     */
+    private List<AopFilter> getFilters(Method method) {
+        List<AopFilter> filters = getAnnotationFilters(method);
+        filters.addAll(getXmlFilters(method));
+        return filters;
     }
 
     /**
      * 生成一个Aop增强的对象
      */
-    public static Object create(Class<?> type) {
-        final Map<Method, List<AopFilter>> filtersMap = getAopFiltersMap(type);
-
+    public Object create(Class<?> type) {
         Enhancer enhancer = new Enhancer(); // 创建代理
-        enhancer.setNamingPolicy(NAMING_POLICY);
+        enhancer.setNamingPolicy(namingPolicy);
         enhancer.setSuperclass(type);
         enhancer.setCallback(new MethodInterceptor() {// 设置callback,使用AopChain代理执行方法
             public Object intercept(Object target, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-                return new AopChain(target, method, args, filtersMap.get(method), proxy).doFilter().getResult();
+                return new AopChain(target, method, args, getFilters(method), proxy).doFilter().getResult();
             }// 使用AopChian代理执行这个方法并返回值
         });
         return enhancer.create();// 创建代理对象

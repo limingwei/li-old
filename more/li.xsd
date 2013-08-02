@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<!-- Root Element -->
+	<xs:element name="config" type="config_type" />
+
+	<xs:complexType name="config_type">
+		<xs:sequence>
+			<xs:element name="beans" type="beans_type" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="aops" type="aops_type" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="tasks" type="tasks_type" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="beans_type">
+		<xs:sequence>
+			<xs:element name="bean" type="bean_type" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="bean_type">
+		<xs:sequence>
+			<xs:element name="property" type="property_type" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attributeGroup ref="bean_attribute" />
+	</xs:complexType>
+
+	<xs:complexType name="property_type">
+		<xs:attributeGroup ref="property_attribute" />
+	</xs:complexType>
+
+	<xs:attributeGroup name="bean_attribute">
+		<xs:attribute name="name" type="xs:string" /><!-- default="userService" -->
+		<xs:attribute name="class" type="xs:string" use="required" /><!-- default="com.company.project.service.impl.UserServiceImpl" -->
+	</xs:attributeGroup>
+
+	<xs:attributeGroup name="property_attribute">
+		<xs:attribute name="name" type="xs:string" use="required" /><!-- default="userDao" -->
+		<xs:attribute name="value" type="xs:string" /><!-- default="userDao" -->
+	</xs:attributeGroup>
+
+	<xs:complexType name="aops_type">
+		<xs:sequence>
+			<xs:element name="aop" type="aop_type" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="aop_type">
+		<xs:attributeGroup ref="aop_attribute" />
+	</xs:complexType>
+
+	<xs:attributeGroup name="aop_attribute">
+		<xs:attribute name="type" type="xs:string" use="required" /><!-- default="com.company.project.service.impl.*" -->
+		<xs:attribute name="method" type="xs:string" use="required" /><!-- default="(save|update)" -->
+		<xs:attribute name="aops" type="xs:string" use="required" /><!-- default="trans" -->
+	</xs:attributeGroup>
+
+	<xs:complexType name="tasks_type">
+		<xs:sequence>
+			<xs:element name="task" type="task_type" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="task_type">
+		<xs:attributeGroup ref="task_attribute" />
+	</xs:complexType>
+
+	<xs:attributeGroup name="task_attribute">
+		<xs:attribute name="class" type="xs:string" use="required" /><!-- default="com.company.project.task.DemoTask" -->
+		<xs:attribute name="trigger" type="xs:string" use="required" /><!-- default="0 0/1 * * * ?" -->
+	</xs:attributeGroup>
+</xs:schema>

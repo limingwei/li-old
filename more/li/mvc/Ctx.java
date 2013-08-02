@@ -1,15 +1,15 @@
 package li.mvc;
 
-import java.io.Writer;
-import java.util.Locale;
+import java.io.File;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
 
 import javax.servlet.http.Cookie;
 
+import li.mvc.view.BeetlView;
+import li.mvc.view.HttlView;
+import li.mvc.view.VelocityView;
 import li.util.Convert;
-import li.util.Files;
 import li.util.Log;
 import li.util.Reflect;
 
@@ -21,9 +21,8 @@ import li.util.Reflect;
  * @see li.mvc.Context
  */
 public class Ctx extends Context {
-    private static final Log log = Log.init();
-
     private static final AbstractAction ABSTRACT_ACTION = new AbstractAction() {};
+    private static Log log = Log.init();
 
     /**
      * 主视图方法,以冒号分割前缀表示视图类型
@@ -47,7 +46,7 @@ public class Ctx extends Context {
         } else if ("httl".equals(viewType) || "ht".equals(viewType)) {// beetl视图
             return httl(VIEW_PREFIX + viewPath + VIEW_SUFFIX);
         } else {
-            return Context.view(path);
+            return Context.view(path);// 其他视图使用Context.view
         }
     }
 
@@ -56,25 +55,7 @@ public class Ctx extends Context {
      */
     public static String beetl(String path) {
         try {
-            Object groupTemplate = Log.get("group_template");// 从缓存中查找GroupTemplate
-            if (null == groupTemplate) {
-                log.debug("beetl initializing ...");
-                Properties properties = new Properties();
-                properties.put("TEMPLATE_ROOT", getRootPath());
-                properties.put("TEMPLATE_CHARSET", "UTF-8");
-                properties.putAll(Files.load("beetl.properties"));// 加载自定义配置,覆盖默认
-                Object config = Reflect.born("org.bee.tl.core.Config");// 加载默认配置
-                Reflect.invoke(config, "put", new Class<?>[] { Map.class }, new Object[] { properties });
-                groupTemplate = Reflect.invoke(config, "createGroupTemplate");// 生成GroupTemplate,并缓存之
-                Log.put("group_template", groupTemplate);
-            }
-            Object template = Reflect.invoke(groupTemplate, "getFileTemplate", path);// 生成模板
-            Map<String, Object> attributes = getAttributes();
-            for (Entry<String, Object> entry : attributes.entrySet()) {
-                Reflect.invoke(template, "set", new Class[] { String.class, Object.class }, new Object[] { entry.getKey(), entry.getValue() });// 设置变量
-            }
-            Reflect.invoke(template, "getText", new Class[] { Writer.class }, new Object[] { getResponse().getWriter() });// merge 模板和模型，将内容输出到Writer里
-            log.info("beetl to : ?", path);
+            new BeetlView().render(path, getResponse(), getAttributes());
         } catch (Throwable e) {
             error(e);
         }
@@ -86,21 +67,7 @@ public class Ctx extends Context {
      */
     public static String velocity(String path) {
         try {
-            Object initialized = Log.get("velocity_initialized"); // 从缓存中查找velocity是否初始化的标记
-            if (null == initialized) { // 缓存中没有
-                log.debug("velocity initializing ..");
-                Properties properties = new Properties();// 默认的参数设置
-                properties.put("file.resource.loader.path", getRootPath());
-                properties.put("input.encoding", "UTF-8");
-                properties.put("output.encoding", "UTF-8");
-                properties.putAll(Files.load("velocity.properties"));// velocity.properties中的参数设置
-                Reflect.call("org.apache.velocity.app.Velocity", "init", properties);// 初始化Velocity
-                Log.put("velocity_initialized", true); // 设置velocityInitialized标记
-            }
-            Object context = Reflect.born("org.apache.velocity.VelocityContext", new Class[] { Map.class }, new Object[] { getAttributes() });// velocity值栈
-            Object template = Reflect.call("org.apache.velocity.app.Velocity", "getTemplate", path);// velocity模板
-            Reflect.invoke(template, "merge", new Class[] { Reflect.getType("org.apache.velocity.context.Context"), java.io.Writer.class }, new Object[] { context, getResponse().getWriter() });
-            log.info("velocity to : ?", path);
+            new VelocityView().render(path, getResponse(), getAttributes());
         } catch (Throwable e) {
             error(e);
         }
@@ -112,25 +79,29 @@ public class Ctx extends Context {
      */
     public static String httl(String path) {
         try {
-            Object engine = Log.get("httl_engine");
-            if (null == engine) {
-                log.debug("httl initializing ..");
-                Properties properties = new Properties();
-                properties.put("loaders", "httl.spi.loaders.FileLoader");
-                properties.put("template.directory", getRootPath());
-                properties.put("template.suffix", ".htm");
-                properties.put("input.encoding", "UTF-8");
-                properties.putAll(Files.load("httl.properties"));// httl.properties中的参数设置
-                engine = Reflect.call("httl.Engine", "getEngine", properties);
-                Log.put("httl_engine", engine);
-            }
-            Object template = Reflect.invoke(engine, "getTemplate", path);
-            Reflect.invoke(template, "render", new Class<?>[] { Object.class, Object.class }, new Object[] { getAttributes(), getResponse().getWriter() });
-            log.info("httl to : ?", path);
+            new HttlView().render(path, getResponse(), getAttributes());
         } catch (Exception e) {
             error(e);
         }
         return "~!@#DONE";
+    }
+
+    /**
+     * 上传文件
+     */
+    public static void upload(String uploadPath) {
+        try {
+            Object factory = Reflect.born("org.apache.commons.fileupload.disk.DiskFileItemFactory");
+            Object upload = Reflect.born("org.apache.commons.fileupload.servlet.ServletFileUpload", new Class[] { Reflect.getType("org.apache.commons.fileupload.FileItemFactory") }, factory);
+            List fileItems = (List) Reflect.invoke(upload, "parseRequest", getRequest());
+            for (Object fileItem : fileItems) {
+                File saveFile = new File(uploadPath, Reflect.invoke(fileItem, "getName").toString());
+                Reflect.invoke(fileItem, "write", saveFile);
+            }
+            log.info("upload success");
+        } catch (Throwable e) {
+            error(e);
+        }
     }
 
     /**
@@ -328,35 +299,5 @@ public class Ctx extends Context {
     public static AbstractAction removeCookie(String name, String path) {
         setCookie(name, null, 0, path);
         return ABSTRACT_ACTION;
-    }
-
-    /**
-     * setLocaleToCookie
-     */
-    public static AbstractAction setLocaleToCookie(Locale locale) {
-        // setCookie(I18N_LOCALE, locale.toString(), I18N.getI18nMaxAgeOfCookie());
-        return ABSTRACT_ACTION;
-    }
-
-    /**
-     * setLocaleToCookie
-     */
-    public static AbstractAction setLocaleToCookie(Locale locale, int maxAge) {
-        // setCookie(I18N_LOCALE, locale.toString(), maxAge);
-        return ABSTRACT_ACTION;
-    }
-
-    /**
-     * getText
-     */
-    public String getText(String key) {
-        return "I18N.getText(key, getLocaleFromCookie())";
-    }
-
-    /**
-     * getText
-     */
-    public String getText(String key, String defaultValue) {
-        return "I18N.getText(key, defaultValue, getLocaleFromCookie())";
     }
 }

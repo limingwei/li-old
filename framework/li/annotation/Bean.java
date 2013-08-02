@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 标记一个Bean,带有此注解的类会被加载到Ioc上下文
+ * 标记一个Ioc Bean
  * 
  * @author li (limw@w.cn)
  * @version 0.1.1 (2012-05-08)

@@ -37,7 +37,7 @@ public class AbstractDao<T> {
      */
     protected Class<T> getType() {
         if (null == this.modelType) {
-            this.modelType = (Class<T>) Reflect.actualType(getClass(), 0); // 通过泛型参数得到modelType
+            this.modelType = (Class<T>) Reflect.actualType(getClass(), 0); // 通过泛型参数得到modelType,在Record中可以直接通过getClass得到
         }
         return this.modelType;
     }
@@ -59,8 +59,9 @@ public class AbstractDao<T> {
      */
     protected QueryBuilder getQueryBuilder() {
         if (null == this.queryBuilder) {
-            this.queryBuilder = new QueryBuilder();
-            this.queryBuilder.setBeanMeta(getBeanMeta());
+            QueryBuilder queryBuilder = new QueryBuilder();
+            queryBuilder.setBeanMeta(this.getBeanMeta());
+            this.queryBuilder = queryBuilder;
         }
         return this.queryBuilder;
     }
@@ -110,7 +111,7 @@ public class AbstractDao<T> {
     }
 
     /**
-     * 根据SQL条件查询记录数
+     * 根据SQL条件查询返回一个数字
      * 
      * @param sql 传入的sql语句,可以包含'?'占位符和具名占位符
      * @param args 替换sql中占位符的值,或者对应具名占位符的Map
@@ -140,7 +141,7 @@ public class AbstractDao<T> {
      * @see li.dao.AbstractDao#update(String, Object...)
      */
     public Integer delete(String sql, Object... args) {
-        return new QueryRunner(getConnection()).executeUpdate(getQueryBuilder().deleteBySql(sql, args));
+        return new QueryRunner(getConnection()).executeUpdate(getQueryBuilder().deleteBySql(sql, args), false);
     }
 
     /**
@@ -212,26 +213,42 @@ public class AbstractDao<T> {
     }
 
     /**
-     * 向数据库中插入一条记录,save方法完成后,对象的ID将会被设值
+     * 向数据库中插入一条记录,完成后,对象的ID将会被设值
      */
     public Boolean save(T t) {
         QueryRunner queryRunner = new QueryRunner(getConnection());
-        Integer updateCount = queryRunner.executeUpdate(getQueryBuilder().save(t));
+        Integer updateCount = queryRunner.executeUpdate(getQueryBuilder().insert(t), true);
 
-        Reflect.set(t, getBeanMeta().getId().name, queryRunner.LAST_INSERT_ID);// 设置对象ID为最后主键值
+        Reflect.set(t, getBeanMeta().getId().name, queryRunner.getLastInsertId());// 设置对象ID为最后主键值
 
         return 0 < updateCount;
     }
 
     /**
-     * 向数据库中插入一条记录,忽略为空的属性
+     * 向数据库中插入一条记录,忽略为空的属性,完成后,对象的ID将会被设值
      */
     public Boolean saveIgnoreNull(T t) {
         QueryRunner queryRunner = new QueryRunner(getConnection());
-        Integer updateCount = queryRunner.executeUpdate(getQueryBuilder().saveIgnoreNull(t));
+        Integer updateCount = queryRunner.executeUpdate(getQueryBuilder().insertIgnoreNull(t), true);
 
-        Reflect.set(t, getBeanMeta().getId().name, queryRunner.LAST_INSERT_ID);// 设置对象ID为最后主键值
+        Reflect.set(t, getBeanMeta().getId().name, queryRunner.getLastInsertId());// 设置对象ID为最后主键值
         return 0 < updateCount;
+    }
+
+    /**
+     * 向数据库中插入一条记录
+     */
+    public Boolean insert(T t) {
+        QueryRunner queryRunner = new QueryRunner(getConnection());
+        return 0 < queryRunner.executeUpdate(getQueryBuilder().insert(t), false);
+    }
+
+    /**
+     * 向数据库中插入一条记录,忽略为空的属性
+     */
+    public Boolean insertIgnoreNull(T t) {
+        QueryRunner queryRunner = new QueryRunner(getConnection());
+        return 0 < queryRunner.executeUpdate(getQueryBuilder().insertIgnoreNull(t), false);
     }
 
     /**
@@ -242,7 +259,7 @@ public class AbstractDao<T> {
      * @return 受影响的行数
      */
     public Integer update(String sql, Object... args) {
-        return new QueryRunner(getConnection()).executeUpdate(getQueryBuilder().updateBySql(sql, args));
+        return new QueryRunner(getConnection()).executeUpdate(getQueryBuilder().updateBySql(sql, args), false);
     }
 
     /**
