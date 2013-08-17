@@ -56,7 +56,7 @@ public class IocContext {
             Properties properties = Files.load("config.properties");
             for (Bean bean : IOC_CONTEXT.beans) {
                 for (Field field : bean.fields) {// 如果 filed.value 形如 ${name} 则使用 properties 中key为name的值替换
-                    if (field.value.length() > 3 && field.value.startsWith("${") && field.value.endsWith("}")) {
+                    if (field.value.startsWith("${") && field.value.endsWith("}")) {
                         field.value = properties.getProperty(field.value.replace("${", "").replace("}", ""));
                     }
                 }
