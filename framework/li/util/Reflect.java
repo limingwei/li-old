@@ -375,12 +375,12 @@ public class Reflect {
     /**
      * 得到一个方法的参数注解列表
      */
-    public static <T extends Annotation> T[] argAnnotations(Method method, Class<T> annotation) {
-        T[] array = (T[]) Array.newInstance(annotation, method.getParameterTypes().length);// 生成注解数组
+    public static <T extends Annotation> T[] argAnnotations(Method method, Class<T> annotationType) {
+        T[] array = (T[]) Array.newInstance(annotationType, method.getParameterTypes().length);// 生成注解数组
         Annotation[][] ats = method.getParameterAnnotations();// 所有参数注解的二维数组
         for (int i = 0; i < ats.length; i++) {// 每一个参数的注解数组
             for (Annotation at : ats[i]) {// 一个参数上的每一个注解
-                if (annotation.isAssignableFrom(at.annotationType())) {// 如果注解类型是指定类型
+                if (annotationType.isAssignableFrom(at.annotationType())) {// 如果注解类型是指定类型
                     array[i] = (T) at;
                     break;// 跳出当前层循环,处理下一个参数
                 }
