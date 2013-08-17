@@ -1,12 +1,12 @@
 package li.lang;
 
-import java.io.File;
+import java.io.OutputStream;
 import java.util.List;
 
 import li.ioc.AnnotationIocLoader;
 import li.model.Bean;
 import li.model.Field;
-import li.util.FileUtil;
+import li.util.IOUtil;
 import li.util.Log;
 import li.util.Verify;
 
@@ -21,52 +21,60 @@ public class IocExporter {
 
     /**
      * 导出注解IOC配置信息到XML
-     * 
-     * @param file 导出IOC的文件
      */
-    public void extract(File file) {
+    public void write(OutputStream out) {
         log.info("extract start");
         List<Bean> beans = new AnnotationIocLoader().getBeans();
-        FileUtil.write(file, doc(beans));
+        IOUtil.write(out, beansToString(beans));
         log.info("extract finished");
     }
 
     /**
      * 导出bean list
      */
-    private String doc(List<Bean> beans) {
+    public String beansToString(List<Bean> beans) {
         String xmlDoc = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<config>\n\t<beans>";// xml文件头
         for (Bean bean : beans) {// 每一个
-            xmlDoc += bean(bean);// bean
+            xmlDoc += beanToString(bean);// bean
         }
-        xmlDoc += "\n\t</beans>\n</config>";// xml文件尾
+        xmlDoc += "\n    </beans>\n</config>";// xml文件尾
         return xmlDoc;
     }
 
     /**
      * 导出一个bean
      */
-    private String bean(Bean bean) {
-        String beanDoc = "\n\t\t<bean ";
+    private String beanToString(Bean bean) {
+        String beanDoc = "\n        <bean ";
         if (!Verify.isEmpty(bean.name)) {// name
             beanDoc += "name=\"" + bean.name + "\" ";
         }
-        beanDoc += "class=\"" + bean.type.getName() + "\">";// class
-        for (Field field : bean.fields) {
-            beanDoc += property(field);// property
+        beanDoc += "class=\"" + bean.type.getName() + "\"";// class
+        String propertiesDoc = fieldsToString(bean.fields);
+        if (!Verify.isEmpty(propertiesDoc)) {
+            beanDoc += ">" + fieldsToString(bean.fields) + "\n        </bean>";
+        } else {
+            beanDoc += "/>";
         }
-        beanDoc += "\n\t\t</bean>";
         return beanDoc;
+    }
+
+    private String fieldsToString(List<Field> properties) {
+        String propertiesDoc = "";
+        for (Field field : properties) {
+            propertiesDoc += fieldToString(field);// property
+        }
+        return propertiesDoc;
     }
 
     /**
      * 导出一个property
      */
-    private String property(Field field) {
+    private String fieldToString(Field field) {
         if (!Verify.isEmpty(field.value)) {// 有值
-            return "\n\t\t\t<property name=\"" + field.name + "\" value=\"" + field.value + "\" />";
+            return "\n            <property name=\"" + field.name + "\" value=\"" + field.value + "\" />";
         } else {// 无值
-            return "\n\t\t\t<property name=\"" + field.name + "\" />";
+            return "\n            <property name=\"" + field.name + "\" />";
         }
     }
 }
