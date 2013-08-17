@@ -16,8 +16,6 @@ import li.util.Log;
  * httl视图
  * 
  * @author : 明伟 
- * @date : 2013年7月19日 下午3:10:12
- * @version 1.0 
  */
 public class HttlView extends AbstractView {
     private static final Log log = Log.init();

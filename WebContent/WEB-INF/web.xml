@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-	id="WebApp_ID" version="3.0">
-	
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+
 	<filter>
 		<filter-name>authFilter</filter-name>
 		<filter-class>li.people.AuthFilter</filter-class>
@@ -19,9 +16,37 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>actionFilter</filter-name>
+		<url-pattern>*.do1</url-pattern>
 		<url-pattern>*.do</url-pattern>
 		<url-pattern>*.htm</url-pattern><!-- 一个 filter 可以配置多个 url-pattern -->
 	</filter-mapping>
+
+	<filter>
+		<filter-name>actionDispatcher</filter-name>
+		<filter-class>li.mvc.ActionDispatcher</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>actionDispatcher</filter-name>
+		<url-pattern>*.do2</url-pattern>
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>actionServlet</servlet-name>
+		<servlet-class>li.mvc.ActionServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>actionServlet</servlet-name>
+		<url-pattern>*.do3</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>actionDispatcher</servlet-name>
+		<servlet-class>li.mvc.ActionDispatcher</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>actionDispatcher</servlet-name>
+		<url-pattern>*.do4</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>druidStatView</servlet-name>

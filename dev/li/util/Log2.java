@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 日志工具类,自动适配Log4j或Console
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.6 (2012-07-05)
  */
 public abstract class Log2 {

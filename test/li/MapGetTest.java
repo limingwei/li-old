@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import li.util.Log;
+
 import org.junit.Test;
 
 public class MapGetTest {
+    private static final Log log = Log.init();
+
     private static final Integer ITEM_NUM = 10000;// 元素个数
     private static final Integer GET_NUM = 10000;// 取值次数
 
@@ -22,9 +26,9 @@ public class MapGetTest {
         Long start = System.currentTimeMillis();
         for (int i = 0; i < GET_NUM; i++) {
             String key = "key_" + new Random().nextInt(ITEM_NUM);
-            System.out.println(map.get(key));
+            log.debug(map.get(key));
         }
-        System.out.println("耗时 毫秒 " + (System.currentTimeMillis() - start));
+        log.debug("耗时 毫秒 " + (System.currentTimeMillis() - start));
     }
 
     @Test
@@ -37,9 +41,9 @@ public class MapGetTest {
         Long start = System.currentTimeMillis();
         for (int i = 0; i < GET_NUM; i++) {
             String key = "key_" + new Random().nextInt(ITEM_NUM);
-            System.out.println(get(list, key));
+            log.debug(get(list, key));
         }
-        System.out.println("耗时 毫秒 " + (System.currentTimeMillis() - start));
+        log.debug("耗时 毫秒 " + (System.currentTimeMillis() - start));
     }
 
     private String get(List<String> list, String key) {

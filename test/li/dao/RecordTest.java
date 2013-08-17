@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import li.annotation.Inject;
+import li.dao.test._User;
+import li.dao.test._UserDao;
 import li.test.BaseTest;
 import li.util.Log;
 
@@ -50,7 +52,7 @@ public class RecordTest extends BaseTest {
 
     @Test
     public void find() {
-        Integer id = userDao.find("WHERE id>0").get(Integer.class, "id");
+        Integer id = userDao.find("WHERE id>0 LIMIT 1").get(Integer.class, "id");
         assertNotNull("dao.find", userDao.find(id));
     }
 

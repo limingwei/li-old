@@ -12,7 +12,7 @@ import li.util.Convert;
 /**
  * 你的数据对象类可以继承这个类,以使用ActiveRecord的方式操作数据库
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-06-25)
  */
 public class Record<T extends Record> extends AbstractDao<T> implements Map, Serializable {

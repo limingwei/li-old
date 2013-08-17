@@ -14,7 +14,7 @@ import li.util.Reflect;
 /**
  * Ioc加载器,加载用注解方式配置的Bean
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.2 (2012-05-08)
  */
 public class AnnotationIocLoader {

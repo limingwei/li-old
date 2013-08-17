@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
-<log4j:configuration>	
+<log4j:configuration>
 	<root>
+		<level value="TRACE" />
 		<appender-ref ref="CONSOLE_APPENDER" />
 	</root>
+
+	<!-- <logger name="li"> <level value="TRACE" /> <appender-ref ref="CONSOLE_APPENDER" /> </logger> <logger name="httl"> <level value="TRACE" /> <appender-ref ref="CONSOLE_APPENDER" /> </logger> <logger name="freemarker"> <level value="TRACE" /> <appender-ref ref="CONSOLE_APPENDER" /> </logger> -->
 
 	<appender name="CONSOLE_APPENDER" class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.PatternLayout">

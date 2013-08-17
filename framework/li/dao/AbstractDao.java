@@ -16,7 +16,7 @@ import li.util.Verify;
 /**
  * AbstractDao,通常,业务对象的Dao要继承这个基类
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.7 (2012-06-26)
  */
 public class AbstractDao<T> {
@@ -31,50 +31,21 @@ public class AbstractDao<T> {
     private DataSource dataSource;// 当前Dao的DataSource
 
     /**
-     * 通过泛型参数得到modelType
-     * 
-     * @see li.util.Reflect#actualType(Class, Integer)
-     */
-    protected Class<T> getType() {
-        if (null == this.modelType) {
-            this.modelType = (Class<T>) Reflect.actualType(getClass(), 0); // 通过泛型参数得到modelType,在Record中可以直接通过getClass得到
-        }
-        return this.modelType;
-    }
-
-    /**
-     * 得到当前Dao所操作的数据对象的结构
-     * 
-     * @see li.model.Bean#getMeta(DataSource, Class)
-     */
-    protected Bean getBeanMeta() {
-        if (null == this.beanMeta) {
-            this.beanMeta = Bean.getMeta(getDataSource(), getType());
-        }
-        return this.beanMeta;
-    }
-
-    /**
-     * 得到SQL构造器
-     */
-    protected QueryBuilder getQueryBuilder() {
-        if (null == this.queryBuilder) {
-            QueryBuilder queryBuilder = new QueryBuilder();
-            queryBuilder.setBeanMeta(this.getBeanMeta());
-            this.queryBuilder = queryBuilder;
-        }
-        return this.queryBuilder;
-    }
-
-    /**
      * 如果还没有注入dataSource,则尝试次从Ioc中搜索DataSource类型的Bean
      */
-    protected DataSource getDataSource() {
+    public DataSource getDataSource() {
         if (null == this.dataSource) {
-            this.dataSource = Ioc.get(DataSource.class);
             log.warn("DataSource not injected for ?", this);
+            this.dataSource = Ioc.get(DataSource.class);
         }
         return this.dataSource;
+    }
+
+    /**
+     * setDataSource
+     */
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     /**
@@ -83,7 +54,7 @@ public class AbstractDao<T> {
      * @see li.dao.Trans
      * @see li.dao.QueryRunner
      */
-    protected Connection getConnection() {
+    public Connection getConnection() {
         try {
             if (null == Trans.CONNECTION_MAP.get()) {// 如果未进入事务
                 return this.getDataSource().getConnection();// 则简单获取一个connection
@@ -97,8 +68,73 @@ public class AbstractDao<T> {
                 return connection; // 返回这个connection
             }
         } catch (Exception e) {
-            throw new RuntimeException("error to connect to the database", e);
+            throw new RuntimeException(e + " ", e);
         }
+    }
+
+    /**
+     * 通过泛型参数得到modelType
+     * 
+     * @see li.util.Reflect#actualType(Class, Integer)
+     */
+    public Class<T> getType() {
+        if (null == this.modelType) {
+            this.modelType = (Class<T>) Reflect.actualType(getClass(), 0); // 通过泛型参数得到modelType,在Record中可以直接通过getClass得到
+        }
+        return this.modelType;
+    }
+
+    /**
+     * 得到当前Dao所操作的数据对象的结构
+     * 
+     * @see li.model.Bean#getMeta(DataSource, Class)
+     */
+    public Bean getBeanMeta() {
+        if (null == this.beanMeta) {
+            this.beanMeta = Bean.getMeta(getDataSource(), getType());
+        }
+        return this.beanMeta;
+    }
+
+    /**
+     * 得到SQL构造器
+     * 
+     * @see li.dao.QueryBuilder
+     */
+    public QueryBuilder getQueryBuilder() {
+        if (null == this.queryBuilder) {
+            QueryBuilder queryBuilder = new QueryBuilder();
+            this.queryBuilder = queryBuilder;
+        }
+        if (null == this.queryBuilder.beanMeta) {
+            this.queryBuilder.beanMeta = this.getBeanMeta();
+        }
+        return this.queryBuilder;
+    }
+
+    /**
+     * setQueryBuilder
+     */
+    public void setQueryBuilder(QueryBuilder queryBuilder) {
+        this.queryBuilder = queryBuilder;
+    }
+
+    /**
+     * 得到 ModelBuilder
+     * 
+     * @see li.dao.ModelBuilder
+     */
+    public ModelBuilder getModelBuilder(QueryRunner queryRunner, ResultSet resultSet) {
+        return new ModelBuilder(queryRunner, resultSet);
+    }
+
+    /**
+     * 得到 QueryRunner
+     * 
+     * @see li.dao.QueryRunner
+     */
+    public QueryRunner getQueryRunner(Connection connection) {
+        return new QueryRunner(connection);
     }
 
     /**
@@ -117,8 +153,8 @@ public class AbstractDao<T> {
      * @param args 替换sql中占位符的值,或者对应具名占位符的Map
      */
     public Integer count(String sql, Object... args) {
-        QueryRunner queryRunner = new QueryRunner(getConnection());
-        ModelBuilder modelBuilder = new ModelBuilder(queryRunner, queryRunner.executeQuery(getQueryBuilder().countBySql(sql, args)));
+        QueryRunner queryRunner = this.getQueryRunner(this.getConnection());
+        ModelBuilder modelBuilder = this.getModelBuilder(queryRunner, queryRunner.executeQuery(getQueryBuilder().countBySql(sql, args)));
         String count = modelBuilder.value(1, true, true);
         return Verify.isEmpty(count) ? -1 : Integer.valueOf(count);
     }
@@ -141,7 +177,7 @@ public class AbstractDao<T> {
      * @see li.dao.AbstractDao#update(String, Object...)
      */
     public Integer delete(String sql, Object... args) {
-        return new QueryRunner(getConnection()).executeUpdate(getQueryBuilder().deleteBySql(sql, args), false);
+        return this.getQueryRunner(this.getConnection()).executeUpdate(getQueryBuilder().deleteBySql(sql, args), false);
     }
 
     /**
@@ -183,9 +219,9 @@ public class AbstractDao<T> {
     public List<T> list(Page page, String sql, Object... args) {
         sql = getQueryBuilder().listBySql(page, sql, args);
 
-        QueryRunner queryRunner = new QueryRunner(getConnection());
+        QueryRunner queryRunner = this.getQueryRunner(this.getConnection());
         ResultSet resultSet = queryRunner.executeQuery(sql);
-        ModelBuilder modelBuilder = new ModelBuilder(queryRunner, resultSet);
+        ModelBuilder modelBuilder = this.getModelBuilder(queryRunner, resultSet);
 
         if (null != resultSet && null != page && page.count()) {
             page.setRecordCount(count(sql));
@@ -197,26 +233,26 @@ public class AbstractDao<T> {
     /**
      * 执行SQL查询并将结果集封装成Record或其子类的List
      */
-    public List<Record> query(Page page, String sql, Object... args) {
+    public List<Record<?>> query(Page page, String sql, Object... args) {
         sql = getQueryBuilder().listBySql(page, sql, args);
 
-        QueryRunner queryRunner = new QueryRunner(getConnection());
+        QueryRunner queryRunner = this.getQueryRunner(this.getConnection());
         ResultSet resultSet = queryRunner.executeQuery(sql);
-        ModelBuilder modelBuilder = new ModelBuilder(queryRunner, resultSet);
+        ModelBuilder modelBuilder = this.getModelBuilder(queryRunner, resultSet);
 
         if (null != resultSet && null != page && page.count()) {
             page.setRecordCount(count(sql));
         }
         Integer count = null == page ? Integer.MAX_VALUE : page.getPageSize();
         Class<?> type = Record.class.isAssignableFrom(getType()) ? getType() : Record.class;// Record类型或其子类
-        return (List<Record>) modelBuilder.list(type, Field.list(resultSet), count, true);
+        return (List<Record<?>>) modelBuilder.list(type, Field.list(resultSet), count, true);
     }
 
     /**
      * 向数据库中插入一条记录,完成后,对象的ID将会被设值
      */
     public Boolean save(T t) {
-        QueryRunner queryRunner = new QueryRunner(getConnection());
+        QueryRunner queryRunner = this.getQueryRunner(this.getConnection());
         Integer updateCount = queryRunner.executeUpdate(getQueryBuilder().insert(t), true);
 
         Reflect.set(t, getBeanMeta().getId().name, queryRunner.getLastInsertId());// 设置对象ID为最后主键值
@@ -228,7 +264,7 @@ public class AbstractDao<T> {
      * 向数据库中插入一条记录,忽略为空的属性,完成后,对象的ID将会被设值
      */
     public Boolean saveIgnoreNull(T t) {
-        QueryRunner queryRunner = new QueryRunner(getConnection());
+        QueryRunner queryRunner = this.getQueryRunner(this.getConnection());
         Integer updateCount = queryRunner.executeUpdate(getQueryBuilder().insertIgnoreNull(t), true);
 
         Reflect.set(t, getBeanMeta().getId().name, queryRunner.getLastInsertId());// 设置对象ID为最后主键值
@@ -239,7 +275,7 @@ public class AbstractDao<T> {
      * 向数据库中插入一条记录
      */
     public Boolean insert(T t) {
-        QueryRunner queryRunner = new QueryRunner(getConnection());
+        QueryRunner queryRunner = this.getQueryRunner(this.getConnection());
         return 0 < queryRunner.executeUpdate(getQueryBuilder().insert(t), false);
     }
 
@@ -247,7 +283,7 @@ public class AbstractDao<T> {
      * 向数据库中插入一条记录,忽略为空的属性
      */
     public Boolean insertIgnoreNull(T t) {
-        QueryRunner queryRunner = new QueryRunner(getConnection());
+        QueryRunner queryRunner = this.getQueryRunner(this.getConnection());
         return 0 < queryRunner.executeUpdate(getQueryBuilder().insertIgnoreNull(t), false);
     }
 
@@ -259,7 +295,7 @@ public class AbstractDao<T> {
      * @return 受影响的行数
      */
     public Integer update(String sql, Object... args) {
-        return new QueryRunner(getConnection()).executeUpdate(getQueryBuilder().updateBySql(sql, args), false);
+        return this.getQueryRunner(this.getConnection()).executeUpdate(getQueryBuilder().updateBySql(sql, args), false);
     }
 
     /**

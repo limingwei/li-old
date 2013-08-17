@@ -16,14 +16,15 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import li.util.Log;
+import li.util.ThreadUtil;
 
 /**
  * MockServletRequest
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-09-27)
  */
-class MockServletRequest implements ServletRequest {
+public class MockServletRequest implements ServletRequest {
     private static final Log log = Log.init();
 
     private MockServletContext servletContext;
@@ -104,7 +105,7 @@ class MockServletRequest implements ServletRequest {
 
     public void setCharacterEncoding(String encoding) throws UnsupportedEncodingException {
         this.encoding = encoding;
-        log.info("set encoding " + encoding + " calling by " + Util.stackTrace());
+        log.info("set encoding " + encoding + " calling by " + ThreadUtil.stackTrace());
     }
 
     public String getContentType() {
@@ -113,7 +114,7 @@ class MockServletRequest implements ServletRequest {
 
     public void setContentType(String contentType) {
         this.contentType = contentType;
-        log.info("set contentType " + contentType + " calling by " + Util.stackTrace());
+        log.info("set contentType " + contentType + " calling by " + ThreadUtil.stackTrace());
     }
 
     public AsyncContext getAsyncContext() {

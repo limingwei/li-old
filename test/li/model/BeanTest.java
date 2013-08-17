@@ -4,7 +4,7 @@ import static org.junit.Assert.assertNotNull;
 
 import javax.sql.DataSource;
 
-import li.dao._User;
+import li.dao.test._User;
 import li.ioc.Ioc;
 import li.test.BaseTest;
 

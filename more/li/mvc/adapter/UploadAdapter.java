@@ -39,7 +39,7 @@ public class UploadAdapter extends AbstractAdapter {
     }
 
     /**
-     * @TODO功能实现待优化
+     * adapt
      */
     public Object adapt(ServletRequest request, Integer argIndex) throws Exception {
         Action action = Context.getAction();

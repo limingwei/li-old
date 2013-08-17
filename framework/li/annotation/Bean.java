@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 标记一个Ioc Bean
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-05-08)
  */
 @Retention(RetentionPolicy.RUNTIME)

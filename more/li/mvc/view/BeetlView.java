@@ -18,8 +18,6 @@ import org.bee.tl.core.Template;
  * beetl视图
  * 
  * @author : 明伟 
- * @date : 2013年7月19日 下午3:10:12
- * @version 1.0 
  */
 public class BeetlView extends AbstractView {
     private static final Log log = Log.init();

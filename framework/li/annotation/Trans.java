@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 标记一个需要事务包裹的方法
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-09-20)
  */
 @Retention(RetentionPolicy.RUNTIME)

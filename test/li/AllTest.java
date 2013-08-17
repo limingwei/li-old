@@ -10,11 +10,8 @@ import li.dao.RecordTest;
 import li.dao.TransTest;
 import li.demo.action.AccountActionTest;
 import li.demo.action.DemoActionTest;
-import li.demo.action.PostActionTest;
 import li.demo.record.AccountTest;
 import li.demo.record.ForumTest;
-import li.demo.record.PostTest;
-import li.demo.record.RoleTest;
 import li.ioc.IocTest;
 import li.model.BeanTest;
 import li.model.FieldTest;
@@ -38,6 +35,6 @@ import org.junit.runners.Suite.SuiteClasses;
         BeanTest.class, FieldTest.class, // Model
         AbstractDaoTest.class, QueryRunnerTest.class, RecordTest.class, PageTest.class, QueryBuilderTest.class, ModelBuilderTest.class, TransTest.class,// Dao
         ConvertTest.class, ReflectTest.class, FilesTest.class, LogTest.class, VerifyTest.class, // Util
-        AccountTest.class, PostTest.class, ForumTest.class, RoleTest.class,// Record
-        DemoActionTest.class, AccountActionTest.class, PostActionTest.class /* Action */})
+        AccountTest.class, ForumTest.class, // Record
+        DemoActionTest.class, AccountActionTest.class /* Action */})
 public class AllTest {}

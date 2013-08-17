@@ -147,13 +147,13 @@ public class Request {
     /**
      * 设置GET访问的参数,会添加到url,url中不应当已经存在
      */
-    public void setParameters(Map<String, Object> parameters) {
-        for (Entry<String, Object> entry : parameters.entrySet()) {
+    public void setParameters(Map<Object, Object> map) {
+        for (Entry<Object, Object> entry : map.entrySet()) {
             Object value = entry.getValue();
             if (!(value instanceof List)) {
                 value = Arrays.asList(value);
             }
-            this.parameters.put(entry.getKey(), (List<String>) value);
+            this.parameters.put(entry.getKey() + "", (List<String>) value);
         }
     }
 
@@ -289,7 +289,7 @@ public class Request {
             }
             url += url.contains("?") ? "&" : "?";
             for (Entry<String, List<String>> entry : this.parameters.entrySet()) {
-                for (String value : entry.getValue()) {
+                for (Object value : entry.getValue()) {
                     url += entry.getKey() + "=" + value + "&";
                 }
             }

@@ -9,11 +9,12 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
 
 import li.util.Log;
+import li.util.ThreadUtil;
 
 /**
  * MockServletResponse
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-09-27)
  */
 class MockServletResponse implements ServletResponse {
@@ -32,7 +33,7 @@ class MockServletResponse implements ServletResponse {
     }
 
     public PrintWriter getWriter() throws IOException {
-        log.info("li.mock.MockServletResponse.getWriter() calling by " + Util.stackTrace());
+        log.info("li.mock.MockServletResponse.getWriter() calling by " + ThreadUtil.stackTrace());
         if (!(null != this.writer && this.writer instanceof PrintWriter)) {
             this.writer = new PrintWriter(null == this.writer ? new NullWriter() : this.writer);
         }
@@ -40,7 +41,7 @@ class MockServletResponse implements ServletResponse {
     }
 
     public ServletOutputStream getOutputStream() throws IOException {
-        log.info("li.mock.MockServletResponse.getOutputStream() calling by " + Util.stackTrace());
+        log.info("li.mock.MockServletResponse.getOutputStream() calling by " + ThreadUtil.stackTrace());
 
         return new ServletOutputStream() {
             public void write(int b) throws IOException {

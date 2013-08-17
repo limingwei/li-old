@@ -16,7 +16,7 @@ import li.util.Reflect;
 /**
  * Action工具类
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2013-02-15)
  * @see li.mvc.Context
  */
@@ -33,7 +33,7 @@ public class Ctx extends Context {
      * @see li.mvc.Context#forward(String)
      * @see li.mvc.Context#freemarker(String)
      * @see li.mvc.Context#redirect(String)
-     * @see li.mvc.Context#write(String)
+     * @see li.mvc.Context#write(Object)
      * @see li.mvc.Context#view(String)
      */
     public static String view(String path) {

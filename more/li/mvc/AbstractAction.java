@@ -12,7 +12,7 @@ import li.util.Convert;
 /**
  * Action基类,你的Action类可以继承这个类
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-07-20)
  * @see li.mvc.Ctx
  */

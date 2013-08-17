@@ -26,7 +26,7 @@ import org.w3c.dom.NodeList;
 /**
  * Quartz
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2013-03-19)
  */
 public class Quartz {
@@ -44,7 +44,6 @@ public class Quartz {
             log.debug("Starting Quartz ...");
             start();
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("Error when starting Quartz");
             throw new RuntimeException(e);
         }
@@ -52,8 +51,6 @@ public class Quartz {
 
     /**
      * Quartz是否正在运行
-     * 
-     * @return
      */
     public static Boolean isOn() {
         try {

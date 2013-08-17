@@ -17,7 +17,7 @@ import org.w3c.dom.NodeList;
 /**
  * Ioc加载器,加载用Xml文件配置的Bean
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.4 (2012-05-08)
  */
 public class XmlIocLoader {

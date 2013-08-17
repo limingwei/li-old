@@ -10,7 +10,7 @@ import li.util.Log;
 /**
  * Dao的辅助类,用于构建PreparedStatement,执行SQL查询
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.6 (2012-05-08)
  */
 public class QueryRunner {
@@ -50,9 +50,7 @@ public class QueryRunner {
                 resultSet = preparedStatement.executeQuery();
                 log.info("? -> ?", sql, connection);
             } catch (Exception e) {
-                Trans.EXCEPTION.set(e);// 出现异常,记录起来
-                log.error("? ?", sql, e);
-                e.printStackTrace();
+                error(e, sql);
             }
         }
         return resultSet;// 查询类SQL,在ModelBuilder中关闭
@@ -74,9 +72,7 @@ public class QueryRunner {
                 }
                 log.info("? -> [? row] ?", sql, count, connection);
             } catch (Exception e) {
-                Trans.EXCEPTION.set(e); // 出现异常,记录起来
-                log.error("? ?", sql, e);
-                e.printStackTrace();
+                error(e, sql);
             }
         }
         this.close();// 更新类SQL,在这里关闭
@@ -97,7 +93,17 @@ public class QueryRunner {
                 log.trace("Closing Connection ?", connection);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Exception at li.dao.QueryRunner.close()", e);
+            throw new RuntimeException(e + " ", e);
         }
+    }
+
+    /**
+     * 运行SQL语句时出现异常的处理
+     */
+    private void error(Exception e, String sql) {
+        Trans.EXCEPTION.set(e); // 出现异常,记录起来
+        log.error("? ?", sql, e);
+        e.printStackTrace();// 这里的异常是不是应该抛出?
+        throw new RuntimeException(e + " ", e);
     }
 }

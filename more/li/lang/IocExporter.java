@@ -13,7 +13,7 @@ import li.util.Verify;
 /**
  * 将注解配置的Ioc信息导出为xml的工具类
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-08-22)
  */
 public class IocExporter {

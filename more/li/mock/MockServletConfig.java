@@ -8,7 +8,7 @@ import javax.servlet.ServletContext;
 /**
  * MockServletConfig
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-09-27)
  */
 class MockServletConfig implements ServletConfig {

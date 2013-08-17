@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../more/li.xsd">
 	<beans>
+		<bean name="li" class="li.datasource.SimpleDataSource">
+			<property name="dataSource" value="druid" />
+			<property name="regex" value=".*" />
+		</bean>
+
 		<bean name="druid" class="li.datasource.druid.DruidAdapter">
 			<property name="url" value="${db.url}" />
 			<property name="username" value="${db.username}" />
 			<property name="password" value="${db.password}" />
-
 			<property name="druidFilters" value="wall,stat,log4j" />
 		</bean>
 	</beans>
 	<aops>
-		<aop type="li.people.*" method=".*" aops="log,trans" />
+		<aop class="li.aop.*" method=".*" filter="log,trans" />
 	</aops>
 </config>

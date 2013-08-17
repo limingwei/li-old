@@ -10,7 +10,7 @@ import java.io.StringReader;
 /**
  * 文件工具类
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2013-02-04)
  */
 public class FileUtil extends Files {

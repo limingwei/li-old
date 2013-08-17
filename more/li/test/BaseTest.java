@@ -7,22 +7,14 @@ import org.junit.runner.RunWith;
 /**
  * 可以作为你的测试类的基类
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-07-21)
+ * @see li.test.JUnit4Li#createTest()
  */
 @RunWith(JUnit4Li.class)
 public class BaseTest {
-    /**
-     * 模拟的 li.dao.Page
-     */
-    protected Page page;
 
-    /**
-     * 初始化时为每一个@Inject注解的属性设值
-     * 
-     * @see li.test.JUnit4Li#createTest()
-     */
-    public BaseTest() {
-        this.page = new Page();
-    }
+    protected Page page = new Page();
+
+    protected Page MAX_PAGE = new Page(1, Integer.MAX_VALUE);
 }

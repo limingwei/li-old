@@ -16,7 +16,7 @@ import li.util.Verify;
 /**
  * Ioc容器,保存所有的Bean
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.5 (2012-05-08)
  * @see li.ioc.Ioc
  */

@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 日志工具类,自动适配Log4j或Console
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.6 (2012-07-05)
  */
 public abstract class Log {
@@ -30,12 +30,12 @@ public abstract class Log {
     }
 
     /**
-     * Log初始化方法,自动适配Log4j或Console
+     * Log初始化方法,根据类名初始化Log,自动适配Log4j或Console
      */
-    public static Log init(final Class<?> type) {
+    public static Log init(final String className) {
         try {
             return new Log() {// 尝试初始化Log4J
-                Object logger = Reflect.call("org.apache.log4j.Logger", "getLogger", new Class[] { Class.class }, new Object[] { type });
+                Object logger = Reflect.call("org.apache.log4j.Logger", "getLogger", new Class[] { String.class }, new Object[] { className });
 
                 protected void log(String method, Object msg) {
                     Reflect.invoke(logger, method, new Class<?>[] { Object.class }, new Object[] { msg });
@@ -51,10 +51,10 @@ public abstract class Log {
     }
 
     /**
-     * 根据类名初始化Log
+     * 根据类型初始化Log
      */
-    public static Log init(String className) {
-        return init(Reflect.getType(className));
+    public static Log init(final Class<?> type) {
+        return init(type.getName());
     }
 
     /**

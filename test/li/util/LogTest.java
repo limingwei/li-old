@@ -8,21 +8,16 @@ import org.junit.Test;
 public class LogTest extends BaseTest {
     private static final Log log = Log.init();
 
-    static final Integer TIMES = 100;
-
-    @Test
-    public void test() {
-        log.info("LOG测试信息");
-    }
+    static final Integer TIMES = 3;
 
     @Test
     public void testLog1() {// 3700 一代
         Log log = Log.init();
         Long start = System.currentTimeMillis();
         for (int i = 0; i < TIMES; i++) {
-            log.debug("111111111111111111111111111111111111111111111111111111?11111111111111111111111111111111111111111111111");
+            log.debug("111111111?111111111111");
         }
-        System.err.println(System.currentTimeMillis() - start);
+        log.debug("一代 执行log ? 次 耗时 ? 毫秒", TIMES, System.currentTimeMillis() - start);
     }
 
     @Test
@@ -30,9 +25,9 @@ public class LogTest extends BaseTest {
         Log log = Log.init();
         Long start = System.currentTimeMillis();
         for (int i = 0; i < TIMES; i++) {
-            log.debug("1111111111111111111111111111111????11111111111111111111111?11111111111111111111111111111111111111111111111", "hello", "hello", "hello", "hello", "hello");
+            log.debug("11111????11111111?111111", "hello", "hello", "hello", "hello", "hello");
         }
-        System.err.println(System.currentTimeMillis() - start);
+        log.debug("一代 参数 执行log ? 次 耗时 ? 毫秒", TIMES, System.currentTimeMillis() - start);
     }
 
     @Test
@@ -40,9 +35,9 @@ public class LogTest extends BaseTest {
         Log2 log = Log2.init();
         Long start = System.currentTimeMillis();
         for (int i = 0; i < TIMES; i++) {
-            log.debug("1111111111111111111111111111111????11111111111111111111111?11111111111111111111111111111111111111111111111");
+            log.debug("1111111????111111?1111111");
         }
-        System.err.println(System.currentTimeMillis() - start);
+        log.debug("二代 执行log ? 次 耗时 ? 毫秒", TIMES, System.currentTimeMillis() - start);
     }
 
     @Test
@@ -50,9 +45,9 @@ public class LogTest extends BaseTest {
         Log2 log = Log2.init();
         Long start = System.currentTimeMillis();
         for (int i = 0; i < TIMES; i++) {
-            log.debug("1111111111111111111111111111111????11111111111111111111111?11111111111111111111111111111111111111111111111", "hello", "hello", "hello", "hello", "hello");
+            log.debug("11111111????1111111?11111111", "hello", "hello", "hello", "hello", "hello");
         }
-        System.err.println(System.currentTimeMillis() - start);
+        log.debug("二代 参数 执行log ? 次 耗时 ? 毫秒", TIMES, System.currentTimeMillis() - start);
     }
 
     @Test
@@ -60,9 +55,9 @@ public class LogTest extends BaseTest {
         Logger logger = Logger.getLogger(getClass());
         Long start = System.currentTimeMillis();
         for (int i = 0; i < TIMES; i++) {
-            logger.debug("1111111111111111111111111111111????11111111111111111111111?11111111111111111111111111111111111111111111111");
+            logger.debug("111111????111111?11111");
         }
-        System.err.println(System.currentTimeMillis() - start);
+        log.debug("原生 执行log ? 次 耗时 ? 毫秒", TIMES, System.currentTimeMillis() - start);
     }
 
     @Test

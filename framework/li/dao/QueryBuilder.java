@@ -13,7 +13,7 @@ import li.util.Verify;
 /**
  * Dao的辅助类,用以组装SQL
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.8 (2012-05-08)
  */
 public class QueryBuilder {
@@ -22,14 +22,7 @@ public class QueryBuilder {
     /**
      * 表示对象结构的beanMeta
      */
-    private Bean beanMeta;
-
-    /**
-     * 设置对象结构
-     */
-    public void setBeanMeta(Bean beanMeta) {
-        this.beanMeta = beanMeta;
-    }
+    protected Bean beanMeta;
 
     /**
      * 根据传入的ID,构建一个用于删除单条记录的SQL
@@ -72,8 +65,9 @@ public class QueryBuilder {
         } else if (!Verify.regex(sql.toUpperCase(), "COUNT\\(.*\\)")) {// 不包括COUNT(*)
             sql = "SELECT COUNT(*) FROM " + sql.substring(sql.toUpperCase().indexOf("FROM") + 4, sql.length()).trim();
         }
-        if (Verify.contain(sql, "LIMIT")) {
-            sql = sql.substring(0, sql.toUpperCase().indexOf("LIMIT"));// 去掉limit部分
+        int index = sql.toUpperCase().indexOf("LIMIT");
+        if (index > 0) {
+            sql = sql.substring(0, index);// 去掉limit部分
         }
         return setArgs(sql, args);// 处理args
     }
@@ -128,7 +122,7 @@ public class QueryBuilder {
         for (Field field : beanMeta.fields) {
             Object fieldValue = Reflect.get(object, field.name);
             if (!beanMeta.getId().name.equals(field.name)) {// 更新所有属性,fieldValue可能为null
-                sql += field.column + "='" + fieldValue + "',";
+                sql += field.column + "=" + wrap(fieldValue) + ",";
             }
         }
         Object id = Reflect.get(object, beanMeta.getId().name);
@@ -143,7 +137,7 @@ public class QueryBuilder {
         for (Field field : beanMeta.fields) {
             Object fieldValue = Reflect.get(object, field.name);
             if (!beanMeta.getId().name.equals(field.name) && !Verify.isEmpty(fieldValue)) {// 更新所有属性,fieldValue可能为null
-                sql += field.column + "='" + fieldValue + "',";
+                sql += field.column + "=" + wrap(fieldValue) + ",";
             }
         }
         Object id = Reflect.get(object, beanMeta.getId().name);
@@ -170,11 +164,9 @@ public class QueryBuilder {
     public String insert(Object object) {
         String columns = " (", values = " VALUES (";
         for (Field field : beanMeta.fields) {
-            if (!beanMeta.getId().name.equals(field.name)) {
-                Object fieldValue = Reflect.get(object, field.name);
-                columns += field.column + ",";
-                values += (null == fieldValue ? "NULL" : "'" + fieldValue + "'") + ",";
-            }
+            Object fieldValue = Reflect.get(object, field.name);
+            columns += field.column + ",";
+            values += wrap(fieldValue) + ",";
         }
         columns = columns.substring(0, columns.length() - 1) + ")";
         values = values.substring(0, values.length() - 1) + ")";
@@ -187,12 +179,10 @@ public class QueryBuilder {
     public String insertIgnoreNull(Object object) {
         String columns = " (", values = " VALUES (";
         for (Field field : beanMeta.fields) {
-            if (!beanMeta.getId().name.equals(field.name)) {
-                Object fieldValue = Reflect.get(object, field.name);
-                if (!Verify.isEmpty(fieldValue)) {// 略过为null的属性
-                    columns += field.column + ",";
-                    values += (null == fieldValue ? "NULL" : "'" + fieldValue + "'") + ",";
-                }
+            Object fieldValue = Reflect.get(object, field.name);
+            if (!Verify.isEmpty(fieldValue)) {// 略过为null的属性
+                columns += field.column + ",";
+                values += wrap(fieldValue) + ",";
             }
         }
         columns = columns.substring(0, columns.length() - 1) + ")";
@@ -210,8 +200,8 @@ public class QueryBuilder {
     public String setArgs(String sql, Object[] args) {
         if (null != sql && sql.length() > 0 && null != args && args.length > 0) {// 非空判断
             for (int i = 0; i < args.length; i++) {
-                if (args[i] instanceof Map) {
-                    sql = setArgMap(sql, (Map) args[i]);// 替换具名参数
+                if (args[i] instanceof Map<?, ?>) {
+                    sql = setArgMap(sql, (Map<?, ?>) args[i]);// 替换具名参数
                 } else {
                     sql = sql.replaceFirst("[?]", wrap(args[i]));// 为参数加上引号后替换问号
                 }

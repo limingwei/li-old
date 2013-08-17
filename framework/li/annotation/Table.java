@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 /**
  * 标记与数据库中一张表相对应的一个类,POJO或者Record
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-05-08)
  */
 @Retention(RetentionPolicy.RUNTIME)

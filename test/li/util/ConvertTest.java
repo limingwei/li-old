@@ -33,7 +33,7 @@ public class ConvertTest {
             record.set("id", 1);
             record.set("username", "li");
             record.set("password", "wode");
-            record.set("email", "limw@w.cn");
+            record.set("email", "limingwei@mail.com");
             list.add(record);
 
             log.debug(ConvertUtil.fromJson(Record.class, ConvertUtil.toJson(record)));
@@ -65,7 +65,7 @@ public class ConvertTest {
             record.set("id", 1);
             record.set("username", "li");
             record.set("password", "wode");
-            record.set("email", "limw@w.cn");
+            record.set("email", "limingwei@mail.com");
             list.add(record);
         }
         String json = ConvertUtil.toJson(list);

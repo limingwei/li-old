@@ -7,11 +7,12 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import li.util.Log;
+import li.util.ThreadUtil;
 
 /**
  * MockHttpServletResponse
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-09-27)
  */
 public class MockHttpServletResponse extends MockServletResponse implements HttpServletResponse {
@@ -20,7 +21,7 @@ public class MockHttpServletResponse extends MockServletResponse implements Http
     private Integer status;
 
     public void sendRedirect(String path) throws IOException {
-        log.info("rederect to : " + path + " calling by " + Util.stackTrace());
+        log.info("rederect to : " + path + " calling by " + ThreadUtil.stackTrace());
     }
 
     public int getStatus() {
@@ -29,7 +30,7 @@ public class MockHttpServletResponse extends MockServletResponse implements Http
 
     public void setStatus(int status) {
         this.status = status;
-        log.info("set status " + status + " calling by " + Util.stackTrace());
+        log.info("set status " + status + " calling by " + ThreadUtil.stackTrace());
     }
 
     public void setStatus(int status, String arg1) {

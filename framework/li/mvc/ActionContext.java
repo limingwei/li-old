@@ -17,7 +17,7 @@ import li.util.Verify;
 /**
  * Action上下文,保存 了所有的Action
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.3 (2012-05-08)
  */
 public class ActionContext {

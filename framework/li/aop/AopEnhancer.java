@@ -26,7 +26,7 @@ import org.w3c.dom.NodeList;
 /**
  * Aop增强类生成器,依赖CGLIB
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-09-20)
  */
 public class AopEnhancer {
@@ -74,7 +74,7 @@ public class AopEnhancer {
                 public String getClassName(String prefix, String source, Object key, Predicate names) {
                     prefix = null == prefix ? "net.sf.cglib.empty.Object" : prefix.startsWith("java") ? "$" + prefix : prefix;
                     return source.endsWith("Enhancer") ? prefix + "$Aop" : prefix + "$FastClass";
-                } // http://www.oschina.net/code/explore/cglib-2.2/src/proxy/net/sf/cglib/core/DefaultNamingPolicy.java
+                } // http://t.cn/zQo4ydN
             };
 
             transFilter = new AopFilter() {// 内置的AopFilter,用li.dao.Trans包裹执行chain.doFilter,使被包裹的方法在事务中执行
@@ -97,14 +97,14 @@ public class AopEnhancer {
             for (String filePath : fileList) {
                 NodeList beanNodes = (NodeList) Files.xpath(Files.build(filePath), "//aop", XPathConstants.NODESET);
                 for (int length = (null == beanNodes ? -1 : beanNodes.getLength()), i = 0; i < length; i++) {
-                    String type = Files.xpath(beanNodes.item(i), "@type", XPathConstants.STRING).toString();
+                    String type = Files.xpath(beanNodes.item(i), "@class", XPathConstants.STRING).toString();
                     String method = Files.xpath(beanNodes.item(i), "@method", XPathConstants.STRING).toString();
-                    String aops = Files.xpath(beanNodes.item(i), "@aops", XPathConstants.STRING).toString();
+                    String aops = Files.xpath(beanNodes.item(i), "@filter", XPathConstants.STRING).toString();
                     xmlAopRules.add(new String[] { type, method, aops });
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e + " ", e);
         }
     }
 

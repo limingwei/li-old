@@ -27,6 +27,26 @@ public class DemoAction extends AbstractAction {
     @Inject
     Account accountDao;
 
+    @At("1.do1")
+    public void do1() {
+        write("do1");
+    }
+
+    @At("1.do2")
+    public void do2() {
+        write("do2");
+    }
+
+    @At("1.do3")
+    public void do3() {
+        write("do3");
+    }
+
+    @At("1.do4")
+    public void do4() {
+        write("do4");
+    }
+
     @At("1.htm")
     public void do_htm() {
         write("1.htm");
@@ -110,7 +130,7 @@ public class DemoAction extends AbstractAction {
         setRequest("str1", "床前明月光 testFreemarker");
         Page page = new Page();
         setSession("pg", page);
-        setRequest("accounts", accountDao.list(page, "select * from t_account"));
+        setRequest("accounts", accountDao.list(page, "SELECT * FROM t_account LIMIT 5"));
         freemarker("WEB-INF/view_fm/fm.htm");
     }
 
@@ -119,7 +139,7 @@ public class DemoAction extends AbstractAction {
      */
     @At("fm2.do")
     public void testFreemarker2() {
-        setRequest("str1", "床前明月光 testFreemarker").setRequest("accounts", accountDao.list(new Page(), "select * from t_account"));
+        setRequest("str1", "床前明月光 testFreemarker").setRequest("accounts", accountDao.list(new Page(), "SELECT * FROM t_account LIMIT 5"));
         freemarker("WEB-INF/view_fm/fm.htm");
     }
 
@@ -131,7 +151,7 @@ public class DemoAction extends AbstractAction {
         setRequest("str1", "床前明月光 testVelocity");
         Page page = new Page();
         setSession("page", page);
-        setRequest("accounts", accountDao.list(page, "select * from t_account"));
+        setRequest("accounts", accountDao.list(page, "SELECT * FROM t_account LIMIT 5"));
         velocity("WEB-INF/view_vl/vl.htm");
     }
 
@@ -140,7 +160,7 @@ public class DemoAction extends AbstractAction {
      */
     @At("vl2.do")
     public void testVelocity2() {
-        setRequest("str1", "床前明月光 testVelocity").setRequest("accounts", accountDao.list(new Page(), "select * from t_account"));
+        setRequest("str1", "床前明月光 testVelocity").setRequest("accounts", accountDao.list(new Page(), "SELECT * FROM t_account LIMIT 5"));
         velocity("WEB-INF/view_vl/vl.htm");
     }
 
@@ -149,7 +169,7 @@ public class DemoAction extends AbstractAction {
      */
     @At("bt.do")
     public void testBeetl() {
-        setRequest("str1", "床前明月光 testBeetl").setRequest("accounts", accountDao.list(new Page(), "select * from t_account"));
+        setRequest("str1", "床前明月光 testBeetl").setRequest("accounts", accountDao.list(new Page(), "SELECT * FROM t_account LIMIT 5"));
         beetl("WEB-INF/view_bt/bt.htm");
     }
 
@@ -158,7 +178,7 @@ public class DemoAction extends AbstractAction {
      */
     @At("testjsp.do")
     public void testJSP() {
-        setRequest("str1", "床前明月光 testJSP").setRequest("accounts", accountDao.list(new Page(), "select * from t_account"));
+        setRequest("str1", "床前明月光 testJSP").setRequest("accounts", accountDao.list(new Page(), "SELECT * FROM t_account LIMIT 5"));
         forward("WEB-INF/view_jsp/test.jsp");
     }
 

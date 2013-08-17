@@ -7,7 +7,7 @@ import li.annotation.Arg;
 /**
  * Action对象,表示一个Action
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.5 (2012-05-08)
  * @see li.annotation.At
  */
@@ -40,7 +40,7 @@ public class Action {
     /**
      * Action方法参数类型列表
      */
-    public Class[] argTypes;
+    public Class<?>[] argTypes;
 
     /**
      * Action方法参数注解列表

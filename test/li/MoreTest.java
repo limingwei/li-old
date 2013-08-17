@@ -2,7 +2,7 @@ package li;
 
 import java.io.File;
 
-import li.aop._Account;
+import li.aop.test._Account;
 import li.ioc.Ioc;
 import li.lang.Code;
 import net.sf.cglib.core.DebuggingClassWriter;

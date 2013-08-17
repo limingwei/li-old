@@ -18,7 +18,7 @@ import org.junit.runners.model.Statement;
 /**
  * 一个自定义的JUnit4ClassRunner, 提供Ioc注入和Dao回滚功能
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2013-01-14)
  */
 public class JUnit4Li extends BlockJUnit4ClassRunner {

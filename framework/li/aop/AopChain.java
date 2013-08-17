@@ -8,7 +8,7 @@ import net.sf.cglib.proxy.MethodProxy;
 /**
  * Aop方法执行链
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-09-20)
  */
 public class AopChain {
@@ -100,7 +100,7 @@ public class AopChain {
         try {
             this.result = proxy.invokeSuper(target, args);
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e + " ", e);
         }
         return this;
     }

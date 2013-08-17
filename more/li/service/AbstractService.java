@@ -11,7 +11,7 @@ import li.util.Reflect;
 /**
  * 一个Abstract的Service,用户可以继承并扩展它形成自己的Service
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.3 (2012-06-26)
  */
 

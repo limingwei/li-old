@@ -16,7 +16,7 @@ import javax.servlet.http.Part;
 /**
  * MockHttpServletRequest
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-09-27)
  */
 public class MockHttpServletRequest extends MockServletRequest implements HttpServletRequest {

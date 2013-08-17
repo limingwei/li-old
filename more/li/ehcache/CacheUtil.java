@@ -64,9 +64,7 @@ public class CacheUtil {
     }
 
     /**
-     * @param cacheName
-     * @param key
-     * @param value
+     * removeCache
      */
     public static void removeCache(String cacheName) {
         getOrAddCache(cacheName).removeAll();
@@ -85,7 +83,7 @@ public class CacheUtil {
     }
 
     /**
-     * @param method
+     * cacheKey
      */
     public static String cacheKey(Object[] args) {
         return ConvertUtil.toJson(args);

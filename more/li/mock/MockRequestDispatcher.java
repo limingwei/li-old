@@ -8,11 +8,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import li.util.Log;
+import li.util.ThreadUtil;
 
 /**
  * MockRequestDispatcher
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-09-27)
  */
 class MockRequestDispatcher implements RequestDispatcher {
@@ -25,10 +26,10 @@ class MockRequestDispatcher implements RequestDispatcher {
     }
 
     public void forward(ServletRequest request, ServletResponse response) throws ServletException, IOException {
-        log.info("forward to : " + path + " calling by " + Util.stackTrace());
+        log.info("forward to : " + path + " calling by " + ThreadUtil.stackTrace());
     }
 
     public void include(ServletRequest request, ServletResponse response) throws ServletException, IOException {
-        log.info("include : " + path + " calling by " + Util.stackTrace());
+        log.info("include : " + path + " calling by " + ThreadUtil.stackTrace());
     }
 }

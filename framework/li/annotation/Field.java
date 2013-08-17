@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 标记类中与数据库中表的一列相对应的一个Field
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.2 (2012-05-08)
  */
 @Retention(RetentionPolicy.RUNTIME)

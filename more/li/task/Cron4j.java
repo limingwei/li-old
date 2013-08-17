@@ -21,7 +21,7 @@ import org.w3c.dom.NodeList;
 /**
  * Cron4j
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2013-03-19)
  */
 public class Cron4j {
@@ -39,7 +39,6 @@ public class Cron4j {
             log.debug("Starting Cron4j ...");
             start();
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("Error when starting Cron4j");
             throw new RuntimeException(e);
         }
@@ -47,8 +46,6 @@ public class Cron4j {
 
     /**
      * Cron4j是否正在运行
-     * 
-     * @return
      */
     public static Boolean isOn() {
         try {

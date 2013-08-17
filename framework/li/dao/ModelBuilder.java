@@ -11,7 +11,7 @@ import li.util.Reflect;
 /**
  * Dao辅助类,从ResultSet中读取数据并组装对象
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.5 (2012-05-08)
  * @see li.util.Reflect
  */
@@ -56,7 +56,7 @@ public class ModelBuilder {
             }
             log.trace("build ? ?", list.size(), type.getName());
         } catch (Exception e) {
-            throw new RuntimeException("Exception at li.dao.ModelBuilder.list()", e);
+            throw new RuntimeException(e + " ", e);
         } finally {
             if (close) {
                 this.close();
@@ -84,7 +84,7 @@ public class ModelBuilder {
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException("Exception at li.dao.ModelBuilder.value()", e);
+            throw new RuntimeException(e + " ", e);
         } finally {
             if (close) {
                 this.close();
@@ -109,7 +109,7 @@ public class ModelBuilder {
                 log.trace("Closed QueryRunner ?", queryRunner);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Exception at li.dao.ModelBuilder.close()", e);
+            throw new RuntimeException(e + " ", e);
         }
     }
 }

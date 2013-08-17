@@ -12,8 +12,6 @@ import li.mvc.Ctx;
  * 基于Aop的视图基类
  * 
  * @author : 明伟 
- * @date : 2013年7月19日 下午3:09:30
- * @version 1.0 
  */
 public abstract class AbstractView implements AopFilter {
     public void doFilter(AopChain chain) {

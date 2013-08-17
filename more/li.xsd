@@ -49,9 +49,9 @@
 	</xs:complexType>
 
 	<xs:attributeGroup name="aop_attribute">
-		<xs:attribute name="type" type="xs:string" use="required" /><!-- default="com.company.project.service.impl.*" -->
+		<xs:attribute name="class" type="xs:string" use="required" /><!-- default="com.company.project.service.impl.*" -->
 		<xs:attribute name="method" type="xs:string" use="required" /><!-- default="(save|update)" -->
-		<xs:attribute name="aops" type="xs:string" use="required" /><!-- default="trans" -->
+		<xs:attribute name="filter" type="xs:string" use="required" /><!-- default="trans" -->
 	</xs:attributeGroup>
 
 	<xs:complexType name="tasks_type">

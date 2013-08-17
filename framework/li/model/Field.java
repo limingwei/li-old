@@ -15,7 +15,7 @@ import li.util.Verify;
 /**
  * 属性对象,表示一个Bean的一个属性,或者Table的一个列
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.7 (2012-05-08)
  */
 public class Field {
@@ -93,7 +93,7 @@ public class Field {
                 connection.close();// 关闭connection,QueryRunner中可能因为事务没有关闭之
                 Log.put("~!@#FIELDS_MAP#DATASOURCE#" + dataSource + "#TABLE#" + table, fields); // 加入缓存
             } catch (Exception e) {
-                throw new RuntimeException("Exception in li.model.Field.list(DataSource, String) ", e);
+                throw new RuntimeException(e + " ", e);
             }
         }
         return fields;
@@ -112,7 +112,7 @@ public class Field {
                 fields.add(attribute);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Exception in li.model.Field.list(ResultSet)", e);
+            throw new RuntimeException(e + " ", e);
         }
         return fields;
     }

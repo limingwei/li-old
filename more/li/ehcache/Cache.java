@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 注解缓存的名称
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-02-05)
  */
 @Retention(RetentionPolicy.RUNTIME)

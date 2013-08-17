@@ -26,7 +26,7 @@ import li.util.Verify;
 /**
  * 访问HTTP请求上下文的工具类,使用ThreadLocal
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-07-20)
  * @see li.mvc.AbstractAction
  */
@@ -112,7 +112,11 @@ public class Context {
      * 返回ServletContext
      */
     public static ServletContext getServletContext() {
-        return getRequest().getServletContext();
+        ServletContext servletContext = getSession().getServletContext();// for servlet 2.5 -
+        if (null == servletContext) {
+            servletContext = getRequest().getServletContext();// for servlet 3 +
+        }
+        return servletContext;
     }
 
     /**
@@ -173,7 +177,7 @@ public class Context {
      * 返回项目文件系统跟路径
      */
     public static String getRootPath() {
-        return getRequest().getServletContext().getRealPath("/");
+        return getServletContext().getRealPath("/");
     }
 
     /**
@@ -189,7 +193,7 @@ public class Context {
      * @see #forward(String)
      * @see #freemarker(String)
      * @see #redirect(String)
-     * @see #write(String)
+     * @see #write(Object)
      */
     public static String view(String path) {
         String viewType = path.contains(":") ? path.split(":")[0] : VIEW_TYPE;// 视图类型

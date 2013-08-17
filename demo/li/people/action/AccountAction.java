@@ -25,7 +25,7 @@ public class AccountAction extends AbstractAction implements Const {
 
     @At("account_list.do")
     public void list(Page page, String key) {
-        setRequest(LIST, accountDao.list(page, key));
+        setRequest(LIST, accountDao.list(key, page));
         setRequest(PAGE, page);
         keepParams("key");
         view("account/list");

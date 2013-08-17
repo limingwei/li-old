@@ -1,6 +1,8 @@
 package li.aop;
 
 import li.annotation.Inject;
+import li.aop.test._Account;
+import li.aop.test._User;
 import li.test.BaseTest;
 import li.util.Log;
 
@@ -17,7 +19,7 @@ public class AopTest extends BaseTest {
 
     @Test
     public void testAop() {
-        account.list(null);
+        account.list(page.setPageSize(5));
     }
 
     @Test

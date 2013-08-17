@@ -8,7 +8,7 @@ import li.aop.AopFilter;
 /**
  * CacheAopFilter,缓存的name为方法,key为方法参数,value为方法返回值
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2013-02-05)
  */
 public class CacheFilter implements AopFilter {

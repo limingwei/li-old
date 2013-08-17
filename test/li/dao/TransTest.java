@@ -1,6 +1,7 @@
 package li.dao;
 
 import li.annotation.Inject;
+import li.dao.test._User;
 import li.people.record.Account;
 import li.test.BaseTest;
 import li.util.Convert;
@@ -16,6 +17,22 @@ public class TransTest extends BaseTest {
 
     @Inject
     _User userDao;
+
+    // @Test
+    public void rollback() {
+        new Trans() {
+            public void run() {
+                userDao.update("SET flag='a' WHERE true");
+                userDao.update("SET flag='a' WHERE true");
+            }
+        };
+    }
+
+    // @Test
+    public void norollback() {
+        userDao.update("SET flag='a' WHERE true");
+        userDao.update("SET flag='a' WHERE true");
+    }
 
     @Test
     public void test1() {
@@ -40,7 +57,7 @@ public class TransTest extends BaseTest {
         _User user = (_User) new Trans(Convert.toMap("email", "tom@w.cn", "username", "xiaoming")) {
             public void run() {
                 userDao.update("SET email=#email WHERE username=#username", map());
-                map().put("user", userDao.find("WHERE username!=?", map().get("username")));
+                map().put("user", userDao.find("WHERE username!=? LIMIT 1", map().get("username")));
             }
         }.map().get("user");
 
@@ -60,23 +77,23 @@ public class TransTest extends BaseTest {
         new Trans() {
             public void run() {
                 log.debug("trans 1 start");
-                accountDao.list(null);
+                accountDao.list(page.setPageSize(5));
                 new Trans() {
                     public void run() {
                         log.debug("trans 2 start");
-                        accountDao.list(null);
+                        accountDao.list(page.setPageSize(5));
                         new Trans() {
                             public void run() {
                                 log.debug("trans 3 start");
-                                accountDao.list(null);
+                                accountDao.list(page.setPageSize(5));
                                 log.debug("trans 3 end");
                             }
                         };
-                        accountDao.list(null);
+                        accountDao.list(page.setPageSize(5));
                         log.debug("trans 2 end");
                     }
                 };
-                accountDao.list(null);
+                accountDao.list(page.setPageSize(5));
                 log.debug("trans 1 end");
             }
         };

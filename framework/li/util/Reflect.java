@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * 反射工具类,封装了一些反射方法
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.4 (2012-05-08)
  */
 public class Reflect {
@@ -31,7 +31,7 @@ public class Reflect {
         try {
             return (Class<T>) Class.forName(type);
         } catch (Exception e) {
-            throw new RuntimeException("Exception at li.util.Reflect.getType(String)", e);
+            throw new RuntimeException(e + " ", e);
         }
     }
 
@@ -42,7 +42,7 @@ public class Reflect {
         try {
             return type.getConstructor(argTypes).newInstance(args);
         } catch (Exception e) {
-            throw new RuntimeException("Exception at li.util.Reflect.born(Class<T>, Class<?>[], Object[])", e);
+            throw new RuntimeException(e + " ", e);
         }
     }
 
@@ -87,8 +87,7 @@ public class Reflect {
         try {
             return method.invoke(target, args);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("method invoking Exception", e);
+            throw new RuntimeException(e + " ", e);
         }
     }
 
@@ -185,7 +184,7 @@ public class Reflect {
             Method getter = getMethod(target.getClass(), method);
             return getter.invoke(target);// 使用Getter方法
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e + " ", e);
         }
     }
 
@@ -196,7 +195,7 @@ public class Reflect {
         try {
             return getField(target.getClass(), fieldName).get(target);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e + " ", e);
         }
     }
 
@@ -248,7 +247,7 @@ public class Reflect {
         try {
             return getField(type, fieldName).get(null);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e + " ", e);
         }
     }
 
@@ -261,7 +260,7 @@ public class Reflect {
             Method setter = getMethod(target.getClass(), method, fieldType(target.getClass(), fieldName));
             setter.invoke(target, value);// 使用Setter方法,这里没做类型转换
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e + " ", e);
         }
     }
 
@@ -273,7 +272,7 @@ public class Reflect {
             Field field = getField(target.getClass(), fieldName);
             field.set(target, Convert.toType(field.getType(), value));// 通过属性访问,这里有做类型转换
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e + " ", e);
         }
     }
 
@@ -323,7 +322,7 @@ public class Reflect {
         try {
             getField(type, fieldName).set(null, value);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e + " ", e);
         }
     }
 
@@ -438,7 +437,7 @@ public class Reflect {
                 }
                 return list.toArray(new String[0]);
             } catch (Throwable e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException(e + " ", e);
             }
         }
 

@@ -17,8 +17,6 @@ import org.apache.velocity.app.Velocity;
  * Velocity视图
  * 
  * @author : 明伟 
- * @date : 2013年7月19日 下午3:10:12
- * @version 1.0 
  */
 public class VelocityView extends AbstractView {
     private static final Log log = Log.init();

@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import li.util.Convert;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
@@ -22,9 +24,18 @@ public class TestHttp {
         for (int i = 0; i < times; i++) {
             Request request = new Request();
             request.setUrl("http://localhost:8080/li_osc/performance_test_action.htm");
-            Response response = request.execute();
+            request.execute();
         }
         System.out.println("##################  运行 " + times + " 次 耗时 " + (System.currentTimeMillis() - start) + " 毫秒");
+    }
+
+    @Test
+    public void testHttpNotStringArgs() {
+        Request request = new Request();
+        request.setUrl("g.cn");
+        request.setParameters(Convert.toMap(1, 2, 3, 4));
+        Response response = request.execute();
+        System.out.println(response.getBody());
     }
 
     /**

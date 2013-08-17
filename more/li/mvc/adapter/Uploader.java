@@ -159,8 +159,6 @@ public class Uploader {
      * request的封装
      * 
      * @author : 明伟 
-     * @date : 2013年7月19日 下午3:04:18
-     * @version 1.0 
      */
     public class LiHttpServletRequestWrapper extends HttpServletRequestWrapper {
         private Map<String, String[]> parameters;

@@ -9,7 +9,7 @@ import li.util.Verify;
 /**
  * Ioc工具类,用于从IocContext中得到一个对象
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.3 (2012-05-08)
  */
 public class Ioc {

@@ -5,7 +5,7 @@ import li.util.Files;
 /**
  * 分页对象
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.2 (2012-06-17)
  */
 public class Page {

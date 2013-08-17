@@ -16,7 +16,7 @@ import li.mvc.Context;
 /**
  * Action测试类的基类，准备了request response等的Mock对象
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-07-21)
  */
 public class ActionTest extends BaseTest {
@@ -56,7 +56,7 @@ public class ActionTest extends BaseTest {
         try {
             new ActionFilter().init(filterConfig);// 初始化Filter,设置一些环境变量,只执行一次
         } catch (ServletException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

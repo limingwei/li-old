@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 注解在方法上,使调用此方法时清理一个缓存
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-02-06)
  */
 @Retention(RetentionPolicy.RUNTIME)

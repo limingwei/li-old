@@ -17,7 +17,7 @@ import org.w3c.dom.Document;
 /**
  * 文件工具类
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.5 (2012-05-08)
  */
 public class Files {
@@ -106,7 +106,7 @@ public class Files {
                         prop.load(new InputStreamReader(new BufferedInputStream(new FileInputStream((String) filePath)), "UTF-8"));
                         properties.putAll(prop);
                     } catch (Exception e) {
-                        throw new RuntimeException("Exception in li.util.Files.load(String)", e);
+                        throw new RuntimeException(e + " ", e);
                     }
                 }
             }

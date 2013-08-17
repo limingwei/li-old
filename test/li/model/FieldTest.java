@@ -9,7 +9,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import li.dao.QueryRunner;
-import li.dao._User;
+import li.dao.test._User;
 import li.ioc.Ioc;
 import li.test.BaseTest;
 

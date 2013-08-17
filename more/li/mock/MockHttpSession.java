@@ -10,11 +10,12 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
 
 import li.util.Log;
+import li.util.ThreadUtil;
 
 /**
  * MockHttpSession
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-09-27)
  */
 public class MockHttpSession implements HttpSession {
@@ -55,7 +56,7 @@ public class MockHttpSession implements HttpSession {
 
     public void removeAttribute(String key) {
         sessionMap.remove(key);
-        log.info("remove session " + key + " calling by " + Util.stackTrace());
+        log.info("remove session " + key + " calling by " + ThreadUtil.stackTrace());
     }
 
     public void setAttribute(String key, Object value) {

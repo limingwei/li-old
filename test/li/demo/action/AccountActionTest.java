@@ -18,22 +18,12 @@ public class AccountActionTest extends ActionTest {
     @Before
     public void before() {
         assertNotNull(accountAction);
-        account.set("id", "1").set("username", "uname").set("password", "pwd").set("email", "eml").set("status", 1);
-    }
-
-    @Test
-    public void add() {
-        accountAction.add();
+        account.set("id", "1").set("username", "uname").set("password", "pwd").set("email", "eml-" + System.currentTimeMillis()).set("flag", 1);
     }
 
     @Test
     public void delete() {
         accountAction.delete(1);
-    }
-
-    @Test
-    public void edit() {
-        accountAction.edit(1);
     }
 
     @Test
@@ -58,6 +48,7 @@ public class AccountActionTest extends ActionTest {
 
     @Test
     public void save() {
+        account.remove("id");
         accountAction.save(account.set("role_id", 1).set("username", System.currentTimeMillis()));
     }
 

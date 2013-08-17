@@ -8,10 +8,15 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import li.util.test.DestModel;
+import li.util.test.SrcModel;
+
 import org.junit.Before;
 import org.junit.Test;
 
 public class ReflectTest {
+    private static final Log log = Log.init();
+
     DestModel attr = new DestModel();
 
     SrcModel srcModel = new SrcModel();
@@ -32,7 +37,7 @@ public class ReflectTest {
 
         String[] argNames = Reflect.argNames(method);
         for (String argName : argNames) {
-            System.out.println(argName);
+            log.debug(argName);
         }
     }
 
@@ -53,7 +58,7 @@ public class ReflectTest {
         for (int i = 0; i < num; i++) {
             Object result = Reflect.get(map, "none");
         }
-        System.out.println("新版本的 get 执行 " + num + " 次 耗时 " + (System.currentTimeMillis() - start));
+        log.debug("新版本的 get 执行 " + num + " 次 耗时 " + (System.currentTimeMillis() - start));
     }
 
     @Test
@@ -64,7 +69,7 @@ public class ReflectTest {
         for (int i = 0; i < num; i++) {
             Object result = get2(map, "none");
         }
-        System.out.println("老版本的 get 执行 " + num + " 次 耗时 " + (System.currentTimeMillis() - start));
+        log.debug("老版本的 get 执行 " + num + " 次 耗时 " + (System.currentTimeMillis() - start));
     }
 
     /**
@@ -96,7 +101,7 @@ public class ReflectTest {
         for (int i = 0; i < num; i++) {
             Reflect.set(map, "f", "v");
         }
-        System.out.println("新版本的 set 执行 " + num + " 次 耗时 " + (System.currentTimeMillis() - start));
+        log.debug("新版本的 set 执行 " + num + " 次 耗时 " + (System.currentTimeMillis() - start));
     }
 
     @Test
@@ -107,7 +112,7 @@ public class ReflectTest {
         for (int i = 0; i < num; i++) {
             set2(map, "f", "v");
         }
-        System.out.println("老版本的 set 执行 " + num + " 次 耗时 " + (System.currentTimeMillis() - start));
+        log.debug("老版本的 set 执行 " + num + " 次 耗时 " + (System.currentTimeMillis() - start));
     }
 
     /**
@@ -139,7 +144,7 @@ public class ReflectTest {
         for (int i = 0; i < num; i++) {
             Class<?> type = Reflect.fieldType(li.dao.AbstractDao.class, "beanMeta");
         }
-        System.out.println("新版本的 fieldType 执行 " + num + " 次 耗时 " + (System.currentTimeMillis() - start));
+        log.debug("新版本的 fieldType 执行 " + num + " 次 耗时 " + (System.currentTimeMillis() - start));
     }
 
     @Test
@@ -149,7 +154,7 @@ public class ReflectTest {
         for (int i = 0; i < num; i++) {
             Class<?> type = fieldType2(li.dao.AbstractDao.class, "beanMeta");
         }
-        System.out.println("老版本的 fieldType 执行 " + num + " 次 耗时 " + (System.currentTimeMillis() - start));
+        log.debug("老版本的 fieldType 执行 " + num + " 次 耗时 " + (System.currentTimeMillis() - start));
     }
 
     /**

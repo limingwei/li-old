@@ -7,13 +7,12 @@ import java.util.concurrent.Executors;
 import javax.sql.DataSource;
 
 import li.ioc.Ioc;
-import li.test.BaseTest;
 
-public class DataSourceTest extends BaseTest {
+public class DataSourceTest {
 
     public static void main(String[] args) {
         final ExecutorService executorService = Executors.newFixedThreadPool(10);
-        final DataSource dataSource = Ioc.get("li");
+        final DataSource dataSource = Ioc.get(DataSource.class);
 
         for (int i = 0; i < 30; i++) {
             executorService.submit(new Runnable() {

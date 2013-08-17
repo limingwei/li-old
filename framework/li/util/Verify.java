@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 /**
  * 验证工具类
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.5 (2012-05-08)
  */
 public class Verify {

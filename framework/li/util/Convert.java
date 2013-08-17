@@ -13,10 +13,50 @@ import java.util.Map;
 /**
  * 类型转换的工具类
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.7 (2012-05-08)
  */
 public class Convert {
+    /**
+     * 把字符串用一次MD5加密后返回
+     */
+    public static String toMD5(Object input) {
+        if (Verify.isEmpty(input)) {
+            return "";
+        }
+        try {
+            StringBuffer stringBuffer = new StringBuffer();
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            messageDigest.update(input.toString().getBytes());
+            byte[] byteDigest = messageDigest.digest();
+            for (int tmp, offset = 0; offset < byteDigest.length; offset++) {
+                tmp = byteDigest[offset] < 0 ? byteDigest[offset] + 256 : byteDigest[offset];
+                if (tmp < 16) {
+                    stringBuffer.append(0);
+                }
+                stringBuffer.append(Integer.toHexString(tmp));
+            }
+            return stringBuffer.toString(); // 32位加密
+        } catch (Exception e) {
+            throw new RuntimeException(e + " ", e);
+        }
+    }
+
+    /**
+     * 将数组转换为Map,奇数位为key,偶数位为value; items必须为偶数个
+     */
+    public static Map<Object, Object> toMap(Object... items) {
+        if (null == items || items.length % 2 != 0) {
+            throw new RuntimeException("Count of items must be even !!!");// 个数必须为偶数,抛出异常
+        } else {
+            Map<Object, Object> map = new HashMap<Object, Object>();
+            for (int i = 0; i < items.length; i = i + 2) {
+                map.put(items[i], items[i + 1]);
+            }
+            return map;
+        }
+    }
+
     /**
      * 将字符串转换为Date
      */
@@ -43,26 +83,13 @@ public class Convert {
     }
 
     /**
-     * 将时间转换为String, java.sql.Timestamp > yyyy-MM-dd HH:mm:ss, java.sql.Time > HH:mm:ss, java.sql.Date > yyyy-MM-dd, java.util.Date yyyy-MM-dd
-     */
-    public static String format(java.util.Date date) {
-        if (date instanceof java.sql.Timestamp) {
-            return DATE_TIME_FORMAT.format(date);
-        } else if (date instanceof java.sql.Time) {
-            return TIME_FORMAT.format(date);
-        } else {// arg instanceof java.sql.Date || arg.getClass().equals(java.util.Date.class)
-            return DATE_FORMAT.format(date);
-        }
-    }
-
-    /**
      * 字符串转Date
      */
     public static java.util.Date parse(DateFormat format, Object value) {
         try {// 日期时间转换
             return format.parse(value.toString());
         } catch (ParseException e) {
-            throw new RuntimeException("ParseException in li.util.Convert.parse(Object) " + value, e);
+            throw new RuntimeException(e + " ", e);
         }
     }
 
@@ -84,42 +111,15 @@ public class Convert {
     }
 
     /**
-     * 把字符串用一次MD5加密后返回
+     * 将时间转换为String, java.sql.Timestamp > yyyy-MM-dd HH:mm:ss, java.sql.Time > HH:mm:ss, java.sql.Date > yyyy-MM-dd, java.util.Date yyyy-MM-dd
      */
-    public static String toMD5(Object input) {
-        if (Verify.isEmpty(input)) {
-            return "";
-        }
-        try {
-            StringBuffer stringBuffer = new StringBuffer();
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            messageDigest.update(input.toString().getBytes());
-            byte[] byteDigest = messageDigest.digest();
-            for (int tmp, offset = 0; offset < byteDigest.length; offset++) {
-                tmp = byteDigest[offset] < 0 ? byteDigest[offset] + 256 : byteDigest[offset];
-                if (tmp < 16) {
-                    stringBuffer.append(0);
-                }
-                stringBuffer.append(Integer.toHexString(tmp));
-            }
-            return stringBuffer.toString(); // 32位加密
-        } catch (Exception e) {
-            throw new RuntimeException("Exception at li.util.Convert.toMD5(Object)", e);
-        }
-    }
-
-    /**
-     * 将数组转换为Map,奇数位为key,偶数位为value; items必须为偶数个
-     */
-    public static Map<Object, Object> toMap(Object... items) {
-        if (null == items || items.length % 2 != 0) {
-            throw new RuntimeException("Count of items must be even !!!");// 个数必须为偶数,抛出异常
-        } else {
-            Map map = new HashMap();
-            for (int i = 0; i < items.length; i = i + 2) {
-                map.put(items[i], items[i + 1]);
-            }
-            return map;
+    public static String format(java.util.Date date) {
+        if (date instanceof java.sql.Timestamp) {
+            return DATE_TIME_FORMAT.format(date);
+        } else if (date instanceof java.sql.Time) {
+            return TIME_FORMAT.format(date);
+        } else {// arg instanceof java.sql.Date || arg.getClass().equals(java.util.Date.class)
+            return DATE_FORMAT.format(date);
         }
     }
 

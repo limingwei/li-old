@@ -7,7 +7,7 @@ import li.dao.Page;
 /**
  * 基础Service接口,你可以继承并扩展它形成自己的Service接口
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.2 (2012-06-26)
  */
 public interface IBaseService<T> {

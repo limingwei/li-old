@@ -1,8 +1,7 @@
 package li.dao;
 
-import java.util.Map;
-
 import li.annotation.Inject;
+import li.dao.test._UserDao;
 import li.people.record.Account;
 import li.test.BaseTest;
 import li.util.Convert;
@@ -21,7 +20,7 @@ public class AbstractDaoTest extends BaseTest {
 
     @Test
     public void testQuery() {
-        for (Record record : userDao.query(null, "select * from t_account")) {
+        for (Record<?> record : userDao.query(null, "SELECT * FROM t_account LIMIT 5")) {
             log.debug(record);
         }
     }
@@ -38,11 +37,10 @@ public class AbstractDaoTest extends BaseTest {
 
     @Test
     public void test() {
-        Map<?, ?> map = Convert.toMap("uname", "li-12345", "eml", "li@w.cn");
-        log.debug(dao.list(page, "WHERE username=#uname OR email=#eml", map));
+        log.debug(dao.list(page.setPageSize(5), "WHERE username=#uname OR email=#eml", Convert.toMap("uname", "li-12345", "eml", "li@w.cn")));
 
         log.debug(dao.find("WHERE username=? OR email=?", "li", "li@w.cn"));
 
-        log.debug(dao.delete("WHERE username=#uname OR email=#eml OR id=?", map, 1));
+        log.debug(dao.delete("WHERE username=#uname OR email=#eml OR id=?", Convert.toMap("uname", "li-12345", "eml", "li@w.cn"), 1));
     }
 }

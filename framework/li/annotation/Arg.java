@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 注解一个Action方法的参数,参数是基本数据类型,基本类型数组,Page,Record或者POJO
  * 
- * @author li (limw@w.cn)
+ * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-07-20)
  */
 @Retention(RetentionPolicy.RUNTIME)

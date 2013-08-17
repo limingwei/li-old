@@ -41,10 +41,6 @@ public abstract class AbstractAdapter implements AopFilter {
 
     /**
      * 适配参数
-     * 
-     * @param i
-     * @return
-     * @throws Exception
      */
     public abstract Object adapt(ServletRequest request, Integer argIndex) throws Exception;
 }
