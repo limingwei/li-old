@@ -32,11 +32,11 @@ public final class JavaFileManagerImpl extends ForwardingJavaFileManager<JavaFil
         this.classLoader = classLoader;
     }
 
-    @Override
     public FileObject getFileForInput(Location location, String packageName, String relativeName) throws IOException {
         FileObject o = fileObjects.get(uri(location, packageName, relativeName));
-        if (o != null)
+        if (o != null) {
             return o;
+        }
         return super.getFileForInput(location, packageName, relativeName);
     }
 
@@ -52,26 +52,22 @@ public final class JavaFileManagerImpl extends ForwardingJavaFileManager<JavaFil
         }
     }
 
-    @Override
     public JavaFileObject getJavaFileForOutput(Location location, String qualifiedName, Kind kind, FileObject outputFile) throws IOException {
         JavaFileObject file = new JavaFileObjectImpl(qualifiedName, kind);
         classLoader.add(qualifiedName, file);
         return file;
     }
 
-    @Override
     public ClassLoader getClassLoader(JavaFileManager.Location location) {
         return classLoader;
     }
 
-    @Override
     public String inferBinaryName(Location loc, JavaFileObject file) {
         if (file instanceof JavaFileObjectImpl)
             return file.getName();
         return super.inferBinaryName(loc, file);
     }
 
-    @Override
     public Iterable<JavaFileObject> list(Location location, String packageName, Set<Kind> kinds, boolean recurse) throws IOException {
         Iterable<JavaFileObject> result = super.list(location, packageName, kinds, recurse);
 

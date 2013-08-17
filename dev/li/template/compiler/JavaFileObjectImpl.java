@@ -32,7 +32,6 @@ public final class JavaFileObjectImpl extends SimpleJavaFileObject {
         source = null;
     }
 
-    @Override
     public CharSequence getCharContent(final boolean ignoreEncodingErrors) throws UnsupportedOperationException {
         if (source == null) {
             throw new UnsupportedOperationException("source == null");
@@ -40,7 +39,6 @@ public final class JavaFileObjectImpl extends SimpleJavaFileObject {
         return source;
     }
 
-    @Override
     public OutputStream openOutputStream() {
         return bytecode = new ByteArrayOutputStream();
     }

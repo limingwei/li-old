@@ -22,7 +22,6 @@ public final class ClassLoaderImpl extends ClassLoader {
         return Collections.unmodifiableCollection(classes.values());
     }
 
-    @Override
     protected Class<?> findClass(final String qualifiedClassName) throws ClassNotFoundException {
         JavaFileObject file = classes.get(qualifiedClassName);
         if (file != null) {
