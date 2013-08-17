@@ -7,7 +7,7 @@ import java.util.Map;
  * @author li
  */
 public abstract class Template {
-    public void render(Map params, Writer writer) {
+    public void render(Map<?, ?> params, Writer writer) {
         try {
             doRender(params, writer);
         } catch (Exception e) {
@@ -15,5 +15,5 @@ public abstract class Template {
         }
     }
 
-    protected abstract void doRender(Map params, Writer writer) throws Exception;
+    protected abstract void doRender(Map<?, ?> params, Writer writer) throws Exception;
 }

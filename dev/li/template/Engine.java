@@ -116,7 +116,7 @@ public class Engine {
                 "import java.util.*;" + //
                 "import li.template.*;" + //
                 "public class " + className + " extends Template {" + //
-                "protected void doRender(Map map, Writer out) throws Exception {";
+                "protected void doRender(Map<?,?> map, Writer out) throws Exception {";
     }
 
     private String foot() {
