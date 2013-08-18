@@ -23,7 +23,7 @@ import javax.tools.ToolProvider;
  * @see httl.spi.parsers.AbstractParser#setCompiler(Compiler)
  * @author Liang Fei (liangfei0201 AT gmail DOT com)
  */
-public class Compiler {
+public class DefaultCompiler {
 
     private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
@@ -37,7 +37,7 @@ public class Compiler {
 
     private final List<String> lintOptions = new ArrayList<String>();
 
-    public Compiler() {
+    public DefaultCompiler() {
         if (compiler == null) {
             throw new IllegalStateException("Can not get system java compiler. Please add jdk tools.jar to your classpath.");
         }
