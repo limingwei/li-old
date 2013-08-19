@@ -127,8 +127,8 @@ public class SimpleDataSource implements DataSource {
         this.dataSource = dataSource;
     }
 
-    public Connection getConnection(String username, String password) throws SQLException {
-        Connection connection = null == this.dataSource ? DriverManager.getConnection(this.url, username, password) : this.dataSource.getConnection(username, password);
+    public Connection getConnection() throws SQLException {
+        Connection connection = null == this.dataSource ? DriverManager.getConnection(this.url, this.username, this.password) : this.dataSource.getConnection();
 
         ConnectionWrapper connectionWrapper = new ConnectionWrapper(this, connection);
         unclosedConnections.add(connectionWrapper);
@@ -139,6 +139,10 @@ public class SimpleDataSource implements DataSource {
             }
         }
         return connectionWrapper;
+    }
+
+    public Connection getConnection(String username, String password) throws SQLException {
+        return getConnection();
     }
 
     public void removeConnection(Connection connection) {
@@ -157,10 +161,6 @@ public class SimpleDataSource implements DataSource {
             string += "\n" + connection + " Called by " + ThreadUtil.stackTrace(connection.getStackTrace(), this.regex);
         }
         log.trace(string);
-    }
-
-    public Connection getConnection() throws SQLException {
-        return getConnection(this.username, this.password);
     }
 
     public PrintWriter getLogWriter() throws SQLException {
@@ -201,6 +201,8 @@ public class SimpleDataSource implements DataSource {
      * @author : li (limingwei@mail.com)
      */
     public class ConnectionWrapper implements Connection {
+        private final Log log = Log.init();
+
         private SimpleDataSource dataSource;
 
         private Connection connection;
@@ -218,64 +220,124 @@ public class SimpleDataSource implements DataSource {
         }
 
         public void close() throws SQLException {
+            log.trace("close ?", this);
             connection.close();
             dataSource.removeConnection(this);
         }
 
-        public <T> T unwrap(Class<T> iface) throws SQLException {
-            return connection.unwrap(iface);
-        }
-
-        public boolean isWrapperFor(Class<?> iface) throws SQLException {
-            return connection.isWrapperFor(iface);
-        }
-
         public Statement createStatement() throws SQLException {
+            log.trace("createStatement ?", this);
             return connection.createStatement();
         }
 
         public PreparedStatement prepareStatement(String sql) throws SQLException {
+            log.trace("prepareStatement sql=? ?", sql, this);
             return connection.prepareStatement(sql);
         }
 
         public CallableStatement prepareCall(String sql) throws SQLException {
+            log.trace("prepareCall sql=? ?", sql, this);
             return connection.prepareCall(sql);
         }
 
         public String nativeSQL(String sql) throws SQLException {
+            log.trace("nativeSQL sql=? ?", sql, this);
             return connection.nativeSQL(sql);
         }
 
         public void setAutoCommit(boolean autoCommit) throws SQLException {
+            log.trace("setAutoCommit autoCommit=? ?", autoCommit, this);
             connection.setAutoCommit(autoCommit);
         }
 
-        public boolean getAutoCommit() throws SQLException {
-            return connection.getAutoCommit();
-        }
-
         public void commit() throws SQLException {
+            log.trace("commit ? ", this);
             connection.commit();
         }
 
         public void rollback() throws SQLException {
+            log.trace("rollback ? ", this);
             connection.rollback();
         }
 
-        public boolean isClosed() throws SQLException {
-            return connection.isClosed();
-        }
-
         public DatabaseMetaData getMetaData() throws SQLException {
+            log.trace("getMetaData ? ", this);
             return connection.getMetaData();
         }
 
         public void setReadOnly(boolean readOnly) throws SQLException {
+            log.trace("setReadOnly readOnly=? ?", readOnly, this);
             connection.setReadOnly(readOnly);
         }
 
-        public boolean isReadOnly() throws SQLException {
-            return connection.isReadOnly();
+        public void setTransactionIsolation(int level) throws SQLException {
+            log.trace("setTransactionIsolation level=? ?", level, this);
+            connection.setTransactionIsolation(level);
+        }
+
+        public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
+            log.trace("createStatement resultSetType=? resultSetConcurrency=? ?", resultSetType, resultSetConcurrency, this);
+            return connection.createStatement(resultSetType, resultSetConcurrency);
+        }
+
+        public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
+            log.trace("prepareStatement sql=? resultSetType=? resultSetConcurrency=? ?", sql, resultSetType, resultSetConcurrency, this);
+            return connection.prepareStatement(sql, resultSetType, resultSetConcurrency);
+        }
+
+        public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
+            log.trace("prepareCall sql=? resultSetType=? resultSetConcurrency=? ?", sql, resultSetType, resultSetConcurrency, this);
+            return connection.prepareCall(sql, resultSetType, resultSetConcurrency);
+        }
+
+        public Savepoint setSavepoint() throws SQLException {
+            log.trace("setSavepoint ? ", this);
+            return connection.setSavepoint();
+        }
+
+        public Savepoint setSavepoint(String name) throws SQLException {
+            log.trace("setSavepoint name=? ?", name, this);
+            return connection.setSavepoint(name);
+        }
+
+        public void rollback(Savepoint savepoint) throws SQLException {
+            log.trace("rollback savepoint=? ?", savepoint, this);
+            connection.rollback(savepoint);
+        }
+
+        public void releaseSavepoint(Savepoint savepoint) throws SQLException {
+            log.trace("releaseSavepoint savepoint=? ?", savepoint, this);
+            connection.releaseSavepoint(savepoint);
+        }
+
+        public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+            log.trace("createStatement resultSetType=? resultSetConcurrency=? resultSetHoldability=? ?", resultSetType, resultSetConcurrency, resultSetHoldability, this);
+            return connection.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability);
+        }
+
+        public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+            log.trace("prepareStatement ? ", this);
+            return connection.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
+        }
+
+        public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+            log.trace("prepareCall ? ", this);
+            return connection.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
+        }
+
+        public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
+            log.trace("prepareStatement ? ", this);
+            return connection.prepareStatement(sql, autoGeneratedKeys);
+        }
+
+        public PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
+            log.trace("prepareStatement ? ", this);
+            return connection.prepareStatement(sql, columnIndexes);
+        }
+
+        public PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException {
+            log.trace("prepareStatement ? ", this);
+            return connection.prepareStatement(sql, columnNames);
         }
 
         public void setCatalog(String catalog) throws SQLException {
@@ -286,8 +348,24 @@ public class SimpleDataSource implements DataSource {
             return connection.getCatalog();
         }
 
-        public void setTransactionIsolation(int level) throws SQLException {
-            connection.setTransactionIsolation(level);
+        public boolean isReadOnly() throws SQLException {
+            return connection.isReadOnly();
+        }
+
+        public boolean getAutoCommit() throws SQLException {
+            return connection.getAutoCommit();
+        }
+
+        public boolean isClosed() throws SQLException {
+            return connection.isClosed();
+        }
+
+        public <T> T unwrap(Class<T> iface) throws SQLException {
+            return connection.unwrap(iface);
+        }
+
+        public boolean isWrapperFor(Class<?> iface) throws SQLException {
+            return connection.isWrapperFor(iface);
         }
 
         public int getTransactionIsolation() throws SQLException {
@@ -300,18 +378,6 @@ public class SimpleDataSource implements DataSource {
 
         public void clearWarnings() throws SQLException {
             connection.clearWarnings();
-        }
-
-        public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
-            return connection.createStatement(resultSetType, resultSetConcurrency);
-        }
-
-        public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-            return connection.prepareStatement(sql, resultSetType, resultSetConcurrency);
-        }
-
-        public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-            return connection.prepareCall(sql, resultSetType, resultSetConcurrency);
         }
 
         public Map<String, Class<?>> getTypeMap() throws SQLException {
@@ -328,46 +394,6 @@ public class SimpleDataSource implements DataSource {
 
         public int getHoldability() throws SQLException {
             return connection.getHoldability();
-        }
-
-        public Savepoint setSavepoint() throws SQLException {
-            return connection.setSavepoint();
-        }
-
-        public Savepoint setSavepoint(String name) throws SQLException {
-            return connection.setSavepoint(name);
-        }
-
-        public void rollback(Savepoint savepoint) throws SQLException {
-            connection.rollback(savepoint);
-        }
-
-        public void releaseSavepoint(Savepoint savepoint) throws SQLException {
-            connection.releaseSavepoint(savepoint);
-        }
-
-        public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-            return connection.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability);
-        }
-
-        public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-            return connection.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
-        }
-
-        public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-            return connection.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
-        }
-
-        public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
-            return connection.prepareStatement(sql, autoGeneratedKeys);
-        }
-
-        public PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
-            return connection.prepareStatement(sql, columnIndexes);
-        }
-
-        public PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException {
-            return connection.prepareStatement(sql, columnNames);
         }
 
         public Clob createClob() throws SQLException {
