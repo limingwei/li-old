@@ -21,7 +21,7 @@ public class Demo {
             for (int y = 0; y < height; y++) {
                 int rgb = in.getRGB(x, y);
 
-                out.setRGB(x, y, 0x00_FF_00_00);
+                out.setRGB(x, y, 0x00FF0000);
             }
         }
 

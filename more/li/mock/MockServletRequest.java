@@ -9,11 +9,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.servlet.AsyncContext;
-import javax.servlet.DispatcherType;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 
 import li.util.Log;
 import li.util.ThreadUtil;
@@ -117,16 +114,8 @@ public class MockServletRequest implements ServletRequest {
         log.info("set contentType " + contentType + " calling by " + ThreadUtil.stackTrace());
     }
 
-    public AsyncContext getAsyncContext() {
-        return null;
-    }
-
     public int getContentLength() {
         return 0;
-    }
-
-    public DispatcherType getDispatcherType() {
-        return null;
     }
 
     public ServletInputStream getInputStream() throws IOException {
@@ -199,13 +188,5 @@ public class MockServletRequest implements ServletRequest {
 
     public boolean isSecure() {
         return false;
-    }
-
-    public AsyncContext startAsync() {
-        return null;
-    }
-
-    public AsyncContext startAsync(ServletRequest arg0, ServletResponse arg1) {
-        return null;
     }
 }

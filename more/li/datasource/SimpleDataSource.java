@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.Executor;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
@@ -441,26 +440,6 @@ public class SimpleDataSource implements DataSource {
 
         public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
             return connection.createStruct(typeName, attributes);
-        }
-
-        public void setSchema(String schema) throws SQLException {
-            connection.setSchema(schema);
-        }
-
-        public String getSchema() throws SQLException {
-            return connection.getSchema();
-        }
-
-        public void abort(Executor executor) throws SQLException {
-            connection.abort(executor);
-        }
-
-        public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
-            connection.setNetworkTimeout(executor, milliseconds);
-        }
-
-        public int getNetworkTimeout() throws SQLException {
-            return connection.getNetworkTimeout();
         }
     }
 }

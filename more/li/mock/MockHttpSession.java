@@ -34,6 +34,10 @@ public class MockHttpSession implements HttpSession {
         return this.servletContext;
     }
 
+    public void setServletContext(ServletContext servletContext) {
+        this.servletContext = servletContext;
+    }
+
     public Object getAttribute(String key) {
         return sessionMap.get(key);
     }

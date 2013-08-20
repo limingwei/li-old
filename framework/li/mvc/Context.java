@@ -112,11 +112,7 @@ public class Context {
      * 返回ServletContext
      */
     public static ServletContext getServletContext() {
-        ServletContext servletContext = getSession().getServletContext();// for servlet 2.5 -
-        if (null == servletContext) {
-            servletContext = getRequest().getServletContext();// for servlet 3 +
-        }
-        return servletContext;
+        return getSession().getServletContext();// for servlet 2.5 -
     }
 
     /**

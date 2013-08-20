@@ -11,16 +11,10 @@ import java.util.Set;
 import java.util.Vector;
 
 import javax.servlet.Filter;
-import javax.servlet.FilterRegistration;
-import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
-import javax.servlet.SessionCookieConfig;
-import javax.servlet.SessionTrackingMode;
-import javax.servlet.descriptor.JspConfigDescriptor;
 
 import li.util.Files;
 
@@ -59,35 +53,11 @@ public class MockServletContext implements ServletContext {
         servletContextMap.put(key, value);
     }
 
-    public Dynamic addFilter(String arg0, String arg1) {
-        return null;
-    }
-
-    public Dynamic addFilter(String arg0, Filter arg1) {
-        return null;
-    }
-
-    public Dynamic addFilter(String arg0, Class<? extends Filter> filter) {
-        return null;
-    }
-
     public void addListener(Class<? extends EventListener> listener) {}
 
     public void addListener(String arg0) {}
 
     public <T extends EventListener> void addListener(T arg0) {}
-
-    public javax.servlet.ServletRegistration.Dynamic addServlet(String arg0, String arg1) {
-        return null;
-    }
-
-    public javax.servlet.ServletRegistration.Dynamic addServlet(String arg0, Servlet servlet) {
-        return null;
-    }
-
-    public javax.servlet.ServletRegistration.Dynamic addServlet(String arg0, Class<? extends Servlet> servlet) {
-        return null;
-    }
 
     public <T extends Filter> T createFilter(Class<T> arg0) throws ServletException {
         return null;
@@ -115,10 +85,6 @@ public class MockServletContext implements ServletContext {
         return null;
     }
 
-    public Set<SessionTrackingMode> getDefaultSessionTrackingModes() {
-        return null;
-    }
-
     public int getEffectiveMajorVersion() {
         return 0;
     }
@@ -127,27 +93,11 @@ public class MockServletContext implements ServletContext {
         return 0;
     }
 
-    public Set<SessionTrackingMode> getEffectiveSessionTrackingModes() {
-        return null;
-    }
-
-    public FilterRegistration getFilterRegistration(String arg0) {
-        return null;
-    }
-
-    public Map<String, ? extends FilterRegistration> getFilterRegistrations() {
-        return null;
-    }
-
     public String getInitParameter(String key) {
         return null;
     }
 
     public Enumeration<String> getInitParameterNames() {
-        return null;
-    }
-
-    public JspConfigDescriptor getJspConfigDescriptor() {
         return null;
     }
 
@@ -199,19 +149,7 @@ public class MockServletContext implements ServletContext {
         return null;
     }
 
-    public ServletRegistration getServletRegistration(String arg0) {
-        return null;
-    }
-
-    public Map<String, ? extends ServletRegistration> getServletRegistrations() {
-        return null;
-    }
-
     public Enumeration<Servlet> getServlets() {
-        return null;
-    }
-
-    public SessionCookieConfig getSessionCookieConfig() {
         return null;
     }
 
@@ -226,6 +164,4 @@ public class MockServletContext implements ServletContext {
     public boolean setInitParameter(String arg0, String arg1) {
         return false;
     }
-
-    public void setSessionTrackingModes(Set<SessionTrackingMode> arg0) throws IllegalStateException, IllegalArgumentException {}
 }

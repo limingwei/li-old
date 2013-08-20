@@ -2,7 +2,6 @@ package li.mock;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Map.Entry;
 
@@ -11,7 +10,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 
 /**
  * MockHttpServletRequest
@@ -49,6 +47,10 @@ public class MockHttpServletRequest extends MockServletRequest implements HttpSe
     }
 
     public MockHttpSession getSession() {
+        MockHttpSession session = this.session;
+        if (null == session.getServletContext()) {
+            session.setServletContext(this.getServletContext());
+        }
         return this.session;
     }
 
@@ -118,14 +120,6 @@ public class MockHttpServletRequest extends MockServletRequest implements HttpSe
 
     public long getDateHeader(String arg0) {
         return 0;
-    }
-
-    public Part getPart(String arg0) throws IOException, IllegalStateException, ServletException {
-        return null;
-    }
-
-    public Collection<Part> getParts() throws IOException, IllegalStateException, ServletException {
-        return null;
     }
 
     public Principal getUserPrincipal() {
