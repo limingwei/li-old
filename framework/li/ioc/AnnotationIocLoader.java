@@ -31,9 +31,8 @@ public class AnnotationIocLoader {
         log.info("Found ? class files, at ?", fileList.size(), rootFolder);
 
         List<li.model.Bean> beans = new ArrayList<li.model.Bean>();
-        for (String classFile : fileList) {
-            String className = classFile.split("\\\\classes\\\\")[1].replaceAll("\\\\", ".").replace(".class", "");// 取/classes/之后的字符串,替换/为.,去掉.class
-            Class<?> type = Reflect.getType(className);
+        for (String classFileName : fileList) {
+            Class<?> type = Reflect.getType(getClassName(classFileName));
             li.annotation.Bean beanAnnotation = type.getAnnotation(li.annotation.Bean.class);
             if (beanAnnotation != null) {
                 li.model.Bean iocBean = new li.model.Bean();// 一个新的Bean
@@ -57,5 +56,12 @@ public class AnnotationIocLoader {
             }
         }
         return beans;
+    }
+
+    /**
+     * 取/classes/之后的字符串,替换/为.,去掉.class
+     */
+    private static String getClassName(String classFileName) {
+        return classFileName.substring(classFileName.indexOf(File.separator + "classes" + File.separator) + 9, classFileName.length() - 6).replace(File.separatorChar, '.');
     }
 }
