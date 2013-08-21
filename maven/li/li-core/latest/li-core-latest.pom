@@ -24,7 +24,6 @@
 			<email>limingwei@mail.com</email>
 		</developer>
 	</developers>
-
 	<dependencies>
 		<dependency>
 			<groupId>cglib</groupId>
