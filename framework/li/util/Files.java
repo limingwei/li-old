@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -29,7 +30,11 @@ public class Files {
      * 返回项目的classes目录
      */
     public static File root() {
-        return new File(Thread.currentThread().getContextClassLoader().getResource("").getPath());
+        try {
+            return new File(Thread.currentThread().getContextClassLoader().getResource("").toURI().getPath());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e + " ", e);
+        }
     }
 
     /**
