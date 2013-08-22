@@ -1,5 +1,5 @@
 目录结构：
-* 框架源码 -> framework
+* 框架源码 -> framework (core)
 * 扩展工具 -> more
 * 尚未完成 -> dev
 * 单元测试 -> test
@@ -11,14 +11,14 @@ by li limingwei@mail.com
 * Q群: 254860190
 
 javadoc
-* li-framework http://limingwei.github.com/liz 
-* li-more http://limingwei.github.com/liz/more 
+* li_core http://limingwei.github.io/li/javadoc/li_core/
+* li_more http://limingwei.github.io/li/javadoc/li_more/
 
 下载
-* li-framework.jar http://limingwei.github.com/liz/downloads/li-framework.jar
-* li-more.jar http://limingwei.github.com/liz/downloads/li-more.jar
-* cglib-nodep.jar http://limingwei.github.com/liz/downloads/cglib-nodep-2.2.3.jar
-* 文档 http://limingwei.github.com/liz/downloads/li.pdf
+* li-core.jar http://limingwei.github.io/li/maven/li/li-core/latest/li-core-latest.jar
+* li-more.jar http://limingwei.github.io/li/maven/li/li-more/latest/li-more-latest.jar
+* cglib-nodep.jar http://limingwei.github.io/li/maven/cglib/cglib-nodep/2.2.3/cglib-nodep-2.2.3.jar
+* 文档 http://limingwei.github.io/li/doc/li.pdf
 
 ~!@#$%^&*()_+{}|:"<>?`-=[]\;',.//*-+.
 * 介绍 http://limingwei.github.com/li
