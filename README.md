@@ -1,26 +1,62 @@
-目录结构：
-* 框架源码 -> framework (core)
-* 扩展工具 -> more
-* 尚未完成 -> dev
-* 单元测试 -> test
-* 示例项目 -> demo
-* WebRoot -> WebContent
+# 《Go Web 编程》
+因为自己对Web开发比较感兴趣，所以最近抽空在写一本开源的书籍《Go Web编程》《Build Web Application with Golang》。写这本书不表示我能力很强，而是我愿意分享，和大家一起分享Go写Web应用的一些东西。
 
-by li limingwei@mail.com
-* QQ: 416133823
-* Q群: 254860190
+- 对于从PHP/Python/Ruby转过来的同学了解Go怎么写Web应用开发的
 
-javadoc
-* li_core http://limingwei.github.io/li/javadoc/li_core/
-* li_more http://limingwei.github.io/li/javadoc/li_more/
+- 对于从C/C++转过来的同学了解Web到底是怎么运行起来的
 
-下载
-* li-core.jar http://limingwei.github.io/li/maven/li/li-core/latest/li-core-latest.jar
-* li-more.jar http://limingwei.github.io/li/maven/li/li-more/latest/li-more-latest.jar
-* cglib-nodep.jar http://limingwei.github.io/li/maven/cglib/cglib-nodep/2.2.3/cglib-nodep-2.2.3.jar
-* 文档 http://limingwei.github.io/li/doc/li.pdf
+我一直认为知识是用来分享的，让更多的人分享自己拥有的一切知识这个才是人生最大的快乐。
 
-~!@#$%^&*()_+{}|:"<>?`-=[]\;',.//*-+.
-* 介绍 http://limingwei.github.com/li
-* 提问&讨论   https://github.com/limingwei/li/issues
-* 更新记录   https://github.com/limingwei/li/wiki/changelog
+这本书目前我放在Github上，我现在基本每天晚上抽空会写一些，时间有限、能力有限，所以希望更多的朋友参与到这个开源项目中来。
+
+**参加了51CTO博客大赛，希望你能够投出宝贵的一票：[http://blog.51cto.com/contest2012/6177767](http://blog.51cto.com/contest2012/6177767)**
+
+## 撰写方法
+### 文件命名
+每个章节建立一个md文件，如第11章的第3节，则建立**11.3.md**。
+### 代码文件
+代码文件置于src目录之下。每小节代码按目录存放。如第11章的第3节的代码保存于**src/11.3/**目录下。在正文中按需要添加代码。
+
+## 格式规范
+### 正文
+请参看已有章节的规范，要注意的是，每个章节在底部都需要有一个links节，包含“目录”，“上一节”和“下一节”的链接。
+### 代码
+代码要**`go fmt`**后提交。注释文件注明其所属章节。
+
+## 如何编译
+`build.go`依赖markdown的一个解析包，所以第一步先
+
+	go get github.com/russross/blackfriday
+
+这样读者就可以把相应的Markdown文件编译成html文件，执行`go build build.go`，执行生成的文件，就会在底目录下生成相应的html文件
+
+## 交流
+欢迎大家加入QQ群：259316004 《Go Web编程》专用交流群
+
+大家有问题还可以上德问上一起交流学习：http://www.dewen.org/topic/165
+
+## 致谢
+首先要感谢Golang-China的QQ群102319854，里面的每一个人都很热心，同时要特别感谢几个人
+
+ - [四月份平民](https://plus.google.com/110445767383269817959) (review代码)
+ - [Hong Ruiqi](https://github.com/hongruiqi) (review代码)
+ - [BianJiang](https://github.com/border) (编写go开发工具Vim和Emacs的设置)
+ - [Oling Cat](https://github.com/OlingCat)(review代码)
+ - [Wenlei Wu](mailto:spadesacn@gmail.com)(提供一些图片展示)
+ 
+##友情链接
+目前Go开发的比较成熟的一个框架是由我们国人开发的，目前版本已经比较成熟，而且提供了很多的应用demo，方便快速开发Web应用，该框架是由海意和BianJiang开发维护，推荐大家看看：
+
+[golangers框架](https://github.com/golangers/framework) 
+
+##帮助信息
+[Markdown 语法说明(简体中文版)](http://wowubuntu.com/markdown/basic.html)
+
+## 授权许可
+除特别声明外，本书中的内容使用[CC BY-SA 3.0 License](http://creativecommons.org/licenses/by-sa/3.0/)（创作共用 署名-相同方式共享3.0许可协议）授权，代码遵循[BSD 3-Clause License](<https://github.com/astaxie/build-web-application-with-golang/blob/master/LICENSE.md>)（3项条款的BSD许可协议）。
+
+## 开始阅读
+[开始阅读](<https://github.com/astaxie/build-web-application-with-golang/blob/master/preface.md>)
+
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/44c98c9d398b8319b6e87edcd3e34144 "githalytics.com")](http://githalytics.com/astaxie/build-web-application-with-golang)
