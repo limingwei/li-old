@@ -42,15 +42,17 @@ public class Request {
     /**
      * 设置请求地址
      */
-    public void setUrl(String url) {
+    public Request setUrl(String url) {
         this.url = url;
+        return this;
     }
 
     /**
      * GET POST
      */
-    public void setMethod(String method) {
+    public Request setMethod(String method) {
         this.method = method;
+        return this;
     }
 
     public Map<String, List<String>> getHeaders() {
@@ -65,69 +67,81 @@ public class Request {
         return null == header ? null : header.get(0);
     }
 
-    public void setHeader(String key, String value) {
+    public Request setHeader(String key, String value) {
         this.headers.put(key, Arrays.asList(value));
+        return this;
     }
 
-    public void setReferer(String referer) {
+    public Request setReferer(String referer) {
         this.setHeader("Referer", referer);
+        return this;
     }
 
-    public void setUserAgent(String userAgent) {
+    public Request setUserAgent(String userAgent) {
         this.setHeader("User-Agent", userAgent);
+        return this;
     }
 
-    public void setContentType(String contentType) {
+    public Request setContentType(String contentType) {
         this.setHeader("Content-Type", contentType);
+        return this;
     }
 
     /**
      * 是否跳转30x 可通过 HttpURLConnection.setFollowRedirects(true)进行全局设置
      */
-    public void setFollowRedirects(Boolean followRedirects) {
+    public Request setFollowRedirects(Boolean followRedirects) {
         this.followRedirects = followRedirects;
+        return this;
     }
 
     /**
      * 设置代理 可通过 System.setProperty("http.proxyHost", "208.110.94.187"); System.setProperty("http.proxyPort", "8089"); Authenticator.setDefault(authenticator); 进行全局设置
      */
-    public void setProxy(Proxy proxy) {
+    public Request setProxy(Proxy proxy) {
         this.proxy = null == proxy ? Proxy.NO_PROXY : proxy;
+        return this;
     }
 
     /**
      * 链接超时，单位毫秒，默认 5 * 60 * 1000 五分钟 可通过 System.setProperty("sun.net.client.defaultConnectTimeout", 1000)进行全局设置
      */
-    public void setConnectTimeout(Integer connectTimeout) {
+    public Request setConnectTimeout(Integer connectTimeout) {
         this.connectTimeout = connectTimeout;
+        return this;
     }
 
     /**
      * 读取超时，单位毫秒，默认 5 * 60 * 1000 五分钟 可通过 System.setProperty("sun.net.client.defaultReadTimeout", 1000)进行全局设置
      */
-    public void setReadTimeout(Integer readTimeout) {
+    public Request setReadTimeout(Integer readTimeout) {
         this.readTimeout = readTimeout;
+        return this;
     }
 
     /**
      * 设置Cookie
      */
-    public void setCookies(List<HttpCookie> cookies) {
+    public Request setCookies(List<HttpCookie> cookies) {
         this.setCookies(Util.cookieToString(cookies));
+        return this;
     }
 
     /**
      * 通过字符串设置Cookies
      */
-    public void setCookies(String cookies) {
+    public Request setCookies(String cookies) {
         this.setHeader("Cookie", cookies);
+        return this;
     }
 
     /**
      * 通过字符串添加Cookies
      */
-    public void addCookies(String cookies) {
-        this.setHeader("Cookie", cookies + this.getCookies());
+    public Request addCookies(String cookies) {
+        cookies = cookies + (null == this.getCookies() ? "" : ("; " + this.getCookies()));
+        this.setHeader("Cookie", cookies);
+        return this;
     }
 
     /**
@@ -147,7 +161,7 @@ public class Request {
     /**
      * 设置GET访问的参数,会添加到url,url中不应当已经存在
      */
-    public void setParameters(Map<Object, Object> map) {
+    public Request setParameters(Map<Object, Object> map) {
         for (Entry<Object, Object> entry : map.entrySet()) {
             Object value = entry.getValue();
             if (!(value instanceof List)) {
@@ -155,12 +169,13 @@ public class Request {
             }
             this.parameters.put(entry.getKey() + "", (List<String>) value);
         }
+        return this;
     }
 
     /**
      * 如果有同名项,会被替换
      */
-    public void setParameter(String key, Object value) {
+    public Request setParameter(String key, Object value) {
         if (value instanceof List) {
             this.parameters.put(key, (List) value);
         } else {
@@ -168,24 +183,26 @@ public class Request {
             para.add(value + "");
             this.parameters.put(key, para);
         }
+        return this;
     }
 
     /**
      * 添加,不替换重名项
      */
-    public void addParameter(String key, Object value) {
+    public Request addParameter(String key, Object value) {
         List<String> parameter = this.parameters.get(key);
         if (null == parameter) {
             this.setParameter(key, value);
         } else {
             parameter.add(value + "");
         }
+        return this;
     }
 
     /**
      * 设置POST请求的表单域
      */
-    public void setFields(Map<String, Object> fields) {
+    public Request setFields(Map<String, Object> fields) {
         this.setMethod(POST);
         for (Entry<String, Object> entry : fields.entrySet()) {
             Object value = entry.getValue();
@@ -194,12 +211,13 @@ public class Request {
             }
             this.fields.put(entry.getKey(), (List<Object>) value);
         }
+        return this;
     }
 
     /**
      * 会替换同名项
      */
-    public void setField(String key, Object value) {
+    public Request setField(String key, Object value) {
         this.setMethod(POST);
         if (value instanceof List) {
             this.fields.put(key, (List) value);
@@ -208,12 +226,13 @@ public class Request {
             para.add(value);
             this.fields.put(key, para);
         }
+        return this;
     }
 
     /**
      * 添加,不会替换重名项
      */
-    public void addField(String key, Object value) {
+    public Request addField(String key, Object value) {
         this.setMethod(POST);
         List<Object> field = this.fields.get(key);
         if (null == field) {
@@ -221,6 +240,7 @@ public class Request {
         } else {
             field.add(value);
         }
+        return this;
     }
 
     /**
@@ -271,7 +291,9 @@ public class Request {
             }
             response.setHttpURLConnection(connection);
             String responseCookies = CookieStore.getCookies(connection.getHeaderFields());// responseCookies
-            response.setCookies(Util.stringToCookie(this.getCookies() + responseCookies));// 合并requestCookies和responseCookies
+
+            String cookies = null == this.getCookies() ? "" : this.getCookies() + null == responseCookies ? "" : responseCookies;
+            response.setCookies(Util.stringToCookie(cookies));// 合并requestCookies和responseCookies
             return response;
         } catch (Exception e) {
             throw new RuntimeException(e);

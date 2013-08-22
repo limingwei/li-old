@@ -83,36 +83,6 @@ public class Util {
     }
 
     /**
-     * stringToCookie
-     */
-    public static List<HttpCookie> stringToCookie(String cookieString) {
-        List<HttpCookie> cookies = new ArrayList<HttpCookie>();
-        String[] strs = cookieString.split(";");
-        for (int i = 0; i < strs.length; i++) {
-            String path = null, domain = null, expires = "-1", name = null, value = null;
-            String[] pair = strs[i].split("=");
-            if ("PATH".equals(pair[0].trim())) {
-                path = pair[1].trim();
-            } else if ("DOMAIN".equals(pair[0].trim())) {
-                domain = pair[1].trim();
-            } else if ("EXPIRES".equals(pair[0].trim())) {
-                expires = pair[1].trim();
-            } else {
-                name = pair[0];
-                value = pair.length > 1 ? pair[1] : "";
-            }
-            if (null != name && !name.trim().isEmpty()) {
-                HttpCookie cookie = new HttpCookie(name.trim(), value);
-                cookie.setPath(path);
-                cookie.setDomain(domain);
-                cookie.setMaxAge(Long.parseLong(expires));
-                cookies.add(cookie);
-            }
-        }
-        return cookies;
-    }
-
-    /**
      * cookieToString
      */
     public static String cookieToString(List<HttpCookie> cookies) {
@@ -153,5 +123,39 @@ public class Util {
         return equals(cookie1.getName(), cookie2.getName()) //
                 && equals(cookie1.getPath(), cookie2.getPath())//
                 && equals(cookie1.getDomain(), cookie2.getDomain());
+    }
+
+    /**
+     * stringToCookie
+     */
+    public static List<HttpCookie> stringToCookie(String cookieString) {
+        List<HttpCookie> cookies = new ArrayList<HttpCookie>();
+        String[] strs = cookieString.split(";");
+        for (int i = 0; i < strs.length; i++) {
+            String path = null, domain = null, expires = "-1", name = null, value = null;
+            String[] pair = strs[i].split("=");
+            if ("PATH".equalsIgnoreCase(pair[0].trim())) {
+                path = pair[1].trim();
+            } else if ("DOMAIN".equalsIgnoreCase(pair[0].trim())) {
+                domain = pair[1].trim();
+            } else if ("EXPIRES".equalsIgnoreCase(pair[0].trim())) {
+                expires = pair[1].trim();
+            } else {
+                name = pair[0];
+                value = pair.length > 1 ? pair[1] : "";
+            }
+            if (null != name && !name.trim().isEmpty()) {
+                try {
+                    HttpCookie cookie = new HttpCookie(name.trim(), value);
+                    cookie.setPath(path);
+                    cookie.setDomain(domain);
+                    cookie.setMaxAge(Long.parseLong(expires));
+                    cookies.add(cookie);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return cookies;
     }
 }

@@ -30,6 +30,14 @@ public class TestHttp {
     }
 
     @Test
+    public void testCookie() {
+        Request request = new Request();
+        request.setUrl("g.cn");
+        Response response = request.execute();
+        System.out.println("body = " + response.getCookies());
+    }
+
+    @Test
     public void testHttpNotStringArgs() {
         Request request = new Request();
         request.setUrl("g.cn");
