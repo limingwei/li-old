@@ -1,3 +1,0 @@
-httl 静态文本 
-hello ${name}
-date ${date}
