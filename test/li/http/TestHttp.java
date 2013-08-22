@@ -30,6 +30,12 @@ public class TestHttp {
     }
 
     @Test
+    public void test() {
+        System.out.println(new Request().setUrl("http://localhost:8080/site_analysis/view.htm?_token=" + "1106y5npjy6gb" + "&a=1&b=2&c=3").execute().getBody());
+        System.out.println(new Request().setUrl("http://localhost:8080/site_analysis/view.htm?_token=" + "1106y5npjy6gb" + "&a=1&b=2&c=3").setMethod(Request.POST).execute().getBody());
+    }
+
+    @Test
     public void testCookie() {
         Request request = new Request();
         request.setUrl("g.cn");
