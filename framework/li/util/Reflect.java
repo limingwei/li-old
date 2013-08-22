@@ -219,7 +219,7 @@ public class Reflect {
                         Log.put("~!@#GETTER#" + target.getClass() + "#" + fieldName, 3);
                     } else {
                         Log.put("~!@#GETTER#" + target.getClass() + "#" + fieldName, 0);
-                        throw new RuntimeException("Reflect.get() target=" + target + ",fieldName=" + fieldName + " " + e.getMessage() + " and " + ex.getMessage());// 这里没有给出根异常信息
+                        throw new RuntimeException("Reflect.get() target=" + target + ",fieldName=" + fieldName + ", when getByGetter " + e.getMessage() + ", when getByField " + ex.getMessage());// 这里没有给出根异常信息
                     }
                 }
             }
@@ -295,7 +295,7 @@ public class Reflect {
                         Log.put("~!@#SETTER#" + target.getClass() + "#" + fieldName, 3);
                     } else {
                         Log.put("~!@#SETTER#" + target.getClass() + "#" + fieldName, 0);
-                        throw new RuntimeException("Reflect.set() target=" + target + ",fieldName=" + fieldName + " " + e.getMessage() + " and " + ex.getMessage());// 这里没有给出根异常信息
+                        throw new RuntimeException("Reflect.set() target=" + target + ",fieldName=" + fieldName + ",when setBySetter " + e.getMessage() + ", when setByField " + ex.getMessage());// 这里没有给出根异常信息
                     }
                 }
             }

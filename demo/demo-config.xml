@@ -4,6 +4,7 @@
 		<bean name="li" class="li.datasource.SimpleDataSource">
 			<property name="dataSource" value="druid" />
 			<property name="regex" value=".*" />
+			<property name="loginTimeout" value="500" />
 		</bean>
 
 		<bean name="druid" class="li.datasource.druid.DruidAdapter">

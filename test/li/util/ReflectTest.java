@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import li.datasource.SimpleDataSource;
 import li.util.test.DestModel;
 import li.util.test.SrcModel;
 
@@ -29,6 +30,13 @@ public class ReflectTest {
         srcModel.attr1 = "123123";
         srcModel.attr2 = false;
         srcModel.destModel = attr;
+    }
+
+    @Test
+    public void fieldType() {
+        System.out.println(Reflect.fieldType(SimpleDataSource.class, "loginTimeout"));
+        Integer loginTimeout = 1;
+        Reflect.set(new SimpleDataSource(), "loginTimeout", loginTimeout);
     }
 
     @Test
