@@ -1,5 +1,6 @@
 package li.people.action;
 
+import java.io.File;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,29 +28,14 @@ public class DemoAction extends AbstractAction {
     @Inject
     Account accountDao;
 
-    @At("1.do1")
-    public void do1() {
-        write("do1");
-    }
+    @At("injar.htm")
+    public void classInJar() throws Exception {
+        String path = getClass().getResource("/").toURI().getPath();
+        File root = new File(path).getParentFile().getParentFile();
 
-    @At("1.do2")
-    public void do2() {
-        write("do2");
-    }
+        System.err.println(root + "\t" + root.getCanonicalPath());
 
-    @At("1.do3")
-    public void do3() {
-        write("do3");
-    }
-
-    @At("1.do4")
-    public void do4() {
-        write("do4");
-    }
-
-    @At("1.htm")
-    public void do_htm() {
-        write("1.htm");
+        write(root + "\t" + root.getCanonicalPath());
     }
 
     @At("performance_test_action.htm")
