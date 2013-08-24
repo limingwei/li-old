@@ -154,7 +154,7 @@ public class SimpleDataSource implements DataSource {
      * 不支持切换用户
      */
     public Connection getConnection(String username, String password) throws SQLException {
-        log.warn("不支持使用新的用户名密码获取连接");
+        log.warn("Not supported to use another username and password after dataSource inited");
         return this.getConnection();
     }
 
