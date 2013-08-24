@@ -14,7 +14,7 @@ public class ClassInJar {
 
         System.out.println(libDir);
 
-        List<String> jars = Files.list(new File(libDir), "^.*\\.jar$", true);
+        List<String> jars = Files.list(new File(libDir), "^.*\\.jar$", true, 1);
         for (String jar : jars) {
             JarFile jarFile = new JarFile(jar);
             Enumeration<JarEntry> entries = jarFile.entries();

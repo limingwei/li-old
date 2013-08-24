@@ -91,7 +91,7 @@ public class AopEnhancer {
 
             // 解析XmlAop配置
             File rootFolder = Files.root();
-            List<String> fileList = Files.list(rootFolder, AOP_CONFIG_REGEX, true);// 搜索配置文件
+            List<String> fileList = Files.list(rootFolder, AOP_CONFIG_REGEX, true, 1);// 搜索配置文件
             log.info("Found ? aop config xml files, at ?", fileList.size(), rootFolder);
 
             for (String filePath : fileList) {

@@ -68,7 +68,6 @@ public class AnnotationIocLoader {
      */
     private static String getClassName(String classFileName) {
         int classesIndex = classFileName.indexOf(File.separator + "classes" + File.separator);
-
         return classFileName.substring(classesIndex > 0 ? classesIndex + 9 : 0, classFileName.length() - 6).replace(File.separatorChar, '.');
     }
 
@@ -77,9 +76,8 @@ public class AnnotationIocLoader {
      */
     private List<String> getClasseFiles() {
         File rootFolder = Files.root();
-        List<String> classFileList = Files.list(rootFolder, CLASS_REGEX, true);
+        List<String> classFileList = Files.list(rootFolder, CLASS_REGEX, true, 1);
         log.info("Found ? class files, at ?", classFileList.size(), rootFolder);
-
         classFileList.addAll(this.getClassFilesInJar());
         return classFileList;
     }
@@ -90,9 +88,9 @@ public class AnnotationIocLoader {
     private List<String> getClassFilesInJar() {
         try {
             List<String> classFileList = new ArrayList<String>();
-            String libDir = getWebRootPath() + File.separator + "WEB-INF" + File.separator + "lib";
-            List<String> jarFiles = Files.list(new File(libDir), JAR_REGEX, true);
-            log.info("Found ? jar files , at ?", jarFiles.size(), libDir);
+            String jarLib = this.getLibFolder();
+            List<String> jarFiles = Files.list(new File(jarLib), JAR_REGEX, true, 1);
+            log.info("Found ? jar files , at ?", jarFiles.size(), jarLib);
             for (String jar : jarFiles) {
                 JarFile jarFile = new JarFile(jar);
                 Enumeration<JarEntry> entries = jarFile.entries();
@@ -106,7 +104,7 @@ public class AnnotationIocLoader {
                     }
                 }
             }
-            log.info("Found ? class files in jar, at ?", classFileList.size(), libDir);
+            log.info("Found ? class files in jar, at ?", classFileList.size(), jarLib);
             return classFileList;
         } catch (Exception e) {
             throw new RuntimeException(e + " ", e);
@@ -116,10 +114,16 @@ public class AnnotationIocLoader {
     /**
      * 获得项目根路径
      */
-    private String getWebRootPath() {
+    private String getLibFolder() {
         try {
             String path = this.getClass().getResource("/").toURI().getPath();
-            return new File(path).getParentFile().getParentFile().getCanonicalPath();
+            String webRoot = new File(path).getParentFile().getParentFile().getCanonicalPath();
+            List<String> libFolders = Files.list(new File(webRoot), "^.*\\" + File.separator + "WEB-INF\\" + File.separator + "lib$", true, 2);
+            if (libFolders.size() == 1) {
+                return libFolders.get(0);
+            }
+            log.warn("searching for /WEB-INF/lib , but not got one", libFolders);
+            return webRoot + File.separator + "WEB-INF" + File.separator + "lib";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

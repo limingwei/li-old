@@ -95,7 +95,7 @@ public class Quartz {
         Map<Class<? extends Job>, String> jobs = new HashMap<Class<? extends Job>, String>();
 
         File rootFolder = Files.root();
-        List<String> fileList = Files.list(rootFolder, TASK_CONFIG_REGEX, true);// 搜索配置文件
+        List<String> fileList = Files.list(rootFolder, TASK_CONFIG_REGEX, true, 1);// 搜索配置文件
         log.info("Found ? quartz task xml config files, at ?", fileList.size(), rootFolder);
 
         for (String filePath : fileList) {

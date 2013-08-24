@@ -78,7 +78,7 @@ public class Cron4j {
         Map<Class<? extends Runnable>, String> jobs = new HashMap<Class<? extends Runnable>, String>();
 
         File rootFolder = Files.root();
-        List<String> fileList = Files.list(rootFolder, TASK_CONFIG_REGEX, true);// 搜索配置文件
+        List<String> fileList = Files.list(rootFolder, TASK_CONFIG_REGEX, true, 1);// 搜索配置文件
         log.info("Found ? cron4j task xml config files, at ?", fileList.size(), rootFolder);
 
         for (String filePath : fileList) {

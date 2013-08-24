@@ -30,7 +30,7 @@ public class XmlIocLoader {
      */
     public List<Bean> getBeans() {
         File rootFolder = Files.root();
-        List<String> fileList = Files.list(rootFolder, IOC_CONFIG_REGEX, true);// 搜索配置文件
+        List<String> fileList = Files.list(rootFolder, IOC_CONFIG_REGEX, true, 1);// 搜索配置文件
         log.info("Found ? ioc config xml files at ?", fileList.size(), rootFolder);
 
         List<Bean> beans = new ArrayList<Bean>();

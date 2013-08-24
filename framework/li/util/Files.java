@@ -43,16 +43,17 @@ public class Files {
      * @param file 要搜索的目录
      * @param regex 要求文件路径要符合的正则表达式
      * @param increase 是否递进搜索
+     * @param fileOrFloder 1 文件 2 文件夹
      * @return 文件绝对路径列表
      */
-    public static List<String> list(File file, String regex, Boolean increase) {
+    public static List<String> list(File file, String regex, Boolean increase, Integer fileOrFloder) {
         List<String> list = new ArrayList<String>();
-        if (file.isFile() && Verify.regex(file.getPath(), regex)) {
+        if (((1 == fileOrFloder && file.isFile()) || (2 == fileOrFloder && file.isDirectory())) && Verify.regex(file.getPath(), regex)) {
             list.add(file.getPath());
         } else if (increase && file.isDirectory()) {
             File[] files = file.listFiles();
             for (File f : files) {
-                list.addAll(list(f, regex, increase)); // 递归调用本方法
+                list.addAll(list(f, regex, increase, fileOrFloder)); // 递归调用本方法
             }
         }
         return list;
@@ -98,7 +99,7 @@ public class Files {
             List<String> propertyFiles = (List<String>) Log.get("~!@#PROPERTIE_FILES");// 从缓存中查找propertyFiles
             if (null == propertyFiles) {
                 File rootFolder = Files.root();
-                propertyFiles = list(rootFolder, PROPERTIES_REGEX, true);
+                propertyFiles = list(rootFolder, PROPERTIES_REGEX, true, 1);
                 Log.put("~!@#PROPERTIE_FILES", propertyFiles); // 将 PROPERTIES文件列表缓存
                 log.info("Found ? properties files , at ?", propertyFiles.size(), rootFolder);
             }
