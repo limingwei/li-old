@@ -78,7 +78,10 @@ public class Field {
      */
     public static List<Field> list(DataSource dataSource, String table) {
         List<Field> fields = (List<Field>) Log.get("~!@#FIELDS_MAP#DATASOURCE#" + dataSource + "#TABLE#" + table);
-        if (null == fields && null != dataSource) { // 如果缓存中没有
+        if (null == fields) { // 如果缓存中没有
+            if (null == dataSource) {
+                throw new RuntimeException("A dataSource in Ioc is needed, like https://github.com/limingwei/li/blob/master/demo/demo-config.xml");
+            }
             log.debug("Field.list() by table ?", table);
             try {
                 fields = new ArrayList<Field>();
