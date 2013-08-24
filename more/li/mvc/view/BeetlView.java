@@ -27,7 +27,7 @@ public class BeetlView extends AbstractView {
     public static synchronized GroupTemplate getGroupTemplate() {
         if (null == groupTemplate) {
             try {
-                log.debug("beetl initializing ...");
+                log.info("beetl initializing ...");
                 Map properties = new Properties();
                 properties.put("TEMPLATE_ROOT", Context.getRootPath());
                 properties.put("TEMPLATE_CHARSET", "UTF-8");
@@ -48,6 +48,6 @@ public class BeetlView extends AbstractView {
             template.set(entry.getKey(), entry.getValue());
         }
         template.getText(response.getWriter());
-        log.info("beetl to : ?", tempPath);
+        log.debug("beetl to : ?", tempPath);
     }
 }

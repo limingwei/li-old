@@ -30,6 +30,16 @@ public class MockHttpSession implements HttpSession {
         this.sessionMap = new HashMap<String, Object>();
     }
 
+    public void removeAttribute(String key) {
+        sessionMap.remove(key);
+        log.debug("remove session " + key + " calling by " + ThreadUtil.stackTrace());
+    }
+
+    public void setAttribute(String key, Object value) {
+        sessionMap.put(key, value);
+        log.debug("set session " + key + " calling by " + ThreadUtil.stackTrace());
+    }
+
     public ServletContext getServletContext() {
         return this.servletContext;
     }
@@ -55,15 +65,6 @@ public class MockHttpSession implements HttpSession {
     }
 
     public void putValue(String key, Object value) {
-        sessionMap.put(key, value);
-    }
-
-    public void removeAttribute(String key) {
-        sessionMap.remove(key);
-        log.info("remove session " + key + " calling by " + ThreadUtil.stackTrace());
-    }
-
-    public void setAttribute(String key, Object value) {
         sessionMap.put(key, value);
     }
 

@@ -60,42 +60,38 @@ public class AopEnhancer {
      * 初始化
      */
     public AopEnhancer() {
-        try {
-            namingPolicy = new NamingPolicy() {// 自定义的NamingPolicy,使Aop子类类名以$Aop结尾
-                public String getClassName(String prefix, String source, Object key, Predicate names) {
-                    prefix = null == prefix ? "net.sf.cglib.empty.Object" : prefix.startsWith("java") ? "$" + prefix : prefix;
-                    return source.endsWith("Enhancer") ? prefix + "$Aop" : prefix + "$FastClass";
-                } // http://t.cn/zQo4ydN
-            };
+        namingPolicy = new NamingPolicy() {// 自定义的NamingPolicy,使Aop子类类名以$Aop结尾
+            public String getClassName(String prefix, String source, Object key, Predicate names) {
+                prefix = null == prefix ? "net.sf.cglib.empty.Object" : prefix.startsWith("java") ? "$" + prefix : prefix;
+                return source.endsWith("Enhancer") ? prefix + "$Aop" : prefix + "$FastClass";
+            } // http://t.cn/zQo4ydN
+        };
 
-            transFilter = new AopFilter() {// 内置的AopFilter,用li.dao.Trans包裹执行chain.doFilter,使被包裹的方法在事务中执行
-                public void doFilter(final AopChain chain) {
-                    new li.dao.Trans() {
-                        public void run() {
-                            chain.doFilter();
-                        }
-                    };
-                }
-            };
-
-            filtersBuiltIn.put("~!@#trans", transFilter);// 内置AopFilter
-
-            // 解析XmlAop配置
-            File rootFolder = Files.root();
-            List<String> fileList = Files.list(rootFolder, AOP_CONFIG_REGEX, true, 1);// 搜索配置文件
-            log.info("Found ? aop config xml files, at ?", fileList.size(), rootFolder);
-
-            for (String filePath : fileList) {
-                NodeList beanNodes = (NodeList) Files.xpath(Files.build(filePath), "//aop", XPathConstants.NODESET);
-                for (int length = (null == beanNodes ? -1 : beanNodes.getLength()), i = 0; i < length; i++) {
-                    String type = Files.xpath(beanNodes.item(i), "@class", XPathConstants.STRING).toString();
-                    String method = Files.xpath(beanNodes.item(i), "@method", XPathConstants.STRING).toString();
-                    String aops = Files.xpath(beanNodes.item(i), "@filter", XPathConstants.STRING).toString();
-                    xmlAopRules.add(new String[] { type, method, aops });
-                }
+        transFilter = new AopFilter() {// 内置的AopFilter,用li.dao.Trans包裹执行chain.doFilter,使被包裹的方法在事务中执行
+            public void doFilter(final AopChain chain) {
+                new li.dao.Trans() {
+                    public void run() {
+                        chain.doFilter();
+                    }
+                };
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e + " ", e);
+        };
+
+        filtersBuiltIn.put("~!@#trans", transFilter);// 内置AopFilter
+
+        // 解析XmlAop配置
+        File rootFolder = Files.root();
+        List<String> fileList = Files.list(rootFolder, AOP_CONFIG_REGEX, true, 1);// 搜索配置文件
+        log.info("Found ? aop config xml files, at ?", fileList.size(), rootFolder);
+
+        for (String filePath : fileList) {
+            NodeList beanNodes = (NodeList) Files.xpath(Files.build(filePath), "//aop", XPathConstants.NODESET);
+            for (int length = (null == beanNodes ? -1 : beanNodes.getLength()), i = 0; i < length; i++) {
+                String type = Files.xpath(beanNodes.item(i), "@class", XPathConstants.STRING).toString();
+                String method = Files.xpath(beanNodes.item(i), "@method", XPathConstants.STRING).toString();
+                String aops = Files.xpath(beanNodes.item(i), "@filter", XPathConstants.STRING).toString();
+                xmlAopRules.add(new String[] { type, method, aops });
+            }
         }
     }
 

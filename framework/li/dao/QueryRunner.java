@@ -48,7 +48,7 @@ public class QueryRunner {
             try { // 如果未进入事务或事务中未出现异常,则执行后面的语句
                 preparedStatement = connection.prepareStatement(sql);
                 resultSet = preparedStatement.executeQuery();
-                log.info("? -> ?", sql, connection);
+                log.debug("? -> ?", sql, connection);
             } catch (Exception e) {
                 error(e, sql);
             }
@@ -70,7 +70,7 @@ public class QueryRunner {
                     this.lastInsertId = null != generatedKeys && generatedKeys.next() ? generatedKeys.getInt(1) : -1;// 最后更新的主键的值
                     generatedKeys.close();// 关闭主键结果集
                 }
-                log.info("? -> [? row] ?", sql, count, connection);
+                log.debug("? -> [? row] ?", sql, count, connection);
             } catch (Exception e) {
                 error(e, sql);
             }
@@ -101,9 +101,8 @@ public class QueryRunner {
      * 运行SQL语句时出现异常的处理
      */
     private void error(Exception e, String sql) {
-        Trans.EXCEPTION.set(e); // 出现异常,记录起来
         log.error("? ?", sql, e);
-        e.printStackTrace();// 这里的异常是不是应该抛出?
+        Trans.EXCEPTION.set(e); // 出现异常,记录起来
         throw new RuntimeException(e + " ", e);
     }
 }

@@ -24,7 +24,7 @@ public class HttlView extends AbstractView {
 
     public static synchronized Engine getEngine() {
         if (null == engine) {
-            log.debug("httl initializing ..");
+            log.info("httl initializing ..");
             Properties properties = new Properties();
             properties.put("loaders", "httl.spi.loaders.FileLoader");
             properties.put("template.directory", Context.getRootPath());
@@ -38,6 +38,6 @@ public class HttlView extends AbstractView {
     public void render(String tempPath, HttpServletResponse response, Map<String, Object> map) throws Exception {
         Template template = getEngine().getTemplate(tempPath);
         template.render(map, response.getWriter());
-        log.info("httl to : ?", tempPath);
+        log.debug("httl to : ?", tempPath);
     }
 }

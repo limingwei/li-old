@@ -50,10 +50,10 @@ public class XmlIocLoader {
                     iocBean.fields.add(field);
                 }
                 beans.add(iocBean);
-
                 log.debug("ADD BEAN: Xml ? ?", iocBean.type.getName(), iocBean.name);
             }
         }
+        log.info("? ioc beans by xml found", beans.size());
         return beans;
     }
 

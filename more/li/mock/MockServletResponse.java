@@ -33,7 +33,7 @@ class MockServletResponse implements ServletResponse {
     }
 
     public PrintWriter getWriter() throws IOException {
-        log.info("li.mock.MockServletResponse.getWriter() calling by " + ThreadUtil.stackTrace());
+        log.debug("li.mock.MockServletResponse.getWriter() calling by " + ThreadUtil.stackTrace());
         if (!(null != this.writer && this.writer instanceof PrintWriter)) {
             this.writer = new PrintWriter(null == this.writer ? new NullWriter() : this.writer);
         }
@@ -41,7 +41,7 @@ class MockServletResponse implements ServletResponse {
     }
 
     public ServletOutputStream getOutputStream() throws IOException {
-        log.info("li.mock.MockServletResponse.getOutputStream() calling by " + ThreadUtil.stackTrace());
+        log.debug("li.mock.MockServletResponse.getOutputStream() calling by " + ThreadUtil.stackTrace());
 
         return new ServletOutputStream() {
             public void write(int b) throws IOException {

@@ -21,7 +21,6 @@ import li.util.Reflect;
  * @version 0.1.2 (2012-05-08)
  */
 public class AnnotationIocLoader {
-
     private static final Log log = Log.init();
 
     private static final String CLASS_REGEX = "^.*\\.class$", JAR_REGEX = "^.*\\.jar$";;
@@ -60,6 +59,7 @@ public class AnnotationIocLoader {
                 // class not found 啥的，太多了，就先不打日志了
             }
         }
+        log.info("? ioc beans by annotation found", beans.size());
         return beans;
     }
 

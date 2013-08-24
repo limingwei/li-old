@@ -212,7 +212,7 @@ public class Context {
      * 执行客户端跳转
      */
     public static String redirect(String path) {
-        log.info("redirect to ?", path);
+        log.debug("redirect to ?", path);
         try {
             getResponse().sendRedirect(path);
         } catch (Exception e) {
@@ -225,7 +225,7 @@ public class Context {
      * 返回forward视图
      */
     public static String forward(String path) {
-        log.info("forward to ?", path);
+        log.debug("forward to ?", path);
         try {
             getRequest().getRequestDispatcher(path).forward(getRequest(), getResponse());
         } catch (Exception e) {
@@ -241,7 +241,7 @@ public class Context {
         try {
             Object configuration = Log.get("~!@#FREEMARKER_CONFIGURATION"); // 从缓存中查找freemarkerConfiguration
             if (null == configuration) { // 缓存中没有
-                log.debug("freemarker initializing ..");
+                log.info("freemarker initializing ..");
                 configuration = Reflect.born("freemarker.template.Configuration"); // 初始化freemarkerConfiguration
                 Reflect.invoke(configuration, "setServletContextForTemplateLoading", new Class[] { Object.class, String.class }, new Object[] { getServletContext(), "/" });// 设置模板加载跟路径
                 Properties properties = new Properties();// 默认的参数设置
@@ -252,7 +252,7 @@ public class Context {
             }
             Object template = Reflect.invoke(configuration, "getTemplate", path);// 加载模板
             Reflect.invoke(template, "process", new Class[] { Object.class, Writer.class }, new Object[] { getAttributes(), getResponse().getWriter() });
-            log.info("freemarker to: ?", path);
+            log.debug("freemarker to: ?", path);
         } catch (Throwable e) {
             error(e);
         }

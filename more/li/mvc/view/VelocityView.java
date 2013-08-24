@@ -25,7 +25,7 @@ public class VelocityView extends AbstractView {
 
     public static synchronized void init() {
         if (null == flag) {
-            log.debug("velocity initializing ..");
+            log.info("velocity initializing ..");
             Properties properties = new Properties();// 默认的参数设置
             properties.put("file.resource.loader.path", Context.getRootPath());
             properties.put("input.encoding", "UTF-8");
@@ -40,6 +40,6 @@ public class VelocityView extends AbstractView {
         init();
         Template template = Velocity.getTemplate(tempPath);
         template.merge(new VelocityContext(map), response.getWriter());
-        log.info("velocity to : ?", tempPath);
+        log.debug("velocity to : ?", tempPath);
     }
 }

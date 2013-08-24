@@ -4,22 +4,93 @@
 	<root>
 		<level value="TRACE" />
 		<appender-ref ref="CONSOLE_APPENDER" />
+
+		<appender-ref ref="FILE_TRACE_APPENDER" />
+		<appender-ref ref="FILE_DEBUG_APPENDER" />
+		<appender-ref ref="FILE_INFO_APPENDER" />
+		<appender-ref ref="FILE_WARN_APPENDER" />
+		<appender-ref ref="FILE_ERROR_FATAL_APPENDER" />
+		<appender-ref ref="FILE_ALL_APPENDER" />
 	</root>
 
-	<!-- <logger name="li"> <level value="TRACE" /> <appender-ref ref="CONSOLE_APPENDER" /> </logger> <logger name="httl"> <level value="TRACE" /> <appender-ref ref="CONSOLE_APPENDER" /> </logger> <logger name="freemarker"> <level value="TRACE" /> <appender-ref ref="CONSOLE_APPENDER" /> </logger> -->
+	<logger name="velocity_log">
+		<level value="INFO" />
+		<appender-ref ref="CONSOLE_APPENDER" />
+		<appender-ref ref="FILE_ALL_APPENDER" />
+	</logger>
+
+	<logger name="druid.sql">
+		<level value="INFO" />
+		<appender-ref ref="CONSOLE_APPENDER" />
+		<appender-ref ref="FILE_ALL_APPENDER" />
+	</logger>
 
 	<appender name="CONSOLE_APPENDER" class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m%n" />
 		</layout>
+	</appender>
+
+	<appender name="FILE_TRACE_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/data/li/logs/li-trace.log" />
+		<param name="DatePattern" value="'-'yyyy-MM-dd'.log'" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m%n" />
+		</layout>
 		<filter class="org.apache.log4j.varia.LevelRangeFilter">
-			<param name="LevelMax" value="FATAL" />
-			<param name="LevelMin" value="TRACE" />
+			<param name="LevelMax" value="TRACE" />
 		</filter>
 	</appender>
 
-	<appender name="FILE_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="/data/li/logs/all" />
+	<appender name="FILE_DEBUG_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/data/li/logs/li-debug.log" />
+		<param name="DatePattern" value="'-'yyyy-MM-dd'.log'" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMax" value="DEBUG" />
+			<param name="LevelMin" value="DEBUG" />
+		</filter>
+	</appender>
+
+	<appender name="FILE_INFO_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/data/li/logs/li-info.log" />
+		<param name="DatePattern" value="'-'yyyy-MM-dd'.log'" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMax" value="INFO" />
+			<param name="LevelMin" value="INFO" />
+		</filter>
+	</appender>
+
+	<appender name="FILE_WARN_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/data/li/logs/li-warn.log" />
+		<param name="DatePattern" value="'-'yyyy-MM-dd'.log'" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMax" value="WARN" />
+			<param name="LevelMin" value="WARN" />
+		</filter>
+	</appender>
+
+	<appender name="FILE_ERROR_FATAL_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/data/li/logs/li-error-fatal.log" />
+		<param name="DatePattern" value="'-'yyyy-MM-dd'.log'" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="ERROR" />
+		</filter>
+	</appender>
+
+	<appender name="FILE_ALL_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/data/li/logs/li-all.log" />
 		<param name="DatePattern" value="'-'yyyy-MM-dd'.log'" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m%n" />

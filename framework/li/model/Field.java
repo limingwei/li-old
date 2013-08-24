@@ -1,6 +1,7 @@
 package li.model;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
@@ -8,7 +9,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import li.dao.QueryRunner;
 import li.util.Log;
 import li.util.Verify;
 
@@ -79,24 +79,21 @@ public class Field {
     public static List<Field> list(DataSource dataSource, String table) {
         List<Field> fields = (List<Field>) Log.get("~!@#FIELDS_MAP#DATASOURCE#" + dataSource + "#TABLE#" + table);
         if (null == fields) { // 如果缓存中没有
-            if (null == dataSource) {
-                throw new RuntimeException("A dataSource in Ioc is needed, like https://github.com/limingwei/li/blob/master/demo/demo-config.xml");
-            }
             log.debug("Field.list() by table ?", table);
             try {
                 fields = new ArrayList<Field>();
                 Connection connection = dataSource.getConnection();
-                QueryRunner queryRunner = new QueryRunner(connection);
-                ResultSet resultSet = queryRunner.executeQuery("SELECT * FROM " + table + " WHERE 1=2");
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + table + " WHERE 1=2");
+                ResultSet resultSet = preparedStatement.executeQuery();
                 fields = list(resultSet);
-                if (null != resultSet) {
+                if (null != resultSet) {// ?
                     resultSet.close();// 关闭resultSet
                 }
-                queryRunner.close();// 关闭QueryRunner,主要是关闭PrerparedStatement
+                preparedStatement.close();
                 connection.close();// 关闭connection,QueryRunner中可能因为事务没有关闭之
                 Log.put("~!@#FIELDS_MAP#DATASOURCE#" + dataSource + "#TABLE#" + table, fields); // 加入缓存
             } catch (Exception e) {
-                throw new RuntimeException(e + " ", e);
+                throw new RuntimeException("A dataSource in Ioc is needed, like https://github.com/limingwei/li/blob/master/demo/demo-config.xml");
             }
         }
         return fields;

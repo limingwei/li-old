@@ -55,7 +55,7 @@ public class IocContext {
             try {
                 IOC_CONTEXT.aopEnhancer = new AopEnhancer();
             } catch (Throwable e) {
-                log.warn("aop is not able , needs http://limingwei.github.io/li/maven/cglib/cglib-nodep/2.2.3/cglib-nodep-2.2.3.jar " + e);
+                log.warn("Aop is not able , needs http://limingwei.github.io/li/maven/cglib/cglib-nodep/2.2.3/cglib-nodep-2.2.3.jar " + e);
             }
 
             // STEP-1-使用XmlIocLoader和AnnotationIocLoader添加Beans
@@ -97,7 +97,7 @@ public class IocContext {
                 }
             }
 
-            log.debug("? beans started up in ?ms", IOC_CONTEXT.beans.size(), (System.currentTimeMillis() - start));
+            log.info("? beans started up in ?ms", IOC_CONTEXT.beans.size(), (System.currentTimeMillis() - start));
         }
         return IOC_CONTEXT;
     }

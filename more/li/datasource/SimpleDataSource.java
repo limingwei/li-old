@@ -85,7 +85,7 @@ public class SimpleDataSource implements DataSource {
         for (ConnectionWrapper connection : unclosedConnections) {
             string += "\n" + connection + " Called by " + ThreadUtil.stackTrace(connection.getStackTrace(), this.regex);
         }
-        log.trace(string);
+        log.debug(string);
     }
 
     /**
