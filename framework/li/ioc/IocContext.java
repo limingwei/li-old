@@ -24,9 +24,12 @@ import li.util.Verify;
 public class IocContext {
     private static final Log log = Log.init();
 
-    private static final AopEnhancer AOP_ENHANCER = new AopEnhancer();
-
     private static IocContext IOC_CONTEXT = null;// 存储IocContext的实例,它会是单例的
+
+    /**
+     * aopEnhancer
+     */
+    private AopEnhancer aopEnhancer;
 
     /**
      * List,用于保存所有的BEAN
@@ -49,6 +52,12 @@ public class IocContext {
 
             IOC_CONTEXT = new IocContext();
 
+            try {
+                IOC_CONTEXT.aopEnhancer = new AopEnhancer();
+            } catch (Throwable e) {
+                log.warn("aop is not able , needs http://limingwei.github.io/li/maven/cglib/cglib-nodep/2.2.3/cglib-nodep-2.2.3.jar " + e);
+            }
+
             // STEP-1-使用XmlIocLoader和AnnotationIocLoader添加Beans
             IOC_CONTEXT.beans.addAll(new XmlIocLoader().getBeans());
             IOC_CONTEXT.beans.addAll(new AnnotationIocLoader().getBeans());
@@ -66,12 +75,12 @@ public class IocContext {
             // STEP-3-实例化所有的bean
             for (Bean bean : IOC_CONTEXT.beans) {
                 if (null == bean.instance) {// 如果尚未实例化
-                    if (!AOP_ENHANCER.aopCan || AopFilter.class.isAssignableFrom(bean.type)) {
+                    if (null == IOC_CONTEXT.aopEnhancer || AopFilter.class.isAssignableFrom(bean.type)) {
                         log.trace("Ioc initializing ?", bean.type);
                         bean.instance = Reflect.born(bean.type);
                     } else {
                         log.trace("Aop initializing ?", bean.type);
-                        bean.instance = AOP_ENHANCER.create(bean.type);
+                        bean.instance = IOC_CONTEXT.aopEnhancer.create(bean.type);
                     }
                 }
             }

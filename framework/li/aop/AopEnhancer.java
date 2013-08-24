@@ -37,11 +37,6 @@ public class AopEnhancer {
     private static final String AOP_CONFIG_REGEX = "^.*(config|ioc|aop)\\.xml$";
 
     /**
-     * Aop功能是否可用
-     */
-    public Boolean aopCan = false;
-
-    /**
      * 内置AopFilter
      */
     private final Map<String, AopFilter> filtersBuiltIn = new HashMap<String, AopFilter>();
@@ -66,10 +61,6 @@ public class AopEnhancer {
      */
     public AopEnhancer() {
         try {
-            Class.forName("net.sf.cglib.proxy.Enhancer");// 判断是否有Aop依赖包Aop功能是否可用
-
-            aopCan = true;// 设置Aop功能可用
-
             namingPolicy = new NamingPolicy() {// 自定义的NamingPolicy,使Aop子类类名以$Aop结尾
                 public String getClassName(String prefix, String source, Object key, Predicate names) {
                     prefix = null == prefix ? "net.sf.cglib.empty.Object" : prefix.startsWith("java") ? "$" + prefix : prefix;

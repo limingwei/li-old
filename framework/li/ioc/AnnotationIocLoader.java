@@ -56,8 +56,8 @@ public class AnnotationIocLoader {
 
                     log.debug("ADD BEAN: @Bean ? ?", type.getName(), iocBean.name);
                 }
-            } catch (Exception e) {
-                // class not found 啥的，这里先不打日志了，太多了
+            } catch (Throwable e) {
+                // class not found 啥的，太多了，就先不打日志了
             }
         }
         return beans;
