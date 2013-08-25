@@ -52,7 +52,6 @@ public class AnnotationIocLoader {
                         }
                     }
                     beans.add(iocBean);
-
                     log.debug("ADD BEAN: @Bean ? ?", type.getName(), iocBean.name);
                 }
             } catch (Throwable e) {
@@ -68,7 +67,7 @@ public class AnnotationIocLoader {
      */
     private static String getClassName(String classFileName) {
         int classesIndex = classFileName.indexOf(File.separator + "classes" + File.separator);
-        return classFileName.substring(classesIndex > 0 ? classesIndex + 9 : 0, classFileName.length() - 6).replace(File.separatorChar, '.');
+        return classFileName.substring(classesIndex > 0 ? classesIndex + 9 : 0, classFileName.length() - 6).replace('/', '.').replace('\\', '.');
     }
 
     /**
