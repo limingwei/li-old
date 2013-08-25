@@ -13,6 +13,7 @@ import li.model.Bean;
 import li.util.Files;
 import li.util.Log;
 import li.util.Reflect;
+import li.util.Verify;
 
 /**
  * Ioc加载器,加载用注解方式配置的Bean
@@ -23,7 +24,7 @@ import li.util.Reflect;
 public class AnnotationIocLoader {
     private static final Log log = Log.init();
 
-    private static final String CLASS_REGEX = "^.*\\.class$", JAR_REGEX = "^.*\\.jar$";;
+    private static final String CLASS_REGEX = "^.*\\.class$";
 
     /**
      * 扫描 Source Floder 下的所有类文件, 将其中加了@Bean注解的类返回,然后被加入到IocContext
@@ -82,16 +83,21 @@ public class AnnotationIocLoader {
     }
 
     /**
-     * 获取所有jar里面的类
+     * 获取jar里面的类
      */
     private List<String> getClassFilesInJar() {
         try {
+            String annotationInJar = Files.load("config.properties").getProperty("annotationInJar", "");
+            log.info("annotationInJar=?", annotationInJar);
+            String[] annotationInJarClasses = annotationInJar.split(",");
             List<String> classFileList = new ArrayList<String>();
-            String jarLib = this.getLibFolder();
-            List<String> jarFiles = Files.list(new File(jarLib), JAR_REGEX, true, 1);
-            log.info("Found ? jar files , at ?", jarFiles.size(), jarLib);
-            for (String jar : jarFiles) {
-                JarFile jarFile = new JarFile(jar);
+            for (String annotationInJarClasse : annotationInJarClasses) {
+                if (Verify.isEmpty(annotationInJarClasse)) {
+                    continue;
+                }
+                String jarFilePath = Reflect.getType(annotationInJarClasse).getProtectionDomain().getCodeSource().getLocation().getFile();
+                log.info("Looking for class files of ? in ?", annotationInJarClasse, jarFilePath);
+                JarFile jarFile = new JarFile(jarFilePath);
                 Enumeration<JarEntry> entries = jarFile.entries();
                 while (entries.hasMoreElements()) {
                     JarEntry jarEntry = (JarEntry) entries.nextElement();
@@ -103,28 +109,10 @@ public class AnnotationIocLoader {
                     }
                 }
             }
-            log.info("Found ? class files in jar, at ?", classFileList.size(), jarLib);
+            log.info("Found ? class files in jar of ?", classFileList.size(), annotationInJar);
             return classFileList;
         } catch (Exception e) {
             throw new RuntimeException(e + " ", e);
-        }
-    }
-
-    /**
-     * 获得项目根路径
-     */
-    private String getLibFolder() {
-        try {
-            String path = this.getClass().getResource("/").toURI().getPath();
-            String webRoot = new File(path).getParentFile().getParentFile().getCanonicalPath();
-            List<String> libFolders = Files.list(new File(webRoot), "^.*\\" + File.separator + "WEB-INF\\" + File.separator + "lib$", true, 2);
-            if (libFolders.size() == 1) {
-                return libFolders.get(0);
-            }
-            log.warn("searching for /WEB-INF/lib , but not got one", libFolders);
-            return webRoot + File.separator + "WEB-INF" + File.separator + "lib";
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 }
