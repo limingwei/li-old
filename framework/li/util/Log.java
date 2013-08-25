@@ -34,16 +34,6 @@ public abstract class Log {
     }
 
     /**
-     * 日志级别
-     */
-    private static final Integer DEBUG = 10000, INFO = 20000, WARN = 30000, ERROR = 40000, FATAL = 50000, TRACE = 5000;
-
-    /**
-     * 日志级别 数组索引*5000 即是 int类型的级别
-     */
-    private static final String[] LEVELS = { "", "TRACE", "DEBUG", "", "INFO", "", "WARN", "", "ERROR", "", "FATAL" };
-
-    /**
      * 第一句log
      */
     static {
@@ -58,7 +48,7 @@ public abstract class Log {
             return new Log() {// 尝试初始化Log4J
                 Logger logger = Logger.getLogger(className);
 
-                protected void log(Integer level, Object message) {
+                protected void log(String level, Object message) {
                     logger.log(Priority.toPriority(level), message);
                 }
             };
@@ -67,8 +57,8 @@ public abstract class Log {
                 Log.put("start", System.currentTimeMillis());
             }
             return new Log() {// 返回ConsoleLog
-                protected void log(Integer level, Object message) {
-                    ((level > 25000) ? System.err : System.out).println("Log:[" + Thread.currentThread().getName() + "] " + (System.currentTimeMillis() - (Long) Log.get("start")) + " " + LEVELS[level / 5000] + " " + Convert.format(Convert.DATE_TIME_FORMAT_5, new Date()) + " " + className + " " + message);
+                protected void log(String level, Object message) {
+                    ("fatal".equals(level) || "error".equals(level) ? System.err : System.out).println("Log:[" + Thread.currentThread().getName() + "] " + (System.currentTimeMillis() - (Long) Log.get("start")) + " " + level + " " + Convert.format(Convert.DATE_TIME_FORMAT_5, new Date()) + " " + className + " " + message);
                 }
             };
         }
@@ -91,17 +81,17 @@ public abstract class Log {
     /**
      * 抽象方法,由不同的Log做具体的适配
      */
-    protected abstract void log(Integer level, Object message);
+    protected abstract void log(String level, Object message);
 
     /**
      * 处理log信息
      */
-    private static String process(Object msg, Object... args) {
-        if (null == args || args.length < 1) {
-            return msg + "";
+    private static String process(Object message, Object... args) {
+        if (null == args || args.length < 1 || !message.toString().contains("?")) {
+            return message + "";
         }
         StringBuffer stringBuffer = new StringBuffer();
-        char[] chars = null == msg ? new char[0] : msg.toString().toCharArray();
+        char[] chars = null == message ? new char[0] : message.toString().toCharArray();
         int arg_index = 0;
         for (int i = 0; i < chars.length; i++) {
             stringBuffer.append((arg_index < args.length && chars[i] == '?') ? args[arg_index++] : chars[i]);
@@ -112,42 +102,42 @@ public abstract class Log {
     /**
      * 输出TRACE级别的日志 Level 1
      */
-    public void trace(Object msg, Object... args) {
-        log(TRACE, process(msg, args));
+    public void trace(Object message, Object... args) {
+        log("trace", process(message, args));
     }
 
     /**
      * 输出DEBUG级别的日志 Level 2
      */
-    public void debug(Object msg, Object... args) {
-        log(DEBUG, process(msg, args));
+    public void debug(Object message, Object... args) {
+        log("debug", process(message, args));
     }
 
     /**
      * 输出INFO级别的日志 Level 3
      */
-    public void info(Object msg, Object... args) {
-        log(INFO, process(msg, args));
+    public void info(Object message, Object... args) {
+        log("info", process(message, args));
     }
 
     /**
      * 输出WARN级别的日志 Level 4
      */
-    public void warn(Object msg, Object... args) {
-        log(WARN, process(msg, args));
+    public void warn(Object message, Object... args) {
+        log("warn", process(message, args));
     }
 
     /**
      * 输出ERROR级别的日志 Level 5
      */
-    public void error(Object msg, Object... args) {
-        log(ERROR, process(msg, args));
+    public void error(Object message, Object... args) {
+        log("error", process(message, args));
     }
 
     /**
      * 输出FATAL级别的日志 Level 6
      */
-    public void fatal(Object msg, Object... args) {
-        log(FATAL, process(msg, args));
+    public void fatal(Object message, Object... args) {
+        log("fatal", process(message, args));
     }
 }
