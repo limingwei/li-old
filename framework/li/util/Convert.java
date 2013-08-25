@@ -124,6 +124,13 @@ public class Convert {
     }
 
     /**
+     * 将时间转换为String
+     */
+    public static String format(DateFormat dateFormat, java.util.Date date) {
+        return dateFormat.format(date);
+    }
+
+    /**
      * 把传入的value转换为type类型
      */
     public static <T> T toType(Class<T> type, Object value) {
@@ -203,6 +210,11 @@ public class Convert {
      * yyyy/MM/dd HH:mm
      */
     public static final SimpleDateFormat DATE_TIME_FORMAT_4 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+
+    /**
+     * yyyy-MM-dd HH:mm:ss
+     */
+    public static final SimpleDateFormat DATE_TIME_FORMAT_5 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
 
     /**
      * yyyy-MM-dd
