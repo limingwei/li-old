@@ -32,7 +32,7 @@
 	</appender>
 
 	<appender name="FILE_TRACE_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="/data/li/logs/li-trace.log" />
+		<param name="File" value="/_data_/li/logs/li-trace.log" />
 		<param name="DatePattern" value="'-'yyyy-MM-dd'.log'" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m%n" />
@@ -43,7 +43,7 @@
 	</appender>
 
 	<appender name="FILE_DEBUG_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="/data/li/logs/li-debug.log" />
+		<param name="File" value="/_data_/li/logs/li-debug.log" />
 		<param name="DatePattern" value="'-'yyyy-MM-dd'.log'" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m%n" />
@@ -55,7 +55,7 @@
 	</appender>
 
 	<appender name="FILE_INFO_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="/data/li/logs/li-info.log" />
+		<param name="File" value="/_data_/li/logs/li-info.log" />
 		<param name="DatePattern" value="'-'yyyy-MM-dd'.log'" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m%n" />
@@ -67,7 +67,7 @@
 	</appender>
 
 	<appender name="FILE_WARN_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="/data/li/logs/li-warn.log" />
+		<param name="File" value="/_data_/li/logs/li-warn.log" />
 		<param name="DatePattern" value="'-'yyyy-MM-dd'.log'" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m%n" />
@@ -79,7 +79,7 @@
 	</appender>
 
 	<appender name="FILE_ERROR_FATAL_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="/data/li/logs/li-error-fatal.log" />
+		<param name="File" value="/_data_/li/logs/li-error-fatal.log" />
 		<param name="DatePattern" value="'-'yyyy-MM-dd'.log'" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m%n" />
@@ -90,7 +90,7 @@
 	</appender>
 
 	<appender name="FILE_ALL_APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="/data/li/logs/li-all.log" />
+		<param name="File" value="/_data_/li/logs/li-all.log" />
 		<param name="DatePattern" value="'-'yyyy-MM-dd'.log'" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="LOG4J:[%t] %r %p %d %c %m%n" />
