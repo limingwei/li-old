@@ -63,12 +63,13 @@ public abstract class Log {
                 }
             };
         } catch (Throwable e) {
-            if (null == Log.get("start")) {
+            final Object start = Log.get("start");
+            if (null == start) {
                 Log.put("start", System.currentTimeMillis());
             }
             return new Log() {// 返回ConsoleLog
                 protected void log(Integer level, Object message) {
-                    ((level > 25000) ? System.err : System.out).println("Log:[" + Thread.currentThread().getName() + "] " + (System.currentTimeMillis() - (Long) Log.get("start")) + " " + LEVELS[level / 5000] + " " + Convert.format(Convert.DATE_TIME_FORMAT_5, new Date()) + " " + className + " " + message);
+                    ((level > 25000) ? System.err : System.out).println("Log:[" + Thread.currentThread().getName() + "] " + (System.currentTimeMillis() - (Long) start) + " " + LEVELS[level / 5000] + " " + Convert.format(Convert.DATE_TIME_FORMAT_5, new Date()) + " " + className + " " + message);
                 }
             };
         }
