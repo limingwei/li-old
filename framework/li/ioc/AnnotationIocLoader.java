@@ -86,17 +86,21 @@ public class AnnotationIocLoader {
      * 获取jar里面的类
      */
     private List<String> getClassFilesInJar() {
+        String annotationInJar = Files.load("config.properties").getProperty("annotationInJar", "");
         try {
-            String annotationInJar = Files.load("config.properties").getProperty("annotationInJar", "");
             log.info("annotationInJar=?", annotationInJar);
             String[] annotationInJarClasses = annotationInJar.split(",");
             List<String> classFileList = new ArrayList<String>();
-            for (String annotationInJarClasse : annotationInJarClasses) {
-                if (Verify.isEmpty(annotationInJarClasse)) {
+            for (String annotationInJarClass : annotationInJarClasses) {
+                if (Verify.isEmpty(annotationInJarClass)) {
                     continue;
                 }
-                String jarFilePath = Reflect.getType(annotationInJarClasse).getProtectionDomain().getCodeSource().getLocation().getFile();
-                log.info("Looking for class files of ? in ?", annotationInJarClasse, jarFilePath);
+                String jarFilePath = Reflect.getType(annotationInJarClass).getProtectionDomain().getCodeSource().getLocation().getFile();
+                if (!jarFilePath.endsWith(".jar")) {
+                    log.info("? is not in jar but in ?", annotationInJarClass, jarFilePath);
+                    continue;
+                }
+                log.info("Looking for class files of ? in ?", annotationInJarClass, jarFilePath);
                 JarFile jarFile = new JarFile(jarFilePath);
                 Enumeration<JarEntry> entries = jarFile.entries();
                 while (entries.hasMoreElements()) {
@@ -112,7 +116,7 @@ public class AnnotationIocLoader {
             log.info("Found ? class files in jar of ?", classFileList.size(), annotationInJar);
             return classFileList;
         } catch (Exception e) {
-            throw new RuntimeException(e + " ", e);
+            throw new RuntimeException("annotationInJar=" + annotationInJar + " " + e + " ", e);
         }
     }
 }
