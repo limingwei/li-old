@@ -13,8 +13,11 @@
 			<property name="password" value="${db.password}" />
 			<property name="druidFilters" value="wall,stat,log4j" />
 		</bean>
+
+		<bean name="druidStatFilter" class="li.datasource.druid.DruidStatFilter"></bean>
 	</beans>
 	<aops>
 		<aop class="li.aop.*" method=".*" filter="log,trans" />
+		<aop class="li.people.*" method=".*" filter="druidStatFilter" />
 	</aops>
 </config>

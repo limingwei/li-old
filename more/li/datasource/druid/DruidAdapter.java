@@ -23,6 +23,12 @@ public class DruidAdapter extends DruidDataSource {
                     wallFilter = new DruidWallFilter();
                 }
                 super.getProxyFilters().add(wallFilter);
+            } else if ("stat".equals(item)) {
+                DruidStatFilter statFilter = Ioc.get(DruidStatFilter.class);
+                if (null == statFilter) {
+                    statFilter = new DruidStatFilter();
+                }
+                super.getProxyFilters().add(statFilter);
             } else {
                 super.setFilters(item);
             }
