@@ -58,7 +58,7 @@ public abstract class Log {
             }
             return new Log() {// 返回ConsoleLog
                 protected void log(String level, Object message) {
-                    ("fatal".equals(level) || "error".equals(level) ? System.err : System.out).println("Log:[" + Thread.currentThread().getName() + "] " + (System.currentTimeMillis() - (Long) Log.get("start")) + " " + level + " " + Convert.format(Convert.DATE_TIME_FORMAT_5, new Date()) + " " + className + " " + message);
+                    ("FATAL".equals(level) || "ERROR".equals(level) ? System.err : System.out).println("Log:[" + Thread.currentThread().getName() + "] " + (System.currentTimeMillis() - (Long) Log.get("start")) + " " + level + " " + Convert.format(Convert.DATE_TIME_FORMAT_5, new Date()) + " " + className + " " + message);
                 }
             };
         }
@@ -103,41 +103,41 @@ public abstract class Log {
      * 输出TRACE级别的日志 Level 1
      */
     public void trace(Object message, Object... args) {
-        log("trace", process(message, args));
+        log("TRACE", process(message, args));
     }
 
     /**
      * 输出DEBUG级别的日志 Level 2
      */
     public void debug(Object message, Object... args) {
-        log("debug", process(message, args));
+        log("DEBUG", process(message, args));
     }
 
     /**
      * 输出INFO级别的日志 Level 3
      */
     public void info(Object message, Object... args) {
-        log("info", process(message, args));
+        log("INFO", process(message, args));
     }
 
     /**
      * 输出WARN级别的日志 Level 4
      */
     public void warn(Object message, Object... args) {
-        log("warn", process(message, args));
+        log("WARN", process(message, args));
     }
 
     /**
      * 输出ERROR级别的日志 Level 5
      */
     public void error(Object message, Object... args) {
-        log("error", process(message, args));
+        log("ERROR", process(message, args));
     }
 
     /**
      * 输出FATAL级别的日志 Level 6
      */
     public void fatal(Object message, Object... args) {
-        log("fatal", process(message, args));
+        log("FATAL", process(message, args));
     }
 }
