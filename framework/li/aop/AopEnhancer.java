@@ -119,10 +119,10 @@ public class AopEnhancer {
     /**
      * 获取一个方法通过Xml配置的AopFilters
      */
-    private List<AopFilter> getXmlFilters(Method method) {
+    private List<AopFilter> getXmlFilters(Object target, Method method) {
         List<AopFilter> filters = new ArrayList<AopFilter>();
         for (String[] role : xmlAopRules) {// 所有的规则
-            if (Verify.regex(method.getDeclaringClass().getName(), role[0]) && Verify.regex(method.getName(), role[1])) {// 类名和方法名均匹配
+            if (Verify.regex(target.getClass().getName(), role[0]) && Verify.regex(method.getName(), role[1])) {// 类名和方法名均匹配
                 String[] names = role[2].split(",");// 所有Aop切入类
                 for (String name : names) {
                     AopFilter filter = Ioc.get(name);// 通过Ioc得到AopFilter
@@ -141,9 +141,9 @@ public class AopEnhancer {
     /**
      * 获取一个方法的所有AopFilters
      */
-    private List<AopFilter> getFilters(Method method) {
+    private List<AopFilter> getFilters(Object target, Method method) {
         List<AopFilter> filters = getAnnotationFilters(method);
-        filters.addAll(getXmlFilters(method));
+        filters.addAll(getXmlFilters(target, method));
         return filters;
     }
 
@@ -156,7 +156,7 @@ public class AopEnhancer {
         enhancer.setSuperclass(type);
         enhancer.setCallback(new MethodInterceptor() {// 设置callback,使用AopChain代理执行方法
             public Object intercept(Object target, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-                return new AopChain(target, method, args, getFilters(method), proxy).doFilter().getResult();
+                return new AopChain(target, method, args, getFilters(target, method), proxy).doFilter().getResult();
             }// 使用AopChian代理执行这个方法并返回值
         });
         return enhancer.create();// 创建代理对象

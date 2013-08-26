@@ -93,7 +93,7 @@ public class Field {
                 connection.close();// 关闭connection,QueryRunner中可能因为事务没有关闭之
                 Log.put("~!@#FIELDS_MAP#DATASOURCE#" + dataSource + "#TABLE#" + table, fields); // 加入缓存
             } catch (Exception e) {
-                throw new RuntimeException("A dataSource in Ioc is needed, like https://github.com/limingwei/li/blob/master/demo/demo-config.xml");
+                throw new RuntimeException(null == dataSource ? " A dataSource in Ioc is needed, like https://github.com/limingwei/li/blob/master/demo/demo-config.xml " : e + " ", e);
             }
         }
         return fields;

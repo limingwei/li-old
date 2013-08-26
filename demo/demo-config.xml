@@ -18,6 +18,6 @@
 	</beans>
 	<aops>
 		<aop class="li.aop.*" method=".*" filter="log,trans" />
-		<aop class="li.people.*" method=".*" filter="druidStatFilter" />
+		<aop class="li.people[.](action|record)[.].*" method=".*(count|delete|find|insert|query|list|save|update).*" filter="druidStatFilter" />
 	</aops>
 </config>

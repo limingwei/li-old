@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import li.aop.AopChain;
 import li.aop.AopFilter;
 
-import com.alibaba.druid.filter.stat.MergeStatFilter;
 import com.alibaba.druid.filter.stat.StatFilterContext;
 import com.alibaba.druid.filter.stat.StatFilterContextListenerAdapter;
 import com.alibaba.druid.support.spring.stat.SpringMethodInfo;
@@ -13,7 +12,12 @@ import com.alibaba.druid.support.spring.stat.SpringMethodStat;
 import com.alibaba.druid.support.spring.stat.SpringStat;
 import com.alibaba.druid.support.spring.stat.SpringStatManager;
 
-public class DruidStatFilter extends MergeStatFilter implements AopFilter {
+/**
+ * com.alibaba.druid.support.spring.stat.DruidStatInterceptor
+ * 
+ * @author 明伟
+ */
+public class DruidStatFilter implements AopFilter {
     public static final String PROP_NAME_PORFILE = "druid.profile";
     private static SpringStat springStat = new SpringStat();
 
@@ -30,6 +34,7 @@ public class DruidStatFilter extends MergeStatFilter implements AopFilter {
     }
 
     public void doFilter(AopChain chain) {
+        System.err.println("DruidStatFilter.doFilter() --> " + chain.getTarget().getClass() + "." + chain.getMethod().getName() + "()");
         SpringMethodStat lastMethodStat = SpringMethodStat.current();
 
         SpringMethodInfo methodInfo = getMethodInfo(chain);
@@ -37,11 +42,13 @@ public class DruidStatFilter extends MergeStatFilter implements AopFilter {
         SpringMethodStat methodStat = springStat.getMethodStat(methodInfo, true);
 
         if (methodStat != null) {
+            System.err.println("methodStat.beforeInvoke();");
             methodStat.beforeInvoke();
         }
         long startNanos = System.nanoTime();
         Throwable error = null;
         try {
+            System.err.println("chain.doFilter();");
             chain.doFilter();
         } catch (Throwable e) {
             throw new RuntimeException(e + " ", e);
@@ -49,6 +56,7 @@ public class DruidStatFilter extends MergeStatFilter implements AopFilter {
             long endNanos = System.nanoTime();
             long nanos = endNanos - startNanos;
             if (methodStat != null) {
+                System.err.println("methodStat.afterInvoke(error, nanos);");
                 methodStat.afterInvoke(error, nanos);
             }
             SpringMethodStat.setCurrent(lastMethodStat);
