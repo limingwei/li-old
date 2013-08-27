@@ -20,34 +20,30 @@ public class StatAopFilter implements AopFilter {
 
     public StatAopFilter() throws Exception {
         SpringStatManager.getInstance().addSpringStat(springStat);
-        StatFilterContext.getInstance().addContextListener(new AopMethodContextListener());
+        StatFilterContext.getInstance().addContextListener(new MethodContextListener());
     }
 
     public void doFilter(AopChain chain) {
         SpringMethodStat lastMethodStat = SpringMethodStat.current();
         SpringMethodInfo methodInfo = new SpringMethodInfo(chain.getMethod().getDeclaringClass()/* chain.getTarget().getClass() */, chain.getMethod());
-        SpringMethodStat methodStat = springStat.getMethodStat(methodInfo, true);
-        if (methodStat != null) {
-            methodStat.beforeInvoke();
-        }
+        SpringMethodStat methodStat = springStat.getMethodStat(methodInfo, true);// ##
         Throwable error = null;
+        methodStat.beforeInvoke();// ##
         long startNanos = System.nanoTime();
         try {
-            chain.doFilter();
+            chain.doFilter();// ##
         } catch (Throwable e) {
-            throw new RuntimeException(e + " ", error = e);
+            throw new RuntimeException(e + " ", error = e);// ##
         } finally {
-            if (methodStat != null) {
-                methodStat.afterInvoke(error, System.nanoTime() - startNanos);
-            }
-            SpringMethodStat.setCurrent(lastMethodStat);
+            methodStat.afterInvoke(error, System.nanoTime() - startNanos);// ##
+            SpringMethodStat.setCurrent(lastMethodStat);// ##
         }
     }
 
     /**
-     * AopMethodContextListener
+     * MethodContextListener
      */
-    private class AopMethodContextListener extends StatFilterContextListenerAdapter {
+    private class MethodContextListener extends StatFilterContextListenerAdapter {
         public void addUpdateCount(int updateCount) {
             SpringMethodStat springMethodStat = SpringMethodStat.current();
             if (springMethodStat != null)

@@ -37,7 +37,7 @@ public abstract class Log {
      * 第一句log
      */
     static {
-        init("-- li's framework --").info("Fork me on https://github.com/limingwei/li, bugs on https://github.com/limingwei/li/issues");
+        init("-- li's framework --").info("Fork me on https://github.com/limingwei/li  bugs on https://github.com/limingwei/li/issues");
     }
 
     /**
