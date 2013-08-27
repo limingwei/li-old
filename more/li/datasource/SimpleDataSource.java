@@ -174,7 +174,7 @@ public class SimpleDataSource implements DataSource {
 
     public PrintWriter getLogWriter() throws SQLException {
         if (null != this.dataSource) {
-            return dataSource.getLogWriter();
+            return this.dataSource.getLogWriter();
         }
         return this.logWriter;
     }
@@ -189,7 +189,7 @@ public class SimpleDataSource implements DataSource {
 
     public int getLoginTimeout() throws SQLException {
         if (null != this.dataSource) {
-            return this.getLoginTimeout();
+            return this.dataSource.getLoginTimeout();
         }
         return DriverManager.getLoginTimeout();
     }
