@@ -7,7 +7,7 @@
 <@li.table cols=4 list=list;each>
 	<@li.tr title="ID">${each.id}</@li.tr>
 	<@li.tr title="名称">${each.name }</@li.tr>
-	<@li.tr title="描述">${each.description}</@li.tr>
+	<@li.tr title="描述">${each.description!}</@li.tr>
 	<@li.tr title="权限">
 		<#assign max=6>
 		<#if each.resources?size lt max>
