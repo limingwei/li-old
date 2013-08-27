@@ -10,13 +10,13 @@ import li.util.Verify;
 import com.alibaba.druid.wall.WallConfig;
 import com.alibaba.druid.wall.WallFilter;
 
-public class DruidWallFilter extends WallFilter {
+public class WallDruidFilter extends WallFilter {
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
     private static final List<String> EMPTY_STRING_LIST = new ArrayList<String>(0);
 
     private WallConfig wallConfig;
 
-    public DruidWallFilter() {
+    public WallDruidFilter() {
         wallConfig = new WallConfig();
         this.setConfig(wallConfig);
     }

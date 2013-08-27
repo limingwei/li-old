@@ -18,9 +18,9 @@ public class DruidAdapter extends DruidDataSource {
         String[] filterArray = (Verify.isEmpty(filters)) ? new String[0] : filters.split("\\,");
         for (String item : filterArray) {
             if ("wall".equals(item)) {
-                DruidWallFilter wallFilter = Ioc.get(DruidWallFilter.class);
+                WallDruidFilter wallFilter = Ioc.get(WallDruidFilter.class);
                 if (null == wallFilter) {
-                    wallFilter = new DruidWallFilter();
+                    wallFilter = new WallDruidFilter();
                 }
                 super.getProxyFilters().add(wallFilter);
             } else {

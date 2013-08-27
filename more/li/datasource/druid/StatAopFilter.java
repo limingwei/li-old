@@ -17,14 +17,14 @@ import com.alibaba.druid.support.spring.stat.SpringStatManager;
  * 
  * @author 明伟
  */
-public class DruidStatFilter implements AopFilter {
+public class StatAopFilter implements AopFilter {
     private static SpringStat springStat = new SpringStat();
 
     private SpringMethodContextListener statContextlistener = new SpringMethodContextListener();
 
     public static final String PROP_NAME_PORFILE = "druid.profile";
 
-    public DruidStatFilter() throws Exception {
+    public StatAopFilter() throws Exception {
         SpringStatManager.getInstance().addSpringStat(springStat);
         StatFilterContext.getInstance().addContextListener(this.statContextlistener);
     }

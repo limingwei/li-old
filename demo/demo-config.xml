@@ -14,10 +14,10 @@
 			<property name="druidFilters" value="wall,stat,log4j" />
 		</bean>
 
-		<bean name="druidStatFilter" class="li.datasource.druid.DruidStatFilter"></bean>
+		<bean name="statAopFilter" class="li.datasource.druid.StatAopFilter" />
 	</beans>
 	<aops>
 		<aop class="li.aop.*" method=".*" filter="log,trans" />
-		<aop class="li.people[.](action|record)[.].*" method=".*(count|delete|find|insert|query|list|save|update).*" filter="druidStatFilter" />
+		<aop class="li.people[.](action|record)[.].*" method=".*(count|delete|find|insert|query|list|save|update).*" filter="statAopFilter" />
 	</aops>
 </config>
