@@ -11,13 +11,13 @@
 			<property name="url" value="${db.url}" />
 			<property name="username" value="${db.username}" />
 			<property name="password" value="${db.password}" />
-			<property name="druidFilters" value="wall,stat,log4j" />
+			<property name="druidFilters" value="wall,mergeStat,log4j" />
 		</bean>
 
 		<bean name="statAopFilter" class="li.datasource.druid.StatAopFilter" />
 	</beans>
 	<aops>
 		<aop class="li.aop.*" method=".*" filter="log,trans" />
-		<aop class="li.people[.](action|record)[.].*" method=".*(count|delete|find|insert|query|list|save|update).*" filter="statAopFilter" />
+		<aop class="li.people[.](action|record)[.].*" method=".*(count|delete|find|insert|list|save|update).*" filter="statAopFilter" />
 	</aops>
 </config>
