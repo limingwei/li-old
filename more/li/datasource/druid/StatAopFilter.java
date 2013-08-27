@@ -1,7 +1,5 @@
 package li.datasource.druid;
 
-import java.lang.reflect.Method;
-
 import li.aop.AopChain;
 import li.aop.AopFilter;
 
@@ -20,41 +18,30 @@ import com.alibaba.druid.support.spring.stat.SpringStatManager;
 public class StatAopFilter implements AopFilter {
     private static SpringStat springStat = new SpringStat();
 
-    private SpringMethodContextListener statContextlistener = new SpringMethodContextListener();
-
-    public static final String PROP_NAME_PORFILE = "druid.profile";
-
     public StatAopFilter() throws Exception {
         SpringStatManager.getInstance().addSpringStat(springStat);
-        StatFilterContext.getInstance().addContextListener(this.statContextlistener);
+        StatFilterContext.getInstance().addContextListener(new SpringMethodContextListener());
     }
 
     public void doFilter(AopChain chain) {
         SpringMethodStat lastMethodStat = SpringMethodStat.current();
-        SpringMethodInfo methodInfo = getMethodInfo(chain);
-        SpringMethodStat methodStat = springStat.getMethodStat(methodInfo, true);
+        SpringMethodStat methodStat = springStat.getMethodStat(new SpringMethodInfo(chain.getMethod().getDeclaringClass(), chain.getMethod()), true);
         if (methodStat != null) {
             methodStat.beforeInvoke();
         }
-        long startNanos = System.nanoTime();
         Throwable error = null;
+        long startNanos = System.nanoTime();
         try {
             chain.doFilter();
         } catch (Throwable e) {
-            throw new RuntimeException(e + " ", e);
+            throw new RuntimeException(e + " ", error = e);
         } finally {
-            long endNanos = System.nanoTime();
-            long nanos = endNanos - startNanos;
+            long nanos = System.nanoTime() - startNanos;
             if (methodStat != null) {
                 methodStat.afterInvoke(error, nanos);
             }
             SpringMethodStat.setCurrent(lastMethodStat);
         }
-    }
-
-    public SpringMethodInfo getMethodInfo(AopChain chain) {
-        Method method = chain.getMethod();
-        return new SpringMethodInfo(method.getDeclaringClass(), method);
     }
 
     private class SpringMethodContextListener extends StatFilterContextListenerAdapter {
