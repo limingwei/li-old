@@ -1,9 +1,9 @@
 package li.mvc;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -31,9 +31,13 @@ import li.util.Verify;
  * @version 0.1.3 (2012-05-08)
  */
 public class ActionFilter implements Filter {
-    private static final String ENCODING = Files.load("config.properties").getProperty("servlet.encoding", "UTF-8");// Servlet编码,可在配置文件中配置
+    private static final Properties PROPERTIES = Files.load("config.properties");
 
-    private static final String USE_I18N = Files.load("config.properties").getProperty("servlet.i18n", "false");// 是否使用国际化
+    private static final String DEV_MODE = PROPERTIES.getProperty("devMode", "false");// 是否开发模式,开发模式才会将异常信息展示到页面
+
+    private static final String ENCODING = PROPERTIES.getProperty("servlet.encoding", "UTF-8");// Servlet编码,可在配置文件中配置
+
+    private static final String USE_I18N = PROPERTIES.getProperty("servlet.i18n", "false");// 是否使用国际化
 
     Log log = Log.init();
 
@@ -72,28 +76,37 @@ public class ActionFilter implements Filter {
     /**
      * 返回值表示是否有Action受理此请求
      */
-    Boolean _service(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-        request.setCharacterEncoding(ENCODING);// 设置编码
-        response.setCharacterEncoding(ENCODING);
-
-        if ("true".equals(USE_I18N.trim().toLowerCase())) {
-            String lang = request.getParameter("lang");// 根据Parameter参数设置国际化,存到session
-            if (!Verify.isEmpty(lang)) {
-                ((HttpServletRequest) request).getSession().setAttribute("lang", Files.load(lang));
-                log.info("Setting language for ?", lang);
+    Boolean _service(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            request.setCharacterEncoding(ENCODING);// 设置编码
+            response.setCharacterEncoding(ENCODING);
+            if ("true".equals(USE_I18N.trim().toLowerCase())) {
+                String lang = request.getParameter("lang");// 根据Parameter参数设置国际化,存到session
+                if (!Verify.isEmpty(lang)) {
+                    ((HttpServletRequest) request).getSession().setAttribute("lang", Files.load(lang));
+                    log.info("Setting language for ?", lang);
+                }
             }
-        }
-        // 请求路径路由
-        Action action = ActionContext.getInstance().getAction(((HttpServletRequest) request).getServletPath(), ((HttpServletRequest) request).getMethod());
-        if (null != action) {
-            Context.init(request, response, action);// 初始化Context
-            log.info("ACTION FOUND: path=\"?\",method=\"?\" action=?()", Context.getRequest().getServletPath(), Context.getRequest().getMethod(), action.actionMethod);
+            // 请求路径路由
+            Action action = ActionContext.getInstance().getAction(((HttpServletRequest) request).getServletPath(), ((HttpServletRequest) request).getMethod());
+            if (null != action) {
+                Context.init(request, response, action);// 初始化Context
+                log.info("ACTION FOUND: path=\"?\",method=\"?\" action=?()", Context.getRequest().getServletPath(), Context.getRequest().getMethod(), action.actionMethod);
 
-            Object result = Reflect.invoke(action.actionInstance, action.actionMethod, this._args());// 执行Action方法
-            if (result instanceof String && !result.equals("~!@#DONE")) {// 返回值为String且未调用视图方法
-                Context.view((String) result);// 则Context.view返回视图
+                Object result = Reflect.invoke(action.actionInstance, action.actionMethod, this._args());// 执行Action方法
+                if (result instanceof String && !result.equals("~!@#DONE")) {// 返回值为String且未调用视图方法
+                    Context.view((String) result);// 则Context.view返回视图
+                }
+                return true;
             }
-            return true;
+        } catch (Throwable e) {
+            if ("true".equalsIgnoreCase(DEV_MODE)) {
+                throw new RuntimeException(e + " ", e);
+            } else {
+                response.setStatus(500);
+                log.error(e.getMessage());
+                e.printStackTrace();
+            }
         }
         return false;
     }

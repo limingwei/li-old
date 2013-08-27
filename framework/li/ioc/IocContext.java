@@ -55,7 +55,7 @@ public class IocContext {
             try {
                 IOC_CONTEXT.aopEnhancer = new AopEnhancer();
             } catch (Throwable e) {
-                log.warn("Aop is not able , needs http://t.cn/z8h0NZ9 " + e);
+                log.warn("Aop is not able , needs cglib-nodep-2.2.3.jar ( http://t.cn/z8h0NZ9 ) " + e);
             }
 
             // STEP-1-使用XmlIocLoader和AnnotationIocLoader添加Beans

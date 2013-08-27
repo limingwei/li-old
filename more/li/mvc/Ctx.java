@@ -57,7 +57,7 @@ public class Ctx extends Context {
         try {
             new BeetlView().render(path, getResponse(), getAttributes());
         } catch (Throwable e) {
-            error(e);
+            throw new RuntimeException(e + " ", e);
         }
         return "~!@#DONE";
     }
@@ -69,7 +69,7 @@ public class Ctx extends Context {
         try {
             new VelocityView().render(path, getResponse(), getAttributes());
         } catch (Throwable e) {
-            error(e);
+            throw new RuntimeException(e + " ", e);
         }
         return "~!@#DONE";
     }
@@ -81,7 +81,7 @@ public class Ctx extends Context {
         try {
             new HttlView().render(path, getResponse(), getAttributes());
         } catch (Exception e) {
-            error(e);
+            throw new RuntimeException(e + " ", e);
         }
         return "~!@#DONE";
     }
@@ -100,7 +100,7 @@ public class Ctx extends Context {
             }
             log.info("upload success");
         } catch (Throwable e) {
-            error(e);
+            throw new RuntimeException(e + " ", e);
         }
     }
 

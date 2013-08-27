@@ -1,6 +1,5 @@
 package li.mvc;
 
-import java.io.Writer;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +21,8 @@ import li.util.Files;
 import li.util.Log;
 import li.util.Reflect;
 import li.util.Verify;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 
 /**
  * 访问HTTP请求上下文的工具类,使用ThreadLocal
@@ -31,15 +32,17 @@ import li.util.Verify;
  * @see li.mvc.AbstractAction
  */
 public class Context {
-    private static final Log log = Log.init();
+    private static final Properties PROPERTIES = Files.load("config.properties");
 
-    static final String VIEW_TYPE = Files.load("config.properties").getProperty("view.type", "forward");
-    static final String VIEW_PREFIX = Files.load("config.properties").getProperty("view.prefix", "");
-    static final String VIEW_SUFFIX = Files.load("config.properties").getProperty("view.suffix", "");
+    static final String VIEW_TYPE = PROPERTIES.getProperty("view.type", "forward");
+    static final String VIEW_PREFIX = PROPERTIES.getProperty("view.prefix", "");
+    static final String VIEW_SUFFIX = PROPERTIES.getProperty("view.suffix", "");
 
     private static final ThreadLocal<HttpServletRequest> REQUEST = new ThreadLocal<HttpServletRequest>();
     private static final ThreadLocal<HttpServletResponse> RESPONSE = new ThreadLocal<HttpServletResponse>();
     private static final ThreadLocal<Action> ACTION = new ThreadLocal<Action>();
+
+    private static final Log log = Log.init();
 
     /**
      * 初始化方法,会将request,response,action分别存入ThreadLocal
@@ -48,15 +51,6 @@ public class Context {
         REQUEST.set((HttpServletRequest) request);
         RESPONSE.set((HttpServletResponse) response);
         ACTION.set(action);
-    }
-
-    /**
-     * 视图层异常处理,为了安全,页面上没有异常信息
-     */
-    protected static void error(Throwable e) {
-        getResponse().setStatus(500);
-        log.error(e.getMessage());
-        e.printStackTrace();
     }
 
     /**
@@ -203,7 +197,7 @@ public class Context {
         } else if ("write".equals(viewType) || "wt".equals(viewType)) {// 向页面write数据
             write(viewPath);
         } else {
-            error(new RuntimeException("view error, not supported viewtype: " + path));
+            throw new RuntimeException("view error, not supported viewtype: " + path);
         }
         return "~!@#DONE";
     }
@@ -216,7 +210,7 @@ public class Context {
         try {
             getResponse().sendRedirect(path);
         } catch (Exception e) {
-            error(e);
+            throw new RuntimeException(e + " ", e);
         }
         return "~!@#DONE";
     }
@@ -229,7 +223,7 @@ public class Context {
         try {
             getRequest().getRequestDispatcher(path).forward(getRequest(), getResponse());
         } catch (Exception e) {
-            error(e);
+            throw new RuntimeException(e + " ", e);
         }
         return "~!@#DONE";
     }
@@ -239,22 +233,22 @@ public class Context {
      */
     public static String freemarker(String path) {
         try {
-            Object configuration = Log.get("~!@#FREEMARKER_CONFIGURATION"); // 从缓存中查找freemarkerConfiguration
+            Configuration configuration = (Configuration) Log.get("~!@#FREEMARKER_CONFIGURATION"); // 从缓存中查找freemarkerConfiguration
             if (null == configuration) { // 缓存中没有
                 log.info("freemarker initializing ..");
-                configuration = Reflect.born("freemarker.template.Configuration"); // 初始化freemarkerConfiguration
-                Reflect.invoke(configuration, "setServletContextForTemplateLoading", new Class[] { Object.class, String.class }, new Object[] { getServletContext(), "/" });// 设置模板加载跟路径
+                configuration = new Configuration();// 初始化freemarkerConfiguration
+                configuration.setServletContextForTemplateLoading(getServletContext(), "/");// 设置模板加载跟路径
                 Properties properties = new Properties();// 默认的参数设置
                 properties.put("default_encoding", "UTF-8");
                 properties.putAll(Files.load("freemarker.properties"));// freemarker.properties中的参数设置
-                Reflect.invoke(configuration, "setSettings", properties);// 加载自定义配置
+                configuration.setSettings(properties);// 加载自定义配置
                 Log.put("~!@#FREEMARKER_CONFIGURATION", configuration); // 缓存freemarkerConfiguration
             }
-            Object template = Reflect.invoke(configuration, "getTemplate", path);// 加载模板
-            Reflect.invoke(template, "process", new Class[] { Object.class, Writer.class }, new Object[] { getAttributes(), getResponse().getWriter() });
+            Template template = configuration.getTemplate(path);// 加载模板
+            template.process(getAttributes(), getResponse().getWriter());
             log.debug("freemarker to: ?", path);
         } catch (Throwable e) {
-            error(e);
+            throw new RuntimeException(e + " ", e);
         }
         return "~!@#DONE";
     }
@@ -276,7 +270,7 @@ public class Context {
             try {
                 getResponse().getWriter().write(contentStr);
             } catch (Exception e) {
-                error(e);
+                throw new RuntimeException(e + " ", e);
             }
         }
     }
