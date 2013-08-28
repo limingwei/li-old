@@ -1,7 +1,6 @@
 package li.mvc;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -26,7 +25,7 @@ public class ActionServlet extends HttpServlet {
     /**
      * 使用了ActionFilter的实现代码
      */
-    private ActionFilter actionFilter;
+    protected ActionFilter actionFilter;
 
     /**
      * 初始化
@@ -45,18 +44,11 @@ public class ActionServlet extends HttpServlet {
     }
 
     /**
-     * 服务
+     * Servlet服务
      */
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (!this._service(request, response)) {
-            log.info("ACTION NOT FOUND: path=\"?\",method=\"?\"", ((HttpServletRequest) request).getServletPath(), ((HttpServletRequest) request).getMethod());
+        if (!this.actionFilter._service(request, response)) {
+            response.sendError(404, request.getServletPath() + " not found");
         }
-    }
-
-    /**
-     * 受理请求
-     */
-    Boolean _service(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-        return this.actionFilter._service(request, response);
     }
 }

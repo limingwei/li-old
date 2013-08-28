@@ -68,7 +68,6 @@ public class ActionFilter implements Filter {
      */
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if (!this._service((HttpServletRequest) request, (HttpServletResponse) response)) {
-            log.info("ACTION NOT FOUND: path=\"?\",method=\"?\"", ((HttpServletRequest) request).getServletPath(), ((HttpServletRequest) request).getMethod());
             chain.doFilter(request, response);
         }
     }
@@ -78,18 +77,19 @@ public class ActionFilter implements Filter {
      */
     Boolean _service(HttpServletRequest request, HttpServletResponse response) {
         try {
-            request.setCharacterEncoding(ENCODING);// 设置编码
-            response.setCharacterEncoding(ENCODING);
-            if ("true".equals(USE_I18N.trim().toLowerCase())) {
-                String lang = request.getParameter("lang");// 根据Parameter参数设置国际化,存到session
-                if (!Verify.isEmpty(lang)) {
-                    ((HttpServletRequest) request).getSession().setAttribute("lang", Files.load(lang));
-                    log.info("Setting language for ?", lang);
-                }
-            }
             // 请求路径路由
             Action action = ActionContext.getInstance().getAction(((HttpServletRequest) request).getServletPath(), ((HttpServletRequest) request).getMethod());
             if (null != action) {
+                request.setCharacterEncoding(ENCODING);// 设置编码
+                response.setCharacterEncoding(ENCODING);
+                if ("true".equalsIgnoreCase(USE_I18N)) {
+                    String lang = request.getParameter("lang");// 根据Parameter参数设置国际化,存到session
+                    if (!Verify.isEmpty(lang)) {
+                        ((HttpServletRequest) request).getSession().setAttribute("lang", Files.load(lang));
+                        log.info("Setting language for ?", lang);
+                    }
+                }
+
                 Context.init(request, response, action);// 初始化Context
                 log.info("ACTION FOUND: path=\"?\",method=\"?\" action=?()", Context.getRequest().getServletPath(), Context.getRequest().getMethod(), action.actionMethod);
 
@@ -99,6 +99,8 @@ public class ActionFilter implements Filter {
                 }
                 return true;
             }
+            log.info("ACTION NOT FOUND: path=\"?\",method=\"?\"", ((HttpServletRequest) request).getServletPath(), ((HttpServletRequest) request).getMethod());
+            return false;
         } catch (Throwable e) {
             if ("true".equalsIgnoreCase(DEV_MODE)) {
                 throw new RuntimeException(e + " ", e);
@@ -106,9 +108,9 @@ public class ActionFilter implements Filter {
                 response.setStatus(500);
                 log.error(e.getMessage());
                 e.printStackTrace();
+                return false;
             }
         }
-        return false;
     }
 
     /**

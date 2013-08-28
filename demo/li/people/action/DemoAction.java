@@ -28,6 +28,26 @@ public class DemoAction extends AbstractAction {
     @Inject
     Account accountDao;
 
+    @At("1.do1")
+    public void do1_1() {
+        write("1.do1 sucess");
+    }
+
+    @At("1.do2")
+    public void do2_1() {
+        write("1.do2 sucess");
+    }
+
+    @At("1.do3")
+    public void do3_1() {
+        write("1.do3 sucess");
+    }
+
+    @At("1.do4")
+    public void do4_1() {
+        write("1.do4 sucess");
+    }
+
     @At("injar.htm")
     public void classInJar() throws Exception {
         String path = getClass().getResource("/").toURI().getPath();

@@ -29,8 +29,7 @@ public class ActionDispatcher extends ActionServlet implements Filter {
      * 受理请求
      */
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (!super._service((HttpServletRequest) request, (HttpServletResponse) response)) {
-            log.info("ACTION NOT FOUND: path=\"?\",method=\"?\"", ((HttpServletRequest) request).getServletPath(), ((HttpServletRequest) request).getMethod());
+        if (!actionFilter._service((HttpServletRequest) request, (HttpServletResponse) response)) {
             chain.doFilter(request, response);
         }
     }
