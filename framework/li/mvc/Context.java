@@ -238,10 +238,13 @@ public class Context {
                 log.info("freemarker initializing ..");
                 configuration = new Configuration();// 初始化freemarkerConfiguration
                 configuration.setServletContextForTemplateLoading(getServletContext(), "/");// 设置模板加载跟路径
-                Properties properties = new Properties();// 默认的参数设置
-                properties.put("default_encoding", "UTF-8");
-                properties.putAll(Files.load("freemarker.properties"));// freemarker.properties中的参数设置
-                configuration.setSettings(properties);// 加载自定义配置
+                configuration.setSettings(new Properties() {
+                    private static final long serialVersionUID = 1L;
+                    {
+                        put("default_encoding", "UTF-8");// 默认参数
+                        putAll(Files.load("freemarker.properties"));// freemarker.properties中的参数设置
+                    }
+                });// 加载自定义配置
                 Log.put("~!@#FREEMARKER_CONFIGURATION", configuration); // 缓存freemarkerConfiguration
             }
             Template template = configuration.getTemplate(path);// 加载模板
