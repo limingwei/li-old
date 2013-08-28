@@ -56,26 +56,26 @@ public class Context {
     /**
      * 从request,sesstion,servletContext中取出Attributes转为Map
      */
-    public static Map getAttributes() {
-        Map map = new HashMap();
+    public static Map<String, Object> getAttributes() {
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("application", getServletContext());
         map.put("servletContext", getServletContext());
         map.put("request", getRequest());
         map.put("response", getResponse());
         map.put("session", getSession());
-        Enumeration<String> servletContextEnumeration = getServletContext().getAttributeNames();
+        Enumeration<?> servletContextEnumeration = getServletContext().getAttributeNames();
         while (servletContextEnumeration.hasMoreElements()) {// 1. 存入servletContext的值
-            String name = servletContextEnumeration.nextElement();
+            String name = (String) servletContextEnumeration.nextElement();
             map.put(name, getServletContext().getAttribute(name));
         }
-        Enumeration<String> sessionEnumeration = getSession().getAttributeNames();
+        Enumeration<?> sessionEnumeration = getSession().getAttributeNames();
         while (sessionEnumeration.hasMoreElements()) {// 2. 存入session的值
-            String name = sessionEnumeration.nextElement();
+            String name = (String) sessionEnumeration.nextElement();
             map.put(name, getSession().getAttribute(name));
         }
-        Enumeration<String> requestEnumeration = getRequest().getAttributeNames();
+        Enumeration<?> requestEnumeration = getRequest().getAttributeNames();
         while (requestEnumeration.hasMoreElements()) {// 3. 存入request的值
-            String name = requestEnumeration.nextElement();
+            String name = (String) requestEnumeration.nextElement();
             map.put(name, getRequest().getAttribute(name));
         }
         return map;
@@ -120,7 +120,7 @@ public class Context {
      * 返回基本类型的数组参数
      */
     public static <T> T[] getArray(Class<T> type, String key) {
-        return Convert.toType(type, getRequest().getParameterValues(key));
+        return Convert.toType(type, (Object[]) getRequest().getParameterValues(key));
     }
 
     /**

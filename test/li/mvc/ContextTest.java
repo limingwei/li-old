@@ -21,6 +21,12 @@ public class ContextTest extends ActionTest {
     }
 
     @Test
+    public void getArray() {
+        request.setParameter("ids", new String[] { "1", "2", "3" });
+        System.out.println(Context.getArray(Integer.class, "ids"));
+    }
+
+    @Test
     public void getResponse() {
         assertNotNull(Context.getResponse());
     }
