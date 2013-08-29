@@ -122,7 +122,7 @@ public class AopEnhancer {
     private List<AopFilter> getXmlFilters(Object target, Method method) {
         List<AopFilter> filters = new ArrayList<AopFilter>();
         for (String[] role : xmlAopRules) {// 所有的规则
-            if (Verify.regex(target.getClass().getName(), role[0]) && Verify.regex(method.getName(), role[1])) {// 类名和方法名均匹配
+            if (Verify.regex(target.getClass().getName(), role[0]) && Verify.regex(method.getName(), role[1])) {// method.getDeclaringClass() or target.getClass()
                 String[] names = role[2].split(",");// 所有Aop切入类
                 for (String name : names) {
                     AopFilter filter = Ioc.get(name);// 通过Ioc得到AopFilter
