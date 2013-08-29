@@ -78,7 +78,7 @@ public class AbstractDao<T, ID extends Serializable> {
     /**
      * 通过泛型参数得到modelType
      * 
-     * @see li.util.Reflect#actualType(Class, Integer)
+     * @see li.util.Reflect#actualTypes(Class)
      */
     public Class<T> getType() {
         if (null == this.modelType) {

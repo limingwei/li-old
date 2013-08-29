@@ -56,7 +56,7 @@ public class Ioc {
     /**
      * 若类型匹配,且泛型参数的实际类型为genericType,则返回他的实例
      * 
-     * @param genericType Bean泛型类型
+     * @param genericTypes Bean泛型类型
      */
     public static <T> T get(Class<T> type, Type... genericTypes) {
         for (Bean bean : IocContext.getInstance().getBeans()) {

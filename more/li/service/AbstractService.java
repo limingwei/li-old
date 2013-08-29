@@ -25,7 +25,7 @@ public abstract class AbstractService<T, ID extends Serializable> implements IBa
     /**
      * 你可以覆盖这个方法,如果不的话,框架会寻找 一个继承AbstractDao,泛型类型为 T的Bean
      * 
-     * @see li.ioc.Ioc#get(Class, Type)
+     * @see li.ioc.Ioc#get(Class, Type...)
      */
     protected AbstractDao<T, ID> getDao() {
         if (null == this.dao) {
