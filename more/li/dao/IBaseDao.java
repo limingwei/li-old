@@ -1,5 +1,6 @@
 package li.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
  * @author li (limingwei@mail.com)
  * @version 0.1.2 (2012-06-26)
  */
-public interface IBaseDao<T, ID> {
+public interface IBaseDao<T, ID extends Serializable> {
     /**
      * 删除
      */

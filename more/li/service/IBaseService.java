@@ -1,5 +1,6 @@
 package li.service;
 
+import java.io.Serializable;
 import java.util.List;
 
 import li.dao.Page;
@@ -10,7 +11,7 @@ import li.dao.Page;
  * @author li (limingwei@mail.com)
  * @version 0.1.2 (2012-06-26)
  */
-public interface IBaseService<T, ID> {
+public interface IBaseService<T, ID extends Serializable> {
     /**
      * 删除
      */
