@@ -10,16 +10,16 @@ import li.dao.Page;
  * @author li (limingwei@mail.com)
  * @version 0.1.2 (2012-06-26)
  */
-public interface IBaseService<T> {
+public interface IBaseService<T, ID> {
     /**
      * 删除
      */
-    public Boolean delete(Number id);
+    public Boolean delete(ID id);
 
     /**
      * 查找
      */
-    public T find(Number id);
+    public T find(ID id);
 
     /**
      * 列表

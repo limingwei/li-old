@@ -15,18 +15,18 @@ import li.util.Reflect;
  * @version 0.1.3 (2012-06-26)
  */
 
-public abstract class AbstractService<T> implements IBaseService<T> {
+public abstract class AbstractService<T, ID> implements IBaseService<T, ID> {
     /**
      * Dao对象
      */
-    private AbstractDao<T> dao;
+    private AbstractDao<T, ID> dao;
 
     /**
      * 你可以覆盖这个方法,如果不的话,框架会寻找 一个继承AbstractDao,泛型类型为 T的Bean
      * 
      * @see li.ioc.Ioc#get(Class, Type)
      */
-    protected AbstractDao<T> getDao() {
+    protected AbstractDao<T, ID> getDao() {
         if (null == this.dao) {
             this.dao = Ioc.get(AbstractDao.class, Reflect.actualType(this.getClass(), 0));
         }
@@ -36,14 +36,14 @@ public abstract class AbstractService<T> implements IBaseService<T> {
     /**
      * 删除
      */
-    public Boolean delete(Number id) {
+    public Boolean delete(ID id) {
         return getDao().delete(id);
     }
 
     /**
      * 查找
      */
-    public T find(Number id) {
+    public T find(ID id) {
         return getDao().find(id);
     }
 

@@ -6,6 +6,6 @@ import li.dao.Record;
 
 @Bean
 @Table("t_app")
-public class App extends Record<App> {
+public class App extends Record<App, Integer> {
     private static final long serialVersionUID = -1929804842749760L;
 }

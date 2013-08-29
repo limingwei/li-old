@@ -15,8 +15,10 @@ import li.util.Convert;
  * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-06-25)
  */
-public class Record<T extends Record> extends AbstractDao<T> implements Map, Serializable {
-    private Map fields = new HashMap();// 存储对象属性值的Map
+public class Record<T extends Record<?, ?>, ID> extends AbstractDao<T, ID> implements Map<Object, Object>, Serializable {
+    private static final long serialVersionUID = -488281210680300817L;
+
+    private Map<Object, Object> fields = new HashMap<Object, Object>();// 存储对象属性值的Map
 
     /**
      * 重写AbstractDao中的list方法,使Record的find和 list方法 支持多表查询
@@ -94,7 +96,7 @@ public class Record<T extends Record> extends AbstractDao<T> implements Map, Ser
     /**
      * 批量设置属性值
      */
-    public void putAll(Map map) {
+    public void putAll(Map<? extends Object, ? extends Object> map) {
         fields.putAll(map);
     }
 
@@ -108,21 +110,21 @@ public class Record<T extends Record> extends AbstractDao<T> implements Map, Ser
     /**
      * 返回属性的Set集合
      */
-    public Set keySet() {
+    public Set<Object> keySet() {
         return fields.keySet();
     }
 
     /**
      * 返回属性值的Collection集合
      */
-    public Collection values() {
+    public Collection<Object> values() {
         return fields.values();
     }
 
     /**
      * 返回属性值的Set集合
      */
-    public Set entrySet() {
+    public Set<Entry<Object, Object>> entrySet() {
         return fields.entrySet();
     }
 

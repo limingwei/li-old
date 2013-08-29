@@ -8,7 +8,7 @@ import li.dao.AbstractDao;
 import li.dao.QueryBuilder;
 
 @Bean
-public class _UserDao extends AbstractDao<_User> {
+public class _UserDao extends AbstractDao<_User, Integer> {
     @Inject("li2")
     DataSource dataSource;
 

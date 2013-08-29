@@ -13,7 +13,7 @@ import li.util.Verify;
 
 @Bean
 @Table("t_role")
-public class Role extends Record<Role> implements Const {
+public class Role extends Record<Role, Integer> implements Const {
     private static final long serialVersionUID = -3309607180685180059L;
 
     @Inject
@@ -46,7 +46,7 @@ public class Role extends Record<Role> implements Const {
     }
 
     @Trans
-    public Boolean delete(Number id) {
+    public Boolean delete(Integer id) {
         return super.delete(id) | -1 < roleResourceDao.deleteByRoleId((Integer) id);
     }
 }

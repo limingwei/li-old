@@ -19,7 +19,7 @@ import li.util.Verify;
  * @author li (limingwei@mail.com)
  * @version 0.1.7 (2012-06-26)
  */
-public class AbstractDao<T> {
+public class AbstractDao<T, ID> {
     private static final Log log = Log.init();
 
     private Class<T> modelType;// 泛型参数的实际类型,即是数据对象类型
@@ -164,7 +164,7 @@ public class AbstractDao<T> {
      * 
      * @see li.dao.AbstractDao#delete(String, Object...)
      */
-    public Boolean delete(Number id) {
+    public Boolean delete(ID id) {
         return 0 < delete(getQueryBuilder().deleteById(id));
     }
 
@@ -185,7 +185,7 @@ public class AbstractDao<T> {
      * 
      * @see li.dao.AbstractDao#find(String, Object...)
      */
-    public T find(Number id) {
+    public T find(ID id) {
         return find(getQueryBuilder().findById(id));
     }
 
@@ -233,7 +233,7 @@ public class AbstractDao<T> {
     /**
      * 执行SQL查询并将结果集封装成Record或其子类的List
      */
-    public List<Record<?>> query(Page page, String sql, Object... args) {
+    public List<Record<?, ?>> query(Page page, String sql, Object... args) {
         sql = getQueryBuilder().listBySql(page, sql, args);
 
         QueryRunner queryRunner = this.getQueryRunner(this.getConnection());
@@ -245,7 +245,7 @@ public class AbstractDao<T> {
         }
         Integer count = null == page ? Integer.MAX_VALUE : page.getPageSize();
         Class<?> type = Record.class.isAssignableFrom(getType()) ? getType() : Record.class;// Record类型或其子类
-        return (List<Record<?>>) modelBuilder.list(type, Field.list(resultSet), count, true);
+        return (List<Record<?, ?>>) modelBuilder.list(type, Field.list(resultSet), count, true);
     }
 
     /**

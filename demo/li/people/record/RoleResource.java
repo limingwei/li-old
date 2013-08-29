@@ -10,7 +10,7 @@ import li.people.Const;
 
 @Bean
 @Table("r_role_resource")
-public class RoleResource extends Record<RoleResource> implements Const {
+public class RoleResource extends Record<RoleResource, Integer> implements Const {
     private static final long serialVersionUID = 6598324284655928582L;
 
     public List<RoleResource> listByRoleId(Integer roleId) {

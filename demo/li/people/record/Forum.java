@@ -6,6 +6,6 @@ import li.dao.Record;
 
 @Bean
 @Table("t_forum")
-public class Forum extends Record<Forum> {
+public class Forum extends Record<Forum, Integer> {
     private static final long serialVersionUID = 4539272062271209117L;
 }

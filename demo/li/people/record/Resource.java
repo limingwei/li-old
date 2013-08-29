@@ -12,7 +12,7 @@ import li.util.Verify;
 
 @Bean
 @Table("t_resource")
-public class Resource extends Record<Resource> implements Const {
+public class Resource extends Record<Resource, Integer> implements Const {
     private static final long serialVersionUID = 7989017780707672816L;
 
     public List<Resource> list(Page page, String key) {

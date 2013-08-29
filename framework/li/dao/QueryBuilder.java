@@ -27,8 +27,8 @@ public class QueryBuilder {
     /**
      * 根据传入的ID,构建一个用于删除单条记录的SQL
      */
-    public String deleteById(Number id) {
-        return "DELETE FROM " + beanMeta.table + " WHERE " + beanMeta.getId().column + "=" + id;
+    public String deleteById(Object id) {
+        return "DELETE FROM " + beanMeta.table + " WHERE " + beanMeta.getId().column + "=" + wrap(id);
     }
 
     /**
@@ -75,8 +75,8 @@ public class QueryBuilder {
     /**
      * 使用传入的ID,构造一个用于查询一条记录的SQL
      */
-    public String findById(Number id) {
-        return "SELECT * FROM " + beanMeta.table + " WHERE " + beanMeta.getId().column + "=" + id;
+    public String findById(Object id) {
+        return "SELECT * FROM " + beanMeta.table + " WHERE " + beanMeta.getId().column + "=" + wrap(id);
     }
 
     /**
@@ -126,7 +126,7 @@ public class QueryBuilder {
             }
         }
         Object id = Reflect.get(object, beanMeta.getId().name);
-        return sql.substring(0, sql.length() - 1) + " WHERE " + beanMeta.getId().column + "=" + id;
+        return sql.substring(0, sql.length() - 1) + " WHERE " + beanMeta.getId().column + "=" + wrap(id);
     }
 
     /**
@@ -141,7 +141,7 @@ public class QueryBuilder {
             }
         }
         Object id = Reflect.get(object, beanMeta.getId().name);
-        return sql.substring(0, sql.length() - 1) + " WHERE " + beanMeta.getId().column + "=" + id;
+        return sql.substring(0, sql.length() - 1) + " WHERE " + beanMeta.getId().column + "=" + wrap(id);
     }
 
     /**

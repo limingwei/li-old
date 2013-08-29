@@ -12,7 +12,7 @@ import li.util.Log;
 
 @Bean
 @Table("t_account")
-public class _User extends Record<_User> {
+public class _User extends Record<_User, Integer> {
     private static final long serialVersionUID = -2274465783698819130L;
 
     private static final Log log = Log.init();

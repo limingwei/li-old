@@ -15,7 +15,7 @@ import li.dao.Record;
 
 @Bean
 @Table("t_account")
-public class _Account extends Record<_Account> {
+public class _Account extends Record<_Account, Integer> {
     private static final long serialVersionUID = -3592765768245992120L;
 
     @Inject("li2")

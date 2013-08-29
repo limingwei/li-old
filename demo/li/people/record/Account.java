@@ -11,7 +11,7 @@ import li.util.Verify;
 
 @Bean
 @Table("t_account")
-public class Account extends Record<Account> {
+public class Account extends Record<Account, Integer> {
     private static final long serialVersionUID = 3084398087892682872L;
 
     public List<Account> list(String key, Page page) {
