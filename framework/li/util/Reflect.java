@@ -223,7 +223,7 @@ public class Reflect {
                     }
                 }
             }
-        } else if (getFlag.equals(1)) {// 通过get方法
+        } else if (getFlag.equals(1)) {// 通过Getter方法
             result = getByGetter(target, fieldName);// 使用Getter方法
         } else if (getFlag.equals(2)) {// 通过Field
             result = getByField(target, fieldName);// 通过属性访问
@@ -285,7 +285,7 @@ public class Reflect {
             try {
                 setBySetter(target, fieldName, value);// 使用Setter方法
                 Log.put("~!@#SETTER#" + target.getClass() + "#" + fieldName, 1);
-            } catch (Exception e) {// 没有匹配的Getter方法
+            } catch (Exception e) {// 没有匹配的Setter方法
                 try {
                     setByField(target, fieldName, value);// 通过属性访问
                     Log.put("~!@#SETTER#" + target.getClass() + "#" + fieldName, 2);
@@ -299,12 +299,12 @@ public class Reflect {
                     }
                 }
             }
-        } else if (setFlag.equals(1)) {// 通过get方法
+        } else if (setFlag.equals(1)) {// 通过Setter方法
             setBySetter(target, fieldName, value);// 使用Setter方法
         } else if (setFlag.equals(2)) {// 通过Field
             setByField(target, fieldName, value);// 通过属性访问
         } else if (setFlag.equals(3)) {// 是Map
-            ((Map) target).put(fieldName, value);// 通过Record.set()方法,这里也没做类型转换
+            ((Map) target).put(fieldName, value);// 通过Map.put()方法,这里也没做类型转换
         }
     }
 
