@@ -1,6 +1,7 @@
 package li.ioc;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
 
 import li.model.Bean;
 import li.util.Reflect;
@@ -57,9 +58,9 @@ public class Ioc {
      * 
      * @param genericType Bean泛型类型
      */
-    public static <T> T get(Class<T> type, Type genericType) {
+    public static <T> T get(Class<T> type, Type... genericTypes) {
         for (Bean bean : IocContext.getInstance().getBeans()) {
-            if (type.isAssignableFrom(bean.type) && null != genericType && genericType.equals(Reflect.actualType(bean.type, 0))) {
+            if (type.isAssignableFrom(bean.type) && null != genericTypes && Arrays.equals(genericTypes, Reflect.actualTypes(bean.type))) {
                 return (T) bean.instance;
             }
         }

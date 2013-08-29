@@ -1,11 +1,7 @@
 package li.dao.test;
 
-import javax.sql.DataSource;
-
 import li.annotation.Bean;
-import li.annotation.Inject;
 import li.annotation.Table;
-import li.dao.QueryBuilder;
 import li.dao.Record;
 import li.dao.Trans;
 import li.util.Log;
@@ -16,12 +12,6 @@ public class _User extends Record<_User, Integer> {
     private static final long serialVersionUID = -2274465783698819130L;
 
     private static final Log log = Log.init();
-
-    @Inject("li")
-    DataSource dataSource;
-
-    @Inject
-    QueryBuilder queryBuilder;
 
     @li.annotation.Trans
     public void testMultipleTrans2() {

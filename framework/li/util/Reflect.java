@@ -359,16 +359,15 @@ public class Reflect {
     }
 
     /**
-     * 超类的第index个泛型参数在子类中的实际类型
+     * 超类的泛型参数在子类中的实际类型
      * 
      * @param subType 子类类型
-     * @param index 泛型参数索引
      */
-    public static Type actualType(Class<?> subType, Integer index) {
+    public static Type[] actualTypes(Class<?> subType) {
         try {
-            return ((ParameterizedType) subType.getGenericSuperclass()).getActualTypeArguments()[index];
+            return ((ParameterizedType) subType.getGenericSuperclass()).getActualTypeArguments();
         } catch (Exception e) {// 不能转换为ParameterizedType或者数组越界的异常,探测他的超类
-            return Object.class == subType.getSuperclass() ? null : actualType(subType.getSuperclass(), index);
+            return Object.class == subType.getSuperclass() ? null : actualTypes(subType.getSuperclass());
         }
     }
 

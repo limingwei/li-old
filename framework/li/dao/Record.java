@@ -12,10 +12,12 @@ import li.util.Convert;
 /**
  * 你的数据对象类可以继承这个类,以使用ActiveRecord的方式操作数据库
  * 
+ * @param <T> 指示对象类型
+ * @param <ID> 指示ID类型
  * @author li (limingwei@mail.com)
  * @version 0.1.1 (2012-06-25)
  */
-public class Record<T extends Record<?, ?>, ID> extends AbstractDao<T, ID> implements Map<Object, Object>, Serializable {
+public class Record<T extends Record<?, ?>, ID extends Serializable> extends AbstractDao<T, ID> implements Map<Object, Object>, Serializable {
     private static final long serialVersionUID = -488281210680300817L;
 
     private Map<Object, Object> fields = new HashMap<Object, Object>();// 存储对象属性值的Map

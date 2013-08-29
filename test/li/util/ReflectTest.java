@@ -190,6 +190,6 @@ public class ReflectTest {
 
     @Test
     public void testActualType() {
-        assertNull(Reflect.actualType(ReflectTest.class, 9));
+        assertNull(Reflect.actualTypes(ReflectTest.class));
     }
 }

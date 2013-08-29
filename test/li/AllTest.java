@@ -7,6 +7,7 @@ import li.dao.PageTest;
 import li.dao.QueryBuilderTest;
 import li.dao.QueryRunnerTest;
 import li.dao.RecordTest;
+import li.dao.StringIdRecordTest;
 import li.dao.TransTest;
 import li.demo.action.AccountActionTest;
 import li.demo.action.DemoActionTest;
@@ -33,7 +34,8 @@ import org.junit.runners.Suite.SuiteClasses;
         IocTest.class,// Ioc
         AopTest.class, // Aop
         BeanTest.class, FieldTest.class, // Model
-        AbstractDaoTest.class, QueryRunnerTest.class, RecordTest.class, PageTest.class, QueryBuilderTest.class, ModelBuilderTest.class, TransTest.class,// Dao
+        AbstractDaoTest.class, QueryRunnerTest.class, RecordTest.class, PageTest.class, //
+        QueryBuilderTest.class, ModelBuilderTest.class, TransTest.class, StringIdRecordTest.class,// Dao
         ConvertTest.class, ReflectTest.class, FilesTest.class, LogTest.class, VerifyTest.class, // Util
         AccountTest.class, ForumTest.class, // Record
         DemoActionTest.class, AccountActionTest.class /* Action */})

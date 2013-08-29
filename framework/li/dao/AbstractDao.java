@@ -1,5 +1,6 @@
 package li.dao;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
@@ -16,10 +17,12 @@ import li.util.Verify;
 /**
  * AbstractDao,通常,业务对象的Dao要继承这个基类
  * 
+ * @param <T> 指示对象类型
+ * @param <ID> 指示ID类型
  * @author li (limingwei@mail.com)
  * @version 0.1.7 (2012-06-26)
  */
-public class AbstractDao<T, ID> {
+public class AbstractDao<T, ID extends Serializable> {
     private static final Log log = Log.init();
 
     private Class<T> modelType;// 泛型参数的实际类型,即是数据对象类型
@@ -79,7 +82,7 @@ public class AbstractDao<T, ID> {
      */
     public Class<T> getType() {
         if (null == this.modelType) {
-            this.modelType = (Class<T>) Reflect.actualType(getClass(), 0); // 通过泛型参数得到modelType,在Record中可以直接通过getClass得到
+            this.modelType = (Class<T>) Reflect.actualTypes(getClass())[0]; // 通过泛型参数得到modelType,在Record中可以直接通过getClass得到
         }
         return this.modelType;
     }

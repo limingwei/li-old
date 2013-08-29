@@ -1,5 +1,6 @@
 package li.service;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import li.util.Reflect;
  * @version 0.1.3 (2012-06-26)
  */
 
-public abstract class AbstractService<T, ID> implements IBaseService<T, ID> {
+public abstract class AbstractService<T, ID extends Serializable> implements IBaseService<T, ID> {
     /**
      * Dao对象
      */
@@ -28,7 +29,7 @@ public abstract class AbstractService<T, ID> implements IBaseService<T, ID> {
      */
     protected AbstractDao<T, ID> getDao() {
         if (null == this.dao) {
-            this.dao = Ioc.get(AbstractDao.class, Reflect.actualType(this.getClass(), 0));
+            this.dao = Ioc.get(AbstractDao.class, Reflect.actualTypes(this.getClass()));
         }
         return this.dao;
     }
