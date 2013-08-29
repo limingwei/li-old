@@ -58,14 +58,14 @@ public abstract class AbstractService<T, ID extends Serializable> implements IBa
     /**
      * 保存
      */
-    public Boolean save(T t) {
-        return getDao().save(t);
+    public Boolean save(T entity) {
+        return getDao().save(entity);
     }
 
     /**
      * 更新
      */
-    public Boolean update(T t) {
-        return getDao().update(t);
+    public Boolean update(T entity) {
+        return getDao().update(entity);
     }
 }

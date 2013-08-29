@@ -29,10 +29,10 @@ public interface IBaseService<T, ID> {
     /**
      * 保存
      */
-    public Boolean save(T t);
+    public Boolean save(T entity);
 
     /**
      * 更新
      */
-    public Boolean update(T t);
+    public Boolean update(T entity);
 }

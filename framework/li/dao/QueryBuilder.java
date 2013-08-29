@@ -117,30 +117,30 @@ public class QueryBuilder {
     /**
      * 根据传入的对象构建一个用于更新一条记录的SQL
      */
-    public String update(Object object) {
+    public String update(Object entity) {
         String sql = "UPDATE " + beanMeta.table + " SET ";
         for (Field field : beanMeta.fields) {
-            Object fieldValue = Reflect.get(object, field.name);
+            Object fieldValue = Reflect.get(entity, field.name);
             if (!beanMeta.getId().name.equals(field.name)) {// 更新所有属性,fieldValue可能为null
                 sql += field.column + "=" + wrap(fieldValue) + ",";
             }
         }
-        Object id = Reflect.get(object, beanMeta.getId().name);
+        Object id = Reflect.get(entity, beanMeta.getId().name);
         return sql.substring(0, sql.length() - 1) + " WHERE " + beanMeta.getId().column + "=" + wrap(id);
     }
 
     /**
      * 根据传入的对象构建一个用于更新一条记录的SQL,忽略对象中值为null的属性
      */
-    public String updateIgnoreNull(Object object) {
+    public String updateIgnoreNull(Object entity) {
         String sql = "UPDATE " + beanMeta.table + " SET ";
         for (Field field : beanMeta.fields) {
-            Object fieldValue = Reflect.get(object, field.name);
+            Object fieldValue = Reflect.get(entity, field.name);
             if (!beanMeta.getId().name.equals(field.name) && !Verify.isEmpty(fieldValue)) {// 更新所有属性,fieldValue可能为null
                 sql += field.column + "=" + wrap(fieldValue) + ",";
             }
         }
-        Object id = Reflect.get(object, beanMeta.getId().name);
+        Object id = Reflect.get(entity, beanMeta.getId().name);
         return sql.substring(0, sql.length() - 1) + " WHERE " + beanMeta.getId().column + "=" + wrap(id);
     }
 
@@ -161,10 +161,10 @@ public class QueryBuilder {
     /**
      * 根据传入的对象构建一个插入一条记录的SQL
      */
-    public String insert(Object object) {
+    public String insert(Object entity) {
         String columns = " (", values = " VALUES (";
         for (Field field : beanMeta.fields) {
-            Object fieldValue = Reflect.get(object, field.name);
+            Object fieldValue = Reflect.get(entity, field.name);
             columns += field.column + ",";
             values += wrap(fieldValue) + ",";
         }
@@ -176,10 +176,10 @@ public class QueryBuilder {
     /**
      * 根据传入的对象构建一个插入一条记录的SQL,忽略为空的属性
      */
-    public String insertIgnoreNull(Object object) {
+    public String insertIgnoreNull(Object entity) {
         String columns = " (", values = " VALUES (";
         for (Field field : beanMeta.fields) {
-            Object fieldValue = Reflect.get(object, field.name);
+            Object fieldValue = Reflect.get(entity, field.name);
             if (!Verify.isEmpty(fieldValue)) {// 略过为null的属性
                 columns += field.column + ",";
                 values += wrap(fieldValue) + ",";

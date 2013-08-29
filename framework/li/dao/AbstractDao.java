@@ -254,11 +254,11 @@ public class AbstractDao<T, ID extends Serializable> {
     /**
      * 向数据库中插入一条记录,完成后,对象的ID将会被设值
      */
-    public Boolean save(T t) {
+    public Boolean save(T entity) {
         QueryRunner queryRunner = this.getQueryRunner(this.getConnection());
-        Integer updateCount = queryRunner.executeUpdate(getQueryBuilder().insert(t), true);
+        Integer updateCount = queryRunner.executeUpdate(getQueryBuilder().insert(entity), true);
 
-        Reflect.set(t, getBeanMeta().getId().name, queryRunner.getLastInsertId());// 设置对象ID为最后主键值
+        Reflect.set(entity, getBeanMeta().getId().name, queryRunner.getLastInsertId());// 设置对象ID为最后主键值
 
         return 0 < updateCount;
     }
@@ -266,28 +266,28 @@ public class AbstractDao<T, ID extends Serializable> {
     /**
      * 向数据库中插入一条记录,忽略为空的属性,完成后,对象的ID将会被设值
      */
-    public Boolean saveIgnoreNull(T t) {
+    public Boolean saveIgnoreNull(T entity) {
         QueryRunner queryRunner = this.getQueryRunner(this.getConnection());
-        Integer updateCount = queryRunner.executeUpdate(getQueryBuilder().insertIgnoreNull(t), true);
+        Integer updateCount = queryRunner.executeUpdate(getQueryBuilder().insertIgnoreNull(entity), true);
 
-        Reflect.set(t, getBeanMeta().getId().name, queryRunner.getLastInsertId());// 设置对象ID为最后主键值
+        Reflect.set(entity, getBeanMeta().getId().name, queryRunner.getLastInsertId());// 设置对象ID为最后主键值
         return 0 < updateCount;
     }
 
     /**
      * 向数据库中插入一条记录
      */
-    public Boolean insert(T t) {
+    public Boolean insert(T entity) {
         QueryRunner queryRunner = this.getQueryRunner(this.getConnection());
-        return 0 < queryRunner.executeUpdate(getQueryBuilder().insert(t), false);
+        return 0 < queryRunner.executeUpdate(getQueryBuilder().insert(entity), false);
     }
 
     /**
      * 向数据库中插入一条记录,忽略为空的属性
      */
-    public Boolean insertIgnoreNull(T t) {
+    public Boolean insertIgnoreNull(T entity) {
         QueryRunner queryRunner = this.getQueryRunner(this.getConnection());
-        return 0 < queryRunner.executeUpdate(getQueryBuilder().insertIgnoreNull(t), false);
+        return 0 < queryRunner.executeUpdate(getQueryBuilder().insertIgnoreNull(entity), false);
     }
 
     /**
@@ -306,8 +306,8 @@ public class AbstractDao<T, ID extends Serializable> {
      * 
      * @see li.dao.AbstractDao#update(String, Object...)
      */
-    public Boolean update(T t) {
-        return 0 < update(getQueryBuilder().update(t));
+    public Boolean update(T entity) {
+        return 0 < update(getQueryBuilder().update(entity));
     }
 
     /**
@@ -315,7 +315,7 @@ public class AbstractDao<T, ID extends Serializable> {
      * 
      * @see li.dao.AbstractDao#update(String, Object...)
      */
-    public Boolean updateIgnoreNull(T t) {
-        return 0 < update(getQueryBuilder().updateIgnoreNull(t));
+    public Boolean updateIgnoreNull(T entity) {
+        return 0 < update(getQueryBuilder().updateIgnoreNull(entity));
     }
 }
