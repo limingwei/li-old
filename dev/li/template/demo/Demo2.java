@@ -27,11 +27,11 @@ import javax.tools.ForwardingJavaFileManager;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
+import javax.tools.JavaFileObject.Kind;
 import javax.tools.SimpleJavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
-import javax.tools.JavaFileObject.Kind;
 
 public class Demo2 {
     public static void main(String[] args) throws Exception {

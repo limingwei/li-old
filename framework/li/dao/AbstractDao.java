@@ -66,6 +66,10 @@ public class AbstractDao<T, ID extends Serializable> {
                 if (null == connection || connection.isClosed()) { // 没有缓存这个Dao的connection或已被关闭
                     connection = this.getDataSource().getConnection(); // 获取一个新的connection
                     connection.setAutoCommit(false); // 设置为不自动提交
+                    Integer isolation = Trans.LEVEL.get();
+                    if (null != isolation) {
+                        connection.setTransactionIsolation(isolation);// 设置事务级别
+                    }
                     Trans.CONNECTION_MAP.get().put(getClass(), connection); // 缓存connection
                 }
                 return connection; // 返回这个connection

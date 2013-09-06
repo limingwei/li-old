@@ -29,19 +29,41 @@ public abstract class Trans {
     protected static final ThreadLocal<Exception> EXCEPTION = new ThreadLocal<Exception>();// 读操作时候似乎都不关紧要,考虑是否可以不要这个
 
     /**
+     * 事务级别
+     */
+    protected static final ThreadLocal<Integer> LEVEL = new ThreadLocal<Integer>();
+
+    /**
      * 定义一个事务,并执行run()中包裹的数据操作方法
      */
     public Trans() {
-        this(new HashMap<Object, Object>());
+        this(new HashMap<Object, Object>(), null);
     }
 
     /**
-     * 定义并执行一个事务,并传入一些参数
+     * 初始化一个事务,传入一些参数
      */
     public Trans(Map<Object, Object> map) {
+        this(map, null);
+    }
+
+    /**
+     * 初始化一个事务,并指定事务级别
+     */
+    public Trans(Integer level) {
+        this(new HashMap<Object, Object>(), level);
+    }
+
+    /**
+     * 定义并执行一个事务,传入一些参数,指定事务级别
+     */
+    public Trans(Map<Object, Object> map, Integer level) {
         this.map = map;
         try {
             try {
+                if (null != level) {
+                    LEVEL.set(level);
+                }
                 begin(); // 开始事务
                 run(); // 执行事务内方法
                 commit(); // 提交事务
@@ -100,6 +122,7 @@ public abstract class Trans {
             }
             CONNECTION_MAP.set(null);
             EXCEPTION.set(null);
+            LEVEL.set(null);
             log.trace("Trans@? ending", hashCode());
         }
     }

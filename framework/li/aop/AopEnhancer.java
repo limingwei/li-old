@@ -67,19 +67,15 @@ public class AopEnhancer {
             } // http://t.cn/zQo4ydN
         };
 
-        transFilter = new AopFilter() {// 内置的AopFilter,用li.dao.Trans包裹执行chain.doFilter,使被包裹的方法在事务中执行
-            public void doFilter(final AopChain chain) {
-                new li.dao.Trans() {
-                    public void run() {
-                        chain.doFilter();
-                    }
-                };
-            }
-        };
+        filtersBuiltIn.put("~!@#trans", transFilter = new TransFilter());// 初始化并内置AopFilter
 
-        filtersBuiltIn.put("~!@#trans", transFilter);// 内置AopFilter
+        readXmlAopConfig();
+    }
 
-        // 解析XmlAop配置
+    /**
+     * 解析XmlAop配置
+     */
+    private void readXmlAopConfig() {
         File rootFolder = Files.root();
         List<String> fileList = Files.list(rootFolder, AOP_CONFIG_REGEX, true, 1);// 搜索配置文件
         log.info("Found ? aop config xml files, at ?", fileList.size(), rootFolder);
@@ -103,12 +99,7 @@ public class AopEnhancer {
         Aop aop = method.getAnnotation(Aop.class);
         for (int length = (null == aop ? -1 : aop.value().length), i = 0; i < length; i++) {// 如果有@Aop注解,对每一个@Aop.value()的值
             AopFilter filter = Ioc.get(aop.value()[i]);// 通过Ioc得到AopFilter
-            if (null == filter) {
-                filter = Reflect.born(aop.value()[i]);// 非Ioc管理,直接new
-            }
-            if (null != filter) {
-                filters.add(filter);
-            }
+            filters.add(null != filter ? filter : Reflect.born(aop.value()[i]));// 非Ioc管理,则直接new
         }
         if (null != method.getAnnotation(li.annotation.Trans.class)) {// 如果有@Trans注解
             filters.add(transFilter);
@@ -127,11 +118,12 @@ public class AopEnhancer {
                 for (String name : names) {
                     AopFilter filter = Ioc.get(name);// 通过Ioc得到AopFilter
                     if (null == filter) {
-                        filter = filtersBuiltIn.get("~!@#" + name);// 内置的AopFilter
+                        filter = filtersBuiltIn.get("~!@#" + name);
                     }
-                    if (null != filter) {
-                        filters.add(filter);
+                    if (null == filter) {
+                        throw new RuntimeException("AopFilter " + name + " not found <aop class=\"" + role[0] + "\" method=\"" + role[1] + "\" filter=\"" + role[2] + "\" />");
                     }
+                    filters.add(filter);// 为空时搜索内置的AopFilter
                 }
             }
         }
