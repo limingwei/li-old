@@ -76,7 +76,11 @@ public class Reflect {
             method.setAccessible(true);// 设置可见性为true
             return method;
         } catch (Exception e) {// 在超类型中查找方法
-            return Object.class == targetType.getSuperclass() ? null : getMethod(targetType.getSuperclass(), methodName, argTypes);
+            if (Object.class == targetType.getSuperclass()) {
+                throw new RuntimeException("NoSuchMethod " + targetType.getName() + "." + methodName + "(..)", e);
+            } else {
+                return getMethod(targetType.getSuperclass(), methodName, argTypes);
+            }
         }
     }
 
@@ -144,7 +148,11 @@ public class Reflect {
             field.setAccessible(true);// 设置可操作性为true
             return field;
         } catch (Exception e) {// 如果当前类型中无这个属性,则从其超类中查找
-            return Object.class == targetType.getSuperclass() ? null : getField(targetType.getSuperclass(), fieldName);
+            if (Object.class == targetType.getSuperclass()) {
+                throw new RuntimeException(targetType.getName() + "." + fieldName + " " + e, e);
+            } else {
+                return getField(targetType.getSuperclass(), fieldName);
+            }
         }
     }
 
@@ -161,15 +169,16 @@ public class Reflect {
                     fieldType = method.getParameterTypes()[0];// 从setter探测
                 }
             }
-            Field field = getField(targetType, fieldName);
-            if (null != field) { // 从field探测
-                fieldType = field.getType();
+            if (null == fieldType) {
+                try {
+                    fieldType = getField(targetType, fieldName).getType();
+                } catch (Exception e) {
+                    try {// 从getter探测
+                        fieldType = getMethod(targetType, "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1)).getReturnType();
+                    } catch (Exception ex) {}
+                }
             }
-            String getterName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-            Method getter = getMethod(targetType, getterName);
-            if (null != getter) {// 从getter探测
-                fieldType = getter.getReturnType();
-            }
+
             Log.put("~!@#FIELD_TYPE#" + targetType + "#" + fieldName, fieldType);
         }
         return fieldType;
@@ -272,7 +281,7 @@ public class Reflect {
             Field field = getField(target.getClass(), fieldName);
             field.set(target, Convert.toType(field.getType(), value));// 通过属性访问,这里有做类型转换
         } catch (Exception e) {
-            throw new RuntimeException(e + " ", e);
+            throw new RuntimeException("e=" + e + " target=" + target + " fieldName=" + fieldName + " value=" + value);
         }
     }
 
@@ -295,7 +304,7 @@ public class Reflect {
                         Log.put("~!@#SETTER#" + target.getClass() + "#" + fieldName, 3);
                     } else {
                         Log.put("~!@#SETTER#" + target.getClass() + "#" + fieldName, 0);
-                        throw new RuntimeException("Reflect.set() target=" + target + ",fieldName=" + fieldName + ",when setBySetter " + e.getMessage() + ", when setByField " + ex.getMessage());
+                        throw new RuntimeException("Reflect.set() target=" + target + ",fieldName=" + fieldName + ",when setBySetter " + e + ", when setByField " + ex, ex);
                     }
                 }
             }

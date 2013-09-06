@@ -5,7 +5,7 @@ import java.util.Date;
 import li.annotation.Aop;
 import li.annotation.Bean;
 import li.annotation.Inject;
-import li.aop._LogFilter;
+import li.aop.test._LogFilter;
 
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
