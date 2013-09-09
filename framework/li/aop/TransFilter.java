@@ -15,12 +15,15 @@ public class TransFilter implements AopFilter {
 
     private Boolean readOnly;
 
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    public void setIsolation(String isolation) {
-        this.setLevel((Integer) Reflect.getStatic(Connection.class, isolation));
+    /**
+     * 事务级别,参数可以为常量名 TRANSACTION_READ_UNCOMMITTED 也可以为他的值 1
+     */
+    public void setLevel(String level) {
+        try {
+            this.level = Integer.valueOf(level);
+        } catch (Exception e) {
+            this.level = (Integer) Reflect.getStatic(Connection.class, level);
+        }
     }
 
     public void setReadOnly(Boolean readOnly) {
