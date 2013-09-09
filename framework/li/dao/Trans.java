@@ -44,25 +44,17 @@ public abstract class Trans {
     private Map<Object, Object> map;
 
     /**
-     * 获取当前线程的事务,没在事务中则返回空
+     * 返回map引用
      */
-    public static Trans current() {
-        return TRANS_LOCAL.get();
+    public Map<Object, Object> map() {
+        return this.map;
     }
 
     /**
-     * 在事务中获取数据库链接
+     * 返回事务执行成功与否的标记
      */
-    public Connection getConnection(DataSource dataSource, Class<?> daoType) throws Exception {
-        Connection connection = this.connectionMap.get(daoType); // 从connectionMap中得到为这个Dao类缓存的connection
-        if (null == connection || connection.isClosed()) { // 没有缓存这个Dao的connection或已被关闭
-            connection = dataSource.getConnection(); // 获取一个新的connection
-            connection.setAutoCommit(false); // 设置为不自动提交
-            connection.setTransactionIsolation(null != this.level ? this.level : connection.getTransactionIsolation());// 设置事务级别
-            connection.setReadOnly(true == this.readOnly);// 默认为false
-            this.connectionMap.put(daoType, connection); // 缓存connection
-        }
-        return connection; // 返回这个connection
+    public Boolean success() {
+        return (Boolean) this.map.get(hashCode() + "~!@#success");
     }
 
     /**
@@ -100,17 +92,25 @@ public abstract class Trans {
     public abstract void run();
 
     /**
-     * 返回map引用
+     * 获取当前线程的事务,没在事务中则返回空
      */
-    public Map<Object, Object> map() {
-        return this.map;
+    public static Trans current() {
+        return TRANS_LOCAL.get();
     }
 
     /**
-     * 返回事务执行成功与否的标记
+     * 在事务中获取数据库链接
      */
-    public Boolean success() {
-        return (Boolean) this.map.get(hashCode() + "~!@#success");
+    public Connection getConnection(DataSource dataSource, Class<?> daoType) throws Exception {
+        Connection connection = this.connectionMap.get(daoType); // 从connectionMap中得到为这个Dao类缓存的connection
+        if (null == connection || connection.isClosed()) { // 没有缓存这个Dao的connection或已被关闭
+            connection = dataSource.getConnection(); // 获取一个新的connection
+            connection.setAutoCommit(false); // 设置为不自动提交
+            connection.setTransactionIsolation(null != this.level ? this.level : connection.getTransactionIsolation());// 设置事务级别
+            connection.setReadOnly(null != this.readOnly ? this.readOnly : connection.isReadOnly());// 设置只读
+            this.connectionMap.put(daoType, connection); // 缓存connection
+        }
+        return connection; // 返回这个connection
     }
 
     /**
@@ -118,8 +118,8 @@ public abstract class Trans {
      */
     private void begin(Integer level, Boolean readOnly) {
         if (null == TRANS_LOCAL.get()) { // Trans in Trans 时候不会重复执行
-            this.level = null != level ? level : null;// 默认为null
-            this.readOnly = null != readOnly ? readOnly : false;// 默认为false
+            this.level = level;
+            this.readOnly = readOnly;
             TRANS_LOCAL.set(this);
             log.trace("Trans@? level=? readOnly=? beginning", hashCode(), this.level, this.readOnly);
         } else {
