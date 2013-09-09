@@ -100,14 +100,10 @@ public abstract class Trans {
             try {
                 begin(level, readOnly); // 开始事务
                 run(); // 执行事务内方法
-                if (!this.readOnly) {// 可写的
-                    commit(); // 提交事务
-                }
+                commit(); // 提交事务
                 this.map.put(hashCode() + "~!@#success", true);
             } catch (Exception e) {// QueryRunner里面已经打印栈,事务管理中,也不需要抛出异常,这里就只管流程
-                if (!this.readOnly) {// 可写的
-                    rollback(); // 回滚事务
-                }
+                rollback(); // 回滚事务
                 this.map.put(hashCode() + "~!@#success", false);
             } finally {
                 end(); // 结束事务
@@ -168,7 +164,7 @@ public abstract class Trans {
      * 捆绑提交当前事务中所有Connection的事务,如果这个事务未在其他事务中的话
      */
     private void commit() throws Exception {
-        if (null == this.map.get(hashCode() + "~!@#in_trans") && null != TRANS_LOCAL.get()) {
+        if (!this.readOnly && null == this.map.get(hashCode() + "~!@#in_trans") && null != TRANS_LOCAL.get()) {
             for (Entry<Class<?>, Connection> connection : this.connectionMap.entrySet()) {
                 connection.getValue().commit();
                 log.trace("Trans@? level=? readOnly=? commiting ?", hashCode(), this.level, this.readOnly, connection.getValue());
@@ -180,7 +176,7 @@ public abstract class Trans {
      * 捆绑回滚当前事务中所有Connection中的事务,如果这个事务未在其他事务中的话
      */
     private void rollback() throws Exception {
-        if (null == this.map.get(hashCode() + "~!@#in_trans") && null != TRANS_LOCAL.get()) {
+        if (!this.readOnly && null == this.map.get(hashCode() + "~!@#in_trans") && null != TRANS_LOCAL.get()) {
             for (Entry<Class<?>, Connection> connection : this.connectionMap.entrySet()) {
                 connection.getValue().rollback();
                 log.trace("Trans@?  level=? readOnly=?  rollingback ?", hashCode(), this.level, this.readOnly, connection.getValue());
