@@ -59,21 +59,11 @@ public class AbstractDao<T, ID extends Serializable> {
      */
     public Connection getConnection() {
         try {
-            if (null == Trans.CONNECTION_MAP.get()) {// 如果未进入事务
+            Trans trans = Trans.get();
+            if (null == trans) {// 如果未进入事务
                 return this.getDataSource().getConnection();// 则简单获取一个connection
             } else { // 如果已经进入事务
-                Connection connection = Trans.CONNECTION_MAP.get().get(getClass()); // 从connectionMap中得到为这个Dao类缓存的connection
-                if (null == connection || connection.isClosed()) { // 没有缓存这个Dao的connection或已被关闭
-                    connection = this.getDataSource().getConnection(); // 获取一个新的connection
-                    connection.setAutoCommit(false); // 设置为不自动提交
-                    Integer level = Trans.LEVEL.get();
-                    if (null != level && -1 != level) {
-                        connection.setTransactionIsolation(level);// 设置事务级别
-                    }
-                    connection.setReadOnly(Trans.READONLY.get());
-                    Trans.CONNECTION_MAP.get().put(getClass(), connection); // 缓存connection
-                }
-                return connection; // 返回这个connection
+                return trans.getConnection(this.getDataSource(), this.getClass());
             }
         } catch (Exception e) {
             throw new RuntimeException(e + " ", e);

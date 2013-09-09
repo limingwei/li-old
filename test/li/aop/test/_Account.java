@@ -1,6 +1,5 @@
 package li.aop.test;
 
-import java.sql.Connection;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -31,7 +30,7 @@ public class _Account extends Record<_Account, Integer> {
         return super.list(page);
     }
 
-    @Trans(readOnly = true, value = Connection.TRANSACTION_READ_COMMITTED)
+    @Trans(readOnly = false)
     @Aop(_LogFilter.class)
     public Integer testUpdate() {
         return super.update("SET flag=1 WHERE id=1");

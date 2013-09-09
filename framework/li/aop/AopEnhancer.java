@@ -32,6 +32,7 @@ import org.w3c.dom.NodeList;
  */
 public class AopEnhancer {
     private static final Log log = Log.init();
+
     /**
      * AopXml配置文件
      */
@@ -140,12 +141,8 @@ public class AopEnhancer {
      * 获取一个方法的所有AopFilters
      */
     private List<AopFilter> getFilters(Object target, Method method) {
-        // List<AopFilter> filters = this.getAnnotationFilters(method);
-        // filters.addAll(this.getXmlFilters(target, method));
-
-        List<AopFilter> filters = this.getXmlFilters(target, method);
-        filters.addAll(this.getAnnotationFilters(method));
-
+        List<AopFilter> filters = this.getAnnotationFilters(method);
+        filters.addAll(this.getXmlFilters(target, method));
         return filters;
     }
 

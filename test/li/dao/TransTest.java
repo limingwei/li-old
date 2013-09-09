@@ -1,5 +1,7 @@
 package li.dao;
 
+import java.sql.Connection;
+
 import li.annotation.Inject;
 import li.dao.test._User;
 import li.people.record.Account;
@@ -36,7 +38,7 @@ public class TransTest extends BaseTest {
 
     @Test
     public void test1() {
-        log.debug(new Trans(Convert.toMap("inpar", "inpar---", "1", "2", "3", "4")) {
+        log.debug(new Trans(Convert.toMap("inpar", "inpar---", "1", "2", "3", "4"), Connection.TRANSACTION_REPEATABLE_READ, false) {
             public void run() {
                 userDao.updateIgnoreNull(new _User().set("id", 2).set("username", "u-1" + System.currentTimeMillis()).set("password", "p-1").set("email", "e-1").set("status", 1));
                 userDao.updateIgnoreNull(new _User().set("id", 2).set("username", "u-2" + System.currentTimeMillis()).set("password", "p-2").set("email", "e-2").set("status", 1));
@@ -54,7 +56,7 @@ public class TransTest extends BaseTest {
 
     @Test
     public void testPassValue() {
-        _User user = (_User) new Trans(Convert.toMap("email", "tom@w.cn", "username", "xiaoming")) {
+        _User user = (_User) new Trans(Convert.toMap("email", "tom@w.cn", "username", "xiaoming"), Connection.TRANSACTION_REPEATABLE_READ, false) {
             public void run() {
                 userDao.update("SET email=#email WHERE username=#username", map());
                 map().put("user", userDao.find("WHERE username!=? LIMIT 1", map().get("username")));

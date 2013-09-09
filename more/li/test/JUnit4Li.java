@@ -84,7 +84,7 @@ public class JUnit4Li extends BlockJUnit4ClassRunner {
             public void run() {
                 try {
                     method.invokeExplosively(target);
-                    Trans.EXCEPTION.set(new Exception("rollback when test"));// 这里设置异常,使事务回滚
+                    this.setException(new Exception("rollback when test"));// 这里设置异常,使事务回滚
                 } catch (Throwable e) {
                     throw new RuntimeException(e);
                 }

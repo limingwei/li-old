@@ -11,9 +11,9 @@ import li.util.Reflect;
  * @author 明伟
  */
 public class TransFilter implements AopFilter {
-    private Integer level = -1;
+    private Integer level;
 
-    private Boolean readOnly = false;
+    private Boolean readOnly;
 
     public void setLevel(Integer level) {
         this.level = level;
