@@ -1,5 +1,7 @@
 package li.dao.test;
 
+import java.sql.Connection;
+
 import li.annotation.Bean;
 import li.annotation.Table;
 import li.dao.Record;
@@ -13,7 +15,7 @@ public class _User extends Record<_User, Integer> {
 
     private static final Log log = Log.init();
 
-    @li.annotation.Trans
+    @li.annotation.Trans(Connection.TRANSACTION_SERIALIZABLE)
     public void testMultipleTrans2() {
         new Trans() {
             public void run() {

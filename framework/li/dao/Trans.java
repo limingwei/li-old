@@ -34,6 +34,11 @@ public abstract class Trans {
     protected static final ThreadLocal<Integer> LEVEL = new ThreadLocal<Integer>();
 
     /**
+     * 事务是否只读
+     */
+    protected static final ThreadLocal<Boolean> READONLY = new ThreadLocal<Boolean>();
+
+    /**
      * 定义一个事务,并执行run()中包裹的数据操作方法
      */
     public Trans() {
@@ -58,18 +63,28 @@ public abstract class Trans {
      * 定义并执行一个事务,传入一些参数,指定事务级别
      */
     public Trans(Map<Object, Object> map, Integer level) {
+        this(map, level, false);
+    }
+
+    /**
+     * 定义并执行一个事务,传入一些参数,指定事务级别,指定是否只读
+     */
+    public Trans(Map<Object, Object> map, Integer level, Boolean readOnly) {
         this.map = map;
         try {
             try {
-                if (null != level) {
-                    LEVEL.set(level);
-                }
+                LEVEL.set(level);
+                READONLY.set(readOnly);
                 begin(); // 开始事务
                 run(); // 执行事务内方法
-                commit(); // 提交事务
+                if (!readOnly) {// 可写的
+                    commit(); // 提交事务
+                }
                 this.map.put(hashCode() + "~!@#success", true);
             } catch (Exception e) {// QueryRunner里面已经打印栈,事务管理中,也不需要抛出异常,这里就只管流程
-                rollback(); // 回滚事务
+                if (!readOnly) {// 可写的
+                    rollback(); // 回滚事务
+                }
                 this.map.put(hashCode() + "~!@#success", false);
             } finally {
                 end(); // 结束事务
@@ -103,7 +118,7 @@ public abstract class Trans {
      */
     private void begin() {
         if (null == CONNECTION_MAP.get()) { // Trans in Trans 时候不会重复执行
-            log.trace("Trans@? beginning", hashCode());
+            log.trace("Trans@? level=? readOnly=? beginning", hashCode(), LEVEL.get(), READONLY.get());
             CONNECTION_MAP.set(new HashMap<Class<?>, Connection>());
         } else {
             this.map.put(hashCode() + "~!@#in_trans", true);
@@ -123,7 +138,7 @@ public abstract class Trans {
             CONNECTION_MAP.set(null);
             EXCEPTION.set(null);
             LEVEL.set(null);
-            log.trace("Trans@? ending", hashCode());
+            log.trace("Trans@? level=? readOnly=? ending", hashCode(), LEVEL.get(), READONLY.get());
         }
     }
 
@@ -135,7 +150,7 @@ public abstract class Trans {
         if (null == this.map.get(hashCode() + "~!@#in_trans") && null != connectionMap) {
             for (Entry<Class<?>, Connection> connection : connectionMap.entrySet()) {
                 connection.getValue().commit();
-                log.trace("Trans@? commiting ?", hashCode(), connection.getValue());
+                log.trace("Trans@? level=? readOnly=? commiting ?", hashCode(), LEVEL.get(), READONLY.get(), connection.getValue());
             }
         }
     }
@@ -148,7 +163,7 @@ public abstract class Trans {
         if (null == this.map.get(hashCode() + "~!@#in_trans") && null != connectionMap) {
             for (Entry<Class<?>, Connection> connection : connectionMap.entrySet()) {
                 connection.getValue().rollback();
-                log.trace("Trans@? rollingback ", hashCode(), connection.getValue());
+                log.trace("Trans@?  level=? readOnly=?  rollingback ?", hashCode(), LEVEL.get(), READONLY.get(), connection.getValue());
             }
         }
     }

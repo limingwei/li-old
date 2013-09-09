@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.xml.xpath.XPathConstants;
 
 import li.annotation.Aop;
+import li.annotation.Trans;
 import li.ioc.Ioc;
 import li.util.Files;
 import li.util.Log;
@@ -54,7 +55,7 @@ public class AopEnhancer {
     /**
      * 内置的AopFilter,用li.dao.Trans包裹执行chain.doFilter,使被包裹的方法在事务中执行
      */
-    private AopFilter transFilter;
+    private TransFilter transFilter;
 
     /**
      * 初始化
@@ -101,7 +102,12 @@ public class AopEnhancer {
             AopFilter filter = Ioc.get(aop.value()[i]);// 通过Ioc得到AopFilter
             filters.add(null != filter ? filter : Reflect.born(aop.value()[i]));// 非Ioc管理,则直接new
         }
-        if (null != method.getAnnotation(li.annotation.Trans.class)) {// 如果有@Trans注解
+        Trans trans = method.getAnnotation(li.annotation.Trans.class);
+        if (null != trans) {// 如果有@Trans注解
+            if (trans.value() != -1) {
+                transFilter.setLevel(trans.value());
+            }
+            transFilter.setReadOnly(trans.readOnly());
             filters.add(transFilter);
         }
         return filters;
@@ -134,8 +140,12 @@ public class AopEnhancer {
      * 获取一个方法的所有AopFilters
      */
     private List<AopFilter> getFilters(Object target, Method method) {
-        List<AopFilter> filters = getAnnotationFilters(method);
-        filters.addAll(getXmlFilters(target, method));
+        // List<AopFilter> filters = this.getAnnotationFilters(method);
+        // filters.addAll(this.getXmlFilters(target, method));
+
+        List<AopFilter> filters = this.getXmlFilters(target, method);
+        filters.addAll(this.getAnnotationFilters(method));
+
         return filters;
     }
 

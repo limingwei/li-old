@@ -15,9 +15,14 @@
 		</bean>
 
 		<bean name="statAopFilter" class="li.druid.StatAopFilter" />
+		<bean name="trans" class="li.aop.TransFilter">
+			<property name="isolation" value="TRANSACTION_SERIALIZABLE" />
+			<property name="readOnly" value="false" />
+		</bean>
 	</beans>
 	<aops>
-		<aop class="li.aop.*" method=".*" filter="log,trans" />
+		<aop class="li.aop.*" method=".*" filter="log" />
+		<aop class="li.aop.test._Account" method="testUpdate" filter="trans" />
 		<aop class="li.people[.](action|record)[.].*" method=".*(count|delete|find|insert|list|save|update).*" filter="statAopFilter" />
 	</aops>
 </config>

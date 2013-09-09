@@ -13,4 +13,14 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Trans {}
+public @interface Trans {
+    /**
+     * 事务级别,-1表示使用默认
+     */
+    public int value() default -1;
+
+    /**
+     * 指示是否只读
+     */
+    public boolean readOnly() default false;
+}

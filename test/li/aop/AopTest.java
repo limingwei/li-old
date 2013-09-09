@@ -23,6 +23,11 @@ public class AopTest extends BaseTest {
     }
 
     @Test
+    public void update() {
+        account.testUpdate();
+    }
+
+    @Test
     public void testAop2() {
         log.debug(user.sayHi("abc", "xyz"));
     }
