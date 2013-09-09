@@ -16,7 +16,7 @@ public class TransFilter implements AopFilter {
     private Boolean readOnly;
 
     /**
-     * 事务级别,参数可以为常量名 TRANSACTION_READ_UNCOMMITTED 也可以为他的值 1
+     * 事务级别,参数可以为String常量名 TRANSACTION_READ_UNCOMMITTED 也可以为他的Int值 1
      */
     public void setLevel(String level) {
         try {
