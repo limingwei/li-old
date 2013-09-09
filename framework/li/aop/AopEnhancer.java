@@ -105,9 +105,7 @@ public class AopEnhancer {
         }
         Trans trans = method.getAnnotation(li.annotation.Trans.class);
         if (null != trans) {// 如果有@Trans注解
-            if (trans.value() != -1) {
-                transFilter.setLevel(trans.value() + "");
-            }
+            transFilter.setLevel(trans.value() != -1 ? trans.value() + "" : null);
             transFilter.setReadOnly(trans.readOnly());
             filters.add(transFilter);
         }
