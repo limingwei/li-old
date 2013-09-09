@@ -1,7 +1,7 @@
 li.api
 li.dao
 li.datasource
-li.datasource.druid
+li.druid
 li.ehcache
 li.http
 li.lang
