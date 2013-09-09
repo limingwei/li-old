@@ -32,7 +32,8 @@ public class _Account extends Record<_Account, Integer> {
 
     @Trans(readOnly = false)
     @Aop(_LogFilter.class)
-    public Integer testUpdate() {
-        return super.update("SET flag=1 WHERE id=1");
+    public void testUpdate() {
+        System.err.println(super.list(null));
+        super.update("SET flag=1 WHERE id=1");
     }
 }

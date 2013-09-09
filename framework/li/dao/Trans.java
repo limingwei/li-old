@@ -39,33 +39,14 @@ public abstract class Trans {
     private Boolean readOnly;
 
     /**
-     * 存储Sql执行时候产生的异常信息,为null表示没有异常
-     */
-    private Exception exception;
-
-    /**
      * 用于存放一些值,可用于Trans内外通信
      */
     private Map<Object, Object> map;
 
     /**
-     * getException
-     */
-    public Exception getException() {
-        return this.exception;
-    }
-
-    /**
-     * setException
-     */
-    public void setException(Exception exception) {
-        this.exception = exception;
-    }
-
-    /**
      * 获取当前线程的事务,没在事务中则返回空
      */
-    public static Trans get() {
+    public static Trans current() {
         return TRANS_LOCAL.get();
     }
 
@@ -98,15 +79,15 @@ public abstract class Trans {
         this.map = map;
         try {
             try {
-                begin(level, readOnly); // 开始事务
-                run(); // 执行事务内方法
-                commit(); // 提交事务
+                this.begin(level, readOnly); // 开始事务
+                this.run(); // 执行事务内方法
+                this.commit(); // 提交事务
                 this.map.put(hashCode() + "~!@#success", true);
             } catch (Exception e) {// QueryRunner里面已经打印栈,事务管理中,也不需要抛出异常,这里就只管流程
-                rollback(); // 回滚事务
+                this.rollback(); // 回滚事务
                 this.map.put(hashCode() + "~!@#success", false);
             } finally {
-                end(); // 结束事务
+                this.end(); // 结束事务
             }
         } catch (Exception e) {
             throw new RuntimeException(e + " ", e);

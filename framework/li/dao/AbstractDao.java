@@ -59,7 +59,7 @@ public class AbstractDao<T, ID extends Serializable> {
      */
     public Connection getConnection() {
         try {
-            Trans trans = Trans.get();
+            Trans trans = Trans.current();
             if (null == trans) {// 如果未进入事务
                 return this.getDataSource().getConnection();// 则简单获取一个connection
             } else { // 如果已经进入事务

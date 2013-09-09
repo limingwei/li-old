@@ -44,15 +44,12 @@ public class QueryRunner {
      */
     public ResultSet executeQuery(String sql) {
         ResultSet resultSet = null;
-        Trans trans = Trans.get();
-        if (null == trans || null == trans.getException()) {
-            try { // 如果未进入事务或事务中未出现异常,则执行后面的语句
-                preparedStatement = connection.prepareStatement(sql);
-                resultSet = preparedStatement.executeQuery();
-                log.debug("? -> ?", sql, connection);
-            } catch (Exception e) {
-                error(e, sql);
-            }
+        try { // 如果未进入事务或事务中未出现异常,则执行后面的语句
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+            log.debug("? -> ?", sql, connection);
+        } catch (Exception e) {
+            error(e, sql);
         }
         return resultSet;// 查询类SQL,在ModelBuilder中关闭
     }
@@ -62,20 +59,17 @@ public class QueryRunner {
      */
     public Integer executeUpdate(String sql, Boolean returnGeneratedKeys) {
         Integer count = -1;
-        Trans trans = Trans.get();
-        if (null == trans || null == trans.getException()) {
-            try { // 如果未进入事务或事务中未出现异常,则执行后面的语句
-                preparedStatement = returnGeneratedKeys ? connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS) : connection.prepareStatement(sql);
-                count = preparedStatement.executeUpdate();
-                if (returnGeneratedKeys) {
-                    ResultSet generatedKeys = preparedStatement.getGeneratedKeys();// 主键结果集
-                    this.lastInsertId = null != generatedKeys && generatedKeys.next() ? generatedKeys.getInt(1) : -1;// 最后更新的主键的值
-                    generatedKeys.close();// 关闭主键结果集
-                }
-                log.debug("? -> [? row] ?", sql, count, connection);
-            } catch (Exception e) {
-                error(e, sql);
+        try { // 如果未进入事务或事务中未出现异常,则执行后面的语句
+            preparedStatement = returnGeneratedKeys ? connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS) : connection.prepareStatement(sql);
+            count = preparedStatement.executeUpdate();
+            if (returnGeneratedKeys) {
+                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();// 主键结果集
+                this.lastInsertId = null != generatedKeys && generatedKeys.next() ? generatedKeys.getInt(1) : -1;// 最后更新的主键的值
+                generatedKeys.close();// 关闭主键结果集
             }
+            log.debug("? -> [? row] ?", sql, count, connection);
+        } catch (Exception e) {
+            error(e, sql);
         }
         this.close();// 更新类SQL,在这里关闭
         return count;
@@ -90,8 +84,8 @@ public class QueryRunner {
                 preparedStatement.close();
                 log.trace("Closing PreparedStatement ?", preparedStatement);
             }
-            if (null != connection && null == Trans.get()) {
-                connection.close();// Trans.CONNECTION_MAP.get()为空表示未进入事务,若已进入事务,则由事务关闭连接
+            if (null != connection && null == Trans.current()) {
+                connection.close();// 若已进入事务,则由事务关闭连接
                 log.trace("Closing Connection ?", connection);
             }
         } catch (Exception e) {
@@ -104,10 +98,6 @@ public class QueryRunner {
      */
     private void error(Exception e, String sql) {
         log.error("? ?", sql, e);
-        Trans trans = Trans.get();
-        if (null != trans) {
-            trans.setException(e);// 出现异常,记录起来
-        }
         throw new RuntimeException(e + " ", e);
     }
 }
