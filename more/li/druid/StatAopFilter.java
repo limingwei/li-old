@@ -1,4 +1,4 @@
-package li.datasource.druid;
+package li.druid;
 
 import li.aop.AopChain;
 import li.aop.AopFilter;

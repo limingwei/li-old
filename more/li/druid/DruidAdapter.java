@@ -1,4 +1,4 @@
-package li.datasource.druid;
+package li.druid;
 
 import java.sql.Connection;
 import java.sql.SQLException;

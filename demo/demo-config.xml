@@ -7,14 +7,14 @@
 			<property name="loginTimeout" value="500" />
 		</bean>
 
-		<bean name="druid" class="li.datasource.druid.DruidAdapter">
+		<bean name="druid" class="li.druid.DruidAdapter">
 			<property name="url" value="${db.url}" />
 			<property name="username" value="${db.username}" />
 			<property name="password" value="${db.password}" />
 			<property name="druidFilters" value="wall,mergeStat,log4j" />
 		</bean>
 
-		<bean name="statAopFilter" class="li.datasource.druid.StatAopFilter" />
+		<bean name="statAopFilter" class="li.druid.StatAopFilter" />
 	</beans>
 	<aops>
 		<aop class="li.aop.*" method=".*" filter="log,trans" />
