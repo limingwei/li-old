@@ -11,8 +11,14 @@ import li.util.Reflect;
  * @author 明伟
  */
 public class TransFilter implements AopFilter {
+    /**
+     * 事务隔离级别
+     */
     private Integer level;
 
+    /**
+     * 事务是否只读
+     */
     private Boolean readOnly;
 
     /**
@@ -26,6 +32,9 @@ public class TransFilter implements AopFilter {
         }
     }
 
+    /**
+     * 默认为false
+     */
     public void setReadOnly(Boolean readOnly) {
         this.readOnly = readOnly;
     }

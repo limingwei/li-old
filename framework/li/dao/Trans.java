@@ -29,7 +29,7 @@ public abstract class Trans {
     private Map<Class<?>, Connection> connectionMap = new HashMap<Class<?>, Connection>();
 
     /**
-     * 事务隔离级别,默认为REPEATABLE_READ
+     * 事务隔离级别
      */
     private Integer level;
 
@@ -164,7 +164,7 @@ public abstract class Trans {
      * 捆绑提交当前事务中所有Connection的事务,如果这个事务未在其他事务中的话
      */
     private void commit() throws Exception {
-        if (!this.readOnly && null == this.map.get(hashCode() + "~!@#in_trans") && null != TRANS_LOCAL.get()) {
+        if (null == this.map.get(hashCode() + "~!@#in_trans") && null != TRANS_LOCAL.get() && !this.readOnly) {
             for (Entry<Class<?>, Connection> connection : this.connectionMap.entrySet()) {
                 connection.getValue().commit();
                 log.trace("Trans@? level=? readOnly=? commiting ?", hashCode(), this.level, this.readOnly, connection.getValue());
@@ -176,7 +176,7 @@ public abstract class Trans {
      * 捆绑回滚当前事务中所有Connection中的事务,如果这个事务未在其他事务中的话
      */
     private void rollback() throws Exception {
-        if (!this.readOnly && null == this.map.get(hashCode() + "~!@#in_trans") && null != TRANS_LOCAL.get()) {
+        if (null == this.map.get(hashCode() + "~!@#in_trans") && null != TRANS_LOCAL.get() && !this.readOnly) {
             for (Entry<Class<?>, Connection> connection : this.connectionMap.entrySet()) {
                 connection.getValue().rollback();
                 log.trace("Trans@?  level=? readOnly=?  rollingback ?", hashCode(), this.level, this.readOnly, connection.getValue());
