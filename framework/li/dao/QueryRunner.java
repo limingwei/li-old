@@ -16,9 +16,15 @@ import li.util.Log;
 public class QueryRunner {
     private static final Log log = Log.init();
 
-    private Connection connection;// 当前QueryRunner实例的connection
+    /**
+     * 当前QueryRunner实例的connection
+     */
+    private Connection connection;
 
-    private PreparedStatement preparedStatement;// 当前QueryRunner实例的preparedStatement
+    /**
+     * 当前QueryRunner实例的preparedStatement
+     */
+    private PreparedStatement preparedStatement;
 
     /**
      * 实例变量,保存最后一条被插入记录被设置的自增ID
@@ -44,7 +50,7 @@ public class QueryRunner {
      */
     public ResultSet executeQuery(String sql) {
         ResultSet resultSet = null;
-        try { // 如果未进入事务或事务中未出现异常,则执行后面的语句
+        try {
             preparedStatement = connection.prepareStatement(sql);
             resultSet = preparedStatement.executeQuery();
             log.debug("? -> ?", sql, connection);
@@ -59,7 +65,7 @@ public class QueryRunner {
      */
     public Integer executeUpdate(String sql, Boolean returnGeneratedKeys) {
         Integer count = -1;
-        try { // 如果未进入事务或事务中未出现异常,则执行后面的语句
+        try {
             preparedStatement = returnGeneratedKeys ? connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS) : connection.prepareStatement(sql);
             count = preparedStatement.executeUpdate();
             if (returnGeneratedKeys) {

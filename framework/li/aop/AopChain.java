@@ -12,19 +12,40 @@ import net.sf.cglib.proxy.MethodProxy;
  * @version 0.1.1 (2012-09-20)
  */
 public class AopChain {
-    private Object target;// 目标对象
+    /**
+     * 目标对象
+     */
+    private Object target;
 
-    private Method method;// 方法对象
+    /**
+     * 目标 方法对象
+     */
+    private Method method;
 
-    private Object[] args;// 参数数组
+    /**
+     * 参数数组
+     */
+    private Object[] args;
 
-    private Object result;// 方法返回值
+    /**
+     * 方法返回值
+     */
+    private Object result;
 
-    private List<AopFilter> filters;// AopFilter列表
+    /**
+     * AopFilter列表
+     */
+    private List<AopFilter> filters;
 
-    private MethodProxy proxy;// 方法代理
+    /**
+     * CGLIB方法代理
+     */
+    private MethodProxy proxy;
 
-    private int index = 0;// AopFilter索引
+    /**
+     * AopFilter索引,指示当前执行到filter链中的第几个filter
+     */
+    private int index = 0;
 
     /**
      * 返回被代理方法宿主对象
