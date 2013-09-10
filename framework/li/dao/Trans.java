@@ -68,10 +68,12 @@ public abstract class Trans {
      * 定义并执行一个事务,传入一些参数,指定事务级别,指定是否只读
      */
     public Trans(Map<Object, Object> map, Integer level, Boolean readOnly) {
-        this.map = map;
         try {
             try {
-                this.begin(level, readOnly); // 开始事务
+                this.map = map;
+                this.level = level;
+                this.readOnly = readOnly;
+                this.begin(); // 开始事务
                 this.run(); // 执行事务内方法
                 this.commit(); // 提交事务
                 this.map.put(hashCode() + "~!@#success", true);
@@ -116,14 +118,12 @@ public abstract class Trans {
     /**
      * 开始事务,初始化CONNECTION_MAP,或者标记这个事务已被其他事务包裹融化
      */
-    private void begin(Integer level, Boolean readOnly) {
-        if (null == TRANS_LOCAL.get()) { // Trans in Trans 时候不会重复执行
-            this.level = level;
-            this.readOnly = readOnly;
+    private void begin() {
+        if (null == TRANS_LOCAL.get()) { // 未在另一个事务中
             TRANS_LOCAL.set(this);
             log.trace("Trans@? level=? readOnly=? beginning", hashCode(), this.level, this.readOnly);
         } else {
-            this.map.put(hashCode() + "~!@#in_trans", true);
+            this.map.put(hashCode() + "~!@#in_trans", true);// 在另一个事务中
         }
     }
 
@@ -131,7 +131,7 @@ public abstract class Trans {
      * 结束事务,关闭当前事务中的所有Connection,如果这个事务未在其他事务中的话
      */
     private void end() throws Exception {
-        if (null == this.map.get(hashCode() + "~!@#in_trans") && null != TRANS_LOCAL.get()) { // Trans in Trans 时候不会重复执行
+        if (null == this.map.get(hashCode() + "~!@#in_trans")) {// 未在另一个事务中
             for (Entry<Class<?>, Connection> connection : this.connectionMap.entrySet()) {
                 connection.getValue().close();
                 log.trace("Closing Connection in Trans ?", connection.getValue());
@@ -145,7 +145,7 @@ public abstract class Trans {
      * 捆绑提交当前事务中所有Connection的事务,如果这个事务未在其他事务中的话
      */
     private void commit() throws Exception {
-        if (null == this.map.get(hashCode() + "~!@#in_trans") && null != TRANS_LOCAL.get() && !this.readOnly) {
+        if (null == this.map.get(hashCode() + "~!@#in_trans") && !this.readOnly) {// 未在另一个事务中且非只读
             for (Entry<Class<?>, Connection> connection : this.connectionMap.entrySet()) {
                 connection.getValue().commit();
                 log.trace("Trans@? level=? readOnly=? commiting ?", hashCode(), this.level, this.readOnly, connection.getValue());
@@ -154,10 +154,10 @@ public abstract class Trans {
     }
 
     /**
-     * 捆绑回滚当前事务中所有Connection中的事务,如果这个事务未在其他事务中的话
+     * 捆绑回滚当前事务中所有Connection中的事务,如果这个事务
      */
     private void rollback() throws Exception {
-        if (null == this.map.get(hashCode() + "~!@#in_trans") && null != TRANS_LOCAL.get() && !this.readOnly) {
+        if (null == this.map.get(hashCode() + "~!@#in_trans") && !this.readOnly) {// 未在另一个事务中且非只读
             for (Entry<Class<?>, Connection> connection : this.connectionMap.entrySet()) {
                 connection.getValue().rollback();
                 log.trace("Trans@?  level=? readOnly=?  rollingback ?", hashCode(), this.level, this.readOnly, connection.getValue());
