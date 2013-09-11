@@ -9,8 +9,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.Test;
 
-import com.alibaba.fastjson.JSON;
-
 public class HibernateTest extends BaseTest {
     @Inject
     SessionFactory sessionFactory;
@@ -29,6 +27,6 @@ public class HibernateTest extends BaseTest {
         System.err.println(session.save(user));
 
         Query query = session.createQuery("FROM User");
-        System.err.println(JSON.toJSON(query.list()));
+        System.err.println(query.list());
     }
 }
