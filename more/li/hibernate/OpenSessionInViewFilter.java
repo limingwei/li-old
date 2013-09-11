@@ -16,9 +16,12 @@ import javax.servlet.ServletResponse;
  */
 
 public class OpenSessionInViewFilter implements Filter {
+
+    public void init(FilterConfig filterConfig) throws ServletException {}
+
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
+
     public void destroy() {}
-
-    public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2) throws IOException, ServletException {}
-
-    public void init(FilterConfig arg0) throws ServletException {}
 }

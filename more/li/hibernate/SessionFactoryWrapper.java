@@ -39,12 +39,12 @@ public class SessionFactoryWrapper implements SessionFactory {
         this.getSessionFactory().close();
     }
 
-    public void evict(Class arg0) throws HibernateException {
-        this.getSessionFactory().evict(arg0);
+    public void evict(Class type) throws HibernateException {
+        this.getSessionFactory().evict(type);
     }
 
-    public void evict(Class arg0, Serializable arg1) throws HibernateException {
-        this.getSessionFactory().evict(arg0, arg1);
+    public void evict(Class type, Serializable arg1) throws HibernateException {
+        this.getSessionFactory().evict(type, arg1);
     }
 
     public void evictCollection(String arg0) throws HibernateException {
@@ -79,8 +79,8 @@ public class SessionFactoryWrapper implements SessionFactory {
         return this.getSessionFactory().getAllCollectionMetadata();
     }
 
-    public ClassMetadata getClassMetadata(Class arg0) throws HibernateException {
-        return this.getSessionFactory().getClassMetadata(arg0);
+    public ClassMetadata getClassMetadata(Class type) throws HibernateException {
+        return this.getSessionFactory().getClassMetadata(type);
     }
 
     public ClassMetadata getClassMetadata(String arg0) throws HibernateException {
@@ -115,23 +115,23 @@ public class SessionFactoryWrapper implements SessionFactory {
         return this.getSessionFactory().openSession();
     }
 
-    public Session openSession(Connection arg0) {
-        return this.getSessionFactory().openSession(arg0);
+    public Session openSession(Connection connection) {
+        return this.getSessionFactory().openSession(connection);
     }
 
-    public Session openSession(Interceptor arg0) throws HibernateException {
-        return this.getSessionFactory().openSession(arg0);
+    public Session openSession(Interceptor interceptor) throws HibernateException {
+        return this.getSessionFactory().openSession(interceptor);
     }
 
-    public Session openSession(Connection arg0, Interceptor arg1) {
-        return this.getSessionFactory().openSession(arg0, arg1);
+    public Session openSession(Connection connection, Interceptor interceptor) {
+        return this.getSessionFactory().openSession(connection, interceptor);
     }
 
     public StatelessSession openStatelessSession() {
         return this.getSessionFactory().openStatelessSession();
     }
 
-    public StatelessSession openStatelessSession(Connection arg0) {
-        return this.getSessionFactory().openStatelessSession(arg0);
+    public StatelessSession openStatelessSession(Connection connection) {
+        return this.getSessionFactory().openStatelessSession(connection);
     }
 }

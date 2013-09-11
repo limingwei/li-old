@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../more/li.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../more/li.xsd">
 	<beans>
 		<bean name="li" class="li.datasource.SimpleDataSource">
 			<property name="dataSource" value="druid" />
@@ -27,6 +28,7 @@
 	<aops>
 		<aop class="li.aop.*" method=".*" filter="log" />
 		<aop class="li.aop.test._Account" method="testUpdate" filter="trans" />
-		<aop class="li.people[.](action|record)[.].*" method=".*(count|delete|find|insert|list|save|update).*" filter="statAopFilter" />
+		<aop class="li.people[.](action|record)[.].*" method=".*(count|delete|find|insert|list|save|update).*"
+			filter="statAopFilter" />
 	</aops>
 </config>

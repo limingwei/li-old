@@ -1,18 +1,13 @@
 package li.hibernate;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.sql.DataSource;
 
 import li.util.Files;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Interceptor;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.classic.Session;
 
 public class SessionFactory extends SessionFactoryWrapper {
     private static final long serialVersionUID = -8786008904930067379L;
@@ -21,28 +16,28 @@ public class SessionFactory extends SessionFactoryWrapper {
 
     private Configuration configuration;
 
-    private DataSource dataSource;
+    static final ThreadLocal<DataSource> DATA_SOURCE_THREAD_LOCAL = new ThreadLocal<DataSource>();
 
     public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-
-    public Connection getConnection() {
-        try {
-            return this.dataSource.getConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        DATA_SOURCE_THREAD_LOCAL.set(dataSource);
     }
 
     public Configuration getConfiguration() {
         if (null == this.configuration) {
-            Configuration configuration = new Configuration().configure();
+            Configuration configuration = new Configuration();
+            configuration.setProperty("hibernate.connection.provider_class", DataSourceConnectionProvider.class.getName());
+
             File root = Files.root();
+            List<String> cfgs = Files.list(root, "^.*hibernate\\.cfg\\.xml$", true, 1);
+            if (null != cfgs && 1 == cfgs.size()) {
+                configuration.configure(new File(cfgs.get(0)));
+            }
+
             List<String> hbms = Files.list(root, "^.*\\.hbm\\.xml$", true, 1);
             for (String hbm : hbms) {
                 configuration.addResource(hbm.replace(root + "", ""));
             }
+
             this.configuration = configuration;
         }
         return this.configuration;
@@ -53,13 +48,5 @@ public class SessionFactory extends SessionFactoryWrapper {
             this.sessionFactory = this.getConfiguration().buildSessionFactory();
         }
         return this.sessionFactory;
-    }
-
-    public Session openSession() throws HibernateException {
-        return null == this.dataSource ? super.openSession() : super.openSession(this.getConnection());
-    }
-
-    public Session openSession(Interceptor interceptor) throws HibernateException {
-        return null == this.dataSource ? super.openSession(interceptor) : super.openSession(this.getConnection(), interceptor);
     }
 }
