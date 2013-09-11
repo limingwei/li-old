@@ -20,12 +20,12 @@ public class TransFilter implements AopFilter {
     /**
      * 事务是否只读
      */
-    private Boolean readOnly;
+    private Boolean readOnly = false;
 
     /**
      * 事务级别,参数可以为String常量名 TRANSACTION_READ_UNCOMMITTED 也可以为他的Int值 1
      */
-    public void setLevel(String level) {
+    public TransFilter setLevel(String level) {
         if (!Verify.isEmpty(level)) {
             try {
                 this.level = Integer.valueOf(level);
@@ -33,13 +33,15 @@ public class TransFilter implements AopFilter {
                 this.level = (Integer) Reflect.getStatic(Connection.class, level);
             }
         }
+        return this;
     }
 
     /**
      * 默认为false
      */
-    public void setReadOnly(Boolean readOnly) {
+    public TransFilter setReadOnly(Boolean readOnly) {
         this.readOnly = readOnly;
+        return this;
     }
 
     public void doFilter(final AopChain chain) {

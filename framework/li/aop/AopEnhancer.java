@@ -54,11 +54,6 @@ public class AopEnhancer {
     private NamingPolicy namingPolicy;
 
     /**
-     * 内置的AopFilter,用li.dao.Trans包裹执行chain.doFilter,使被包裹的方法在事务中执行
-     */
-    private TransFilter transFilter;
-
-    /**
      * 初始化
      */
     public AopEnhancer() {
@@ -69,7 +64,7 @@ public class AopEnhancer {
             } // http://t.cn/zQo4ydN
         };
 
-        filtersBuiltIn.put("~!@#trans", transFilter = new TransFilter());// 初始化并内置AopFilter
+        filtersBuiltIn.put("~!@#trans", new TransFilter());// 初始化并内置AopFilter
 
         readXmlAopConfig();
     }
@@ -105,10 +100,8 @@ public class AopEnhancer {
         }
         Trans trans = method.getAnnotation(li.annotation.Trans.class);
         if (null != trans) {// 如果有@Trans注解
-            transFilter.setLevel(trans.value() != -1 ? trans.value() + "" : null);
-            transFilter.setReadOnly(trans.readOnly());
-            filters.add(transFilter);
-        }
+            filters.add(new TransFilter().setLevel(trans.value() != -1 ? trans.value() + "" : null).setReadOnly(trans.readOnly()));
+        }// 每个注解都需要new TransFilter(),因为各个的注解值会不一样
         return filters;
     }
 
@@ -122,10 +115,7 @@ public class AopEnhancer {
                 String[] names = role[2].split(",");// 所有Aop切入类
                 for (String name : names) {
                     AopFilter filter = Ioc.get(name);// 通过Ioc得到AopFilter
-                    if (null == filter) {
-                        filter = filtersBuiltIn.get("~!@#" + name);
-                    }
-                    if (null == filter) {
+                    if (null == (null == filter ? filter = filtersBuiltIn.get("~!@#" + name) : filter)) {// 无Ioc配置则取内置,若无则报异常
                         throw new RuntimeException("AopFilter " + name + " not found <aop class=\"" + role[0] + "\" method=\"" + role[1] + "\" filter=\"" + role[2] + "\" />");
                     }
                     filters.add(filter);// 为空时搜索内置的AopFilter
@@ -140,7 +130,7 @@ public class AopEnhancer {
      */
     private List<AopFilter> getFilters(Object target, Method method) {
         List<AopFilter> filters = this.getAnnotationFilters(method);
-        filters.addAll(this.getXmlFilters(target, method));
+        filters.addAll(this.getXmlFilters(target, method));// 先加载注解 Aop,后Xml Aop,使注解配置覆盖Xml配置
         return filters;
     }
 
