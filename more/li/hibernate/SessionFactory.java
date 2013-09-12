@@ -7,7 +7,9 @@ import javax.sql.DataSource;
 
 import li.util.Files;
 
+import org.hibernate.HibernateException;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.classic.Session;
 
 public class SessionFactory extends SessionFactoryWrapper {
     private static final long serialVersionUID = -8786008904930067379L;
@@ -16,10 +18,14 @@ public class SessionFactory extends SessionFactoryWrapper {
 
     private Configuration configuration;
 
-    static final ThreadLocal<DataSource> DATA_SOURCE_THREAD_LOCAL = new ThreadLocal<DataSource>();
+    static final ThreadLocal<DataSource> DATASOURCE_THREADLOCAL = new ThreadLocal<DataSource>();
 
     public void setDataSource(DataSource dataSource) {
-        DATA_SOURCE_THREAD_LOCAL.set(dataSource);
+        DATASOURCE_THREADLOCAL.set(dataSource);
+    }
+
+    public DataSource getDataSource() {
+        return DATASOURCE_THREADLOCAL.get();
     }
 
     public Configuration getConfiguration() {
@@ -48,5 +54,11 @@ public class SessionFactory extends SessionFactoryWrapper {
             this.sessionFactory = this.getConfiguration().buildSessionFactory();
         }
         return this.sessionFactory;
+    }
+
+    public Session getCurrentSession() throws HibernateException {
+        // Session session = OpenSessionInViewFilter.SESSION_THREADLOCAL.get();
+        // return session;
+        return super.getCurrentSession();
     }
 }

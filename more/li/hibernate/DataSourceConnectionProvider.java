@@ -13,7 +13,7 @@ public class DataSourceConnectionProvider implements ConnectionProvider {
     public void configure(Properties properties) throws HibernateException {}
 
     public DataSource getDataSource() {
-        return SessionFactory.DATA_SOURCE_THREAD_LOCAL.get();
+        return SessionFactory.DATASOURCE_THREADLOCAL.get();
     }
 
     public Connection getConnection() throws SQLException {
