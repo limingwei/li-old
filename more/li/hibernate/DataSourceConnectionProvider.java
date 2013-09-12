@@ -9,6 +9,9 @@ import javax.sql.DataSource;
 import org.hibernate.HibernateException;
 import org.hibernate.connection.ConnectionProvider;
 
+/**
+ * @author 明伟
+ */
 public class DataSourceConnectionProvider implements ConnectionProvider {
     public void configure(Properties properties) throws HibernateException {}
 

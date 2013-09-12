@@ -6,6 +6,9 @@ import li.dao.Page;
 
 import org.hibernate.SessionFactory;
 
+/**
+ * @author 明伟
+ */
 public class Daos {
     /**
      * list

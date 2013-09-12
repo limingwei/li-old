@@ -1,6 +1,7 @@
 package li.hibernate;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
@@ -10,9 +11,7 @@ import java.util.Set;
 import javax.sql.DataSource;
 
 import li.dao.Page;
-import li.util.Log;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -26,8 +25,6 @@ import org.hibernate.persister.entity.SingleTableEntityPersister;
  * @author 明伟
  */
 public abstract class DaoSupport {
-    private static final Log log = Log.init();
-
     /**
      * Pojo类型
      */
@@ -53,28 +50,44 @@ public abstract class DaoSupport {
      */
     private String idColumn;
 
+    /**
+     * sessionFactory
+     */
     private SessionFactory sessionFactory;
 
+    /**
+     * getSessionFactory
+     */
     public SessionFactory getSessionFactory() {
         return this.sessionFactory;
     }
 
+    /**
+     * setSessionFactory
+     */
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
     /**
-     * getSessionFactory().getCurrentSession()
+     * getOrOpenSession
      */
-    public Session getCurrentSession() {
-        try {
-            return getSessionFactory().getCurrentSession();
-        } catch (HibernateException e) {
-            if ("No Hibernate Session bound to thread, and configuration does not allow creation of non-transactional one here".equals(e.getMessage())) {
-                log.info(e + "");
-                return getSessionFactory().openSession();
-            }
-            throw e;
+    public Session getOrOpenSession() {
+        Session session = OpenSessionInViewFilter.SESSION_THREADLOCAL.get();
+        if (null == session) {
+            session = this.getSessionFactory().openSession();
+        }
+        return session;
+    }
+
+    /**
+     * closeSession
+     */
+    public void closeSession(Session session) {
+        Session session_threadlocal = OpenSessionInViewFilter.SESSION_THREADLOCAL.get();
+        if (null != session & !session.equals(session_threadlocal)) {
+            session.clear();
+            session.close();
         }
     }
 
@@ -101,9 +114,21 @@ public abstract class DaoSupport {
      */
     public Class<?> getEntityClass() {
         if (null == this.entityClass) {
-            this.entityClass = (Class<?>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+            this.entityClass = (Class<?>) this.getParameterizedType(this.getClass()).getActualTypeArguments()[0];
         }
         return this.entityClass;
+    }
+
+    /**
+     * getParameterizedType
+     */
+    private ParameterizedType getParameterizedType(Class<?> clazz) {
+        Type type = clazz.getGenericSuperclass();
+        if (type instanceof ParameterizedType) {
+            return (ParameterizedType) type;
+        } else {
+            return getParameterizedType(clazz.getSuperclass());
+        }
     }
 
     public void setEntityClass(Class<?> entityClass) {
@@ -162,7 +187,7 @@ public abstract class DaoSupport {
      * @param args 替换?的参数数组
      */
     protected Query buildQuery(Session session, Page page, String hql, Object... args) {
-        return setArgs(page, (null == session ? this.getCurrentSession() : session).createQuery(hql), args);
+        return setArgs(page, (null == session ? this.getSessionFactory().openSession() : session).createQuery(hql), args);
     }
 
     /**
@@ -174,7 +199,7 @@ public abstract class DaoSupport {
      * @param args 替换?的参数数组
      */
     protected SQLQuery buildSqlQuery(Session session, Page page, String sql, Object... args) {
-        return setArgs(page, (null == session ? this.getCurrentSession() : session).createSQLQuery(sql), args);
+        return setArgs(page, (null == session ? this.getSessionFactory().openSession() : session).createSQLQuery(sql), args);
     }
 
     /**

@@ -11,6 +11,9 @@ import org.hibernate.HibernateException;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.classic.Session;
 
+/**
+ * @author 明伟
+ */
 public class SessionFactory extends SessionFactoryWrapper {
     private static final long serialVersionUID = -8786008904930067379L;
 

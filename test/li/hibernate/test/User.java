@@ -1,5 +1,7 @@
 package li.hibernate.test;
 
+import java.util.List;
+
 public class User {
     private Integer id;
     private String username;
@@ -7,6 +9,16 @@ public class User {
     private String tel;
     private String email;
     private Integer flag;
+
+    private List<Role> roles;
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
 
     public Integer getId() {
         return id;

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import li.dao.Page;
 
+import org.hibernate.Session;
 import org.hibernate.criterion.CriteriaSpecification;
 
 /**
@@ -16,78 +17,46 @@ import org.hibernate.criterion.CriteriaSpecification;
  * @version 1.0 
  */
 public abstract class AbstractDao<T, ID extends Serializable> extends DaoSupport {
-    /**
-     * list
-     */
-    public List<T> list(Page page) {
-        return super.buildQuery(null, page, " FROM " + this.getEntityName() + " ").list();
-    }
-
-    /**
-     * listByProperty
-     */
-    public List<T> listByProperty(String propertyName, Object value, Page page) {
-        return this.list(page, "FROM " + this.getEntityName() + " WHERE " + propertyName + "=?", value);
-    }
+    private static final Page SIZE_ONE_PAGE = new Page().setPageSize(1).count(false);
 
     /**
      * listByHql
      */
     public List<T> list(Page page, String hql, Object... args) {
-        return super.buildQuery(null, page, hql, args).list();
+        Session session = super.getOrOpenSession();
+        List<T> list = super.buildQuery(session, page, hql, args).list();
+        super.closeSession(session);
+        return list;
     }
 
     /**
      * listBySql
      */
     public List<T> listBySql(Page page, String sql, Object... args) {
-        return super.buildSqlQuery(null, page, sql, args).addEntity(this.getEntityClass()).list();
-    }
-
-    /**
-     * count
-     */
-    public Integer count() {
-        return this.count("SELECT COUNT(*) FROM  " + this.getEntityName());
+        Session session = super.getOrOpenSession();
+        List<T> list = super.buildSqlQuery(session, page, sql, args).list();
+        super.closeSession(session);
+        return list;
     }
 
     /**
      * countByHql
      */
     public Integer count(String hql, Object... args) {
-        return ((Number) super.buildQuery(null, null, hql, args).uniqueResult()).intValue();
+        Session session = super.getOrOpenSession();
+        Integer count = ((Number) super.buildQuery(session, null, hql, args).uniqueResult()).intValue();
+        super.closeSession(session);
+        return count;
     }
 
     /**
      * countBySql
      */
     public Integer countBySql(String sql, Object... args) {
-        return ((Number) super.buildSqlQuery(null, null, sql, args).uniqueResult()).intValue();
-    }
-
-    /**
-     * find
-     */
-    public T find(ID id) {
-        return (T) super.getCurrentSession().get(this.getEntityClass(), id);
-    }
-
-    /**
-     * find
-     */
-    public T find(String hql, Object... args) {
-        return (T) super.buildQuery(null, null, hql, args).uniqueResult();
-    }
-
-    /**
-     * 使用Sql查询数据库,返回map
-     * 
-     * @param sql
-     * @param args
-     * @return
-     */
-    public Map<?, ?> findMap(String sql, Object... args) {
-        return (Map<?, ?>) super.buildSqlQuery(null, null, sql, args).setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP).uniqueResult();
+        Session session = super.getOrOpenSession();
+        Integer count = ((Number) super.buildSqlQuery(session, null, sql, args).uniqueResult()).intValue();
+        super.closeSession(session);
+        return count;
     }
 
     /**
@@ -99,14 +68,146 @@ public abstract class AbstractDao<T, ID extends Serializable> extends DaoSupport
      * @return
      */
     public List<Map<?, ?>> listMap(Page page, String sql, Object... args) {
-        return super.buildSqlQuery(null, page, sql, args).setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP).list();
+        Session session = super.getOrOpenSession();
+        List<Map<?, ?>> list = super.buildSqlQuery(session, page, sql, args).setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP).list();
+        super.closeSession(session);
+        return list;
+    }
+
+    /**
+     * 更新操作
+     */
+    public Integer update(String hql, Object... args) {
+        Session session = super.getOrOpenSession();
+        Integer result = super.buildQuery(session, null, hql, args).executeUpdate();
+        super.closeSession(session);
+        return result;
+    }
+
+    /**
+     * updateBySql
+     */
+    public Integer updateBySql(String sql, Object... args) {
+        Session session = super.getOrOpenSession();
+        Integer result = super.buildSqlQuery(session, null, sql, args).executeUpdate();
+        super.closeSession(session);
+        return result;
+    }
+
+    /**
+     * save
+     */
+    public Boolean save(T entry) {
+        Session session = super.getOrOpenSession();
+        try {
+            session.save(entry);
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException(e + " ", e);
+        } finally {
+            super.closeSession(session);
+        }
+    }
+
+    /**
+     * saveOrUpdate
+     */
+    public Boolean saveOrUpdate(T entry) {
+        Session session = super.getOrOpenSession();
+        try {
+            session.saveOrUpdate(entry);
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException(e + " ", e);
+        } finally {
+            super.closeSession(session);
+        }
+    }
+
+    /**
+     * update
+     */
+    public Boolean update(T entity) {
+        Session session = super.getOrOpenSession();
+        try {
+            session.update(entity);
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException(e + " ", e);
+        } finally {
+            super.closeSession(session);
+        }
+    }
+
+    /**
+     * delete
+     */
+    public Boolean delete(T entity) {
+        Session session = super.getOrOpenSession();
+        try {
+            session.delete(entity);
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException(e + " ", e);
+        } finally {
+            super.closeSession(session);
+        }
     }
 
     /**
      * findBySql
      */
     public T findBySql(String sql, Object... args) {
-        return (T) super.buildSqlQuery(null, null, sql, args).addEntity(this.getEntityClass()).uniqueResult();
+        List<T> list = this.listBySql(SIZE_ONE_PAGE, sql, args);
+        return null == list || list.isEmpty() ? null : list.get(0);
+    }
+
+    /**
+     * find
+     */
+    public T find(String hql, Object... args) {
+        List<T> list = this.list(SIZE_ONE_PAGE, hql, args);
+        return null == list || list.isEmpty() ? null : list.get(0);
+    }
+
+    /**
+     * 使用Sql查询数据库,返回map
+     * 
+     * @param sql
+     * @param args
+     * @return
+     */
+    public Map<?, ?> findMap(String sql, Object... args) {
+        List<Map<?, ?>> list = this.listMap(SIZE_ONE_PAGE, sql, args);
+        return null == list || list.isEmpty() ? null : list.get(0);
+    }
+
+    /**
+     * find
+     */
+    public T find(ID id) {
+        return this.find("FROM " + this.getEntityName() + " WHERE " + this.getIdField() + "=?", id);
+    }
+
+    /**
+     * list
+     */
+    public List<T> list(Page page) {
+        return this.list(page, "FROM " + this.getEntityName());
+    }
+
+    /**
+     * listByProperty
+     */
+    public List<T> listByProperty(String propertyName, Object value, Page page) {
+        return this.list(page, "FROM " + this.getEntityName() + " WHERE " + propertyName + "=?", value);
+    }
+
+    /**
+     * count
+     */
+    public Integer count() {
+        return this.count("SELECT COUNT(*) FROM  " + this.getEntityName());
     }
 
     /**
@@ -114,18 +215,6 @@ public abstract class AbstractDao<T, ID extends Serializable> extends DaoSupport
      */
     public Boolean delete(ID id) {
         return 0 < this.update("DELETE FROM " + this.getEntityName() + " WHERE " + super.getIdField() + " = ? ", id);
-    }
-
-    /**
-     * delete
-     */
-    public Boolean delete(T entry) {
-        try {
-            super.getCurrentSession().delete(entry);
-            return true;
-        } catch (Exception e) {
-            throw new RuntimeException(e + " ", e);
-        }
     }
 
     /**
@@ -140,55 +229,5 @@ public abstract class AbstractDao<T, ID extends Serializable> extends DaoSupport
      */
     public Integer deleteBySql(String sql, Object... args) {
         return this.updateBySql(sql, args);
-    }
-
-    /**
-     * save
-     */
-    public Boolean save(T entry) {
-        try {
-            super.getCurrentSession().save(entry);
-            return true;
-        } catch (Exception e) {
-            throw new RuntimeException(e + " ", e);
-        }
-    }
-
-    /**
-     * saveOrUpdate
-     */
-    public Boolean saveOrUpdate(T entry) {
-        try {
-            super.getCurrentSession().saveOrUpdate(entry);
-            return true;
-        } catch (Exception e) {
-            throw new RuntimeException(e + " ", e);
-        }
-    }
-
-    /**
-     * update
-     */
-    public Boolean update(T entity) {
-        try {
-            super.getCurrentSession().update(entity);
-            return true;
-        } catch (Exception e) {
-            throw new RuntimeException(e + " ", e);
-        }
-    }
-
-    /**
-     * 更新操作
-     */
-    public Integer update(String hql, Object... args) {
-        return super.buildQuery(null, null, hql, args).executeUpdate();
-    }
-
-    /**
-     * updateBySql
-     */
-    public Integer updateBySql(String sql, Object... args) {
-        return super.buildSqlQuery(null, null, sql, args).executeUpdate();
     }
 }

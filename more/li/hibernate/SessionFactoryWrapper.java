@@ -18,6 +18,9 @@ import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.metadata.CollectionMetadata;
 import org.hibernate.stat.Statistics;
 
+/**
+ * @author 明伟
+ */
 public class SessionFactoryWrapper implements SessionFactory {
     private static final long serialVersionUID = 8697863729776416273L;
 

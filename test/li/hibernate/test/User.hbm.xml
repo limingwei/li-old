@@ -11,5 +11,9 @@
 		<property name="tel" />
 		<property name="email" />
 		<property name="flag" />
+		<bag name="roles" table="r_user_role">
+			<key column="user_id" />
+			<many-to-many class="li.hibernate.test.Role" column="role_id" />
+		</bag>
 	</class>
 </hibernate-mapping>
