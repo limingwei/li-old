@@ -6,6 +6,8 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import li.dao.Trans;
+
 import org.hibernate.HibernateException;
 import org.hibernate.connection.ConnectionProvider;
 
@@ -20,7 +22,16 @@ public class DataSourceConnectionProvider implements ConnectionProvider {
     }
 
     public Connection getConnection() throws SQLException {
-        return getDataSource().getConnection();
+        try {
+            Trans trans = Trans.current();
+            if (null == trans) {
+                return this.getDataSource().getConnection();
+            } else {
+                return trans.getConnection(this.getDataSource());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void closeConnection(Connection connection) throws SQLException {

@@ -26,7 +26,7 @@ public abstract class Trans {
     /**
      * 当前事务管理的链接,key为Dao的类型
      */
-    private Map<Class<?>, Connection> connectionMap = new HashMap<Class<?>, Connection>();
+    private Map<DataSource, Connection> connectionMap = new HashMap<DataSource, Connection>();
 
     /**
      * 事务隔离级别
@@ -103,14 +103,14 @@ public abstract class Trans {
     /**
      * 在事务中获取数据库链接
      */
-    public Connection getConnection(DataSource dataSource, Class<?> daoType) throws Exception {
-        Connection connection = this.connectionMap.get(daoType); // 从connectionMap中得到为这个Dao类缓存的connection
+    public Connection getConnection(DataSource dataSource) throws Exception {
+        Connection connection = this.connectionMap.get(dataSource); // 从connectionMap中得到为这个Dao类缓存的connection
         if (null == connection || connection.isClosed()) { // 没有缓存这个Dao的connection或已被关闭
             connection = dataSource.getConnection(); // 获取一个新的connection
             connection.setAutoCommit(false); // 设置为不自动提交
             connection.setTransactionIsolation(null != this.level ? this.level : connection.getTransactionIsolation());// 设置事务级别
             connection.setReadOnly(null != this.readOnly ? this.readOnly : connection.isReadOnly());// 设置只读
-            this.connectionMap.put(daoType, connection); // 缓存connection
+            this.connectionMap.put(dataSource, connection); // 缓存connection
         }
         return connection; // 返回这个connection
     }
@@ -132,7 +132,7 @@ public abstract class Trans {
      */
     private void end() throws Exception {
         if (null == this.map.get(hashCode() + "~!@#in_trans")) {// 未在另一个事务中
-            for (Entry<Class<?>, Connection> connection : this.connectionMap.entrySet()) {
+            for (Entry<DataSource, Connection> connection : this.connectionMap.entrySet()) {
                 connection.getValue().close();
                 log.trace("Closing Connection in Trans ?", connection.getValue());
             }
@@ -146,7 +146,7 @@ public abstract class Trans {
      */
     private void commit() throws Exception {
         if (null == this.map.get(hashCode() + "~!@#in_trans") && !this.readOnly) {// 未在另一个事务中且非只读
-            for (Entry<Class<?>, Connection> connection : this.connectionMap.entrySet()) {
+            for (Entry<DataSource, Connection> connection : this.connectionMap.entrySet()) {
                 connection.getValue().commit();
                 log.trace("Trans@? level=? readOnly=? commiting ?", hashCode(), this.level, this.readOnly, connection.getValue());
             }
@@ -158,7 +158,7 @@ public abstract class Trans {
      */
     private void rollback() throws Exception {
         if (null == this.map.get(hashCode() + "~!@#in_trans") && !this.readOnly) {// 未在另一个事务中且非只读
-            for (Entry<Class<?>, Connection> connection : this.connectionMap.entrySet()) {
+            for (Entry<DataSource, Connection> connection : this.connectionMap.entrySet()) {
                 connection.getValue().rollback();
                 log.trace("Trans@?  level=? readOnly=?  rollingback ?", hashCode(), this.level, this.readOnly, connection.getValue());
             }

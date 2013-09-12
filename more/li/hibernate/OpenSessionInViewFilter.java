@@ -36,7 +36,7 @@ public class OpenSessionInViewFilter implements Filter, AopFilter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         SESSION_THREADLOCAL.set(this.sessionFactory.openSession());
         filterChain.doFilter(servletRequest, servletResponse);
-        this.closeSession(SESSION_THREADLOCAL.get());
+        closeSession(SESSION_THREADLOCAL.get());
     }
 
     /**

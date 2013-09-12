@@ -8,6 +8,8 @@ import li.dao.Page;
 
 import org.hibernate.Session;
 import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.metadata.ClassMetadata;
+import org.hibernate.persister.entity.SingleTableEntityPersister;
 
 /**
  * AbstractDao  
@@ -229,5 +231,12 @@ public abstract class AbstractDao<T, ID extends Serializable> extends DaoSupport
      */
     public Integer deleteBySql(String sql, Object... args) {
         return this.updateBySql(sql, args);
+    }
+
+    public void saveIgnoreNull(T entity) {
+        ClassMetadata classMetadata = super.getSessionFactory().getClassMetadata(this.getEntityClass());
+        SingleTableEntityPersister singleTableEntityPersister = (SingleTableEntityPersister) classMetadata;
+        singleTableEntityPersister.getEntityMetamodel().isDynamicInsert();
+        singleTableEntityPersister.getEntityMetamodel().isDynamicUpdate();
     }
 }

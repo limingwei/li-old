@@ -16,4 +16,8 @@ public class UserDao extends AbstractDao<User, Integer> {
     public List<User> list(Page page) {
         return super.list(page);
     }
+
+    public Boolean save(User entry) {
+        return super.save(entry);
+    }
 }

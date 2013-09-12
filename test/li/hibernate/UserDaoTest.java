@@ -13,9 +13,19 @@ public class UserDaoTest {
     UserDao userDao;
 
     @Test
-    public void list() {
+    public void find() {
         User user = userDao.find(1);
         System.out.println(user);
         System.out.println(user.getRoles());
+    }
+
+    @Test
+    public void save() {
+        User user = new User();
+        user.setUsername("uuuuuuuuuu");
+        user.setPassword("pppppppppppp");
+        user.setTel("ttttttt");
+        user.setFlag(1);
+        userDao.save(user);
     }
 }

@@ -5,11 +5,10 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import li.hibernate.wrapper.SessionFactoryWrapper;
 import li.util.Files;
 
-import org.hibernate.HibernateException;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.classic.Session;
 
 /**
  * @author 明伟
@@ -57,11 +56,5 @@ public class SessionFactory extends SessionFactoryWrapper {
             this.sessionFactory = this.getConfiguration().buildSessionFactory();
         }
         return this.sessionFactory;
-    }
-
-    public Session getCurrentSession() throws HibernateException {
-        // Session session = OpenSessionInViewFilter.SESSION_THREADLOCAL.get();
-        // return session;
-        return super.getCurrentSession();
     }
 }
