@@ -1,4 +1,4 @@
-package li.hibernate.wrapper;
+package li.hibernate;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -90,8 +90,8 @@ public class SessionFactoryWrapper implements SessionFactory {
         return this.getSessionFactory().getClassMetadata(type);
     }
 
-    public CollectionMetadata getCollectionMetadata(String arg0) throws HibernateException {
-        return this.getSessionFactory().getCollectionMetadata(arg0);
+    public CollectionMetadata getCollectionMetadata(String type) throws HibernateException {
+        return this.getSessionFactory().getCollectionMetadata(type);
     }
 
     public Session getCurrentSession() throws HibernateException {
@@ -102,8 +102,8 @@ public class SessionFactoryWrapper implements SessionFactory {
         return this.getSessionFactory().getDefinedFilterNames();
     }
 
-    public FilterDefinition getFilterDefinition(String arg0) throws HibernateException {
-        return this.getSessionFactory().getFilterDefinition(arg0);
+    public FilterDefinition getFilterDefinition(String filterName) throws HibernateException {
+        return this.getSessionFactory().getFilterDefinition(filterName);
     }
 
     public Statistics getStatistics() {

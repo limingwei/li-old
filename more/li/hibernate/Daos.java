@@ -53,8 +53,8 @@ public class Daos {
     }
 
     /**
-     * @param hibernateTemplate
-     * @param entityClass
+     * @param _sessionFactory
+     * @param _entityClass
      */
     private static AbstractDao getDao(final SessionFactory _sessionFactory, final Class<?> _entityClass) {
         return new AbstractDao() {

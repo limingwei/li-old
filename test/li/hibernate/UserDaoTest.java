@@ -21,11 +21,18 @@ public class UserDaoTest {
 
     @Test
     public void save() {
-        User user = new User();
-        user.setUsername("uuuuuuuuuu");
-        user.setPassword("pppppppppppp");
-        user.setTel("ttttttt");
-        user.setFlag(1);
-        userDao.save(user);
+        for (int i = 0; i < 10; i++) {
+            User user = new User();
+            user.setUsername("uuuuuuuuuu-" + i);
+            user.setPassword("pppppppppppp-" + i);
+            user.setTel("ttttttt-" + i);
+            user.setFlag(1);
+            userDao.save(user);
+        }
+    }
+
+    @Test
+    public void list() {
+        System.err.println(userDao.list(null));
     }
 }

@@ -22,13 +22,15 @@ public class DataSourceConnectionProvider implements ConnectionProvider {
     }
 
     public Connection getConnection() throws SQLException {
+        Connection connection;
         try {
             Trans trans = Trans.current();
             if (null == trans) {
-                return this.getDataSource().getConnection();
+                connection = this.getDataSource().getConnection();
             } else {
-                return trans.getConnection(this.getDataSource());
+                connection = trans.getConnection(this.getDataSource());
             }
+            return connection;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

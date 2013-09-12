@@ -119,7 +119,7 @@ public abstract class Trans {
      * 开始事务,初始化CONNECTION_MAP,或者标记这个事务已被其他事务包裹融化
      */
     private void begin() {
-        if (null == TRANS_LOCAL.get()) { // 未在另一个事务中
+        if (null == Trans.current()) { // 未在另一个事务中
             TRANS_LOCAL.set(this);
             log.trace("Trans@? level=? readOnly=? beginning", hashCode(), this.level, this.readOnly);
         } else {

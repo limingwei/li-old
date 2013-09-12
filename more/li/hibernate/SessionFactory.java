@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import li.hibernate.wrapper.SessionFactoryWrapper;
 import li.util.Files;
 
 import org.hibernate.cfg.Configuration;
@@ -34,18 +33,15 @@ public class SessionFactory extends SessionFactoryWrapper {
         if (null == this.configuration) {
             Configuration configuration = new Configuration();
             configuration.setProperty("hibernate.connection.provider_class", DataSourceConnectionProvider.class.getName());
-
             File root = Files.root();
             List<String> cfgs = Files.list(root, "^.*hibernate\\.cfg\\.xml$", true, 1);
             if (null != cfgs && 1 == cfgs.size()) {
                 configuration.configure(new File(cfgs.get(0)));
             }
-
             List<String> hbms = Files.list(root, "^.*\\.hbm\\.xml$", true, 1);
             for (String hbm : hbms) {
                 configuration.addResource(hbm.replace(root + "", ""));
             }
-
             this.configuration = configuration;
         }
         return this.configuration;
