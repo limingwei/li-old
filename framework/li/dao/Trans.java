@@ -24,7 +24,7 @@ public abstract class Trans {
     private static final ThreadLocal<Trans> TRANS_LOCAL = new ThreadLocal<Trans>();
 
     /**
-     * 当前事务管理的链接,key为Dao的类型
+     * 当前事务管理的链接,每DataSource一个,多DataSource支持
      */
     private Map<DataSource, Connection> connectionMap = new HashMap<DataSource, Connection>();
 
@@ -55,6 +55,28 @@ public abstract class Trans {
      */
     public Boolean success() {
         return (Boolean) this.map.get(hashCode() + "~!@#success");
+    }
+
+    /**
+     * 获取当前线程的事务,没在事务中则返回空
+     */
+    public static Trans current() {
+        return TRANS_LOCAL.get();
+    }
+
+    /**
+     * 在事务中获取数据库链接
+     */
+    public Connection getConnection(DataSource dataSource) throws Exception {
+        Connection connection = this.connectionMap.get(dataSource); // 从connectionMap中得到为这个Dao类缓存的connection
+        if (null == connection || connection.isClosed()) { // 没有缓存这个Dao的connection或已被关闭
+            connection = dataSource.getConnection(); // 获取一个新的connection
+            connection.setAutoCommit(false); // 设置为不自动提交
+            connection.setTransactionIsolation(null != this.level ? this.level : connection.getTransactionIsolation());// 设置事务级别
+            connection.setReadOnly(null != this.readOnly ? this.readOnly : connection.isReadOnly());// 设置只读
+            this.connectionMap.put(dataSource, connection); // 缓存connection
+        }
+        return connection; // 返回这个connection
     }
 
     /**
@@ -92,28 +114,6 @@ public abstract class Trans {
      * 抽象方法,包裹需要事务控制的Dao方法
      */
     public abstract void run();
-
-    /**
-     * 获取当前线程的事务,没在事务中则返回空
-     */
-    public static Trans current() {
-        return TRANS_LOCAL.get();
-    }
-
-    /**
-     * 在事务中获取数据库链接
-     */
-    public Connection getConnection(DataSource dataSource) throws Exception {
-        Connection connection = this.connectionMap.get(dataSource); // 从connectionMap中得到为这个Dao类缓存的connection
-        if (null == connection || connection.isClosed()) { // 没有缓存这个Dao的connection或已被关闭
-            connection = dataSource.getConnection(); // 获取一个新的connection
-            connection.setAutoCommit(false); // 设置为不自动提交
-            connection.setTransactionIsolation(null != this.level ? this.level : connection.getTransactionIsolation());// 设置事务级别
-            connection.setReadOnly(null != this.readOnly ? this.readOnly : connection.isReadOnly());// 设置只读
-            this.connectionMap.put(dataSource, connection); // 缓存connection
-        }
-        return connection; // 返回这个connection
-    }
 
     /**
      * 开始事务,初始化CONNECTION_MAP,或者标记这个事务已被其他事务包裹融化
