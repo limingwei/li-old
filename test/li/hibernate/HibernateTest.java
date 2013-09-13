@@ -23,6 +23,7 @@ public class HibernateTest extends BaseTest {
         user.setPassword("123");
         user.setEmail("eee");
         user.setTel("ttt");
+        user.setFlag(1);
 
         System.err.println(session.save(user));
 

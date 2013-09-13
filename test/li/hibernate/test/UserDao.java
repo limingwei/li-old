@@ -20,8 +20,19 @@ public class UserDao extends AbstractDao<User, Integer> {
         return Daos.list(this.getSessionFactory(), User.class, page);
     }
 
-    @Trans(value = Connection.TRANSACTION_SERIALIZABLE, readOnly = false)
     public Boolean save(User entry) {
         return super.save(entry);
+    }
+
+    @Trans(value = Connection.TRANSACTION_SERIALIZABLE, readOnly = false)
+    public void testTrans() {
+        for (int i = 0; i < 10; i++) {
+            User user = new User();
+            user.setUsername("uuuuuuuuuu-" + i);
+            user.setPassword("pppppppppppp-" + i);
+            user.setTel("ttttttt-" + i);
+            user.setFlag(1);
+            super.save(user);
+        }
     }
 }

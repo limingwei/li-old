@@ -13,6 +13,8 @@ import li.demo.action.AccountActionTest;
 import li.demo.action.DemoActionTest;
 import li.demo.record.AccountTest;
 import li.demo.record.ForumTest;
+import li.hibernate.HibernateTest;
+import li.hibernate.UserDaoTest;
 import li.ioc.IocTest;
 import li.model.BeanTest;
 import li.model.FieldTest;
@@ -38,5 +40,6 @@ import org.junit.runners.Suite.SuiteClasses;
         QueryBuilderTest.class, ModelBuilderTest.class, TransTest.class, StringIdRecordTest.class,// Dao
         ConvertTest.class, ReflectTest.class, FilesTest.class, LogTest.class, VerifyTest.class, // Util
         AccountTest.class, ForumTest.class, // Record
-        DemoActionTest.class, AccountActionTest.class /* Action */})
+        DemoActionTest.class, AccountActionTest.class, // Action
+        HibernateTest.class, UserDaoTest.class })
 public class AllTest {}

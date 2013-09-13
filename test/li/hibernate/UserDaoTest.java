@@ -20,19 +20,15 @@ public class UserDaoTest {
     }
 
     @Test
-    public void save() {
-        for (int i = 0; i < 10; i++) {
-            User user = new User();
-            user.setUsername("uuuuuuuuuu-" + i);
-            user.setPassword("pppppppppppp-" + i);
-            user.setTel("ttttttt-" + i);
-            user.setFlag(1);
-            userDao.save(user);
-        }
-    }
+    public void save() {}
 
     @Test
     public void list() {
         System.err.println(userDao.list(null));
+    }
+
+    @Test
+    public void testTrans() {
+        userDao.testTrans();
     }
 }
