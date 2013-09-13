@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import li.mvc.Context;
-import li.util.StringUtil;
 
 public class Uploader {
     private Map<String, String[]> parameters = new HashMap<String, String[]>();
@@ -95,14 +94,7 @@ public class Uploader {
         if (i > 0) {// ie11里面filename不仅为文件名而为完整文件路径
             fileName = fileName.substring(i + 1);
         }
-        System.out.println(fileName + "\t" + StringUtil.getEncoding(fileName));
-
         fileName = uploadPath + "//" + UUID.randomUUID() + "_" + name + "_" + fileName;
-
-        System.out.println(uploadPath + "\t" + StringUtil.getEncoding(uploadPath));
-        System.out.println(name + "\t" + StringUtil.getEncoding(name));
-        System.out.println(fileName + "\t" + StringUtil.getEncoding(fileName));
-
         File file = new File(fileName);
         file.getParentFile().mkdirs();
         return file;

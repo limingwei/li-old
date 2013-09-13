@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../more/li.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://limingwei.github.io/li/li.xsd">
 	<consts>
-		<const name="" value="" />
-		<const name="" value="" />
-		<const name="" value="" />
-		<const name="" value="" />
+		<const name="annotationInJar" value="com.alibaba.druid.pool.DruidDataSource" />
 	</consts>
 	<beans>
 		<bean name="li" class="li.datasource.SimpleDataSource">
@@ -12,20 +9,17 @@
 			<property name="regex" value=".*" />
 			<property name="loginTimeout" value="500" />
 		</bean>
-
 		<bean name="druid" class="li.druid.DruidAdapter">
 			<property name="url" value="${db.url}" />
 			<property name="username" value="${db.username}" />
 			<property name="password" value="${db.password}" />
 			<property name="druidFilters" value="wall,mergeStat,log4j" />
 		</bean>
-
 		<bean name="statAopFilter" class="li.druid.StatAopFilter" />
 		<bean name="trans" class="li.aop.TransFilter">
 			<property name="level" value="TRANSACTION_SERIALIZABLE" />
 			<property name="readOnly" value="false" />
 		</bean>
-
 		<bean name="sessionFactory" class="li.hibernate.SessionFactory">
 			<property name="dataSource" value="li" />
 		</bean>

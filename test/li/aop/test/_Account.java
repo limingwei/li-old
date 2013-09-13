@@ -12,11 +12,14 @@ import li.annotation.Trans;
 import li.dao.Page;
 import li.dao.QueryBuilder;
 import li.dao.Record;
+import li.util.Log;
 
 @Bean
 @Table("t_account")
 public class _Account extends Record<_Account, Integer> {
     private static final long serialVersionUID = -3592765768245992120L;
+
+    static Log log = Log.init();
 
     @Inject("li2")
     DataSource dataSource;
@@ -33,7 +36,7 @@ public class _Account extends Record<_Account, Integer> {
     @Trans(readOnly = false)
     @Aop(_LogFilter.class)
     public void testUpdate() {
-        System.err.println(super.list(null));
+        log.info("li.aop.test._Account.testUpdate() " + super.list(null));
         super.update("SET flag=1 WHERE id=1");
     }
 }

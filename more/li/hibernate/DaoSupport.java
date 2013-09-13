@@ -1,7 +1,5 @@
 package li.hibernate;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
@@ -11,6 +9,7 @@ import java.util.Set;
 import javax.sql.DataSource;
 
 import li.dao.Page;
+import li.util.Reflect;
 
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -114,23 +113,14 @@ public abstract class DaoSupport {
      */
     public Class<?> getEntityClass() {
         if (null == this.entityClass) {
-            this.entityClass = (Class<?>) this.getParameterizedType(this.getClass()).getActualTypeArguments()[0];
+            this.entityClass = (Class<?>) Reflect.actualTypes(this.getClass())[0];
         }
         return this.entityClass;
     }
 
     /**
-     * getParameterizedType
+     * setEntityClass
      */
-    private ParameterizedType getParameterizedType(Class<?> clazz) {
-        Type type = clazz.getGenericSuperclass();
-        if (type instanceof ParameterizedType) {
-            return (ParameterizedType) type;
-        } else {
-            return getParameterizedType(clazz.getSuperclass());
-        }
-    }
-
     public void setEntityClass(Class<?> entityClass) {
         this.entityClass = entityClass;
     }

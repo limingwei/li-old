@@ -107,7 +107,6 @@ public class Files {
                 Log.put("~!@#PROPERTIE_FILES", propertyFiles); // 将 PROPERTIES文件列表缓存
                 log.info("Found ? properties files , at ?", propertyFiles.size(), rootFolder);
             }
-
             properties = new Properties();
             for (Object filePath : propertyFiles) {
                 if (Verify.contain((String) filePath, name)) {
@@ -125,6 +124,9 @@ public class Files {
         return properties;
     }
 
+    /**
+     * 返回框架的常量配置项,来自config.properties和xml const
+     */
     public static Properties config() {
         Properties config = (Properties) Log.get("~!@#CONFIG");// 从缓存中查找properties
         if (null == config) {

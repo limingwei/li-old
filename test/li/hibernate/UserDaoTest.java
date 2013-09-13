@@ -20,7 +20,14 @@ public class UserDaoTest {
     }
 
     @Test
-    public void save() {}
+    public void save() {
+        User user = new User();
+        user.setUsername("uuuuuuuuuu-");
+        user.setPassword("pppppppppppp-");
+        user.setTel("ttttttt-");
+        user.setFlag(1);
+        userDao.save(user);
+    }
 
     @Test
     public void list() {
@@ -30,5 +37,10 @@ public class UserDaoTest {
     @Test
     public void testTrans() {
         userDao.testTrans();
+    }
+
+    @Test
+    public void testNoTrans() {
+        userDao.testNoTrans();
     }
 }

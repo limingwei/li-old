@@ -26,7 +26,18 @@ public class UserDao extends AbstractDao<User, Integer> {
 
     @Trans(value = Connection.TRANSACTION_SERIALIZABLE, readOnly = false)
     public void testTrans() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
+            User user = new User();
+            user.setUsername("uuuuuuuuuu-" + i);
+            user.setPassword("pppppppppppp-" + i);
+            user.setTel("ttttttt-" + i);
+            user.setFlag(1);
+            super.save(user);
+        }
+    }
+
+    public void testNoTrans() {
+        for (int i = 0; i < 3; i++) {
             User user = new User();
             user.setUsername("uuuuuuuuuu-" + i);
             user.setPassword("pppppppppppp-" + i);

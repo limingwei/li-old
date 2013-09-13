@@ -8,8 +8,6 @@ import li.dao.Page;
 
 import org.hibernate.Session;
 import org.hibernate.criterion.CriteriaSpecification;
-import org.hibernate.metadata.ClassMetadata;
-import org.hibernate.persister.entity.SingleTableEntityPersister;
 
 /**
  * AbstractDao  
@@ -63,11 +61,6 @@ public abstract class AbstractDao<T, ID extends Serializable> extends DaoSupport
 
     /**
      * 使用Sql查询数据库,返回mapList
-     * 
-     * @param page
-     * @param sql
-     * @param args
-     * @return
      */
     public List<Map<?, ?>> listMap(Page page, String sql, Object... args) {
         Session session = super.getOrOpenSession();
@@ -174,10 +167,6 @@ public abstract class AbstractDao<T, ID extends Serializable> extends DaoSupport
 
     /**
      * 使用Sql查询数据库,返回map
-     * 
-     * @param sql
-     * @param args
-     * @return
      */
     public Map<?, ?> findMap(String sql, Object... args) {
         List<Map<?, ?>> list = this.listMap(SIZE_ONE_PAGE, sql, args);
@@ -199,13 +188,6 @@ public abstract class AbstractDao<T, ID extends Serializable> extends DaoSupport
     }
 
     /**
-     * listByProperty
-     */
-    public List<T> listByProperty(String propertyName, Object value, Page page) {
-        return this.list(page, "FROM " + this.getEntityName() + " WHERE " + propertyName + "=?", value);
-    }
-
-    /**
      * count
      */
     public Integer count() {
@@ -216,7 +198,7 @@ public abstract class AbstractDao<T, ID extends Serializable> extends DaoSupport
      * delete
      */
     public Boolean delete(ID id) {
-        return 0 < this.update("DELETE FROM " + this.getEntityName() + " WHERE " + super.getIdField() + " = ? ", id);
+        return 0 < this.delete("DELETE FROM " + this.getEntityName() + " WHERE " + super.getIdField() + " = ? ", id);
     }
 
     /**
@@ -231,12 +213,5 @@ public abstract class AbstractDao<T, ID extends Serializable> extends DaoSupport
      */
     public Integer deleteBySql(String sql, Object... args) {
         return this.updateBySql(sql, args);
-    }
-
-    public void saveIgnoreNull(T entity) {
-        ClassMetadata classMetadata = super.getSessionFactory().getClassMetadata(this.getEntityClass());
-        SingleTableEntityPersister singleTableEntityPersister = (SingleTableEntityPersister) classMetadata;
-        singleTableEntityPersister.getEntityMetamodel().isDynamicInsert();
-        singleTableEntityPersister.getEntityMetamodel().isDynamicUpdate();
     }
 }
