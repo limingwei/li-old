@@ -8,6 +8,7 @@
 			<xs:element name="beans" type="beans_type" minOccurs="0" maxOccurs="unbounded" />
 			<xs:element name="aops" type="aops_type" minOccurs="0" maxOccurs="unbounded" />
 			<xs:element name="tasks" type="tasks_type" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="consts" type="consts_type" minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:complexType>
 
@@ -67,5 +68,20 @@
 	<xs:attributeGroup name="task_attribute">
 		<xs:attribute name="class" type="xs:string" use="required" /><!-- default="com.company.project.task.DemoTask" -->
 		<xs:attribute name="trigger" type="xs:string" use="required" /><!-- default="0 0/1 * * * ?" -->
+	</xs:attributeGroup>
+
+	<xs:complexType name="consts_type">
+		<xs:sequence>
+			<xs:element name="const" type="const_type" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="const_type">
+		<xs:attributeGroup ref="const_attribute" />
+	</xs:complexType>
+
+	<xs:attributeGroup name="const_attribute">
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="value" type="xs:string" use="required" />
 	</xs:attributeGroup>
 </xs:schema>

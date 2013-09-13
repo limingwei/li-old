@@ -11,9 +11,11 @@ import java.util.Properties;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 /**
  * 文件工具类
@@ -23,6 +25,8 @@ import org.w3c.dom.Document;
  */
 public class Files {
     private static final Log log = Log.init();
+
+    private static final String CONST_CONFIG_REGEX = "^.*(config|ioc|aop|const)\\.xml$";
 
     private static final String PROPERTIES_REGEX = "^.*\\.properties$";
 
@@ -119,5 +123,23 @@ public class Files {
             Log.put("~!@#PROPERTIES#" + name, properties);// 将 properties 缓存
         }
         return properties;
+    }
+
+    public static Properties config() {
+        Properties config = (Properties) Log.get("~!@#CONFIG");// 从缓存中查找properties
+        if (null == config) {
+            config = Files.load("config.properties");
+            List<String> fileList = Files.list(Files.root(), CONST_CONFIG_REGEX, true, 1);// 搜索配置文件
+            for (String filePath : fileList) {
+                NodeList beanNodes = (NodeList) Files.xpath(Files.build(filePath), "//const", XPathConstants.NODESET);
+                for (int length = (null == beanNodes ? -1 : beanNodes.getLength()), i = 0; i < length; i++) {
+                    String name = Files.xpath(beanNodes.item(i), "@name", XPathConstants.STRING) + "";
+                    String value = Files.xpath(beanNodes.item(i), "@value", XPathConstants.STRING) + "";
+                    config.setProperty(name, value);
+                }
+            }
+            Log.put("~!@#CONFIG", config);// 将 properties 缓存
+        }
+        return config;
     }
 }

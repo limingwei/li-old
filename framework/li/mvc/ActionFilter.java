@@ -3,7 +3,6 @@ package li.mvc;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -31,13 +30,9 @@ import li.util.Verify;
  * @version 0.1.3 (2012-05-08)
  */
 public class ActionFilter implements Filter {
-    private static final Properties PROPERTIES = Files.load("config.properties");
-
-    private static final String DEV_MODE = PROPERTIES.getProperty("devMode", "false");// 是否开发模式,开发模式才会将异常信息展示到页面
-
-    private static final String ENCODING = PROPERTIES.getProperty("servlet.encoding", "UTF-8");// Servlet编码,可在配置文件中配置
-
-    private static final String USE_I18N = PROPERTIES.getProperty("servlet.i18n", "false");// 是否使用国际化
+    private static final String DEV_MODE = Files.config().getProperty("devMode", "false");// 是否开发模式,开发模式才会将异常信息展示到页面
+    private static final String ENCODING = Files.config().getProperty("servlet.encoding", "UTF-8");// Servlet编码,可在配置文件中配置
+    private static final String USE_I18N = Files.config().getProperty("servlet.i18n", "false");// 是否使用国际化
 
     Log log = Log.init();
 

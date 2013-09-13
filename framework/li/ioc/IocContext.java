@@ -63,7 +63,7 @@ public class IocContext {
             IOC_CONTEXT.beans.addAll(new AnnotationIocLoader().getBeans());
 
             // STEP-2-处理field.value中的${name}
-            Properties properties = Files.load("config.properties");
+            Properties properties = Files.config();
             for (Bean bean : IOC_CONTEXT.beans) {
                 for (Field field : bean.fields) {// 如果 filed.value 形如 ${name} 则使用 properties 中key为name的值替换
                     if (field.value.startsWith("${") && field.value.endsWith("}")) {

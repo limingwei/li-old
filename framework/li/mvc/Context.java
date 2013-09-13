@@ -32,11 +32,9 @@ import freemarker.template.Template;
  * @see li.mvc.AbstractAction
  */
 public class Context {
-    private static final Properties PROPERTIES = Files.load("config.properties");
-
-    static final String VIEW_TYPE = PROPERTIES.getProperty("view.type", "forward");
-    static final String VIEW_PREFIX = PROPERTIES.getProperty("view.prefix", "");
-    static final String VIEW_SUFFIX = PROPERTIES.getProperty("view.suffix", "");
+    static final String VIEW_TYPE = Files.config().getProperty("view.type", "forward");
+    static final String VIEW_PREFIX = Files.config().getProperty("view.prefix", "");
+    static final String VIEW_SUFFIX = Files.config().getProperty("view.suffix", "");
 
     private static final ThreadLocal<HttpServletRequest> REQUEST = new ThreadLocal<HttpServletRequest>();
     private static final ThreadLocal<HttpServletResponse> RESPONSE = new ThreadLocal<HttpServletResponse>();

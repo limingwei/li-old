@@ -86,7 +86,7 @@ public class AnnotationIocLoader {
      * 获取jar里面的类
      */
     private List<String> getClassFilesInJar() {
-        String annotationInJar = Files.load("config.properties").getProperty("annotationInJar", "");
+        String annotationInJar = Files.config().getProperty("annotationInJar", "");
         try {
             log.info("annotationInJar=?", annotationInJar);
             String[] annotationInJarClasses = annotationInJar.split(",");
