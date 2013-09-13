@@ -3,6 +3,7 @@
 	<consts>
 		<const name="annotationInJar" value="com.alibaba.druid.pool.DruidDataSource" />
 	</consts>
+
 	<beans>
 		<bean name="li" class="li.datasource.SimpleDataSource">
 			<property name="dataSource" value="druid" />
@@ -15,7 +16,6 @@
 			<property name="password" value="${db.password}" />
 			<property name="druidFilters" value="wall,mergeStat,log4j" />
 		</bean>
-		<bean name="statAopFilter" class="li.druid.StatAopFilter" />
 		<bean name="trans" class="li.aop.TransFilter">
 			<property name="level" value="TRANSACTION_SERIALIZABLE" />
 			<property name="readOnly" value="false" />
@@ -24,6 +24,7 @@
 			<property name="dataSource" value="li" />
 		</bean>
 	</beans>
+
 	<aops>
 		<aop class="li.aop.*" method=".*" filter="log" />
 		<aop class="li.aop.test._Account" method="testUpdate" filter="trans" />
