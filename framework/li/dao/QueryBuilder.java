@@ -17,7 +17,7 @@ import li.util.Verify;
  * @version 0.1.8 (2012-05-08)
  */
 public class QueryBuilder {
-    private static final String MAP_ARG_SIGN = Files.load("config.properties").getProperty("dao.mapArgSign", "#");
+    private static final String MAP_ARG_SIGN = Files.config().getProperty("dao.mapArgSign", "#");
 
     /**
      * 表示对象结构的beanMeta

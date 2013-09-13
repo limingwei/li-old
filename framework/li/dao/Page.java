@@ -12,7 +12,7 @@ public class Page {
     /**
      * 默认PageSize为20,可以在配置文件中修改
      */
-    public static final Integer DEFAULT_SIZE = Integer.valueOf(Files.load("config.properties").getProperty("pageSize", "20"));
+    public static final Integer DEFAULT_SIZE = Integer.valueOf(Files.config().getProperty("pageSize", "20"));
 
     private Integer pageSize = DEFAULT_SIZE;// 单页记录数
 

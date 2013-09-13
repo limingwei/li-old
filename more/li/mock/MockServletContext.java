@@ -25,7 +25,7 @@ import li.util.Files;
  * @version 0.1.1 (2012-09-27)
  */
 public class MockServletContext implements ServletContext {
-    private static final String WEB_ROOT_DIR_NAME = Files.load("config.properties").getProperty("mock.webRoot", "WebContent");
+    private static final String WEB_ROOT_DIR_NAME = Files.config().getProperty("mock.webRoot", "WebContent");
 
     private Map<String, Object> servletContextMap;
 
