@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-	<!-- Root Element -->
+	<!-- Root -->
 	<xs:element name="config" type="config_type" />
 
 	<xs:complexType name="config_type">
-		<xs:sequence>
+		<xs:sequence><!-- sequence是有序的 -->
+			<xs:element name="consts" type="consts_type" minOccurs="0" maxOccurs="unbounded" />
 			<xs:element name="beans" type="beans_type" minOccurs="0" maxOccurs="unbounded" />
 			<xs:element name="aops" type="aops_type" minOccurs="0" maxOccurs="unbounded" />
 			<xs:element name="tasks" type="tasks_type" minOccurs="0" maxOccurs="unbounded" />
-			<xs:element name="consts" type="consts_type" minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:complexType>
 
+	<!-- Ioc -->
 	<xs:complexType name="beans_type">
 		<xs:sequence>
 			<xs:element name="bean" type="bean_type" minOccurs="0" maxOccurs="unbounded" />
@@ -25,20 +26,21 @@
 		<xs:attributeGroup ref="bean_attribute" />
 	</xs:complexType>
 
+	<xs:attributeGroup name="bean_attribute">
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="class" type="xs:string" use="required" />
+	</xs:attributeGroup>
+
 	<xs:complexType name="property_type">
 		<xs:attributeGroup ref="property_attribute" />
 	</xs:complexType>
 
-	<xs:attributeGroup name="bean_attribute">
-		<xs:attribute name="name" type="xs:string" /><!-- default="userService" -->
-		<xs:attribute name="class" type="xs:string" use="required" /><!-- default="com.company.project.service.impl.UserServiceImpl" -->
-	</xs:attributeGroup>
-
 	<xs:attributeGroup name="property_attribute">
-		<xs:attribute name="name" type="xs:string" use="required" /><!-- default="userDao" -->
-		<xs:attribute name="value" type="xs:string" /><!-- default="userDao" -->
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="value" type="xs:string" />
 	</xs:attributeGroup>
 
+	<!-- Aop -->
 	<xs:complexType name="aops_type">
 		<xs:sequence>
 			<xs:element name="aop" type="aop_type" minOccurs="0" maxOccurs="unbounded" />
@@ -55,6 +57,7 @@
 		<xs:attribute name="filter" type="xs:string" use="required" /><!-- default="trans" -->
 	</xs:attributeGroup>
 
+	<!-- Task -->
 	<xs:complexType name="tasks_type">
 		<xs:sequence>
 			<xs:element name="task" type="task_type" minOccurs="0" maxOccurs="unbounded" />
@@ -70,6 +73,7 @@
 		<xs:attribute name="trigger" type="xs:string" use="required" /><!-- default="0 0/1 * * * ?" -->
 	</xs:attributeGroup>
 
+	<!-- Const -->
 	<xs:complexType name="consts_type">
 		<xs:sequence>
 			<xs:element name="const" type="const_type" minOccurs="0" maxOccurs="unbounded" />
