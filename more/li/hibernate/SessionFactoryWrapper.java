@@ -19,6 +19,8 @@ import org.hibernate.metadata.CollectionMetadata;
 import org.hibernate.stat.Statistics;
 
 /**
+ * SessionFactoryWrapper
+ * 
  * @author 明伟
  */
 public class SessionFactoryWrapper implements SessionFactory {

@@ -10,16 +10,18 @@ import li.util.Files;
 import org.hibernate.cfg.Configuration;
 
 /**
+ * SessionFactory
+ * 
  * @author 明伟
  */
 public class SessionFactory extends SessionFactoryWrapper {
     private static final long serialVersionUID = -8786008904930067379L;
 
-    private org.hibernate.SessionFactory sessionFactory;
+    static final ThreadLocal<DataSource> DATASOURCE_THREADLOCAL = new ThreadLocal<DataSource>();
 
     private Configuration configuration;
 
-    static final ThreadLocal<DataSource> DATASOURCE_THREADLOCAL = new ThreadLocal<DataSource>();
+    private org.hibernate.SessionFactory sessionFactory;
 
     public void setDataSource(DataSource dataSource) {
         DATASOURCE_THREADLOCAL.set(dataSource);
@@ -29,15 +31,17 @@ public class SessionFactory extends SessionFactoryWrapper {
         return DATASOURCE_THREADLOCAL.get();
     }
 
+    /**
+     * read hibernate configuration
+     */
     public Configuration getConfiguration() {
         if (null == this.configuration) {
             Configuration configuration = new Configuration();
             configuration.setProperty("hibernate.connection.provider_class", DataSourceConnectionProvider.class.getName());
-            File root = Files.root();
-            List<String> cfgs = Files.list(root, "^.*hibernate\\.cfg\\.xml$", true, 1);
-            if (null != cfgs && 1 == cfgs.size()) {
-                configuration.configure(new File(cfgs.get(0)));
+            if (new File(Files.root() + File.separator + "hibernate.cfg.xml").exists()) {
+                configuration.configure();// 读取 hibernate.cfg.xml
             }
+            File root = Files.root();
             List<String> hbms = Files.list(root, "^.*\\.hbm\\.xml$", true, 1);
             for (String hbm : hbms) {
                 configuration.addResource(hbm.replace(root + "", ""));
@@ -47,6 +51,9 @@ public class SessionFactory extends SessionFactoryWrapper {
         return this.configuration;
     }
 
+    /**
+     * buildSessionFactory
+     */
     public org.hibernate.SessionFactory getSessionFactory() {
         if (null == this.sessionFactory) {
             this.sessionFactory = this.getConfiguration().buildSessionFactory();
