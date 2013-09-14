@@ -68,8 +68,8 @@ public abstract class Trans {
      * 在事务中获取数据库链接
      */
     public Connection getConnection(DataSource dataSource) throws Exception {
-        Connection connection = this.connectionMap.get(dataSource); // 从connectionMap中得到为这个Dao类缓存的connection
-        if (null == connection || connection.isClosed()) { // 没有缓存这个Dao的connection或已被关闭
+        Connection connection = this.connectionMap.get(dataSource); // 从connectionMap中得到为这个DataSource缓存的connection
+        if (null == connection || connection.isClosed()) { // 没有缓存这个DataSource的connection或已被关闭
             connection = dataSource.getConnection(); // 获取一个新的connection
             connection.setAutoCommit(false); // 设置为不自动提交
             connection.setTransactionIsolation(null != this.level ? this.level : connection.getTransactionIsolation());// 设置事务级别
