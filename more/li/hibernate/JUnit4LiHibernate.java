@@ -7,24 +7,33 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 
+/**
+ * @author 明伟
+ */
 public class JUnit4LiHibernate extends JUnit4Li {
-    private SessionFactory _sessionFactory;
+    private SessionFactory sessionFactory;
 
+    /**
+     */
     public JUnit4LiHibernate(Class<?> type) throws InitializationError {
         super(type);
-        this._sessionFactory = Ioc.get(SessionFactory.class);
+        this.sessionFactory = Ioc.get(SessionFactory.class);
     }
 
+    /**
+     */
     protected Statement methodInvoker(final FrameworkMethod method, final Object target) {
         return new Statement() {
             public void evaluate() throws Throwable {
-                OpenSessionInViewFilter.SESSION_THREADLOCAL.set(_sessionFactory.openSession());
+                OpenSessionInViewFilter.SESSION_THREADLOCAL.set(sessionFactory.openSession());
                 invoke(method, target);
                 OpenSessionInViewFilter.closeSession(OpenSessionInViewFilter.SESSION_THREADLOCAL.get());
             }
         };
     }
 
+    /**
+     */
     private void invoke(FrameworkMethod method, Object target) {
         try {
             super.methodInvoker(method, target).evaluate();

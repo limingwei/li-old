@@ -23,6 +23,7 @@
 		<bean name="sessionFactory" class="li.hibernate.SessionFactory">
 			<property name="dataSource" value="li" />
 		</bean>
+		<bean name="statAopFilter" class="li.druid.StatAopFilter" />
 	</beans>
 
 	<aops>

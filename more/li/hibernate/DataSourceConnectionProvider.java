@@ -15,22 +15,24 @@ import org.hibernate.connection.ConnectionProvider;
  * @author 明伟
  */
 public class DataSourceConnectionProvider implements ConnectionProvider {
-    public void configure(Properties properties) throws HibernateException {}
+
+    private DataSource dataSource;
 
     public DataSource getDataSource() {
-        return SessionFactory.DATASOURCE_THREADLOCAL.get();
+        if (null == this.dataSource) {
+            this.dataSource = SessionFactory.DATASOURCE_THREADLOCAL.get();
+        }
+        return this.dataSource;
     }
 
     public Connection getConnection() throws SQLException {
-        Connection connection;
         try {
             Trans trans = Trans.current();
             if (null == trans) {
-                connection = this.getDataSource().getConnection();
+                return this.getDataSource().getConnection();
             } else {
-                connection = trans.getConnection(this.getDataSource());
+                return trans.getConnection(this.getDataSource());
             }
-            return connection;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -40,9 +42,11 @@ public class DataSourceConnectionProvider implements ConnectionProvider {
         connection.close();
     }
 
-    public void close() throws HibernateException {}
-
     public boolean supportsAggressiveRelease() {
         return false;
     }
+
+    public void configure(Properties properties) throws HibernateException {}
+
+    public void close() throws HibernateException {}
 }
