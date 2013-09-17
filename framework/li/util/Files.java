@@ -130,6 +130,7 @@ public class Files {
     public static Properties config() {
         Properties config = (Properties) Log.get("~!@#CONFIG");// 从缓存中查找properties
         if (null == config) {
+            log.info("reading configs, from properties and xml ...");
             config = Files.load("config.properties");
             List<String> fileList = Files.list(Files.root(), CONST_CONFIG_REGEX, true, 1);// 搜索配置文件
             for (String filePath : fileList) {
