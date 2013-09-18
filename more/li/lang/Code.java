@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 /**
  * 一个统计代码的工具
@@ -92,7 +93,16 @@ public class Code {
         }
 
         public String toString() {
-            return "统计路径\t" + src + "\n文件个数\t" + fileCount + "\n导入行数\t" + importLines + "\n空行行数\t" + whiteLines + "\n注释行数\t" + commentLines + "\n代码行数\t" + normalLines + "\n总计行数\t" + (importLines + whiteLines + commentLines + normalLines);
+            long total = importLines + whiteLines + commentLines + normalLines;
+            double _fileCount = new Integer(fileCount).doubleValue();
+            DecimalFormat decimalFormat = new DecimalFormat("#0.000");
+            return "统计路径\t" + src //
+                    + "\n文件个数\t" + fileCount //
+                    + "\n导入行数\t" + importLines + "\t平均\t" + decimalFormat.format((importLines / _fileCount))//
+                    + "\n空行行数\t" + whiteLines + "\t平均\t" + decimalFormat.format((whiteLines / _fileCount))//
+                    + "\n注释行数\t" + commentLines + "\t平均\t" + decimalFormat.format((commentLines / _fileCount))//
+                    + "\n代码行数\t" + normalLines + "\t平均\t" + decimalFormat.format((normalLines / _fileCount))//
+                    + "\n总计行数\t" + total + "\t平均\t" + decimalFormat.format((total / _fileCount));
         }
     }
 
