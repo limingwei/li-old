@@ -17,7 +17,7 @@ public class UserDao extends AbstractDao<User, Integer> {
     SessionFactory sessionFactory;
 
     public List<User> list(Page page) {
-        return Daos.list(this.getSessionFactory(), User.class, page);
+        return Daos.getDao(this.getSessionFactory(), User.class).list(page);
     }
 
     public Boolean save(User entry) {
