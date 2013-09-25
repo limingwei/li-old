@@ -11,9 +11,9 @@ import li.people.record.Account;
 import li.util.Convert;
 
 @Bean
-public class AccountAction extends AbstractAction{
+public class ${entityName}Action extends AbstractAction{
     @Inject
-    Account accountDao;
+    ${entityName} ${entityName}Dao;
 
     @At("account_list.do")
     public void list(Page page, String key) {

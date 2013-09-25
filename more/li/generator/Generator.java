@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import li.util.Log;
 
@@ -24,31 +25,45 @@ public class Generator {
         List<String> tableNames = getTableNames();
         for (String tableName : tableNames) {
             if (!config.skipTable(tableName)) {
-                generate(tableName, config.getTemplateDir());
+                for (String templateDir : config.getTemplateDirs()) {
+                    generate(tableName, templateDir);
+                }
             }
         }
     }
 
     private static void generate(String table, String templateDir) throws Throwable {
         log.trace("li.generator.Generator.generate(" + table + ", " + templateDir + ")");
-        generateDir(table, new File(templateDir));
+        generateDir(table, new File(templateDir), templateDir);
     }
 
-    private static void generateFile(String table, File temp) throws Throwable {
+    private static void generateFile(String tableName, File temp, String templateDir) throws Throwable {
         if (temp.getName().endsWith(config.getTemplateSuffix())) {
-            FreemarkerUtil.generateFile(config, table, temp);
+            Map values = getValues(tableName, templateDir);
+            FreemarkerUtil.generateFile(config, temp, values);
         }
     }
 
-    private static void generateDir(String table, File dir) throws Throwable {
+    private static Map getValues(String tableName, String tempDir) {
+        Map map = config.getConfigMap();
+        map.put("tableName", tableName);
+        map.put("entityName", config.getEntityName(tableName));
+        map.put("templateDir", tempDir);
+
+        map.put("outPutDir", config.getOutPutDir(tempDir));
+        log.debug("out put dir is " + config.getOutPutDir(tempDir));
+        return map;
+    }
+
+    private static void generateDir(String table, File dir, String tempDir) throws Throwable {
         log.trace("li.generator.Generator.generateDir(" + table + ", " + dir + ")");
         File[] files = dir.listFiles();
         if (null != files) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    generateDir(table, file);
+                    generateDir(table, file, tempDir);
                 } else if (file.isFile()) {
-                    generateFile(table, file);
+                    generateFile(table, file, tempDir);
                 }
             }
         }

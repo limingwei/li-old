@@ -1,7 +1,11 @@
 package li.generator;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import li.util.Files;
 import li.util.Log;
@@ -39,12 +43,38 @@ public class Config {
         return (String) getConfigMap().get("db.password");
     }
 
-    public String getTemplateDir() {
-        return (String) getConfigMap().get("gen.templateDir");
+    // public String getTemplateDir() {
+    // return (String) getConfigMap().get("gen.templateDir");
+    // }
+
+    // public String getOutPutDir() {
+    // return (String) getConfigMap().get("gen.outputDir");
+    // }
+
+    public List<String> getTemplateDirs() {
+        Set<Entry> set = getConfigMap().entrySet();
+        List<String> dirs = new ArrayList<String>();
+        for (Entry entry : set) {
+            if (entry.getKey().toString().startsWith("templateDir")) {
+                dirs.add((String) entry.getValue());
+            }
+        }
+        return dirs;
     }
 
-    public String getOutPutDir() {
-        return (String) getConfigMap().get("gen.outputDir");
+    public String getOutPutDir(String templateDir) {
+        log.debug("li.generator.Config.getOutPutDir(?)", templateDir);
+        Set<Entry> set = getConfigMap().entrySet();
+        for (Entry entry : set) {
+            if (entry.getValue().toString().startsWith(templateDir)) {
+                String result = (String) getConfigMap().get(entry.getKey().toString().replace("templateDir", "outputDir")) //
+                        + entry.getValue().toString().replace(templateDir, "");
+                System.err.println(entry);
+                log.debug("got out put dir " + result);
+                return result;
+            }
+        }
+        return "!@#$";
     }
 
     public String getTemplateSuffix() {
@@ -55,8 +85,8 @@ public class Config {
         return (String) getConfigMap().get("TABLE_PREFIX");
     }
 
-    public String getTemplateName(File temp) throws Throwable {
-        return temp.getCanonicalPath().replace(this.getTemplateDir(), "");
+    public String getTemplateName(File temp, String tempDir) throws Throwable {
+        return temp.getCanonicalPath().replace(tempDir, "");
     }
 
     public String getEntityName(String tableName) {
@@ -65,11 +95,11 @@ public class Config {
         return tableName.substring(0, 1).toUpperCase() + tableName.substring(1);
     }
 
-    public String getOutPutFileName(Map configMap, File temp, String entityName) throws Throwable {
+    public String getOutPutFileName(String tempDir, Map configMap, File temp, String entityName) throws Throwable {
         if (temp.getCanonicalPath().contains(".java")) {
-            return temp.getCanonicalPath().replace(this.getTemplateDir(), "").replace(this.getTemplateSuffix(), "").replace("$name", entityName);
+            return temp.getCanonicalPath().replace(tempDir, "").replace(this.getTemplateSuffix(), "").replace("$name", entityName);
         } else {
-            return temp.getCanonicalPath().replace(this.getTemplateDir(), "").replace(this.getTemplateSuffix(), "").replace("$name", entityName).toLowerCase();
+            return temp.getCanonicalPath().replace(tempDir, "").replace(this.getTemplateSuffix(), "").replace("$name", entityName).toLowerCase();
         }
     }
 

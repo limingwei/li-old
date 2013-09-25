@@ -1,1 +1,1 @@
-add template
+add template ${entityName}
