@@ -43,14 +43,6 @@ public class Config {
         return (String) getConfigMap().get("db.password");
     }
 
-    // public String getTemplateDir() {
-    // return (String) getConfigMap().get("gen.templateDir");
-    // }
-
-    // public String getOutPutDir() {
-    // return (String) getConfigMap().get("gen.outputDir");
-    // }
-
     public List<String> getTemplateDirs() {
         Set<Entry> set = getConfigMap().entrySet();
         List<String> dirs = new ArrayList<String>();

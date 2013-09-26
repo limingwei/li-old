@@ -1,10 +1,11 @@
-package li.generator;
+package li.generator.freemarker;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+import li.generator.Config;
 import li.util.Log;
 import freemarker.cache.FileTemplateLoader;
 import freemarker.template.Configuration;
