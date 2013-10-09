@@ -86,7 +86,7 @@ public class QueryRunner {
      */
     public void close() {
         try {
-            if (null != preparedStatement) {
+            if (null != preparedStatement && !preparedStatement.isClosed()) {
                 preparedStatement.close();
                 log.trace("Closing PreparedStatement ?", preparedStatement);
             }
