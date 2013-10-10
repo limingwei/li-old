@@ -9,7 +9,9 @@ import li.util.Files;
  * @version 0.1.2 (2012-06-17)
  */
 public class Page {
-    public static final Page MAX = new Page().setPageSize(Integer.MAX_VALUE).count(false);
+    public static final Page MAX = new Page(1, Integer.MAX_VALUE).count(false);
+
+    public static final Page ONE = new Page(1, 1).count(false);
 
     /**
      * 默认PageSize为20,可以在配置文件中修改
