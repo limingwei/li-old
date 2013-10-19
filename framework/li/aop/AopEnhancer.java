@@ -64,7 +64,8 @@ public class AopEnhancer {
             } // http://t.cn/zQo4ydN
         };
 
-        filtersBuiltIn.put("~!@#trans", new TransFilter());// 初始化并内置AopFilter
+        filtersBuiltIn.put("~!@#trans", new TransFilter());// 内置TransFilter
+        filtersBuiltIn.put("~!@#readonly", new TransFilter().setReadOnly(true));// 内置 ReadOnly TransFilter
 
         readXmlAopConfig();
     }

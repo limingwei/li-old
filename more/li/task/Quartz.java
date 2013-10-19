@@ -36,17 +36,29 @@ public class Quartz {
 
     private static Scheduler scheduler = null;
 
+    private Integer delay = 10;
+
+    public void setDelay(Integer delay) {
+        this.delay = delay;
+    }
+
     /**
      * 初始化此类的时候启动Quartz,唯一的public方法
      */
     public Quartz() {
-        try {
-            log.debug("Starting Quartz ...");
-            start();
-        } catch (Exception e) {
-            log.error("Error when starting Quartz");
-            throw new RuntimeException(e);
-        }
+        log.debug("Quartz will be started in default ? seconds", delay);
+        new Thread() {// 新开一个线程
+            public void run() {
+                try {
+                    Thread.sleep(delay * 1000);// 延迟启动定时任务
+                    log.debug("Starting Quartz ...");
+                    _start();
+                } catch (Exception e) {
+                    log.error("Error when starting Quartz");
+                    throw new RuntimeException(e);
+                }
+            };
+        }.start();
     }
 
     /**
@@ -63,7 +75,7 @@ public class Quartz {
     /**
      * 启动Quartz,启动所有任务,synchronized方法
      */
-    private synchronized static void start() throws Exception {
+    private synchronized static void _start() throws Exception {
         if (null == scheduler) {// 只开始一次
             scheduler = getScheduler();
             Set<Entry<Class<? extends Job>, String>> jobs = getJobs().entrySet();
