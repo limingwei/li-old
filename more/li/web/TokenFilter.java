@@ -1,4 +1,4 @@
-package li.api;
+package li.web;
 
 import java.io.IOException;
 import java.util.Map;
