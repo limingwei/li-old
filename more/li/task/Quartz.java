@@ -34,23 +34,19 @@ public class Quartz {
 
     private static final String TASK_CONFIG_REGEX = "^.*(config|task|quartz)\\.xml$";
 
+    private static final Integer DELAY = Integer.valueOf(Files.config().getProperty("quartz_delay", "10"));
+
     private static Scheduler scheduler = null;
-
-    private Integer delay = 10;
-
-    public void setDelay(Integer delay) {
-        this.delay = delay;
-    }
 
     /**
      * 初始化此类的时候启动Quartz,唯一的public方法
      */
     public Quartz() {
-        log.debug("Quartz will be started in default ? seconds", delay);
+        log.debug("Quartz will be started in default ? seconds", DELAY);
         new Thread() {// 新开一个线程
             public void run() {
                 try {
-                    Thread.sleep(delay * 1000);// 延迟启动定时任务
+                    Thread.sleep(DELAY * 1000);// 延迟启动定时任务
                     log.debug("Starting Quartz ...");
                     _start();
                 } catch (Exception e) {
