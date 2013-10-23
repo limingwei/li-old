@@ -121,7 +121,7 @@ public abstract class Trans {
     private void begin() {
         if (null == Trans.current()) { // 未在另一个事务中
             TRANS_LOCAL.set(this);
-            log.trace("Trans@? level=? readOnly=? beginning", hashCode(), this.level, this.readOnly);
+            log.trace("Trans@? level=? readOnly=? beginning", hashCode(), null == level ? "default" : level, this.readOnly);
         } else {
             this.map.put(hashCode() + "~!@#in_trans", true);// 在另一个事务中
         }
@@ -137,7 +137,7 @@ public abstract class Trans {
                 log.trace("Closing Connection in Trans ?", connection.getValue());
             }
             TRANS_LOCAL.set(null);
-            log.trace("Trans@? level=? readOnly=? ending", hashCode(), this.level, this.readOnly);
+            log.trace("Trans@? level=? readOnly=? ending", hashCode(), null == level ? "default" : level, this.readOnly);
         }
     }
 
@@ -148,7 +148,7 @@ public abstract class Trans {
         if (null == this.map.get(hashCode() + "~!@#in_trans") && !this.readOnly) {// 未在另一个事务中且非只读
             for (Entry<DataSource, Connection> connection : this.connectionMap.entrySet()) {
                 connection.getValue().commit();
-                log.trace("Trans@? level=? readOnly=? commiting ?", hashCode(), this.level, this.readOnly, connection.getValue());
+                log.trace("Trans@? level=? readOnly=? commiting ?", hashCode(), null == level ? "default" : level, this.readOnly, connection.getValue());
             }
         }
     }
@@ -160,7 +160,7 @@ public abstract class Trans {
         if (null == this.map.get(hashCode() + "~!@#in_trans") && !this.readOnly) {// 未在另一个事务中且非只读
             for (Entry<DataSource, Connection> connection : this.connectionMap.entrySet()) {
                 connection.getValue().rollback();
-                log.trace("Trans@?  level=? readOnly=?  rollingback ?", hashCode(), this.level, this.readOnly, connection.getValue());
+                log.trace("Trans@?  level=? readOnly=?  rollingback ?", hashCode(), null == level ? "default" : level, this.readOnly, connection.getValue());
             }
         }
     }
