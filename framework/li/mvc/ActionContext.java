@@ -59,7 +59,6 @@ public class ActionContext {
                     }
                 }
             }
-
             log.info("? actions started up in ?ms", ACTION_CONTEXT.ACTION_MAP.size(), (System.currentTimeMillis() - start));
         }
         return ACTION_CONTEXT;

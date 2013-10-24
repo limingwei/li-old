@@ -55,9 +55,7 @@ public class AnnotationIocLoader {
                     beans.add(iocBean);
                     log.debug("ADD BEAN: @Bean ? ?", type.getName(), iocBean.name);
                 }
-            } catch (Throwable e) {
-                // class not found 啥的，太多了，就先不打日志了
-            }
+            } catch (Throwable e) {} // class not found 啥的，太多了，就先不打日志了
         }
         log.info("? ioc beans by annotation found", beans.size());
         return beans;
@@ -66,7 +64,7 @@ public class AnnotationIocLoader {
     /**
      * 取/classes/之后的字符串(如果有/classes/的话),替换/为.,去掉.class
      */
-    private static String getClassName(String classFileName) {
+    static String getClassName(String classFileName) {
         int classesIndex = classFileName.indexOf(File.separator + "classes" + File.separator);
         return classFileName.substring(classesIndex > 0 ? classesIndex + 9 : 0, classFileName.length() - 6).replace('/', '.').replace('\\', '.');
     }
@@ -74,18 +72,18 @@ public class AnnotationIocLoader {
     /**
      * 获取所有类文件,从class和jar
      */
-    private List<String> getClasseFiles() {
+    static List<String> getClasseFiles() {
         File rootFolder = Files.root();
         List<String> classFileList = Files.list(rootFolder, CLASS_REGEX, true, 1);
         log.info("Found ? class files, at ?", classFileList.size(), rootFolder);
-        classFileList.addAll(this.getClassFilesInJar());
+        classFileList.addAll(getClassFilesInJar());
         return classFileList;
     }
 
     /**
      * 获取jar里面的类
      */
-    private List<String> getClassFilesInJar() {
+    private static List<String> getClassFilesInJar() {
         String annotationInJar = Files.config().getProperty("annotationInJar", "");
         try {
             log.info("annotationInJar=?", annotationInJar);
