@@ -320,11 +320,19 @@ public class Request {
         return this.urlWithParameters;
     }
 
-    /*
-     * getDataMultipart会修改Content-Type,若已设置Content-Type为FORM_URLENCODED,则不用getDataMultipart
+    /**
+     * 若Fields里面包括File或URL则使用getDataMultipart
      */
     protected byte[] getData() throws Exception {
-        return FORM_URLENCODED.equals(getHeader("Content-Type")) ? getDataUrlEncoded() : getDataMultipart();
+        for (Entry<String, List<Object>> entry : this.fields.entrySet()) {
+            for (Object each : entry.getValue()) {
+                if (each instanceof File || each instanceof URL) {// 本地文件或远程文件
+                    return this.getDataMultipart(); // 有至少一个文件
+                }
+            }
+        }
+        this.setContentType(FORM_URLENCODED);
+        return this.getDataUrlEncoded();
     }
 
     /**
