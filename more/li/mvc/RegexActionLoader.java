@@ -9,13 +9,14 @@ import li.annotation.Arg;
 import li.ioc.IocContext;
 import li.model.Action;
 import li.model.Bean;
+import li.util.Files;
 import li.util.Reflect;
 import li.util.Verify;
 
 public class RegexActionLoader implements ActionLoader {
-    private String typeRegex = "";
+    private static String typeRegex = Files.config().getProperty("action.typeRegex", "~!@#none");
 
-    private String methodRegex = "";
+    private static String methodRegex = Files.config().getProperty("action.methodRegex", "~!@#none");
 
     public Map<String, Action> getActions() {
         Map<String, Action> actionMap = new HashMap<String, Action>();// 保存Action
@@ -41,12 +42,20 @@ public class RegexActionLoader implements ActionLoader {
         return actionMap;
     }
 
-    private String getPath(Class<?> type, Method method) {
-        return type.getSimpleName().toLowerCase().replace("action", "") + "_" + method.getName();
+    public String getPath(Class<?> type, Method method) {
+        return type.getSimpleName().toLowerCase().replace("action", "") + "_" + method.getName() + this.getSuffix(method);
     }
 
-    private String getHttpMethod(Method method) {
-        if (method.getName().contains("save") || method.getName().contains("update")) {
+    public String getSuffix(Method method) {
+        if (method.getName().contains("save") || method.getName().contains("update") || method.getName().contains("delete")) {
+            return ".do";
+        } else {
+            return ".htm";
+        }
+    }
+
+    public String getHttpMethod(Method method) {
+        if (method.getName().contains("save") || method.getName().contains("update") || method.getName().contains("delete")) {
             return RequestMethod.POST;
         } else {
             return RequestMethod.GET;

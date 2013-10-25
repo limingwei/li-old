@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import li.model.Bean;
+import li.util.Files;
 import li.util.Reflect;
 import li.util.Verify;
 
@@ -13,9 +14,9 @@ import li.util.Verify;
  * @date : 2013年10月24日 下午5:39:55
  */
 public class RegexIocLoader implements IocLoader {
-    private String typeRegex = "";
+    private static String typeRegex = Files.config().getProperty("bean.typeRegex", "~!@#none");
 
-    private String fieldRegex = "";
+    private static String fieldRegex = Files.config().getProperty("bean.fieldRegex", "~!@#none");
 
     public List<Bean> getBeans() {
         List<String> fileList = AnnotationIocLoader.getClasseFiles();
@@ -28,7 +29,7 @@ public class RegexIocLoader implements IocLoader {
 
                 List<Field> fields = Reflect.getFields(iocBean.type);
                 for (Field field : fields) {
-                    if (Verify.regex(typeName, fieldRegex)) {
+                    if (Verify.regex(field.getName(), fieldRegex)) {
                         li.model.Field attribute = new li.model.Field();// 一个新的Field
                         attribute.name = field.getName();
                         attribute.type = field.getType();

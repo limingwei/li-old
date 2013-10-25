@@ -16,9 +16,11 @@ import li.demo.record.ForumTest;
 import li.hibernate.HibernateTest;
 import li.hibernate.UserDaoTest;
 import li.ioc.IocTest;
+import li.ioc.RegexIocLoaderTest;
 import li.model.BeanTest;
 import li.model.FieldTest;
 import li.mvc.ContextTest;
+import li.mvc.RegexActionLoaderTest;
 import li.service.AbstractServiceTest;
 import li.util.ConvertTest;
 import li.util.FilesTest;
@@ -41,5 +43,6 @@ import org.junit.runners.Suite.SuiteClasses;
         ConvertTest.class, ReflectTest.class, FilesTest.class, LogTest.class, VerifyTest.class, // Util
         AccountTest.class, ForumTest.class, // Record
         DemoActionTest.class, AccountActionTest.class, // Action
-        HibernateTest.class, UserDaoTest.class })
+        HibernateTest.class, UserDaoTest.class, //
+        RegexActionLoaderTest.class, RegexIocLoaderTest.class })
 public class AllTest {}
