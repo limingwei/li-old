@@ -80,6 +80,7 @@ public class Quartz {
                 JobDetail jobDetail = new JobDetailImpl(name, Scheduler.DEFAULT_GROUP, entry.getKey());
                 CronTrigger cronTrigger = new CronTriggerImpl(name, Scheduler.DEFAULT_GROUP, entry.getValue());
                 scheduler.scheduleJob(jobDetail, cronTrigger);
+                log.info("Adding task ? , trigger ? ", entry.getKey(), entry.getValue());
             }
             scheduler.start();
         } else {
