@@ -17,7 +17,7 @@ import li.util.Log;
  * @author li (limingwei@mail.com)
  * @version 0.1.0 (2013-08-13)
  */
-public class ActionServlet extends HttpServlet {
+public class ActionServlet_1 extends HttpServlet {
     private static final long serialVersionUID = -8214041532098707839L;
 
     Log log = Log.init();

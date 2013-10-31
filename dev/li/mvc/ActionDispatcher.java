@@ -20,7 +20,7 @@ import li.util.Log;
  * @author li (limingwei@mail.com)
  * @version 0.1.0 (2013-08-13)
  */
-public class ActionDispatcher extends ActionServlet implements Filter {
+public class ActionDispatcher extends ActionServlet_1 implements Filter {
     private static final long serialVersionUID = -4195486986869714390L;
 
     Log log = Log.init();
