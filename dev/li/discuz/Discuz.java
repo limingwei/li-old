@@ -1,7 +1,11 @@
 package li.discuz;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import li.http.Request;
+import li.http.Response;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -36,7 +40,67 @@ public class Discuz {
         this.domain = domain;
     }
 
-    public List<Cookie> login(String username, String password) {
+    private li.http.CookieStore cookieStore;
+
+    /**
+     * 登陆
+     */
+    public void login(String username, String password) throws Exception {
+        String referer = domain + "member.php?mod=logging&action=login&mobile=yes";
+        Document document = Jsoup.connect(referer).get();
+        String action = domain + document.select("form").attr("action");
+
+        Request request = new Request();
+        request.setReferer(referer);
+        request.setUrl(action);
+
+        request.setField("formhash", document.select("input#formhash").attr("value"));
+        request.setField("referer", document.select("input#referer").attr("value"));
+        request.setField("submit", document.select("input#submit").attr("value"));
+        request.setField("loginsubmit", "true");
+        request.setField("questionid", "0");
+        request.setField("answer", "");
+        request.setField("username", username);
+        request.setField("password", password);
+
+        Response response = request.execute(cookieStore = new li.http.CookieStore());
+
+        System.err.println(response.getBody());
+    }
+
+    /**
+     * 发帖
+     */
+    public void post(Integer fid, String subject, String message) throws IOException {
+        String referer = domain + "forum.php?mod=post&action=newthread&fid=" + fid + "&mobile=yes";
+        Document document = Jsoup.connect(referer).get();
+        String action = domain + document.select("form#postform").attr("action");
+
+        Request request = new Request();
+        request.setReferer(referer);
+        request.setUrl(action);
+
+        request.setField("formhash", document.select("input#formhash").attr("value"));
+        request.setField("posttime", document.select("input#posttime").attr("value"));
+        request.setField("subject", subject);
+        request.setField("message", message);
+        request.setField("topicsubmit", "发表帖子");
+
+        Response response = request.execute(cookieStore);
+
+        System.err.println(response.getHeaders());
+        System.out.println(response.getBody());
+    }
+
+    /**
+     * 回帖
+     */
+    public void reply(Integer tid, String message) {}
+
+    /**
+     * 原来的登陆
+     */
+    public List<Cookie> login2(String username, String password) {
         String referer = domain + "member.php?mod=logging&action=login&mobile=yes";
 
         HttpGet get = new HttpGet(referer);
@@ -65,7 +129,7 @@ public class Discuz {
         return COOKIE_STORE.getCookies();
     }
 
-    public void post(Integer fid, String subject, String message) {
+    public void post2(Integer fid, String subject, String message) {
         String referer = domain + "forum.php?mod=post&action=newthread&fid=" + fid + "&mobile=yes";
 
         HttpGet get = new HttpGet(referer);
@@ -87,7 +151,7 @@ public class Discuz {
         System.out.println(content(response.getEntity()));
     }
 
-    public void reply(Integer tid, String message) {
+    public void reply2(Integer tid, String message) {
         String referer = domain + "forum.php?mod=viewthread&tid=" + tid + "&mobile=yes";
 
         HttpGet get = new HttpGet(referer);
