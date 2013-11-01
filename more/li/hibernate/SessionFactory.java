@@ -37,7 +37,7 @@ public class SessionFactory extends SessionFactoryWrapper {
     public Configuration getConfiguration() {
         if (null == this.configuration) {
             Configuration configuration = new Configuration();
-            configuration.setProperty("hibernate.connection.provider_class", DataSourceConnectionProvider.class.getName());
+            configuration.setProperty("hibernate.connection.provider_class", "li.hibernate.DataSourceConnectionProvider");
             if (new File(Files.root() + File.separator + "hibernate.cfg.xml").exists()) {
                 configuration.configure();// 读取 hibernate.cfg.xml
             }

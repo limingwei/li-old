@@ -48,32 +48,32 @@ public class SessionFactoryWrapper implements SessionFactory {
         this.getSessionFactory().evict(type);
     }
 
-    public void evict(Class type, Serializable arg1) throws HibernateException {
-        this.getSessionFactory().evict(type, arg1);
+    public void evict(Class type, Serializable serial) throws HibernateException {
+        this.getSessionFactory().evict(type, serial);
     }
 
-    public void evictCollection(String arg0) throws HibernateException {
-        this.getSessionFactory().evictCollection(arg0);
+    public void evictCollection(String entity) throws HibernateException {
+        this.getSessionFactory().evictCollection(entity);
     }
 
-    public void evictCollection(String arg0, Serializable arg1) throws HibernateException {
-        this.getSessionFactory().evictCollection(arg0, arg1);
+    public void evictCollection(String entity, Serializable serial) throws HibernateException {
+        this.getSessionFactory().evictCollection(entity, serial);
     }
 
-    public void evictEntity(String arg0) throws HibernateException {
-        this.getSessionFactory().evictEntity(arg0);
+    public void evictEntity(String entity) throws HibernateException {
+        this.getSessionFactory().evictEntity(entity);
     }
 
-    public void evictEntity(String arg0, Serializable arg1) throws HibernateException {
-        this.getSessionFactory().evictEntity(arg0, arg1);
+    public void evictEntity(String entity, Serializable serial) throws HibernateException {
+        this.getSessionFactory().evictEntity(entity, serial);
     }
 
     public void evictQueries() throws HibernateException {
         this.getSessionFactory().evictQueries();
     }
 
-    public void evictQueries(String arg0) throws HibernateException {
-        this.getSessionFactory().evictQueries(arg0);
+    public void evictQueries(String queries) throws HibernateException {
+        this.getSessionFactory().evictQueries(queries);
     }
 
     public Map getAllClassMetadata() throws HibernateException {
