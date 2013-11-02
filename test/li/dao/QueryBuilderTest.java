@@ -56,6 +56,11 @@ public class QueryBuilderTest extends BaseTest {
     }
 
     @Test
+    public void deleteBySql2() {
+        assertEquals("DELETE FROM t_account WHERE id='1'", queryBuilder.deleteBySql("WHERE url=? ORDER BY id LIMIT ?", new Object[] { "###???###", 2 }));
+    }
+
+    @Test
     public void findById() {
         assertEquals("SELECT * FROM t_account WHERE id=123", queryBuilder.findById(123));
     }

@@ -63,6 +63,8 @@ public class ActionServlet extends HttpServlet {
                 if (result instanceof String && !result.equals("~!@#DONE")) {// 返回值为String且未调用视图方法
                     Context.view((String) result);// 则Context.view返回视图
                 }
+            } else {
+                response.sendError(404, request.getServletPath() + " not found");
             }
             log.info("ACTION NOT FOUND: path=\"?\",method=\"?\"", ((HttpServletRequest) request).getServletPath(), ((HttpServletRequest) request).getMethod());
         } catch (Throwable e) {
