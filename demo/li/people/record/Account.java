@@ -31,8 +31,8 @@ public class Account extends Record<Account, Integer> {
     }
 
     public Account login(Account account) {
-        String sql = "WHERE (username=#username OR email=#username) AND password=#password";
-        return find(sql, account.set("password", Convert.toMD5(account.get("password"))));
+        String sql = "WHERE (username=? OR email=?) AND password=?";
+        return find(sql, account.get("username"), account.get("email"), Convert.toMD5(account.get("password")));
     }
 
     public Account md5PasswordIfNotNull() {

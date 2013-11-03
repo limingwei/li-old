@@ -20,6 +20,10 @@ public class AopTest extends BaseTest {
     @Test
     public void testAop() {
         account.list(page.setPageSize(5));
+        account.list(page.setPageSize(5));
+        account.list(page.setPageSize(5));
+        account.list(page.setPageSize(5));
+        account.list(page.setPageSize(5));
     }
 
     @Test

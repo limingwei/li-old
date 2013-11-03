@@ -152,7 +152,7 @@ public class AbstractDao<T, ID extends Serializable> {
      */
     public Integer count(String sql, Object... args) {
         QueryRunner queryRunner = this.getQueryRunner(this.getConnection());
-        ModelBuilder modelBuilder = this.getModelBuilder(queryRunner, queryRunner.executeQuery(getQueryBuilder().countBySql(sql, args)));
+        ModelBuilder modelBuilder = this.getModelBuilder(queryRunner, queryRunner.executeQuery(getQueryBuilder().countBySql(sql), args));
         String count = modelBuilder.value(1, true, true);
         return Verify.isEmpty(count) ? -1 : Integer.valueOf(count);
     }
@@ -175,7 +175,7 @@ public class AbstractDao<T, ID extends Serializable> {
      * @see li.dao.AbstractDao#update(String, Object...)
      */
     public Integer delete(String sql, Object... args) {
-        return this.getQueryRunner(this.getConnection()).executeUpdate(getQueryBuilder().deleteBySql(sql, args), false);
+        return this.getQueryRunner(this.getConnection()).executeUpdate(getQueryBuilder().deleteBySql(sql), false, args);
     }
 
     /**
@@ -195,7 +195,11 @@ public class AbstractDao<T, ID extends Serializable> {
      * @see li.dao.AbstractDao#list(Page, String, Object...)
      */
     public T find(String sql, Object... args) {
-        List<T> list = list(null, getQueryBuilder().findBySql(sql, args));
+        QueryRunner queryRunner = this.getQueryRunner(this.getConnection());
+        ResultSet resultSet = queryRunner.executeQuery(getQueryBuilder().findBySql(sql), args);
+        ModelBuilder modelBuilder = this.getModelBuilder(queryRunner, resultSet);
+
+        List<T> list = modelBuilder.list(getType(), getBeanMeta().fields, 1, true);
         return null != list && list.size() > 0 ? list.get(0) : null;
     }
 
@@ -215,14 +219,13 @@ public class AbstractDao<T, ID extends Serializable> {
      * @param args 替换sql中占位符的值,或者对应具名占位符的Map
      */
     public List<T> list(Page page, String sql, Object... args) {
-        sql = getQueryBuilder().listBySql(page, sql, args);
-
+        sql = getQueryBuilder().listBySql(page, sql);
         QueryRunner queryRunner = this.getQueryRunner(this.getConnection());
-        ResultSet resultSet = queryRunner.executeQuery(sql);
+        ResultSet resultSet = queryRunner.executeQuery(sql, args);
         ModelBuilder modelBuilder = this.getModelBuilder(queryRunner, resultSet);
 
         if (null != resultSet && null != page && page.count()) {
-            page.setRecordCount(count(sql));
+            page.setRecordCount(count(sql, args));
         }
         Integer count = null == page ? Integer.MAX_VALUE : page.getPageSize();
         return modelBuilder.list(getType(), getBeanMeta().fields, count, true);
@@ -232,7 +235,7 @@ public class AbstractDao<T, ID extends Serializable> {
      * 执行SQL查询并将结果集封装成Record或其子类的List
      */
     public List<Record<?, ?>> query(Page page, String sql, Object... args) {
-        sql = getQueryBuilder().listBySql(page, sql, args);
+        sql = getQueryBuilder().listBySql(page, sql);
 
         QueryRunner queryRunner = this.getQueryRunner(this.getConnection());
         ResultSet resultSet = queryRunner.executeQuery(sql);
@@ -293,7 +296,7 @@ public class AbstractDao<T, ID extends Serializable> {
      * @return 受影响的行数
      */
     public Integer update(String sql, Object... args) {
-        return this.getQueryRunner(this.getConnection()).executeUpdate(getQueryBuilder().updateBySql(sql, args), false);
+        return this.getQueryRunner(this.getConnection()).executeUpdate(getQueryBuilder().updateBySql(sql), false, args);
     }
 
     /**
