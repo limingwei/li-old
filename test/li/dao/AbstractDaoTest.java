@@ -56,6 +56,7 @@ public class AbstractDaoTest extends BaseTest {
         entity.set("password", "ppp");
         entity.set("role_id", 1);
         entity.set("flag", 1);
+        entity.set("email", "asdfasdf");
 
         userDao.insert(entity);
     }
@@ -67,6 +68,7 @@ public class AbstractDaoTest extends BaseTest {
         entity.set("password", "ppp");
         entity.set("role_id", 1);
         entity.set("flag", 1);
+        entity.set("email", "asdfasdf");
         userDao.insertIgnoreNull(entity);
     }
 }
