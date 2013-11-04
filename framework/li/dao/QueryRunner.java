@@ -63,17 +63,6 @@ public class QueryRunner {
     }
 
     /**
-     * preparedStatement.setObject
-     */
-    private void setParameters(PreparedStatement preparedStatement, Object[] args) throws SQLException {
-        if (null != args) {
-            for (int i = 0; i < args.length; i++) {
-                preparedStatement.setObject(i + 1, args[i]);
-            }
-        }
-    }
-
-    /**
      * 执行更新类SQL,返回Integer类型的,受影响的行数
      */
     public Integer executeUpdate(String sql, Boolean returnGeneratedKeys, Object... args) {
@@ -93,6 +82,17 @@ public class QueryRunner {
         }
         this.close();// 更新类SQL,在这里关闭
         return count;
+    }
+
+    /**
+     * preparedStatement.setObject
+     */
+    private void setParameters(PreparedStatement preparedStatement, Object[] args) throws SQLException {
+        if (null != args) {
+            for (int i = 0; i < args.length; i++) {
+                preparedStatement.setObject(i + 1, args[i]);
+            }
+        }
     }
 
     /**
