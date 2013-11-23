@@ -29,6 +29,12 @@ public class QueryBuilderTest extends BaseTest {
     }
 
     @Test
+    public void 参数值中有问号() {
+        String sql = queryBuilder.countBySql("WHERE id=? OR id=? OR id=? OR id=?", new Object[] { "aa?", "bbb", "ccc", "ddd" });
+        assertEquals("SELECT COUNT(*) FROM t_account WHERE id='aa?' OR id='bbb' OR id='ccc' OR id='ddd'", sql);
+    }
+
+    @Test
     public void countAll() {
         assertEquals("SELECT COUNT(*) FROM t_account", queryBuilder.countAll());
     }

@@ -84,60 +84,44 @@ public abstract class Log {
     protected abstract void log(String level, Object message);
 
     /**
-     * 处理log信息
-     */
-    private static String process(Object message, Object... args) {
-        if (null == args || args.length < 1 || !message.toString().contains("?")) {
-            return message + "";
-        }
-        StringBuffer stringBuffer = new StringBuffer();
-        char[] chars = null == message ? new char[0] : message.toString().toCharArray();
-        int arg_index = 0;
-        for (int i = 0; i < chars.length; i++) {
-            stringBuffer.append((arg_index < args.length && chars[i] == '?') ? args[arg_index++] : chars[i]);
-        }
-        return stringBuffer.toString();
-    }
-
-    /**
      * 输出TRACE级别的日志 Level 1
      */
     public void trace(Object message, Object... args) {
-        log("TRACE", process(message, args));
+        log("TRACE", Strings.replace(message, '?', args));
     }
 
     /**
      * 输出DEBUG级别的日志 Level 2
      */
     public void debug(Object message, Object... args) {
-        log("DEBUG", process(message, args));
+        log("DEBUG", Strings.replace(message, '?', args));
     }
 
     /**
      * 输出INFO级别的日志 Level 3
      */
     public void info(Object message, Object... args) {
-        log("INFO", process(message, args));
+        log("INFO", Strings.replace(message, '?', args));
     }
 
     /**
      * 输出WARN级别的日志 Level 4
      */
     public void warn(Object message, Object... args) {
-        log("WARN", process(message, args));
+        log("WARN", Strings.replace(message, '?', args));
     }
 
     /**
      * 输出ERROR级别的日志 Level 5
      */
     public void error(Object message, Object... args) {
-        log("ERROR", process(message, args));
+        log("ERROR", Strings.replace(message, '?', args));
     }
 
     /**
      * 输出FATAL级别的日志 Level 6
      */
     public void fatal(Object message, Object... args) {
-        log("FATAL", process(message, args));
+        log("FATAL", Strings.replace(message, '?', args));
     }
 }

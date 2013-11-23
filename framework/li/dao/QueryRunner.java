@@ -3,7 +3,6 @@ package li.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import li.util.Log;
@@ -49,11 +48,10 @@ public class QueryRunner {
     /**
      * 执行查询类SQL,返回ResultSet结果集
      */
-    public ResultSet executeQuery(String sql, Object... args) {
+    public ResultSet executeQuery(String sql) {
         ResultSet resultSet = null;
         try {
             preparedStatement = connection.prepareStatement(sql);
-            this.setParameters(preparedStatement, args);
             resultSet = preparedStatement.executeQuery();
             log.debug("? -> ?", sql, connection);
         } catch (Exception e) {
@@ -65,11 +63,10 @@ public class QueryRunner {
     /**
      * 执行更新类SQL,返回Integer类型的,受影响的行数
      */
-    public Integer executeUpdate(String sql, Boolean returnGeneratedKeys, Object... args) {
+    public Integer executeUpdate(String sql, Boolean returnGeneratedKeys) {
         Integer count = -1;
         try {
             preparedStatement = returnGeneratedKeys ? connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS) : connection.prepareStatement(sql);
-            this.setParameters(preparedStatement, args);
             count = preparedStatement.executeUpdate();
             if (returnGeneratedKeys) {
                 ResultSet generatedKeys = preparedStatement.getGeneratedKeys();// 主键结果集
@@ -82,17 +79,6 @@ public class QueryRunner {
         }
         this.close();// 更新类SQL,在这里关闭
         return count;
-    }
-
-    /**
-     * preparedStatement.setObject
-     */
-    private void setParameters(PreparedStatement preparedStatement, Object[] args) throws SQLException {
-        if (null != args) {
-            for (int i = 0; i < args.length; i++) {
-                preparedStatement.setObject(i + 1, args[i]);
-            }
-        }
     }
 
     /**
