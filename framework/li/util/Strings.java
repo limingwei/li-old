@@ -16,4 +16,16 @@ public class Strings {
         }
         return stringBuffer.toString();
     }
+
+    public static String link(String linker, Object... array) {
+        if (null == linker || null == array || 0 == array.length) {
+            return "";
+        } else {
+            String result = "";
+            for (Object each : array) {
+                result += each + linker;
+            }
+            return result.substring(0, result.length() - linker.length());
+        }
+    }
 }
